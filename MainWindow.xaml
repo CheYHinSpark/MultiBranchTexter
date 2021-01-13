@@ -1,12 +1,37 @@
-﻿<Window x:Class="MultiBranchTexter.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MultiBranchTexter"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+﻿<local:MetroWindow x:Class="MultiBranchTexter.MainWindow"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                   xmlns:local="clr-namespace:MultiBranchTexter"
+                   Style="{StaticResource MetroWindowStyle}"
+                   mc:Ignorable="d"
+                   Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <TabControl>
+            <local:MBTabItem Header="测试">
+                <TextBox/>
+            </local:MBTabItem>
+            <local:MBTabItem Header="测试2">
+            </local:MBTabItem>
+            <local:MBTabItem Header="测试">
+            </local:MBTabItem>
+            <local:MBTabItem Header="测试2">
+            </local:MBTabItem>
+            <local:MBTabItem Header="测试">
+            </local:MBTabItem>
+            <local:MBTabItem Header="测试2">
+            </local:MBTabItem>
+            <local:MBTabItem Header="测试">
+            </local:MBTabItem>
+            <local:MBTabItem Header="测试2">
+            </local:MBTabItem>
+        </TabControl>
     </Grid>
-</Window>
+
+
+
+
+
+   
+</local:MetroWindow>

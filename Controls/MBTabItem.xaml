@@ -1,0 +1,32 @@
+﻿<TabItem x:Class="MultiBranchTexter.MBTabItem"
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         Loaded="TabItem_Loaded"
+         MinHeight="20"
+         >
+    <TabItem.Template>
+        <ControlTemplate TargetType="{x:Type TabItem}">
+            <Border>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter Grid.Column="0" ContentSource="Header" 
+                                      HorizontalAlignment="Left" 
+                                      VerticalAlignment="Center"/>
+                    <Button Grid.Column="1" Name="btn_Close" 
+                            Width="16" Height="16"
+                            Content="x"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Click="CloseBtn_Click"/>
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </TabItem.Template>
+    <Grid/>
+</TabItem>

@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1;
 D:\MultiBranchTexter\App.xaml
-11151548125
+31058736649
 
-51109880194
+7-1928115408
 1921654412462
-MainWindow.xaml;
+Controls\MBTabItem.xaml;MainWindow.xaml;Resources\Dictionary.xaml;
 
-False
+True
 
