@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1;
 D:\MultiBranchTexter\App.xaml
-31580518935
+5-1085460316
 
-7251804522
+10-66850730
 1921654412462
-Controls\MainWindow.xaml;Controls\MBTabItem.xaml;Resources\Dictionary.xaml;
+Controls\ConnectingLine.xaml;Controls\FlowChartContainer.xaml;Controls\MainWindow.xaml;Controls\MBTabItem.xaml;Resources\Dictionary.xaml;
 
 False
 

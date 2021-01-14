@@ -8,24 +8,13 @@
                    mc:Ignorable="d"
                    Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <TabControl>
+        <!--<TabControl>
             <local:MBTabItem Header="测试">
             </local:MBTabItem>
-            <local:MBTabItem Header="测试2">
-            </local:MBTabItem>
-            <local:MBTabItem Header="测试">
-            </local:MBTabItem>
-            <local:MBTabItem Header="测试2">
-            </local:MBTabItem>
-            <local:MBTabItem Header="测试">
-            </local:MBTabItem>
-            <local:MBTabItem Header="测试2">
-            </local:MBTabItem>
-            <local:MBTabItem Header="测试">
-            </local:MBTabItem>
-            <local:MBTabItem Header="测试2">
-            </local:MBTabItem>
-        </TabControl>
+        </TabControl>-->
+        <local:FlowChartContainer/>
+
+
     </Grid>
 
 

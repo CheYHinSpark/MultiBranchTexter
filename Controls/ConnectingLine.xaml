@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="MultiBranchTexter.ConnectingLine"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             HorizontalAlignment="Left"
+             VerticalAlignment="Top">
+    <Grid>
+        <Path x:Name="Path" StrokeThickness="3" 
+              Stroke="Aqua"
+              ToolTip="这是一条线！"
+              MouseLeftButtonDown="Path_MouseLeftButtonDown"
+              MouseEnter="Path_MouseEnter"
+              MouseLeave="Path_MouseLeave"
+              MouseRightButtonDown="Path_MouseRightButtonDown">
+        </Path>
+    </Grid>
+</UserControl>

@@ -22,3 +22,7 @@ D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\Controls\MBTabItem.g.cs
 D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\GeneratedInternalTypeHelper.g.cs
 D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\Controls\MainWindow.g.cs
 D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\Controls\MainWindow.baml
+D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\Controls\ConnectingLine.baml
+D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\Controls\ConnectingLine.g.cs
+D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\Controls\FlowChartContainer.g.cs
+D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\Controls\FlowChartContainer.baml
