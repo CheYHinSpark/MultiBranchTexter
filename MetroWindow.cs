@@ -1,6 +1,17 @@
-﻿using System.Windows;
+﻿using System;
+using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
+using System.Windows.Shell;
+using System.Collections.Generic;
+using System.Text;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace MultiBranchTexter
 {
@@ -13,10 +24,12 @@ namespace MultiBranchTexter
 
         public MetroWindow()
         {
-            this.Loaded += ModernWindow_Loaded;
+            this.Loaded += MetroWindow_Loaded;
+            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight - 7;
+            this.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
         }
 
-        private void ModernWindow_Loaded(object sender, RoutedEventArgs e)
+        private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // 查找窗体模板
 
@@ -34,23 +47,21 @@ namespace MultiBranchTexter
                 WindowTitleTbl.Text = Title;
             }
         }
-
       
         private void CloseButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             Close();
         }
+
         private void MaxButton_Click(object sender, RoutedEventArgs e)
         {
             if (MaxButton.IsChecked == true)
             {
-                this.WindowState = WindowState.Maximized;
-                Left = 0;
-                Top = 0;
+                WindowState = WindowState.Maximized;
             }
             else
             {
-                this.WindowState = WindowState.Normal;
+                WindowState = WindowState.Normal;
             }
         }
 
@@ -59,10 +70,7 @@ namespace MultiBranchTexter
             this.WindowState = System.Windows.WindowState.Minimized;
         }
 
-        /// <summary>
-        /// 实现窗体移动
-        /// </summary>
-        /// <param name="e"></param>
+        // 实现窗体移动
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             DragMove();
