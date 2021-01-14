@@ -10,7 +10,6 @@
     <Grid>
         <TabControl>
             <local:MBTabItem Header="测试">
-                <TextBox/>
             </local:MBTabItem>
             <local:MBTabItem Header="测试2">
             </local:MBTabItem>

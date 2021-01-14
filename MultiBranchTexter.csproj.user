@@ -18,7 +18,7 @@
     <Page Update="Resources\Dictionary.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="MainWindow.xaml">
+    <Page Update="Controls\MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

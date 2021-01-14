@@ -2,9 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:MultiBranchTexter"
                     >
+    <!--颜色部分-->
     <Color x:Key="mainColor">#FF873674</Color>
     <SolidColorBrush x:Key="mainColorBrush" Color="{StaticResource mainColor}"/>
-
+    <SolidColorBrush x:Key="darkBorderBrush" Color="#FF323232"/>
+    <SolidColorBrush x:Key="mainHighBrush" Color="#99FFFFFF"/>
+    <SolidColorBrush x:Key="redBrush" Color="#EED44C45"/>
 
     <!--最小化和关闭按钮样式-->
     <Style x:Key="WinMinCloseBtnStyle" TargetType="{x:Type Button}">
@@ -27,14 +30,14 @@
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsMouseOver" Value="True"/>
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="MainBorder" Property="Background" Value="#AAFFFFFF"/>
+                            <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource mainHighBrush}"/>
                         </MultiTrigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsMouseOver" Value="True"/>
                                 <Condition Property="Name" Value="CloseWinButton"/>
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="MainBorder" Property="Background" Value="#EED44C45"/>
+                            <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource redBrush}"/>
                         </MultiTrigger>
                         <Trigger Property="Name" Value="CloseWinButton">
                             <Setter TargetName="CP" Property="Data" Value="M9,6 L21,18 M9,18 L21,6"/>
@@ -45,7 +48,7 @@
         </Setter>
     </Style>
 
-    <!--最大化最小化按钮样式-->
+    <!--最大化与还原按钮样式-->
     <Style x:Key="WinMaxBtnStyle" TargetType="{x:Type CheckBox}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -66,7 +69,7 @@
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsMouseOver" Value="True"/>
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="MainBorder" Property="Background" Value="#AAFFFFFF"/>
+                            <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource mainHighBrush}"/>
                         </MultiTrigger>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="CP" Property="Data" Value="M8,10 8,18 18,18 18,10 Z M18,14 22,14 22,6 12,6 12,10"/>
@@ -114,7 +117,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-
+    <!--窗体控件Style-->
     <Style x:Key="MetroWindowStyle" TargetType="{x:Type Window}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -134,4 +137,20 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <!--TabItem的关闭按钮-->
+    <ControlTemplate x:Key="TabItemCloseBtnTemplate" TargetType="{x:Type Button}">
+        <Border x:Name="BD" Width="16" Height="16" CornerRadius="8"
+                Background="Transparent">
+            <Path x:Name="CP" Stroke="White" StrokeThickness="1" Data="M4,4 L12,12 M4,12 L12,4"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource redBrush}" TargetName="BD"/>
+            </Trigger>
+            <Trigger Property="Uid" Value="1">
+                <Setter Property="Stroke" Value="Gray" TargetName="CP"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 </ResourceDictionary>

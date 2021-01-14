@@ -5,11 +5,9 @@ D:\MultiBranchTexter\bin\Debug\netcoreapp3.1\MultiBranchTexter.runtimeconfig.dev
 D:\MultiBranchTexter\bin\Debug\netcoreapp3.1\MultiBranchTexter.dll
 D:\MultiBranchTexter\bin\Debug\netcoreapp3.1\MultiBranchTexter.pdb
 D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\MultiBranchTexter.csprojAssemblyReference.cache
-D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\MainWindow.g.cs
 D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\App.g.cs
 D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\MultiBranchTexter_MarkupCompile.cache
 D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\MultiBranchTexter_MarkupCompile.lref
-D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\MainWindow.baml
 D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\MultiBranchTexter.g.resources
 D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\MultiBranchTexter.AssemblyInfoInputs.cache
 D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\MultiBranchTexter.AssemblyInfo.cs
@@ -22,3 +20,5 @@ D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\Resources\Dictionary.baml
 D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\Controls\MBTabItem.baml
 D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\Controls\MBTabItem.g.cs
 D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\GeneratedInternalTypeHelper.g.cs
+D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\Controls\MainWindow.g.cs
+D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\Controls\MainWindow.baml
