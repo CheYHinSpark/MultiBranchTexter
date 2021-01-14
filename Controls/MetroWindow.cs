@@ -22,7 +22,6 @@ namespace MultiBranchTexter
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // 查找窗体模板
-
             if (App.Current.Resources["MetroWindowTemplate"] is ControlTemplate metroWindowTemplate)
             {
                 CloseButton = metroWindowTemplate.FindName("CloseWinButton", this) as Button;

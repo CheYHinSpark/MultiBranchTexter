@@ -43,9 +43,16 @@ namespace MultiBranchTexter
         {
             //找到父级TabControl
             m_Parent = FindParentTabControl(this);
+            // 查找窗体模板
+            if (App.Current.Resources["MBTabItemTemplate"] is ControlTemplate tabItemTemplate)
+            {
+                (tabItemTemplate.FindName("CloseBtn", this) as Button).Click += CloseBtn_Click;
+              
+            }
             //if (m_Parent != null)
             //{ Load(); }
         }
+
         #endregion
         #region 关闭按钮
         /// <summary>

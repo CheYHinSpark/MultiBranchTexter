@@ -153,4 +153,40 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+    <!--TabItem模板-->
+    <ControlTemplate x:Key="MBTabItemTemplate" TargetType="{x:Type TabItem}">
+        <Border x:Name="BD" BorderBrush="{StaticResource darkBorderBrush}" 
+                BorderThickness="1" CornerRadius="4,4,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <ContentPresenter x:Name="CP" Grid.Column="0" 
+                                  ContentSource="Header" 
+                                  TextElement.Foreground="White"
+                                  Margin="2"
+                                  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                <Button Grid.Column="1" Name="CloseBtn" 
+                        Width="16" Height="16" x:Uid="0"
+                        Template="{StaticResource TabItemCloseBtnTemplate}"
+                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="False"/>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="{StaticResource mainHighBrush}" TargetName="BD"/>
+            </MultiTrigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="TextElement.Foreground" Value="Black" TargetName="CP"/>
+                <Setter Property="Background" Value="White" TargetName="BD"/>
+                <Setter Property="BorderThickness" Value="2,2,2,0" TargetName="BD"/>
+                <Setter Property="Uid" Value="1" TargetName="CloseBtn"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 </ResourceDictionary>

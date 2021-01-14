@@ -11,6 +11,14 @@
         <!--<TabControl>
             <local:MBTabItem Header="测试">
             </local:MBTabItem>
+            <local:MBTabItem Header="测试">
+            </local:MBTabItem>
+            <local:MBTabItem Header="测试">
+            </local:MBTabItem>
+            <local:MBTabItem Header="测试">
+            </local:MBTabItem>
+            <local:MBTabItem Header="测试">
+            </local:MBTabItem>
         </TabControl>-->
         <local:FlowChartContainer/>
 
