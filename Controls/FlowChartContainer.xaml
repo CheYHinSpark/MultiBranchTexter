@@ -9,12 +9,9 @@
                   HorizontalScrollBarVisibility="Auto">
         <Grid x:Name="container"
               Width="Auto" Height="Auto" 
+              Margin="0,0,40,60"
               HorizontalAlignment="Left" 
               VerticalAlignment="Top">
-            <local:NodeButton x:Name="b1" Width="40" Margin="10" Height="20"/>
-            <local:NodeButton x:Name="b2" Width="40" Margin="200,200,0,0" Height="20"/>
-            <local:NodeButton x:Name="b4" Width="40" Margin="10,503,0,0" Height="20"/>
-            <local:NodeButton x:Name="b3" Width="40" Margin="400,603,0,0" Height="20"/>
         </Grid>
     </ScrollViewer>
 </UserControl>

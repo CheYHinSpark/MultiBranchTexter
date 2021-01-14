@@ -12,9 +12,11 @@ namespace MultiBranchTexter
     {
 
         public TextNode textNode;
-        private List<NodeButton> postNodes = new List<NodeButton>();
-        public NodeButton()
+        public List<NodeButton> postNodes = new List<NodeButton>();
+        public NodeButton(TextNode newNode)
         {
+            textNode = newNode;
+            Content = textNode.Name;
             HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
             VerticalAlignment = System.Windows.VerticalAlignment.Top;
             Loaded += NodeButton_Loaded;
@@ -48,6 +50,18 @@ namespace MultiBranchTexter
                 line.EndElement = node;
                 line.StartDrawing();
             }
+        }
+        public List<ConnectingLine> DrawPostLines()
+        {
+            List<ConnectingLine> result = new List<ConnectingLine>();
+            foreach (NodeButton node in postNodes)
+            {
+                ConnectingLine line = new ConnectingLine();
+                result.Add(line);
+                line.BeginElement = this;
+                line.EndElement = node;
+            }
+            return result;
         }
     }
 }

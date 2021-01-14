@@ -14,7 +14,8 @@ namespace MultiBranchTexter.Model
         private List<TextNode> preNodes = new List<TextNode>();
         // 后节点
         private List<TextNode> postNodes = new List<TextNode>();
-
+        // 后节点快速索引
+        public List<int> postNodeIndexes = new List<int>();
 
 
         public TextNode() { }
@@ -34,6 +35,24 @@ namespace MultiBranchTexter.Model
         {
             //TODO 判断是否已经存在
             postNodes.Add(node);
+        }
+        /// <summary>
+        /// 得到postNodes在参数List中的指标，仅仅根据name判断Node是否相等
+        /// </summary>
+        /// <param name="textNodes"></param>
+        /// <returns></returns>
+        public List<int> GetPostNodeIndex(List<TextNode> textNodes)
+        {
+            List<int> vs = new List<int>();
+            for (int i = 0; i < textNodes.Count; i++)
+            {
+                for (int j = 0; j < postNodes.Count; j++)
+                {
+                    if (textNodes[i].Name == postNodes[j].Name)
+                    { vs.Add(i); }
+                }
+            }
+            return vs;
         }
     }
 }

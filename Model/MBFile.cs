@@ -90,7 +90,7 @@ namespace MultiBranchTexter.Model
                     {
                         postIndex = int.Parse(vs1[i]);
                         result[preIndex].AddPostNode(result[postIndex]);
-                        result[postIndex].AddPostNode(result[preIndex]);
+                        result[postIndex].AddPreNode(result[preIndex]);
                     }
                 }
                 catch
