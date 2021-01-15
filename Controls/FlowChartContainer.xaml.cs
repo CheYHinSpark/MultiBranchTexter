@@ -38,7 +38,7 @@ namespace MultiBranchTexter
         //复杂情况可能出问题
         private void UpdateControls(List<TextNode> textNodes)
         {
-            List<bool> hasCreated = new List<bool>();
+            //node所在组数，实际是画图后的行数
             List<int> groupIndexOfBtns = new List<int>();
             List<NodeButton> nodeButtons = new List<NodeButton>();
             //二维List，对NodeButton分组
@@ -46,13 +46,13 @@ namespace MultiBranchTexter
             {
                 new List<NodeButton>()
             };
-            //初始化hasCreated
+            //初始化序列
             for (int i = 0; i<textNodes.Count;i++)
             {
-                hasCreated.Add(false);
                 groupIndexOfBtns.Add(0);
                 nodeButtons.Add(new NodeButton(textNodes[i]));
             }
+            //对每个Node，更新nodebutton以及postNodeButtons的组数
             for (int i = 0; i < textNodes.Count;i++)
             {
                 //对这个Node，将其所有postNode的组数变为其当前组数和本Node组数+1的较大值
@@ -83,7 +83,7 @@ namespace MultiBranchTexter
                     container.Children.Add(groupedNodes[i][j]);
                 }
             }
-
+            //连线
             for (int i = 0; i < textNodes.Count; i++)
             {
                 nodeButtons[i].DrawPostLines(container);

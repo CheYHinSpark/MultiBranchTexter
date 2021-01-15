@@ -5,7 +5,6 @@
              VerticalAlignment="Top">
     <Path x:Name="Path" StrokeThickness="3" 
           Stroke="Aqua"
-          ToolTip="这是一条线！"
           MouseLeftButtonDown="Path_MouseLeftButtonDown"
           MouseEnter="Path_MouseEnter"
           MouseLeave="Path_MouseLeave"

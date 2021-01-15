@@ -11,29 +11,18 @@ namespace MultiBranchTexter
     /// </summary>
     public partial class ConnectingLine : UserControl
     {
-        //依赖属性注册
-        public static readonly DependencyProperty BeginElementProperty =
-            DependencyProperty.Register("BeginElement", typeof(FrameworkElement), typeof(ConnectingLine));
-        public static readonly DependencyProperty EndElementProperty =
-            DependencyProperty.Register("EndElement", typeof(FrameworkElement), typeof(ConnectingLine));
-
-        public FrameworkElement BeginElement
-        {
-            get { return (FrameworkElement)GetValue(BeginElementProperty); }
-            set { SetValue(BeginElementProperty, value); }
-        }
-        public FrameworkElement EndElement
-        {
-            get { return (FrameworkElement)GetValue(EndElementProperty); }
-            set { SetValue(EndElementProperty, value); }
-        }
+      
+        public NodeButton BeginElement { get; set; }
+        public NodeButton EndElement { get; set; }
 
         public ConnectingLine()
         {
             InitializeComponent();
         }
 
-
+        /// <summary>
+        /// 开始画线
+        /// </summary>
         public void StartDrawing()
         {
             if (BeginElement == null || EndElement == null)
@@ -44,8 +33,11 @@ namespace MultiBranchTexter
             Point endPt = new Point(endVec.X + EndElement.ActualWidth / 2.0, endVec.Y + EndElement.ActualHeight / 2.0);
             Point c1Pt = new Point(beginPt.X, beginPt.Y * 0.64 + endPt.Y * 0.36);
             Point c2Pt = new Point(endPt.X, beginPt.Y * 0.36 + endPt.Y * 0.64);
+            //三次bezier曲线
             Path.Data = Geometry.Parse("M" + beginPt.ToString() + " C" + c1Pt.ToString() + " "
                 + c2Pt.ToString() + " " + endPt.ToString());
+            //更新tooltip
+            Path.ToolTip = "从" + BeginElement.textNode.Name + "\n到" + EndElement.textNode.Name;
         }
 
         //左键点击线条

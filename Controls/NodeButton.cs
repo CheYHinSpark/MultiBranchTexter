@@ -21,8 +21,6 @@ namespace MultiBranchTexter
             VerticalAlignment = System.Windows.VerticalAlignment.Top;
             Loaded += NodeButton_Loaded;
             Click += NodeButton_Click;
-            //获取text的标题作为button的content
-
         }
 
         //点击btn
