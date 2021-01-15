@@ -20,8 +20,16 @@ namespace MultiBranchTexter
             HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
             VerticalAlignment = System.Windows.VerticalAlignment.Top;
             Loaded += NodeButton_Loaded;
+            Click += NodeButton_Click;
             //获取text的标题作为button的content
 
+        }
+
+        //点击btn
+        private void NodeButton_Click(object sender, RoutedEventArgs e)
+        {
+            //通知窗体切换页面，打开相应的标签页
+            (FindParentWindow(this)).OpenMBTabItem(textNode);
         }
 
         private void NodeButton_Loaded(object sender, RoutedEventArgs e)
@@ -39,29 +47,33 @@ namespace MultiBranchTexter
         }
 
         //根据textNode的连接情况在自己和后续节点间连线
-        public void DrawLines()
+        public void DrawPostLines(Grid container)
         {
             foreach (NodeButton node in postNodes)
             {
                 ConnectingLine line = new ConnectingLine();
-                Grid parent = VisualTreeHelper.GetParent(this) as Grid;
-                parent.Children.Add(line);
                 line.BeginElement = this;
                 line.EndElement = node;
+                container.Children.Add(line);
+                container.UpdateLayout();// <--没有将无法显示
                 line.StartDrawing();
             }
         }
-        public List<ConnectingLine> DrawPostLines()
+
+        /// <summary>
+        /// 递归找父级MainWindow
+        /// </summary>
+        /// <param name="reference">依赖对象</param>
+        /// <returns>TabControl</returns>
+        private MainWindow FindParentWindow(DependencyObject reference)
         {
-            List<ConnectingLine> result = new List<ConnectingLine>();
-            foreach (NodeButton node in postNodes)
-            {
-                ConnectingLine line = new ConnectingLine();
-                result.Add(line);
-                line.BeginElement = this;
-                line.EndElement = node;
-            }
-            return result;
+            DependencyObject dObj = VisualTreeHelper.GetParent(reference);
+            if (dObj == null)
+                return null;
+            if (dObj.GetType() == typeof(MainWindow))
+                return dObj as MainWindow;
+            else
+                return FindParentWindow(dObj);
         }
     }
 }

@@ -86,12 +86,7 @@ namespace MultiBranchTexter
 
             for (int i = 0; i < textNodes.Count; i++)
             {
-                foreach(ConnectingLine line in nodeButtons[i].DrawPostLines())
-                {
-                    container.Children.Add(line);
-                    container.UpdateLayout();// <--没有将无法显示线条
-                    line.StartDrawing();
-                }
+                nodeButtons[i].DrawPostLines(container);
             }
         }
     }

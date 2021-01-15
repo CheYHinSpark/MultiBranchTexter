@@ -8,26 +8,15 @@
                    mc:Ignorable="d"
                    Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <!--<TabControl>
-            <local:MBTabItem Header="测试">
-            </local:MBTabItem>
-            <local:MBTabItem Header="测试">
-            </local:MBTabItem>
-            <local:MBTabItem Header="测试">
-            </local:MBTabItem>
-            <local:MBTabItem Header="测试">
-            </local:MBTabItem>
-            <local:MBTabItem Header="测试">
-            </local:MBTabItem>
-        </TabControl>-->
-        <local:FlowChartContainer/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <Button x:Name="frontBtn" Content="回到首页" Grid.Row="0" Click="frontBtn_Click"/>
+        <TabControl x:Name="workTabControl" Grid.Row="1"/>
+        <local:FlowChartContainer x:Name="flowChart" Grid.Row="1"/>
 
     </Grid>
 
-
-
-
-
-   
 </local:MetroWindow>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MultiBranchTexter.Model;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -18,12 +19,19 @@ namespace MultiBranchTexter
     /// </summary>
     public partial class MBTabItem : TabItem
     {
-        public MBTabItem()
+        public MBTabItem(TextNode node)
         {
             InitializeComponent();
+            textNode = node;
+            Header = node.Name;
+            textBox.Text = node.Text;
         }
 
         #region 成员变量
+        /// <summary>
+        /// 相应的textNode
+        /// </summary>
+        public TextNode textNode;
         /// <summary>
         /// 父级TabControl
         /// </summary>
@@ -43,7 +51,7 @@ namespace MultiBranchTexter
         {
             //找到父级TabControl
             m_Parent = FindParentTabControl(this);
-            // 查找窗体模板
+            // 查找控件模板
             if (App.Current.Resources["MBTabItemTemplate"] is ControlTemplate tabItemTemplate)
             {
                 (tabItemTemplate.FindName("CloseBtn", this) as Button).Click += CloseBtn_Click;

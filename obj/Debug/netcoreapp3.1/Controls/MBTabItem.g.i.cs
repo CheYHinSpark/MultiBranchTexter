@@ -60,7 +60,7 @@ namespace MultiBranchTexter {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/MultiBranchTexter;V1.0.0.0;component/controls/mbtabitem.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/MultiBranchTexter;component/controls/mbtabitem.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Controls\MBTabItem.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

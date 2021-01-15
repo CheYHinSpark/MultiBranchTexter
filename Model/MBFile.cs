@@ -99,7 +99,6 @@ namespace MultiBranchTexter.Model
                     return null;
                 }
             }
-
             //关闭流
             reader.Close();
             fs.Close();
@@ -107,4 +106,8 @@ namespace MultiBranchTexter.Model
             return result;
         }
     }
+
+    //mbtxt文件写入器
+    public class MBFileWriter
+    { }
 }
