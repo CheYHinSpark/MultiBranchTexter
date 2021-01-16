@@ -16,6 +16,9 @@
     <Compile Update="Controls\FlowChartContainer.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controls\NodeButton.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Controls\ConnectingLine.xaml">
@@ -31,6 +34,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Controls\MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\NodeButton.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

@@ -150,6 +150,15 @@ namespace MultiBranchTexter
         //    }
         //}
         #endregion
+
+        /// <summary>
+        /// 设置字体大小
+        /// </summary>
+        public void SetFontSize(int newSize)
+        {
+            textBox.FontSize = newSize;
+        }
+
         #region 递归找父级TabControl
         /// <summary>
         /// 递归找父级TabControl
@@ -166,7 +175,10 @@ namespace MultiBranchTexter
             else
                 return FindParentTabControl(dObj);
         }
+
+
         #endregion
+
         #endregion
     }
 }

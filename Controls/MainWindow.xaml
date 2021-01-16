@@ -9,12 +9,15 @@
                    Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="24"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Button x:Name="frontBtn" Content="回到首页" Grid.Row="0" Click="frontBtn_Click"/>
-        <TabControl x:Name="workTabControl" Grid.Row="1"/>
+        <Button x:Name="frontBtn" Content="回到首页" 
+                HorizontalAlignment="Left" Width="Auto"
+                Template="{StaticResource generalButtonTemplate}"
+                Grid.Row="0" Click="frontBtn_Click"/>
+        <TabControl x:Name="workTabControl" Grid.Row="1" Padding="0"/>
         <local:FlowChartContainer x:Name="flowChart" Grid.Row="1"/>
 
     </Grid>

@@ -3,9 +3,13 @@
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          Loaded="TabItem_Loaded"
          MinHeight="24"
-         Template="{StaticResource MBTabItemTemplate}"
-         >
+         Template="{StaticResource MBTabItemTemplate}">
     <Grid>
-        <TextBox x:Name="textBox"/>
+        <TextBox x:Name="textBox" 
+                 VerticalScrollBarVisibility="Auto"
+                 AcceptsTab="True" AcceptsReturn="True"
+                 TextWrapping="Wrap" 
+                 Template="{StaticResource textBoxTemplate}">
+        </TextBox>
     </Grid>
 </TabItem>

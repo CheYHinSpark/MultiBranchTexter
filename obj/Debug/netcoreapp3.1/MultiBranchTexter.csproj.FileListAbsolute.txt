@@ -26,3 +26,5 @@ D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\Controls\ConnectingLine.baml
 D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\Controls\ConnectingLine.g.cs
 D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\Controls\FlowChartContainer.g.cs
 D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\Controls\FlowChartContainer.baml
+D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\Controls\NodeButton.g.cs
+D:\MultiBranchTexter\obj\Debug\netcoreapp3.1\Controls\NodeButton.baml
