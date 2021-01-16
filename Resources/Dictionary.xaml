@@ -4,11 +4,29 @@
                     >
     <!--颜色部分-->
     <Color x:Key="mainColor">#FF873674</Color>
+    <Color x:Key="mainHighColor">#FFDD88AA</Color>
     <SolidColorBrush x:Key="mainColorBrush" Color="{StaticResource mainColor}"/>
     <SolidColorBrush x:Key="darkBorderBrush" Color="#FF323232"/>
-    <SolidColorBrush x:Key="mainHighBrush" Color="#99FFFFFF"/>
-    <SolidColorBrush x:Key="redBrush" Color="#EED44C45"/>
+    <SolidColorBrush x:Key="mainHighBrush" Color="{StaticResource mainHighColor}"/>
+    <SolidColorBrush x:Key="redBrush" Color="#FFD44C45"/>
 
+    <!--通用按钮样式-->
+    <ControlTemplate x:Key="generalButtonTemplate" TargetType="{x:Type Button}">
+        <Border x:Name="BD" BorderThickness="1" CornerRadius="4"
+                Margin="4"
+                Background="{StaticResource mainColorBrush}"
+                BorderBrush="{StaticResource darkBorderBrush}">
+            <ContentPresenter x:Name="CP" TextElement.Foreground="White"
+                              Margin="6,4,6,4"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource mainHighBrush}" TargetName="BD"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
     <!--最小化和关闭按钮样式-->
     <Style x:Key="WinMinCloseBtnStyle" TargetType="{x:Type Button}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -82,15 +100,14 @@
 
     <!--窗体控件模板-->
     <ControlTemplate x:Key="MetroWindowTemplate" TargetType="{x:Type Window}">
-        <Border Background="{StaticResource mainColorBrush}" 
-                BorderThickness="1" BorderBrush="{StaticResource mainColorBrush}">
-            <Grid x:Name="LayoutRoot">
+        <Border>
+            <Grid x:Name="LayoutRoot" Background="Black">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="24"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <!--标题栏-->
-                <Grid Grid.Row="0">
+                <Grid Grid.Row="0" Background="{StaticResource mainColorBrush}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
@@ -113,7 +130,7 @@
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="WindowState" Value="Maximized">
-                <Setter Property="Margin" Value="6,6,6,0" TargetName="LayoutRoot"/>
+                <Setter Property="Margin" Value="5,5,5,0" TargetName="LayoutRoot"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -148,14 +165,19 @@
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource redBrush}" TargetName="BD"/>
             </Trigger>
-            <Trigger Property="Uid" Value="1">
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Uid" Value="1"/>
+                    <Condition Property="IsMouseOver" Value="False"/>
+                </MultiTrigger.Conditions>
                 <Setter Property="Stroke" Value="Gray" TargetName="CP"/>
-            </Trigger>
+            </MultiTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <!--TabItem模板-->
     <ControlTemplate x:Key="MBTabItemTemplate" TargetType="{x:Type TabItem}">
         <Border x:Name="BD" BorderBrush="{StaticResource darkBorderBrush}" 
+                Background="{StaticResource mainColorBrush}"
                 BorderThickness="1" CornerRadius="4,4,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -186,6 +208,19 @@
                 <Setter Property="Background" Value="White" TargetName="BD"/>
                 <Setter Property="BorderThickness" Value="2,2,2,0" TargetName="BD"/>
                 <Setter Property="Uid" Value="1" TargetName="CloseBtn"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <!--textBox模板-->
+    <ControlTemplate x:Key="textBoxTemplate" TargetType="{x:Type TextBox}">
+        <Border x:Name="BD" BorderThickness="2" BorderBrush="Gray">
+            <ScrollViewer Margin="0"
+                        x:Name="PART_ContentHost" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="BorderBrush" Value="Blue" TargetName="BD"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
