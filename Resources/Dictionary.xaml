@@ -9,19 +9,12 @@
     <SolidColorBrush x:Key="darkBorderBrush" Color="#FF323232"/>
     <SolidColorBrush x:Key="mainHighBrush" Color="{StaticResource mainHighColor}"/>
     <SolidColorBrush x:Key="redBrush" Color="#FFD44C45"/>
-<<<<<<< HEAD
     <SolidColorBrush x:Key="textBoxHighlightBorderBrush" Color="#FF64BAE0"/>
-=======
->>>>>>> df9bfd0f587db324d86a2df0e5c25b4fc3c15286
 
     <!--通用按钮样式-->
     <ControlTemplate x:Key="generalButtonTemplate" TargetType="{x:Type Button}">
         <Border x:Name="BD" BorderThickness="1" CornerRadius="4"
-<<<<<<< HEAD
                 Margin="2"
-=======
-                Margin="4"
->>>>>>> df9bfd0f587db324d86a2df0e5c25b4fc3c15286
                 Background="{StaticResource mainColorBrush}"
                 BorderBrush="{StaticResource darkBorderBrush}">
             <ContentPresenter x:Name="CP" TextElement.Foreground="White"
@@ -220,7 +213,6 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
     
-<<<<<<< HEAD
     <!--textBox的模板-->
     <ControlTemplate x:Key="textBoxTemplate" TargetType="{x:Type TextBox}">
         <Border x:Name="BD" BorderThickness="2" BorderBrush="Transparent">
@@ -230,17 +222,6 @@
         <ControlTemplate.Triggers>
             <Trigger Property="IsFocused" Value="True">
                 <Setter Property="BorderBrush" Value="{StaticResource textBoxHighlightBorderBrush}" TargetName="BD"/>
-=======
-    <!--textBox模板-->
-    <ControlTemplate x:Key="textBoxTemplate" TargetType="{x:Type TextBox}">
-        <Border x:Name="BD" BorderThickness="2" BorderBrush="Gray">
-            <ScrollViewer Margin="0"
-                        x:Name="PART_ContentHost" />
-        </Border>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsFocused" Value="True">
-                <Setter Property="BorderBrush" Value="Blue" TargetName="BD"/>
->>>>>>> df9bfd0f587db324d86a2df0e5c25b4fc3c15286
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
