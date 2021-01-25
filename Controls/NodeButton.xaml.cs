@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MultiBranchTexter.Model;
+using MultiBranchTexter.Controls;
 
 namespace MultiBranchTexter
 {
@@ -46,7 +47,7 @@ namespace MultiBranchTexter
         private void gotoBtn_Click(object sender, RoutedEventArgs e)
         {
             //通知窗体切换页面，打开相应的标签页
-            (FindParentWindow(this)).OpenMBTabItem(textNode);
+            ControlTreeHelper.FindParentOfType<MainWindow>(this).OpenMBTabItem(textNode);
         }
 
         //双击标题，可以改标题
@@ -87,22 +88,6 @@ namespace MultiBranchTexter
                 container.UpdateLayout();// <--没有将无法显示
                 line.StartDrawing();
             }
-        }
-
-        /// <summary>
-        /// 递归找父级MainWindow
-        /// </summary>
-        /// <param name="reference">依赖对象</param>
-        /// <returns>TabControl</returns>
-        private MainWindow FindParentWindow(DependencyObject reference)
-        {
-            DependencyObject dObj = VisualTreeHelper.GetParent(reference);
-            if (dObj == null)
-                return null;
-            if (dObj.GetType() == typeof(MainWindow))
-                return dObj as MainWindow;
-            else
-                return FindParentWindow(dObj);
         }
         #endregion
     }

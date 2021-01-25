@@ -83,8 +83,12 @@ namespace MultiBranchTexter
             //隐藏flowChart
             flowChart.Visibility = Visibility.Hidden;
         }
-        #endregion
 
-      
+        //返回首页
+        public void BackToFront()
+        {
+            flowChart.Visibility = Visibility.Visible;
+        }
+        #endregion
     }
 }

@@ -208,6 +208,7 @@
                 <Setter Property="TextElement.Foreground" Value="Black" TargetName="CP"/>
                 <Setter Property="Background" Value="White" TargetName="BD"/>
                 <Setter Property="BorderThickness" Value="2,2,2,0" TargetName="BD"/>
+                <Setter Property="BorderBrush" Value="{StaticResource textBoxHighlightBorderBrush}" TargetName="BD"/>
                 <Setter Property="Uid" Value="1" TargetName="CloseBtn"/>
             </Trigger>
         </ControlTemplate.Triggers>

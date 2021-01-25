@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MultiBranchTexter.Controls;
 
 namespace MultiBranchTexter
 {
@@ -35,87 +36,87 @@ namespace MultiBranchTexter
         /// <summary>
         /// 父级TabControl
         /// </summary>
-        private TabControl m_Parent;
+        private TabControl parent;
         /// <summary>
         /// 约定的宽度
         /// </summary>
-        private double m_ConventionWidth = 100;
+        private double conventionWidth = 120;
         #endregion
 
         #region 事件
-        #region loaded
         /// <summary>
         /// loaded
         /// </summary>
         private void TabItem_Loaded(object sender, RoutedEventArgs e)
         {
             //找到父级TabControl
-            m_Parent = FindParentTabControl(this);
+            parent = ControlTreeHelper.FindParentOfType<TabControl>(this);
             // 查找控件模板
             if (App.Current.Resources["MBTabItemTemplate"] is ControlTemplate tabItemTemplate)
             {
                 (tabItemTemplate.FindName("CloseBtn", this) as Button).Click += CloseBtn_Click;
               
             }
-            //if (m_Parent != null)
-            //{ Load(); }
+            if (parent != null)
+            { Load(); }
         }
 
-        #endregion
-        #region 关闭按钮
         /// <summary>
         /// 关闭按钮
         /// </summary>
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (m_Parent == null)
+            if (parent == null)
             { return; }
 
             //移除自身
-            m_Parent.Items.Remove(this);
+            parent.Items.Remove(this);
             //移除事件
-            m_Parent.SizeChanged -= m_Parent_SizeChanged;
+            parent.SizeChanged -= parent_SizeChanged;
 
             //调整剩余项大小
             //保持约定宽度item的临界个数
-            int criticalCount = (int)((m_Parent.ActualWidth - 5) / m_ConventionWidth);
+            int criticalCount = (int)((parent.ActualWidth - 5) / conventionWidth);
             //平均宽度
-            double perWidth = (m_Parent.ActualWidth - 5) / m_Parent.Items.Count;
-            foreach (MBTabItem item in m_Parent.Items)
+            double perWidth = (parent.ActualWidth - 5) / parent.Items.Count;
+            foreach (MBTabItem item in parent.Items)
             {
-                if (m_Parent.Items.Count <= criticalCount)
+                if (parent.Items.Count <= criticalCount)
                 {
-                    item.Width = m_ConventionWidth;
+                    item.Width = conventionWidth;
                 }
                 else
                 {
                     item.Width = perWidth;
                 }
             }
+            //如果是最后一项被关掉了
+            if (parent.Items.Count == 0)
+            {
+                // 本控件已经移除，所以依赖对象不能是this
+                ControlTreeHelper.FindParentOfType<MainWindow>(parent).BackToFront();
+            }
         }
-        #endregion
-        #region 父级TabControl尺寸发生变化
         /// <summary>
         /// 父级TabControl尺寸发生变化
         /// </summary>
-        private void m_Parent_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void parent_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             //调整自身大小
             //保持约定宽度item的临界个数
-            int criticalCount = (int)((m_Parent.ActualWidth - 5) / m_ConventionWidth);
-            if (m_Parent.Items.Count <= criticalCount)
+            int criticalCount = (int)((parent.ActualWidth - 5) / conventionWidth);
+            if (parent.Items.Count <= criticalCount)
             {
                 //小于等于临界个数 等于约定宽度
-                this.Width = m_ConventionWidth;
+                this.Width = conventionWidth;
             }
             else
             {
                 //大于临界个数 等于平均宽度
-                double perWidth = (m_Parent.ActualWidth - 5) / m_Parent.Items.Count;
+                double perWidth = (parent.ActualWidth - 5) / parent.Items.Count;
                 this.Width = perWidth;
             }
         }
-        #endregion
         #endregion
 
         #region 方法
@@ -123,32 +124,30 @@ namespace MultiBranchTexter
         /// <summary>
         /// Load
         /// </summary>
-        //private void Load()
-        //{
-        //    //约定的宽度
-        //    double.TryParse(m_Parent.Tag.ToString(), out m_ConventionWidth);
-        //    //注册父级TabControl尺寸发生变化事件
-        //    m_Parent.SizeChanged += m_Parent_SizeChanged;
+        private void Load()
+        {
+            //注册父级TabControl尺寸发生变化事件
+            parent.SizeChanged += parent_SizeChanged;
 
-        //    //自适应
-        //    //保持约定宽度item的临界个数
-        //    int criticalCount = (int)((m_Parent.ActualWidth - 5) / m_ConventionWidth);
-        //    if (m_Parent.Items.Count <= criticalCount)
-        //    {
-        //        //小于等于临界个数 等于约定宽度
-        //        this.Width = m_ConventionWidth;
-        //    }
-        //    else
-        //    {
-        //        //大于临界个数 每项都设成平均宽度
-        //        double perWidth = (m_Parent.ActualWidth - 5) / m_Parent.Items.Count;
-        //        foreach (MBTabItem item in m_Parent.Items)
-        //        {
-        //            item.Width = perWidth;
-        //        }
-        //        this.Width = perWidth;
-        //    }
-        //}
+            //自适应
+            //保持约定宽度item的临界个数
+            int criticalCount = (int)((parent.ActualWidth - 5) / conventionWidth);
+            if (parent.Items.Count <= criticalCount)
+            {
+                //小于等于临界个数 等于约定宽度
+                this.Width = conventionWidth;
+            }
+            else
+            {
+                //大于临界个数 每项都设成平均宽度
+                double perWidth = (parent.ActualWidth - 5) / parent.Items.Count;
+                foreach (MBTabItem item in parent.Items)
+                {
+                    item.Width = perWidth;
+                }
+                this.Width = perWidth;
+            }
+        }
         #endregion
 
         /// <summary>
@@ -158,27 +157,6 @@ namespace MultiBranchTexter
         {
             textBox.FontSize = newSize;
         }
-
-        #region 递归找父级TabControl
-        /// <summary>
-        /// 递归找父级TabControl
-        /// </summary>
-        /// <param name="reference">依赖对象</param>
-        /// <returns>TabControl</returns>
-        private TabControl FindParentTabControl(DependencyObject reference)
-        {
-            DependencyObject dObj = VisualTreeHelper.GetParent(reference);
-            if (dObj == null)
-                return null;
-            if (dObj.GetType() == typeof(TabControl))
-                return dObj as TabControl;
-            else
-                return FindParentTabControl(dObj);
-        }
-
-
-        #endregion
-
         #endregion
     }
 }
