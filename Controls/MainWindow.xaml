@@ -6,7 +6,8 @@
                    xmlns:local="clr-namespace:MultiBranchTexter"
                    Style="{StaticResource MetroWindowStyle}"
                    mc:Ignorable="d"
-                   Title="MainWindow" Height="450" Width="800">
+                   Title="MainWindow" Height="450" Width="800"
+                   KeyDown="MainWindow_KeyDown">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

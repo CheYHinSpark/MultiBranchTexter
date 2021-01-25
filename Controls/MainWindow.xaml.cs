@@ -26,11 +26,44 @@ namespace MultiBranchTexter
             InitializeComponent();
         }
 
+        #region 事件
+        //各种按键
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            //Ctrl 配合
+            if (e.KeyboardDevice.Modifiers == ModifierKeys.Control)
+            {
+                //Ctrl+A 全选
+                if (e.Key == Key.A)
+                { }
+                //Ctrl+S 保存
+                if (e.Key == Key.S)
+                { }
+                //Ctrl+O 打开
+                if (e.Key == Key.O)
+                { }
+                //Ctrl+N 新建
+                if (e.Key == Key.N)
+                { }
+                //Ctrl+F 寻找
+                if (e.Key == Key.F)
+                { }
+                //Ctrl+H 替换
+                if (e.Key == Key.H)
+                { }
+            }
+            //Esc 退到首页
+            if (e.Key == Key.Escape)
+            { flowChart.Visibility = Visibility.Visible; }
+        }
+
         private void frontBtn_Click(object sender, RoutedEventArgs e)
         {
             flowChart.Visibility = Visibility.Visible;
         }
+        #endregion
 
+        #region 方法
         //打开标签页
         public void OpenMBTabItem(TextNode node)
         {
@@ -50,5 +83,8 @@ namespace MultiBranchTexter
             //隐藏flowChart
             flowChart.Visibility = Visibility.Hidden;
         }
+        #endregion
+
+      
     }
 }
