@@ -3,11 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              HorizontalAlignment="Left"
              VerticalAlignment="Top">
+    <UserControl.Resources>
+        <!--右键菜单部分-->
+        <ContextMenu x:Key="lineContextMenu">
+            <MenuItem x:Name="addNode" Header="添加节点" Click="addNode_Click"/>
+            <MenuItem x:Name="deleteLine" Header="删除连线" Click="deleteLine_Click"/>
+        </ContextMenu>
+    </UserControl.Resources>
     <Path x:Name="Path" StrokeThickness="3" 
           Stroke="Aqua"
-          MouseLeftButtonDown="Path_MouseLeftButtonDown"
           MouseEnter="Path_MouseEnter"
           MouseLeave="Path_MouseLeave"
-          MouseRightButtonDown="Path_MouseRightButtonDown">
-    </Path>
+          ContextMenu="{StaticResource lineContextMenu}"
+          />
+
+
 </UserControl>

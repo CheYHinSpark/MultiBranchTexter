@@ -10,7 +10,10 @@
     <SolidColorBrush x:Key="mainHighBrush" Color="{StaticResource mainHighColor}"/>
     <SolidColorBrush x:Key="redBrush" Color="#FFD44C45"/>
     <SolidColorBrush x:Key="textBoxHighlightBorderBrush" Color="#FF64BAE0"/>
-
+    
+   
+    
+    
     <!--通用按钮样式-->
     <ControlTemplate x:Key="generalButtonTemplate" TargetType="{x:Type Button}">
         <Border x:Name="BD" BorderThickness="1" CornerRadius="4"

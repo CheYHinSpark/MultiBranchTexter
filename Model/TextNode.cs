@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace MultiBranchTexter.Model
 {
     public class TextNode
     {
         // 文件名
-        public string Name;
+        public string Name = "";
         // 文字内容
-        public string Text;
+        public string Text = "";
         // 前节点
         private List<TextNode> preNodes = new List<TextNode>();
         // 后节点
         private List<TextNode> postNodes = new List<TextNode>();
-        // 后节点快速索引
-        public List<int> postNodeIndexes = new List<int>();
-
+        
 
         public TextNode() { }
         // TODO
@@ -26,6 +22,7 @@ namespace MultiBranchTexter.Model
             Text = text;
         }
 
+        #region 添加与删除前后节点
         public void AddPreNode(TextNode node)
         {
             //TODO 判断是否已经存在
@@ -36,6 +33,18 @@ namespace MultiBranchTexter.Model
             //TODO 判断是否已经存在
             postNodes.Add(node);
         }
+        public void DeletePreNode(TextNode node)
+        {
+            //TODO 判断是否已经存在
+            preNodes.Remove(node);
+        }
+        public void DeletePostNode(TextNode node)
+        {
+            //TODO 判断是否已经存在
+            postNodes.Remove(node);
+        }
+        #endregion
+
         /// <summary>
         /// 得到postNodes在参数List中的指标，仅仅根据name判断Node是否相等
         /// </summary>

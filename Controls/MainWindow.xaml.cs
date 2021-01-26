@@ -1,18 +1,6 @@
 ﻿using MultiBranchTexter.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MultiBranchTexter
 {
@@ -68,7 +56,7 @@ namespace MultiBranchTexter
         public void OpenMBTabItem(TextNode node)
         {
             //遍历已有的标签页看看是否已经存在同name的标签
-            foreach(MBTabItem mBTabItem in workTabControl.Items)
+            foreach (MBTabItem mBTabItem in workTabControl.Items)
             {
                 if (mBTabItem.textNode.Name == node.Name)
                 {

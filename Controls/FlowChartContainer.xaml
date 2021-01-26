@@ -5,11 +5,13 @@
              Loaded="UserControl_Loaded"
              >
     <ScrollViewer x:Name="scrollViewer" Background="White"
+                  PreviewMouseDown="scrollViewer_PreviewMouseDown"
                   VerticalScrollBarVisibility="Auto" 
                   HorizontalScrollBarVisibility="Auto">
         <Grid x:Name="container"
               Width="Auto" Height="Auto" 
               Margin="0,0,40,60"
+              IsHitTestVisible="True"
               HorizontalAlignment="Left" 
               VerticalAlignment="Top">
         </Grid>

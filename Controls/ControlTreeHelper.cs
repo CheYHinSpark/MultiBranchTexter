@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Media;
 
@@ -17,7 +15,7 @@ namespace MultiBranchTexter.Controls
         /// <typeparam name="T">目标类型</typeparam>
         /// <param name="reference">依赖对象</param>
         /// <returns></returns>
-        public static T FindParentOfType<T>(DependencyObject reference) where T: DependencyObject
+        public static T FindParentOfType<T>(DependencyObject reference) where T : DependencyObject
         {
             DependencyObject dObj = VisualTreeHelper.GetParent(reference);
             if (dObj == null)

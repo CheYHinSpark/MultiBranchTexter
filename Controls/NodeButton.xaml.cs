@@ -1,17 +1,9 @@
-﻿using System;
+﻿using MultiBranchTexter.Controls;
+using MultiBranchTexter.Model;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MultiBranchTexter.Model;
-using MultiBranchTexter.Controls;
 
 namespace MultiBranchTexter
 {
@@ -31,8 +23,8 @@ namespace MultiBranchTexter
             textNode = newNode;
             //显示标题
             titleBox.Text = textNode.Name;
-            //设置显示顺序为1，以显示在connectingline上面
-            Panel.SetZIndex(this, 1);
+            //设置显示顺序为2，以显示在connectingline上面
+            Panel.SetZIndex(this, 2);
         }
 
 
@@ -71,7 +63,21 @@ namespace MultiBranchTexter
             //检查是否已经存在这个后节点
 
             //添加
+            textNode.AddPostNode(postButton.textNode);
             postNodes.Add(postButton);
+        }
+
+        //删除后续节点表中的某个节点
+        public void DeletePostNode(NodeButton postButton)
+        {
+            postNodes.Remove(postButton);
+            textNode.DeletePostNode(postButton.textNode);
+        }
+        //删除前节点表中的某个节点
+        public void DeletePreNode(NodeButton postButton)
+        {
+            // NodeButton没有前节点表，只要删掉textNode的就可以
+            textNode.DeletePreNode(postButton.textNode);
         }
 
         //根据textNode的连接情况在自己和后续节点间生成连线

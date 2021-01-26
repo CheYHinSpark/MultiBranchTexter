@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -36,7 +35,7 @@ namespace MultiBranchTexter
                 WindowTitleTbl.Text = Title;
             }
         }
-      
+
         private void CloseButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             Close();

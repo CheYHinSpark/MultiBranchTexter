@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -41,8 +40,8 @@ namespace MultiBranchTexter.Model
                 if (line == "[Nodes]")
                 { break; }
                 if (line != "")
-                { 
-                    if (Directory.Exists(line.Replace("/","\\")))
+                {
+                    if (Directory.Exists(line.Replace("/", "\\")))
                     { dirPath = line + "\\"; }
                 }
             }
@@ -86,7 +85,7 @@ namespace MultiBranchTexter.Model
                     string[] vs1 = vs[1].Split(",");
                     int postIndex;
                     //为Node添加postNode
-                    for (int i = 0; i < vs1.Length;i++)
+                    for (int i = 0; i < vs1.Length; i++)
                     {
                         postIndex = int.Parse(vs1[i]);
                         result[preIndex].AddPostNode(result[postIndex]);
