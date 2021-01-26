@@ -23,6 +23,19 @@ namespace MultiBranchTexter.Model
         }
 
         #region 添加与删除前后节点
+        #region 静态方法
+        public static void Link(TextNode pre, TextNode post)
+        {
+            pre.AddPostNode(post);
+            post.AddPreNode(pre);
+        }
+        public static void UnLink(TextNode pre, TextNode post)
+        {
+            pre.DeletePostNode(post);
+            post.DeletePreNode(pre);
+        }
+        #endregion
+
         public void AddPreNode(TextNode node)
         {
             //TODO 判断是否已经存在
@@ -46,7 +59,7 @@ namespace MultiBranchTexter.Model
         #endregion
 
         /// <summary>
-        /// 得到postNodes在参数List中的指标，仅仅根据name判断Node是否相等
+        /// 得到postNodes在参数List中的指标，目前是根据内存地址判断
         /// </summary>
         /// <param name="textNodes"></param>
         /// <returns></returns>
@@ -55,11 +68,15 @@ namespace MultiBranchTexter.Model
             List<int> vs = new List<int>();
             for (int i = 0; i < textNodes.Count; i++)
             {
-                for (int j = 0; j < postNodes.Count; j++)
+                if (postNodes.Contains(textNodes[i]))
                 {
-                    if (textNodes[i].Name == postNodes[j].Name)
-                    { vs.Add(i); }
+                    vs.Add(i);
                 }
+                //for (int j = 0; j < postNodes.Count; j++)
+                //{
+                //    if (textNodes[i].Name == postNodes[j].Name)
+                //    { vs.Add(i); }
+                //}
             }
             return vs;
         }

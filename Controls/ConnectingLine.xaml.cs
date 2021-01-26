@@ -62,10 +62,8 @@ namespace MultiBranchTexter
         //删除线条
         private void deleteLine_Click(object sender, RoutedEventArgs e)
         {
-            //从起始点中删去终止点
-            BeginElement.DeletePostNode(EndElement);
-            //从终止点中删去起始点
-            EndElement.DeletePostNode(BeginElement);
+            //断开起始点和终止点
+            NodeButton.UnLink(BeginElement, EndElement);
             //删去本线条
             ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).DeleteLine(this);
         }
@@ -78,10 +76,8 @@ namespace MultiBranchTexter
             EndElement.textNode.DeletePreNode(BeginElement.textNode);
             //添加新节点进去
             TextNode newNode = new TextNode();
-            BeginElement.textNode.AddPostNode(newNode);
-            newNode.AddPreNode(BeginElement.textNode);
-            EndElement.textNode.AddPreNode(newNode);
-            newNode.AddPostNode(EndElement.textNode);
+            TextNode.Link(BeginElement.textNode, newNode);
+            TextNode.Link(newNode, EndElement.textNode);
             //更新排列
             ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).AddNodeAndUpdateFlowChart(newNode);
         }

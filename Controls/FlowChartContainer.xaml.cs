@@ -70,7 +70,7 @@ namespace MultiBranchTexter
                 {
                     mat[i, postIndex[j]] = true;
                     //为nodeButton添加post
-                    nodeButtons[i].AddPostNode(nodeButtons[postIndex[j]]);
+                    NodeButton.Link(nodeButtons[i], nodeButtons[postIndex[j]]);
                 }
             }
             while (hasDoneIndex.Count < num)

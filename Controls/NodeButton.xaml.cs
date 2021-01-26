@@ -57,28 +57,24 @@ namespace MultiBranchTexter
         #endregion
 
         #region 方法
-        //添加后续节点的NodeButton
-        public void AddPostNode(NodeButton postButton)
+        #region 静态方法
+        public static void Link(NodeButton pre, NodeButton post)
         {
             //检查是否已经存在这个后节点
 
             //添加
-            textNode.AddPostNode(postButton.textNode);
-            postNodes.Add(postButton);
+            TextNode.Link(pre.textNode, post.textNode);
+            pre.postNodes.Add(post);
         }
+        public static void UnLink(NodeButton pre, NodeButton post)
+        {
+            //检查是否存在这个后节点
 
-        //删除后续节点表中的某个节点
-        public void DeletePostNode(NodeButton postButton)
-        {
-            postNodes.Remove(postButton);
-            textNode.DeletePostNode(postButton.textNode);
+            //移除
+            pre.postNodes.Remove(post);
+            TextNode.UnLink(pre.textNode, post.textNode);
         }
-        //删除前节点表中的某个节点
-        public void DeletePreNode(NodeButton postButton)
-        {
-            // NodeButton没有前节点表，只要删掉textNode的就可以
-            textNode.DeletePreNode(postButton.textNode);
-        }
+        #endregion
 
         //根据textNode的连接情况在自己和后续节点间生成连线
         public void DrawPostLines(Grid container)
