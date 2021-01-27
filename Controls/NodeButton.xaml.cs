@@ -1,9 +1,11 @@
 ﻿using MultiBranchTexter.Controls;
 using MultiBranchTexter.Model;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace MultiBranchTexter
 {
@@ -15,6 +17,9 @@ namespace MultiBranchTexter
 
         public TextNode textNode;
         public List<NodeButton> postNodes = new List<NodeButton>();
+
+        private Point oldPoint = new Point();
+        private bool isMove = false;
         public NodeButton()
         { }
         public NodeButton(TextNode newNode)
@@ -29,6 +34,47 @@ namespace MultiBranchTexter
 
 
         #region 事件
+        #region 移动事件
+        private void nodeButton_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isMove)
+            {
+                double xPos = e.GetPosition(null).X - oldPoint.X + Margin.Left;
+                double yPos = e.GetPosition(null).Y - oldPoint.Y + Margin.Top;
+                Margin= new Thickness(xPos, yPos, 0, 0);
+                oldPoint = e.GetPosition(null);
+            }
+        }
+
+        private void nodeButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.OriginalSource is Border)
+            {
+                isMove = true;
+                Panel.SetZIndex(this, 3);
+            }
+            oldPoint = e.GetPosition(null);
+        }
+
+        private void nodeButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Panel.SetZIndex(this, 2);
+            isMove = false;
+        }
+        private void nodeButton_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            Debug.WriteLine(e.Delta);
+            Debug.WriteLine(ControlTreeHelper.FindParentOfType<ScrollViewer>(this).VerticalOffset);
+            //if (isMove)
+            //{
+            //    double xPos = Margin.Left;
+            //    double yPos = -e.Delta + Margin.Top;
+            //    Margin = new Thickness(xPos, yPos, 0, 0);
+            //    oldPoint = e.GetPosition(null);
+            //}
+        }
+        #endregion
+
         //点击editBtn……咦我想要什么功能来着
         private void editBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -77,7 +123,7 @@ namespace MultiBranchTexter
         #endregion
 
         //根据textNode的连接情况在自己和后续节点间生成连线
-        public void DrawPostLines(Grid container)
+        public void DrawPostLines(Panel container)
         {
             foreach (NodeButton node in postNodes)
             {
@@ -91,7 +137,13 @@ namespace MultiBranchTexter
                 line.StartDrawing();
             }
         }
+
         #endregion
+
+        private void Thumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+        {
+
+        }
     }
 }
 

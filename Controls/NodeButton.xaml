@@ -4,8 +4,12 @@
              Width="100" 
              HorizontalAlignment="Left" VerticalAlignment="Top"
              >
-    <Border x:Name="bgBorder" Padding="4"
+    <Border x:Name="bgBorder" Padding="10,4,10,4"
             Background="AliceBlue" BorderBrush="DarkRed"
+            MouseDown="nodeButton_MouseDown"
+            MouseMove="nodeButton_MouseMove"
+            MouseLeftButtonUp="nodeButton_MouseLeftButtonUp"
+            MouseWheel="nodeButton_MouseWheel"
             BorderThickness="1" CornerRadius="4">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -16,6 +20,8 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="24"/>
             </Grid.RowDefinitions>
+            <!--<Thumb Margin="-10,-4,-10,-4" Grid.ColumnSpan="2" Grid.RowSpan="2"
+                   DragDelta="Thumb_DragDelta"/>-->
             <Rectangle Grid.Row="0" Grid.ColumnSpan="2"
                        Margin="2"
                        VerticalAlignment="Bottom" Fill="Gray" Height="2"/>
