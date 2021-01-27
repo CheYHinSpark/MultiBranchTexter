@@ -2,18 +2,18 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:MultiBranchTexter"
+             xmlns:c="clr-namespace:MultiBranchTexter.Controls"
              Loaded="UserControl_Loaded"
              >
     <ScrollViewer x:Name="scrollViewer" Background="White"
                   PreviewMouseDown="scrollViewer_PreviewMouseDown"
                   VerticalScrollBarVisibility="Auto" 
                   HorizontalScrollBarVisibility="Auto">
-        <Grid x:Name="container"
-              Width="Auto" Height="Auto" 
-              Margin="0,0,0,60"
-              IsHitTestVisible="True"
-              HorizontalAlignment="Left" 
-              VerticalAlignment="Top">
-        </Grid>
+        <c:AutoSizeCanvas x:Name="container"
+                         Width="Auto" Height="Auto" 
+                         Margin="0,0,0,0"
+                         IsHitTestVisible="True"
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Top"/>
     </ScrollViewer>
 </UserControl>

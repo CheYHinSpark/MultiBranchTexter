@@ -43,11 +43,12 @@ namespace MultiBranchTexter
             if (isMove)
             {
                 //自身位置
-                double xPos = e.GetPosition(null).X - oldPoint.X + Margin.Left;
-                double yPos = e.GetPosition(null).Y - oldPoint.Y + Margin.Top;
+                double xPos = e.GetPosition(null).X - oldPoint.X + Canvas.GetLeft(this);
+                double yPos = e.GetPosition(null).Y - oldPoint.Y + Canvas.GetTop(this);
                 xPos = xPos >= 0 ? xPos : 0; 
                 yPos = yPos >= 0 ? yPos : 0;
-                Margin = new Thickness(xPos, yPos, 0, 0);
+                Canvas.SetLeft(this, xPos);
+                Canvas.SetTop(this, yPos);
                 oldPoint = e.GetPosition(null);
                 //调整线条
                 foreach(ConnectingLine line in preLines)

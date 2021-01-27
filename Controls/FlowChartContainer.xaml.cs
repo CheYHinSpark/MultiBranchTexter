@@ -114,7 +114,8 @@ namespace MultiBranchTexter
             {
                 for (int j = 0; j < groupedNodes[i].Count; j++)
                 {
-                    groupedNodes[i][j].Margin = new Thickness(40 + 120 * j, 60 + 160 * i, 0, 0);
+                    Canvas.SetLeft(groupedNodes[i][j], 40 + 120 * j);
+                    Canvas.SetTop(groupedNodes[i][j], 60 + 160 * i);
                     container.Children.Add(groupedNodes[i][j]);
                 }
             }
