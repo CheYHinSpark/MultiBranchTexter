@@ -1,2 +1,4 @@
 /.vs/
 /obj/
+/bin/
+!/bin/Debug/netcoreapp3.1/Test/
