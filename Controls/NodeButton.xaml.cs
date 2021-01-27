@@ -18,6 +18,9 @@ namespace MultiBranchTexter
         public TextNode textNode;
         public List<NodeButton> postNodes = new List<NodeButton>();
 
+        public List<ConnectingLine> preLines = new List<ConnectingLine>();
+        public List<ConnectingLine> postLines = new List<ConnectingLine>();
+ 
         private Point oldPoint = new Point();
         private bool isMove = false;
         public NodeButton()
@@ -39,10 +42,18 @@ namespace MultiBranchTexter
         {
             if (isMove)
             {
+                //自身位置
                 double xPos = e.GetPosition(null).X - oldPoint.X + Margin.Left;
                 double yPos = e.GetPosition(null).Y - oldPoint.Y + Margin.Top;
-                Margin= new Thickness(xPos, yPos, 0, 0);
+                xPos = xPos >= 0 ? xPos : 0; 
+                yPos = yPos >= 0 ? yPos : 0;
+                Margin = new Thickness(xPos, yPos, 0, 0);
                 oldPoint = e.GetPosition(null);
+                //调整线条
+                foreach(ConnectingLine line in preLines)
+                { line.Drawing(); }
+                foreach(ConnectingLine line in postLines)
+                { line.Drawing(); }
             }
         }
 
@@ -132,18 +143,15 @@ namespace MultiBranchTexter
                     BeginElement = this,
                     EndElement = node
                 };
+                postLines.Add(line);
+                node.preLines.Add(line);
                 container.Children.Add(line);
                 container.UpdateLayout();// <--没有将无法显示
-                line.StartDrawing();
+                line.Drawing();
             }
         }
 
         #endregion
-
-        private void Thumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
-        {
-
-        }
     }
 }
 

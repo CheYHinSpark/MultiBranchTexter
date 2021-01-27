@@ -64,6 +64,8 @@ namespace MultiBranchTexter
         {
             //断开起始点和终止点
             NodeButton.UnLink(BeginElement, EndElement);
+            BeginElement.postLines.Remove(this);
+            EndElement.preLines.Remove(this);
             //删去本线条
             ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).DeleteLine(this);
         }
@@ -87,9 +89,9 @@ namespace MultiBranchTexter
 
         #region 方法
         /// <summary>
-        /// 开始画线
+        /// 画线
         /// </summary>
-        public void StartDrawing()
+        public void Drawing()
         {
             if (BeginElement == null || EndElement == null)
             { return; }
@@ -97,8 +99,8 @@ namespace MultiBranchTexter
             Vector endVec = VisualTreeHelper.GetOffset(EndElement);
             Point beginPt = new Point(beginVec.X + BeginElement.ActualWidth / 2.0, beginVec.Y + BeginElement.ActualHeight / 2.0);
             Point endPt = new Point(endVec.X + EndElement.ActualWidth / 2.0, endVec.Y + EndElement.ActualHeight / 2.0);
-            Point c1Pt = new Point(beginPt.X, beginPt.Y * 0.64 + endPt.Y * 0.36);
-            Point c2Pt = new Point(endPt.X, beginPt.Y * 0.36 + endPt.Y * 0.64);
+            Point c1Pt = new Point(beginPt.X, beginPt.Y * 0.5 + endPt.Y * 0.5);
+            Point c2Pt = new Point(endPt.X, beginPt.Y * 0.5 + endPt.Y * 0.5);
             //三次bezier曲线
             Path.Data = Geometry.Parse("M" + beginPt.ToString() + " C" + c1Pt.ToString() + " "
                 + c2Pt.ToString() + " " + endPt.ToString());
