@@ -60,7 +60,6 @@ namespace MultiBranchTexter
 
         private void nodeButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            parent = ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this);
             if (e.OriginalSource is Border)
             {
                 SwitchMoving();
@@ -165,7 +164,6 @@ namespace MultiBranchTexter
             isMoving = true;
         }
 
-
         public void Move(double xPos, double yPos)
         {
             xPos += Canvas.GetLeft(this);
@@ -182,7 +180,13 @@ namespace MultiBranchTexter
             { line.Drawing(); }
         }
 
-
+        /// <summary>
+        /// 设置父控件
+        /// </summary>
+        public void SetParent(AutoSizeCanvas canvas)
+        {
+            parent = canvas;
+        }
         #endregion
     }
 }

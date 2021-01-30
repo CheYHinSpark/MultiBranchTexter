@@ -20,6 +20,7 @@ namespace MultiBranchTexter
         private DispatcherTimer timer = null;
 
         public List<NodeButton> selectedNodes = new List<NodeButton>();
+        private Point _clickPoint;
 
         public FlowChartContainer()
         {
@@ -130,6 +131,7 @@ namespace MultiBranchTexter
                     Canvas.SetLeft(groupedNodes[i][j], 40 + 120 * j);
                     Canvas.SetTop(groupedNodes[i][j], 60 + 160 * i);
                     container.Children.Add(groupedNodes[i][j]);
+                    groupedNodes[i][j].SetParent(container);
                 }
             }
             //连线
@@ -254,6 +256,27 @@ namespace MultiBranchTexter
             {
                 e.Handled = true;
                 container.ScaleRatio += 0.1 * Math.Sign(e.Delta);
+            }
+        }
+
+        private void container_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.OriginalSource is ScrollViewer)
+            {
+                if (e.LeftButton == MouseButtonState.Pressed)
+                {
+                    this.Cursor = Cursors.Hand;
+                    double x, y;
+                    Point p = e.GetPosition((ScrollViewer)sender);
+
+                    x = _clickPoint.X - p.X;
+                    y = _clickPoint.Y - p.Y;
+
+                    scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + x);
+                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + y);
+                }
+                else { this.Cursor = Cursors.Arrow; }
+                _clickPoint = e.GetPosition((ScrollViewer)sender);
             }
         }
     }

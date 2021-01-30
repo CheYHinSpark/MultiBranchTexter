@@ -5,23 +5,23 @@
              xmlns:c="clr-namespace:MultiBranchTexter.Controls"
              Loaded="UserControl_Loaded"
              >
-    <c:GreatScrollViewer x:Name="scrollViewer"
-                             PreviewMouseWheel="scrollViewer_PreviewMouseWheel"
-                      Margin="0" Template="{StaticResource greatScrollViewerTemplate}"
-                      VerticalScrollBarVisibility="Auto" 
-                      HorizontalScrollBarVisibility="Auto">
-        <c:AutoSizeCanvas x:Name="container"
-                              
+    <ScrollViewer x:Name="scrollViewer"
+                  PreviewMouseWheel="scrollViewer_PreviewMouseWheel"
+                  MouseMove="container_MouseMove"
+                  Margin="0"
+                  VerticalScrollBarVisibility="Auto" 
+                  HorizontalScrollBarVisibility="Auto">
+            <c:AutoSizeCanvas x:Name="container"
                          Width="Auto" Height="Auto" 
                          Margin="0,0,20,20"
                          HorizontalAlignment="Left" 
-                         VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
-            <c:AutoSizeCanvas.LayoutTransform>
-                <ScaleTransform ScaleX="{Binding Path=ScaleRatio,
+                         VerticalAlignment="Top">
+                <c:AutoSizeCanvas.LayoutTransform>
+                    <ScaleTransform ScaleX="{Binding Path=ScaleRatio,
                     RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=c:AutoSizeCanvas}}" 
                                 ScaleY="{Binding Path=ScaleRatio,
                     RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=c:AutoSizeCanvas}}"/>
-            </c:AutoSizeCanvas.LayoutTransform>
-        </c:AutoSizeCanvas>
-    </c:GreatScrollViewer>
+                </c:AutoSizeCanvas.LayoutTransform>
+            </c:AutoSizeCanvas>
+    </ScrollViewer>
 </UserControl>

@@ -1,6 +1,8 @@
 ﻿using MultiBranchTexter.Model;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace MultiBranchTexter
 {
@@ -78,5 +80,6 @@ namespace MultiBranchTexter
             flowChart.Visibility = Visibility.Visible;
         }
         #endregion
+      
     }
 }
