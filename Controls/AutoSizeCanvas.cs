@@ -13,8 +13,23 @@ namespace MultiBranchTexter.Controls
     /// </summary>
     public class AutoSizeCanvas : Canvas
     {
+        public static DependencyProperty ScaleRatioProperty =
+            DependencyProperty.Register("ScaleRatio", //属性名称
+                typeof(double), //属性类型
+                typeof(AutoSizeCanvas), //该属性所有者，即将该属性注册到那个类上
+                new PropertyMetadata(1.0)//属性默认值
+                );
+        
+        public double ScaleRatio
+        {
+            get { return (double)GetValue(ScaleRatioProperty); }
+            set { SetValue(ScaleRatioProperty, value); }
+        }
+
+
         public bool IsResizing = false;
         private Size oldSize;
+
         protected override Size MeasureOverride(Size constraint)
         {
             base.MeasureOverride(constraint);

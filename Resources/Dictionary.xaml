@@ -232,7 +232,7 @@
 
 
     <ControlTemplate x:Key="greatScrollViewerTemplate" TargetType="{x:Type ScrollViewer}">
-        <Grid>
+        <Grid Background="White">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto" />

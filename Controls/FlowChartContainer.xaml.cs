@@ -6,7 +6,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Shapes;
+using System.Windows.Input;
 using System.Windows.Threading;
+using System.Windows.Media;
 
 namespace MultiBranchTexter
 {
@@ -244,6 +246,15 @@ namespace MultiBranchTexter
         //        timer = null;
         //    }
         //}
-        #endregion 
+        #endregion
+
+        private void scrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            if (Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                e.Handled = true;
+                container.ScaleRatio += 0.1 * Math.Sign(e.Delta);
+            }
+        }
     }
 }

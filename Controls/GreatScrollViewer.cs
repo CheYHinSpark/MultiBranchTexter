@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace MultiBranchTexter.Controls
@@ -22,7 +23,13 @@ namespace MultiBranchTexter.Controls
 
         public GreatScrollViewer()
         {
+            //PreviewMouseWheel += GreatScrollViewer_MouseWheel;
             Loaded += GreatScrollViewer_Loaded;
+        }
+
+        private void GreatScrollViewer_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            
         }
 
         private void GreatScrollViewer_Loaded(object sender, System.Windows.RoutedEventArgs e)
