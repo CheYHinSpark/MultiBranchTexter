@@ -5,15 +5,15 @@
              xmlns:c="clr-namespace:MultiBranchTexter.Controls"
              Loaded="UserControl_Loaded"
              >
-    <ScrollViewer x:Name="scrollViewer" Background="White"
-                  PreviewMouseDown="scrollViewer_PreviewMouseDown"
-                  VerticalScrollBarVisibility="Auto" 
-                  HorizontalScrollBarVisibility="Auto">
-        <c:AutoSizeCanvas x:Name="container"
+        <c:GreatScrollViewer x:Name="scrollViewer" Background="White"
+                      Margin="0" Template="{StaticResource greatScrollViewerTemplate}"
+                      VerticalScrollBarVisibility="Auto" 
+                      HorizontalScrollBarVisibility="Auto">
+            <c:AutoSizeCanvas x:Name="container"
                          Width="Auto" Height="Auto" 
-                         Margin="0,0,0,0"
-                         IsHitTestVisible="True"
+                         Margin="0,0,20,20"
                          HorizontalAlignment="Left" 
-                         VerticalAlignment="Top"/>
-    </ScrollViewer>
+                         VerticalAlignment="Top">
+            </c:AutoSizeCanvas>
+        </c:GreatScrollViewer>
 </UserControl>

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -14,6 +15,8 @@ namespace MultiBranchTexter
     /// </summary>
     public partial class NodeButton : UserControl
     {
+        private AutoSizeCanvas parent;
+
 
         public TextNode textNode;
         public List<NodeButton> postNodes = new List<NodeButton>();
@@ -22,7 +25,8 @@ namespace MultiBranchTexter
         public List<ConnectingLine> postLines = new List<ConnectingLine>();
  
         private Point oldPoint = new Point();
-        private bool isMove = false;
+        private bool isMoving = false;
+        public bool IsMoving { get { return isMoving; } }
         public NodeButton()
         { }
         public NodeButton(TextNode newNode)
@@ -40,50 +44,41 @@ namespace MultiBranchTexter
         #region 移动事件
         private void nodeButton_MouseMove(object sender, MouseEventArgs e)
         {
-            if (isMove)
+            if (isMoving)
             {
-                //自身位置
-                double xPos = e.GetPosition(null).X - oldPoint.X + Canvas.GetLeft(this);
-                double yPos = e.GetPosition(null).Y - oldPoint.Y + Canvas.GetTop(this);
-                xPos = xPos >= 0 ? xPos : 0; 
-                yPos = yPos >= 0 ? yPos : 0;
-                Canvas.SetLeft(this, xPos);
-                Canvas.SetTop(this, yPos);
-                oldPoint = e.GetPosition(null);
-                //调整线条
-                foreach(ConnectingLine line in preLines)
-                { line.Drawing(); }
-                foreach(ConnectingLine line in postLines)
-                { line.Drawing(); }
+                if (e.LeftButton == MouseButtonState.Released)
+                {
+                    SwitchMoving();
+                    return;
+                }
+                //移动自身位置
+                Move(e.GetPosition(parent).X - oldPoint.X,
+                    e.GetPosition(parent).Y - oldPoint.Y);
+                oldPoint = e.GetPosition(parent);
             }
         }
 
         private void nodeButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            parent = ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this);
             if (e.OriginalSource is Border)
             {
-                isMove = true;
-                Panel.SetZIndex(this, 3);
+                SwitchMoving();
             }
-            oldPoint = e.GetPosition(null);
+            oldPoint = e.GetPosition(parent);
         }
 
         private void nodeButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Panel.SetZIndex(this, 2);
-            isMove = false;
+            SwitchMoving();
         }
+
         private void nodeButton_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            Debug.WriteLine(e.Delta);
-            Debug.WriteLine(ControlTreeHelper.FindParentOfType<ScrollViewer>(this).VerticalOffset);
-            //if (isMove)
-            //{
-            //    double xPos = Margin.Left;
-            //    double yPos = -e.Delta + Margin.Top;
-            //    Margin = new Thickness(xPos, yPos, 0, 0);
-            //    oldPoint = e.GetPosition(null);
-            //}
+            if (isMoving)
+            {
+                SwitchMoving();
+            }
         }
         #endregion
 
@@ -152,8 +147,42 @@ namespace MultiBranchTexter
             }
         }
 
+        /// <summary>
+        /// 切换是否移动
+        /// </summary>
+        private void SwitchMoving()
+        {
+            // 如果正在移动，切换为不移动
+            if (isMoving)
+            {
+                Panel.SetZIndex(this, 2);
+                parent.IsResizing = false;
+                isMoving = false;
+                return;
+            }
+            Panel.SetZIndex(this, 3);
+            parent.IsResizing = true;
+            isMoving = true;
+        }
+
+
+        public void Move(double xPos, double yPos)
+        {
+            xPos += Canvas.GetLeft(this);
+            yPos += Canvas.GetTop(this);
+            //自身位置
+            xPos = xPos >= 0 ? xPos : 0;
+            yPos = yPos >= 0 ? yPos : 0;
+            Canvas.SetLeft(this, xPos);
+            Canvas.SetTop(this, yPos);
+            //调整线条
+            foreach (ConnectingLine line in preLines)
+            { line.Drawing(); }
+            foreach (ConnectingLine line in postLines)
+            { line.Drawing(); }
+        }
+
+
         #endregion
     }
 }
-
-

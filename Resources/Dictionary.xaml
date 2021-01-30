@@ -229,4 +229,46 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
+
+    <ControlTemplate x:Key="greatScrollViewerTemplate" TargetType="{x:Type ScrollViewer}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid x:Name="scrollContentGrid">
+                <ScrollContentPresenter />
+                <Border x:Name="leftBd" Width="20" HorizontalAlignment="Left"
+                        Background="Red" IsHitTestVisible="False"
+                        />
+                <Border x:Name="topBd" Height="20" VerticalAlignment="Top"
+                        Background="Red" IsHitTestVisible="False"
+                        />
+                <Border x:Name="rightBd" Width="20" HorizontalAlignment="Right"
+                        Background="Red" IsHitTestVisible="False"
+                        />
+                <Border x:Name="bottomBd" Width="20" VerticalAlignment="Bottom"
+                        Background="Red" IsHitTestVisible="False"
+                        />
+                
+            </Grid>
+            <ScrollBar x:Name="PART_VerticalScrollBar" Grid.Row="0" Grid.Column="1"
+                       Value="{TemplateBinding VerticalOffset}"
+                       Maximum="{TemplateBinding ScrollableHeight}"
+                       ViewportSize="{TemplateBinding ViewportHeight}"
+                       Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+            <ScrollBar x:Name="PART_HorizontalScrollBar"
+                       Orientation="Horizontal"
+                       Grid.Row="1" Grid.Column="0"
+                       Value="{TemplateBinding HorizontalOffset}"
+                       Maximum="{TemplateBinding ScrollableWidth}"
+                       ViewportSize="{TemplateBinding ViewportWidth}"
+                       Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
+        </Grid>
+    </ControlTemplate>
 </ResourceDictionary>

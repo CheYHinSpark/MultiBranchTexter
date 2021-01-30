@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace MultiBranchTexter
 {
@@ -13,11 +15,16 @@ namespace MultiBranchTexter
     /// </summary>
     public partial class FlowChartContainer : UserControl
     {
+        private DispatcherTimer timer = null;
+
+        public List<NodeButton> selectedNodes = new List<NodeButton>();
+
         public FlowChartContainer()
         {
             InitializeComponent();
         }
 
+        #region 事件
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             //测试读取Test文件夹下的mbtxt文件
@@ -27,6 +34,11 @@ namespace MultiBranchTexter
             DrawFlowChart(reader.Read());
         }
 
+        #endregion
+
+        #region 方法
+
+        #region 流程图绘制方法
         //根据List<TextNode>建立树状图
         //不处理循坏连接的情况
         //有向无环图排序
@@ -60,7 +72,6 @@ namespace MultiBranchTexter
                 hasDone[i] = false;
                 //初始化组数
                 groupIndexOfBtns[i] = 0;
-                
             }
             for (int i = 0; i < textNodes.Count; i++)
             {
@@ -83,10 +94,10 @@ namespace MultiBranchTexter
                     if (hasDoneIndex.Contains(j))
                     { continue; }
                     bool shouldAdd = true;
-                    for (int i = 0; i < num;i++)
+                    for (int i = 0; i < num; i++)
                     {
                         //找到一个前驱，跳过
-                        if (mat[i,j])
+                        if (mat[i, j])
                         {
                             shouldAdd = false;
                             break;
@@ -101,7 +112,7 @@ namespace MultiBranchTexter
                 //添加
                 groupedNodes.Add(noPreNodes);
                 //处理身后事
-                for (int i = 0; i< hasDoneIndex.Count; i++)
+                for (int i = 0; i < hasDoneIndex.Count; i++)
                 {
                     for (int j = 0; j < num; j++)
                     {
@@ -131,6 +142,21 @@ namespace MultiBranchTexter
         {
             container.Children.Remove(line);
         }
+
+        /// <summary>
+        /// 添加节点并更新流程图
+        /// </summary>
+        /// <param name="newNode"></param>
+        public void AddNodeAndUpdateFlowChart(TextNode newNode)
+        {
+            List<TextNode> textNodes = GetTextNodes();
+            textNodes.Add(newNode);
+            container.Children.Clear();
+            DrawFlowChart(textNodes);
+        }
+        #endregion
+
+
         /// <summary>
         /// 获得textNode列表
         /// </summary>
@@ -146,28 +172,78 @@ namespace MultiBranchTexter
             }
             return textNodes;
         }
-        /// <summary>
-        /// 添加节点并更新流程图
-        /// </summary>
-        /// <param name="newNode"></param>
-        public void AddNodeAndUpdateFlowChart(TextNode newNode)
-        {
-            List<TextNode> textNodes = GetTextNodes();
-            textNodes.Add(newNode);
-            container.Children.Clear();
-            DrawFlowChart(textNodes);
-        }
 
-        private void scrollViewer_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            if (e.Source is ScrollViewer)
-            {
-                if (e.OriginalSource is Grid)
-                {
-                    //现在点击到的是空白区域，取消选中的控件
-                    
-                }
-            }
-        }
+
+        #endregion
+
+        #region 失败的开发
+        //private void repeatBtn_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        //{
+        //    StartTimer();
+        //}
+
+        //private void Timer_Tick(object sender, EventArgs e)
+        //{
+        //    //if (bottomBtn.IsMouseOver)
+        //    //{
+
+        //    //    selectedNodes.Clear();
+        //    //    foreach (UserControl control in container.Children)
+        //    //    {
+        //    //        if (control is NodeButton)
+        //    //        {
+        //    //            if ((control as NodeButton).IsMoving)
+        //    //            { selectedNodes.Add((control as NodeButton)); }
+        //    //        }
+        //    //    }
+
+        //    //    for (int i = 0; i < selectedNodes.Count;i++)
+        //    //    {
+        //    //        selectedNodes[i].Move(0, 15);
+        //    //    }
+        //    //    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + 15);
+
+        //    //}
+        //}
+
+        //private void repeatBtn_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        //{
+        //    if (e.LeftButton == System.Windows.Input.MouseButtonState.Released)
+        //    {
+        //        StopTimer();
+        //    }
+        //}
+
+        //private void repeatBtn_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        //{
+        //    StopTimer();
+        //}
+
+        //private void repeatBtn_Click(object sender, RoutedEventArgs e)
+        //{
+        //    StartTimer();
+        //}
+
+
+        //private void StartTimer()
+        //{
+        //    if (timer == null)
+        //    {
+        //        timer = new DispatcherTimer();
+        //        timer.Tick += Timer_Tick;
+        //        timer.Interval = new TimeSpan(0, 0, 0, 0, 33);
+        //        timer.Start();
+        //    }
+        //}
+
+        //private void StopTimer()
+        //{
+        //    if (timer != null)
+        //    {
+        //        timer.Stop();
+        //        timer = null;
+        //    }
+        //}
+        #endregion 
     }
 }
