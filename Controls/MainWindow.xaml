@@ -4,6 +4,7 @@
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                    xmlns:local="clr-namespace:MultiBranchTexter"
+                   xmlns:c="clr-namespace:MultiBranchTexter.Controls"
                    Style="{StaticResource MetroWindowStyle}"
                    mc:Ignorable="d"
                    Title="MainWindow" Height="450" Width="800"
@@ -19,7 +20,7 @@
                 Template="{StaticResource generalButtonTemplate}"
                 Grid.Row="0" Click="frontBtn_Click"/>
         <TabControl x:Name="workTabControl" Grid.Row="1" Padding="0"/>
-        <local:FlowChartContainer x:Name="flowChart" Grid.Row="1"/>
+        <c:FlowChartContainer x:Name="flowChart" Grid.Row="1"/>
 
     </Grid>
 

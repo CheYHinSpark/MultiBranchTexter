@@ -10,22 +10,21 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using System.Windows.Media;
 
-namespace MultiBranchTexter
+namespace MultiBranchTexter.Controls
 {
     /// <summary>
     /// FlowChartContainer.xaml 的交互逻辑
     /// </summary>
     public partial class FlowChartContainer : UserControl
     {
-        private DispatcherTimer timer = null;
-
-        //public List<NodeButton> selectedNodes = new List<NodeButton>();
-        
         //与拖拽、移动有关的变量
         private Point _clickPoint;
         private bool isDragScroll = false;
+        //选择相关的变量
+        public List<NodeButton> selectedNodes = new List<NodeButton>();
+
         //搜索相关的变量
-        private List<NodeButton> searchedNodes = new List<NodeButton>();
+        public List<NodeButton> searchedNodes = new List<NodeButton>();
         private int searchedIndex = -1;
 
         public FlowChartContainer()
@@ -77,7 +76,7 @@ namespace MultiBranchTexter
             }
             if (selectBorder.Visibility == Visibility.Visible)
             {
-                // TODO: 没有解决负宽度问题
+                // TODO: 没有解决框选框负宽度问题
                 Point p = e.GetPosition((ScrollViewer)sender);
                 //selectBorder.Width = p.X - _clickPoint.X;
                 //selectBorder.Height = p.Y - _clickPoint.Y;
@@ -100,6 +99,8 @@ namespace MultiBranchTexter
                 }
                 else
                 {
+                    //取消选择
+                    ClearSelection();
                     //准备拖拽
                     isDragScroll = true;
                     this.Cursor = Cursors.Hand;
@@ -256,13 +257,31 @@ namespace MultiBranchTexter
         }
 
         #region 节点搜索功能
+        public void ClearSearch()
+        {
+            for (int i =0;i<searchedNodes.Count;i++)
+            {
+                if (selectedNodes.Contains(searchedNodes[i]))
+                {
+                    searchedNodes[i].NodeState = NodeState.Selected;
+                }
+                else
+                {
+                    searchedNodes[i].NodeState = NodeState.Normal;
+                }
+            }
+            searchedNodes.Clear();
+        }
+
         /// <summary>
         /// 根据信息搜索目标节点
         /// </summary>
         /// <param name="info"></param>
         public void SearchNode(string info)
         {
-            searchedNodes.Clear();
+            ClearSearch();
+            if (info == "")
+            { return; }
             foreach (UserControl control in container.Children)
             {
                 if (control is NodeButton)
@@ -270,6 +289,10 @@ namespace MultiBranchTexter
                     if ((control as NodeButton).BeSearch(info))
                     { searchedNodes.Add((control as NodeButton)); }
                 }
+            }
+            for (int i =0;i<searchedNodes.Count;i++)
+            {
+                searchedNodes[i].NodeState = NodeState.Searched;
             }
             //如果不为空，跳转到第一个查到的node
             if (searchedNodes.Count > 0)
@@ -282,10 +305,13 @@ namespace MultiBranchTexter
         /// <summary>
         /// 搜索到的下一个
         /// </summary>
-        public void SearchNext()
+        public void SearchNext(string info)
         {
             if (searchedNodes.Count == 0)
-            { return; }
+            { 
+                SearchNode(info);
+                return;
+            }
             searchedIndex++;
             if (searchedIndex >= searchedNodes.Count)
             { searchedIndex = 0; }
@@ -306,77 +332,55 @@ namespace MultiBranchTexter
         }
         #endregion
 
+        #region 节点选择功能
+        public void NewSelection(NodeButton node)
+        {
+            ClearSelection();
+            selectedNodes.Add(node);
+            selectedNodes[0].NodeState = NodeState.Selected;
+        }
+        public void NewSelection(List<NodeButton> nodes)
+        {
+            ClearSelection();
+            for (int i =0; i<nodes.Count;i++)
+            {
+                nodes[i].NodeState = NodeState.Selected;
+            }
+            selectedNodes = nodes;
+        }
+        public void ClearSelection()
+        {
+            for (int i =0;i<selectedNodes.Count;i++)
+            {
+                if (searchedNodes.Contains(selectedNodes[i]))
+                {
+                    selectedNodes[i].NodeState = NodeState.Searched;
+                }
+                else
+                {
+                    selectedNodes[i].NodeState = NodeState.Normal;
+                }
+            }
+            selectedNodes.Clear();
+        }
+
+        public void AddSelection(NodeButton node)
+        {
+            node.NodeState = NodeState.Selected;
+            selectedNodes.Add(node);
+        }
+        public void AddSelection(List<NodeButton> nodes)
+        {
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                nodes[i].NodeState = NodeState.Selected;
+                selectedNodes.Add(nodes[i]);
+            }
+        }
         #endregion
 
-        #region 失败的开发
-        //private void repeatBtn_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        //{
-        //    StartTimer();
-        //}
-
-        //private void Timer_Tick(object sender, EventArgs e)
-        //{
-        //    //if (bottomBtn.IsMouseOver)
-        //    //{
-
-        //    //    selectedNodes.Clear();
-        //    //    foreach (UserControl control in container.Children)
-        //    //    {
-        //    //        if (control is NodeButton)
-        //    //        {
-        //    //            if ((control as NodeButton).IsMoving)
-        //    //            { selectedNodes.Add((control as NodeButton)); }
-        //    //        }
-        //    //    }
-
-        //    //    for (int i = 0; i < selectedNodes.Count;i++)
-        //    //    {
-        //    //        selectedNodes[i].Move(0, 15);
-        //    //    }
-        //    //    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + 15);
-
-        //    //}
-        //}
-
-        //private void repeatBtn_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
-        //{
-        //    if (e.LeftButton == System.Windows.Input.MouseButtonState.Released)
-        //    {
-        //        StopTimer();
-        //    }
-        //}
-
-        //private void repeatBtn_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        //{
-        //    StopTimer();
-        //}
-
-        //private void repeatBtn_Click(object sender, RoutedEventArgs e)
-        //{
-        //    StartTimer();
-        //}
-
-
-        //private void StartTimer()
-        //{
-        //    if (timer == null)
-        //    {
-        //        timer = new DispatcherTimer();
-        //        timer.Tick += Timer_Tick;
-        //        timer.Interval = new TimeSpan(0, 0, 0, 0, 33);
-        //        timer.Start();
-        //    }
-        //}
-
-        //private void StopTimer()
-        //{
-        //    if (timer != null)
-        //    {
-        //        timer.Stop();
-        //        timer = null;
-        //    }
-        //}
         #endregion
+
 
     }
 }

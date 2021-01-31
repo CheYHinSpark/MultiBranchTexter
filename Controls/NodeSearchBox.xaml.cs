@@ -39,11 +39,12 @@ namespace MultiBranchTexter.Controls
         private void closeBtn_Click(object sender, RoutedEventArgs e)
         {
             this.Visibility = Visibility.Hidden;
+            container.ClearSearch();
         }
 
         private void nextBtn_Click(object sender, RoutedEventArgs e)
         {
-            container.SearchNext();
+            container.SearchNext(findBox.Text);
         }
     }
 }

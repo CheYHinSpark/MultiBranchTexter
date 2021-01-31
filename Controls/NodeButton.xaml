@@ -1,45 +1,72 @@
-﻿<UserControl x:Class="MultiBranchTexter.NodeButton"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Width="100" 
-             HorizontalAlignment="Left" VerticalAlignment="Top"
-             >
-    <Border x:Name="bgBorder" Padding="10,4,10,4"
-            Background="AliceBlue" BorderBrush="DarkRed"
+﻿<c:NodeBase x:Class="MultiBranchTexter.Controls.NodeButton"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:c="clr-namespace:MultiBranchTexter.Controls"
+            Width="100" Loaded="NodeBase_Loaded"
+            HorizontalAlignment="Left" VerticalAlignment="Top">
+    <c:NodeBase.Template>
+        <ControlTemplate TargetType="{x:Type c:NodeBase}">
+            <Border x:Name="bgBorder" Padding="10,4,10,4"
+            Background="AliceBlue" 
+                       BorderBrush="DarkRed"
             MouseLeftButtonDown="nodeButton_MouseLeftButtonDown"
             MouseMove="nodeButton_MouseMove"
             MouseLeftButtonUp="nodeButton_MouseLeftButtonUp"
             MouseWheel="nodeButton_MouseWheel"
             BorderThickness="1" CornerRadius="4">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="24"/>
-            </Grid.RowDefinitions>
-            <!--<Thumb Margin="-10,-4,-10,-4" Grid.ColumnSpan="2" Grid.RowSpan="2"
-                   DragDelta="Thumb_DragDelta"/>-->
-            <Rectangle Grid.Row="0" Grid.ColumnSpan="2"
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="24"/>
+                    </Grid.RowDefinitions>
+                    <Rectangle Grid.Row="0" Grid.ColumnSpan="2"
                        Margin="2"
                        VerticalAlignment="Bottom" Fill="Gray" Height="2"/>
-            <TextBox x:Name="titleBox" Margin="2"
+                    <TextBox x:Name="titleBox" Margin="2"
                      Grid.Row="0" Grid.ColumnSpan="2"
                      Focusable="False"
                      Template="{StaticResource textBoxTemplate}"
                      PreviewMouseDoubleClick="titleBox_PreviewMouseDoubleClick"
                      LostFocus="titleBox_LostFocus"
                      />
-            <Button x:Name="editBtn" Grid.Row="1" Grid.Column="0"
+                    <Button x:Name="editBtn" Grid.Row="1" Grid.Column="0"
                     Template="{StaticResource generalButtonTemplate}"
                     Click="editBtn_Click"/>
-            <Button x:Name="gotoBtn" Grid.Row="1" Grid.Column="1"
+                    <Button x:Name="gotoBtn" Grid.Row="1" Grid.Column="1"
                     Template="{StaticResource generalButtonTemplate}" 
                     Click="gotoBtn_Click">
-                <Path Fill="White" Data="M0,0 0,10 8,5Z"/>
-            </Button>
-        </Grid>
-    </Border>
-</UserControl>
+                        <Path Fill="White" Data="M0,0 0,10 8,5Z"/>
+                    </Button>
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="NodeState" Value="Selected">
+                    <Setter Property="BorderBrush" Value="Red" TargetName="bgBorder"/>
+                    <Setter Property="Effect" TargetName="bgBorder">
+                        <Setter.Value>
+                            <DropShadowEffect ShadowDepth="0"
+                                              Color="Red"
+                                              Opacity="1"
+                                              BlurRadius="6"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="NodeState" Value="Searched">
+                    <Setter Property="BorderBrush" Value="Orange" TargetName="bgBorder"/>
+                    <Setter Property="Effect" TargetName="bgBorder">
+                        <Setter.Value>
+                            <DropShadowEffect ShadowDepth="0"
+                                              Color="Orange"
+                                              Opacity="1"
+                                              BlurRadius="6"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </c:NodeBase.Template>
+</c:NodeBase>

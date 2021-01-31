@@ -1,22 +1,19 @@
-﻿using MultiBranchTexter.Controls;
-using MultiBranchTexter.Model;
+﻿using MultiBranchTexter.Model;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Media;
 
-namespace MultiBranchTexter
+namespace MultiBranchTexter.Controls
 {
     /// <summary>
     /// NodeButton.xaml 的交互逻辑
     /// </summary>
-    public partial class NodeButton : UserControl
+    public partial class NodeButton : NodeBase
     {
+        private TextBox titleBox;
         private AutoSizeCanvas parent;
-
 
         public TextNode textNode;
         public List<NodeButton> postNodes = new List<NodeButton>();
@@ -33,14 +30,19 @@ namespace MultiBranchTexter
         {
             InitializeComponent();
             textNode = newNode;
+        }
+
+
+        #region 事件
+        //加载完成
+        private void NodeBase_Loaded(object sender, RoutedEventArgs e)
+        {
+            titleBox = GetTemplateChild("titleBox") as TextBox;
             //显示标题
             titleBox.Text = textNode.Name;
             //设置显示顺序为2，以显示在connectingline上面
             Panel.SetZIndex(this, 2);
         }
-
-
-        #region 事件
         #region 移动事件
         private void nodeButton_MouseMove(object sender, MouseEventArgs e)
         {
@@ -60,9 +62,13 @@ namespace MultiBranchTexter
 
         private void nodeButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            NodeState = NodeState.Selected;
             if (e.OriginalSource is Border)
             {
                 SwitchMoving();
+                //通知flowchart改变selectedNodes
+                FlowChartContainer container = ControlTreeHelper.FindParentOfType<FlowChartContainer>(parent);
+                container.NewSelection(this);
             }
             oldPoint = e.GetPosition(parent);
         }
@@ -197,5 +203,6 @@ namespace MultiBranchTexter
             return titleBox.Text.Contains(findStr);
         }
         #endregion
+
     }
 }

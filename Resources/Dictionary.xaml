@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:MultiBranchTexter"
+                    xmlns:c="clr-namespace:MultiBranchTexter.Controls"
                     >
     <!--颜色部分-->
     <Color x:Key="mainColor">#FF873674</Color>
@@ -10,10 +11,10 @@
     <SolidColorBrush x:Key="mainHighBrush" Color="{StaticResource mainHighColor}"/>
     <SolidColorBrush x:Key="redBrush" Color="#FFD44C45"/>
     <SolidColorBrush x:Key="textBoxHighlightBorderBrush" Color="#FF64BAE0"/>
-    
-   
-    
-    
+
+
+
+
     <!--通用按钮样式-->
     <ControlTemplate x:Key="generalButtonTemplate" TargetType="{x:Type Button}">
         <Border x:Name="BD" BorderThickness="1" CornerRadius="4"
@@ -30,7 +31,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    
+
     <!--最小化和关闭按钮样式-->
     <Style x:Key="WinMinCloseBtnStyle" TargetType="{x:Type Button}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -213,7 +214,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    
+
     <!--textBox的模板-->
     <ControlTemplate x:Key="textBoxTemplate" TargetType="{x:Type TextBox}">
         <Border x:Name="BD" BorderThickness="2" BorderBrush="Transparent">
@@ -226,7 +227,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    
+
     <!--searchBox的按钮模板-->
     <ControlTemplate x:Key="searchBoxBtnTemp" TargetType="{x:Type Button}">
         <Border x:Name="MainBorder" Background="Transparent">

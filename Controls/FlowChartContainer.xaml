@@ -1,7 +1,6 @@
-﻿<UserControl x:Class="MultiBranchTexter.FlowChartContainer"
+﻿<UserControl x:Class="MultiBranchTexter.Controls.FlowChartContainer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:MultiBranchTexter"
              xmlns:c="clr-namespace:MultiBranchTexter.Controls"
              Loaded="UserControl_Loaded"
              >
@@ -28,7 +27,8 @@
             </c:AutoSizeCanvas>
         </ScrollViewer>
         <!--搜索框-->
-        <c:NodeSearchBox x:Name="searchBox" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+        <c:NodeSearchBox x:Name="searchBox" Visibility="Hidden"
+                         VerticalAlignment="Top" HorizontalAlignment="Right"/>
         <!--框选框-->
         <Border x:Name="selectBorder" 
                 Background="#88FF5555" 
