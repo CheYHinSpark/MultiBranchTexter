@@ -5,6 +5,10 @@
              Loaded="UserControl_Loaded"
              >
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
         <ScrollViewer x:Name="scrollViewer" Background="White"
                       PreviewMouseDown="scrollViewer_PreviewMouseDown"
                       PreviewMouseUp="scrollViewer_PreviewMouseUp"
@@ -19,10 +23,8 @@
                               HorizontalAlignment="Left" 
                               VerticalAlignment="Top">
                 <c:AutoSizeCanvas.LayoutTransform>
-                    <ScaleTransform ScaleX="{Binding Path=ScaleRatio,
-                        RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=c:AutoSizeCanvas}}" 
-                                ScaleY="{Binding Path=ScaleRatio,
-                        RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=c:AutoSizeCanvas}}"/>
+                    <ScaleTransform ScaleX="{Binding ScaleRatio, RelativeSource={RelativeSource AncestorType={x:Type c:AutoSizeCanvas}, Mode=FindAncestor}}" 
+                                    ScaleY="{Binding ScaleRatio, RelativeSource={RelativeSource AncestorType={x:Type c:AutoSizeCanvas}, Mode=FindAncestor}}"/>
                 </c:AutoSizeCanvas.LayoutTransform>
             </c:AutoSizeCanvas>
         </ScrollViewer>
@@ -30,10 +32,20 @@
         <c:NodeSearchBox x:Name="searchBox" Visibility="Hidden"
                          VerticalAlignment="Top" HorizontalAlignment="Right"/>
         <!--框选框-->
-        <Border x:Name="selectBorder" 
+        <Border x:Name="selectBorder" Grid.Row="0"
                 Background="#88FF5555" 
                 BorderBrush="Red" BorderThickness="1"
                 VerticalAlignment="Top" HorizontalAlignment="Left"
-                IsHitTestVisible="False" Visibility="Hidden"></Border>
+                IsHitTestVisible="False" Visibility="Hidden"/>
+        <!--下方信息栏-->
+        <StackPanel Orientation="Horizontal" 
+                    Grid.Row="1" 
+                    Background="{StaticResource mainColorBrush}">
+            <TextBlock Text="{Binding ScaleRatio, 
+                Converter={StaticResource numToPerCvt}, 
+                ElementName=container}" Width="Auto" Foreground="White"
+                       VerticalAlignment="Center"
+                   />
+        </StackPanel>
     </Grid>
 </UserControl>

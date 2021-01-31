@@ -134,7 +134,10 @@ namespace MultiBranchTexter.Controls
         }
         #endregion
 
-        //根据textNode的连接情况在自己和后续节点间生成连线
+        /// <summary>
+        /// 根据textNode的连接情况在自己和后续节点间生成连线
+        /// </summary>
+        /// <param name="container"></param>
         public void DrawPostLines(Panel container)
         {
             foreach (NodeButton node in postNodes)
@@ -151,6 +154,27 @@ namespace MultiBranchTexter.Controls
                 line.Drawing();
             }
         }
+
+        /// <summary>
+        /// 根据一个后继节点自己和后续节点间生成连线
+        /// </summary>
+        /// <param name="container"></param>
+        public void DrawPostLine(Panel container, NodeButton postNode)
+        {
+            if (!postNodes.Contains(postNode))
+            { throw new System.Exception("没有目标后继节点"); }
+            ConnectingLine line = new ConnectingLine
+            {
+                BeginElement = this,
+                EndElement = postNode
+            };
+            postLines.Add(line);
+            postNode.preLines.Add(line);
+            container.Children.Add(line);
+            container.UpdateLayout();// <--没有将无法显示
+            line.Drawing();
+        }
+
 
         /// <summary>
         /// 切换是否移动

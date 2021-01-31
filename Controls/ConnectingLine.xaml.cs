@@ -29,10 +29,8 @@ namespace MultiBranchTexter
         /// 终止节点
         /// </summary>
         public NodeButton EndElement { get; set; }
-        /// <summary>
-        /// 是否被选中
-        /// </summary>
-        private bool isSelected = false;
+        //记录鼠标位置
+        private Point mousePt = new Point();
         #endregion
 
         #region 事件
@@ -40,21 +38,20 @@ namespace MultiBranchTexter
         //鼠标进入
         private void Path_MouseEnter(object sender, MouseEventArgs e)
         {
-            if (isSelected)
-                return;
             //设置显示顺序为1，以显示在其他connectingline上面
             Panel.SetZIndex(this, 1);
-            Path.Stroke = new SolidColorBrush(Colors.Orange);
             Path.StrokeThickness = 4;
         }
         //鼠标离开
         private void Path_MouseLeave(object sender, MouseEventArgs e)
         {
-            if (isSelected)
-                return;
             Panel.SetZIndex(this, 0);
-            Path.Stroke = new SolidColorBrush(Colors.Aqua);
             Path.StrokeThickness = 3;
+        }
+
+        private void Path_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            mousePt = e.GetPosition(ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this));
         }
         #endregion
 
@@ -72,16 +69,15 @@ namespace MultiBranchTexter
         //添加节点
         private void addNode_Click(object sender, RoutedEventArgs e)
         {
-            //从起始点中删去终止点
-            BeginElement.textNode.DeletePostNode(EndElement.textNode);
-            //从终止点中删去起始点
-            EndElement.textNode.DeletePreNode(BeginElement.textNode);
-            //添加新节点进去
-            TextNode newNode = new TextNode();
-            TextNode.Link(BeginElement.textNode, newNode);
-            TextNode.Link(newNode, EndElement.textNode);
-            //更新排列
-            ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).AddNodeAndUpdateFlowChart(newNode);
+            //断开起始点和终止点
+            NodeButton.UnLink(BeginElement, EndElement);
+            BeginElement.postLines.Remove(this);
+            EndElement.preLines.Remove(this);
+            //加入新节点，相关的link和画线都在fcc里完成
+            ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).AddNodeButton(new TextNode(),
+                BeginElement, EndElement, mousePt.X, mousePt.Y);
+            //删去本线条
+            ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).DeleteLine(this);
         }
         #endregion
 
@@ -108,6 +104,5 @@ namespace MultiBranchTexter
             Path.ToolTip = "从" + BeginElement.textNode.Name + "\n到" + EndElement.textNode.Name;
         }
         #endregion
-
     }
 }

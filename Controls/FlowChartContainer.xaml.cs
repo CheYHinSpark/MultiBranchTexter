@@ -51,6 +51,7 @@ namespace MultiBranchTexter.Controls
             {
                 e.Handled = true;
                 container.ScaleRatio += 0.1 * Math.Sign(e.Delta);
+                container.ScaleRatio = container.ScaleRatio < 0.1 ? 0.1 : container.ScaleRatio;
             }
         }
 
@@ -107,7 +108,6 @@ namespace MultiBranchTexter.Controls
                     _clickPoint = e.GetPosition((ScrollViewer)sender);
                 }
             }
-
         }
 
         private void scrollViewer_PreviewMouseUp(object sender, MouseButtonEventArgs e)
@@ -228,15 +228,31 @@ namespace MultiBranchTexter.Controls
         }
 
         /// <summary>
-        /// 添加节点并更新流程图
+        /// 重新绘制流程图
         /// </summary>
         /// <param name="newNode"></param>
-        public void AddNodeAndUpdateFlowChart(TextNode newNode)
+        public void ReDrawFlowChart()
         {
             List<TextNode> textNodes = GetTextNodes();
-            textNodes.Add(newNode);
             container.Children.Clear();
             DrawFlowChart(textNodes);
+        }
+
+        public void AddNodeButton(TextNode newNode,NodeButton preNode,NodeButton postNode, double xPos, double yPos)
+        {
+            NodeButton nodeButton = new NodeButton(newNode);
+            nodeButton.SetParent(container);
+            //连接三个点
+            NodeButton.Link(preNode, nodeButton);
+            NodeButton.Link(nodeButton, postNode);
+            container.Children.Add(nodeButton);
+            Canvas.SetLeft(nodeButton, xPos);
+            Canvas.SetTop(nodeButton, yPos);
+            container.UpdateLayout();
+            nodeButton.Move(-nodeButton.ActualWidth / 2, -nodeButton.ActualHeight / 2);
+            //画两条线
+            preNode.DrawPostLine(container, nodeButton);
+            nodeButton.DrawPostLine(container,postNode);
         }
         #endregion
 

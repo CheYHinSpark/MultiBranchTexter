@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              HorizontalAlignment="Left"
-             VerticalAlignment="Top">
+             VerticalAlignment="Top"
+             >
     <UserControl.Resources>
         <!--右键菜单部分-->
         <ContextMenu x:Key="lineContextMenu">
@@ -11,11 +12,10 @@
         </ContextMenu>
     </UserControl.Resources>
     <Path x:Name="Path" StrokeThickness="3" 
-          Stroke="Aqua"
+          MouseDown="Path_MouseDown"
           MouseEnter="Path_MouseEnter"
           MouseLeave="Path_MouseLeave"
+          Style="{StaticResource connectingLinePathStyle}"
           ContextMenu="{StaticResource lineContextMenu}"
           />
-
-
 </UserControl>

@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:MultiBranchTexter"
                     xmlns:c="clr-namespace:MultiBranchTexter.Controls"
+                    xmlns:cvt="clr-namespace:MultiBranchTexter.Converters"
                     >
     <!--颜色部分-->
     <Color x:Key="mainColor">#FF873674</Color>
@@ -12,7 +13,8 @@
     <SolidColorBrush x:Key="redBrush" Color="#FFD44C45"/>
     <SolidColorBrush x:Key="textBoxHighlightBorderBrush" Color="#FF64BAE0"/>
 
-
+    <!--转换器-->
+    <cvt:NumberToPercentStrConverter x:Key="numToPerCvt" />
 
 
     <!--通用按钮样式-->
@@ -151,7 +153,6 @@
                               CornerRadius="0" 
                               CaptionHeight="0"
                               UseAeroCaptionButtons="False"
-                              NonClientFrameEdges="Bottom"
                               ResizeBorderThickness="4" />
             </Setter.Value>
         </Setter>
@@ -251,4 +252,14 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
+    <!--连接线style-->
+    <Style x:Key="connectingLinePathStyle" TargetType="{x:Type Path}">
+        <Setter Property="Stroke" Value="Aqua"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Stroke" Value="Orange"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>
