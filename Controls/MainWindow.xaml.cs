@@ -37,7 +37,12 @@ namespace MultiBranchTexter
                 { }
                 //Ctrl+F 寻找
                 if (e.Key == Key.F)
-                { }
+                {
+                    if (flowChart.Visibility == Visibility.Visible)
+                    {
+                        flowChart.searchBox.Visibility = Visibility.Visible;
+                    }
+                }
                 //Ctrl+H 替换
                 if (e.Key == Key.H)
                 { }

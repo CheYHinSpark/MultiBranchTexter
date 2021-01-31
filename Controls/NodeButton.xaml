@@ -6,7 +6,7 @@
              >
     <Border x:Name="bgBorder" Padding="10,4,10,4"
             Background="AliceBlue" BorderBrush="DarkRed"
-            MouseDown="nodeButton_MouseDown"
+            MouseLeftButtonDown="nodeButton_MouseLeftButtonDown"
             MouseMove="nodeButton_MouseMove"
             MouseLeftButtonUp="nodeButton_MouseLeftButtonUp"
             MouseWheel="nodeButton_MouseWheel"

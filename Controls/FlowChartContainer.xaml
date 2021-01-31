@@ -5,23 +5,35 @@
              xmlns:c="clr-namespace:MultiBranchTexter.Controls"
              Loaded="UserControl_Loaded"
              >
-    <ScrollViewer x:Name="scrollViewer"
-                  PreviewMouseWheel="scrollViewer_PreviewMouseWheel"
-                  MouseMove="container_MouseMove"
-                  Margin="0"
-                  VerticalScrollBarVisibility="Auto" 
-                  HorizontalScrollBarVisibility="Auto">
+    <Grid>
+        <ScrollViewer x:Name="scrollViewer" Background="White"
+                      PreviewMouseDown="scrollViewer_PreviewMouseDown"
+                      PreviewMouseUp="scrollViewer_PreviewMouseUp"
+                      PreviewMouseWheel="scrollViewer_PreviewMouseWheel"
+                      MouseMove="scrollViewer_MouseMove"
+                      Margin="0"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Auto">
             <c:AutoSizeCanvas x:Name="container"
-                         Width="Auto" Height="Auto" 
-                         Margin="0,0,20,20"
-                         HorizontalAlignment="Left" 
-                         VerticalAlignment="Top">
+                              Width="Auto" Height="Auto" 
+                              Margin="0,0,20,20"
+                              HorizontalAlignment="Left" 
+                              VerticalAlignment="Top">
                 <c:AutoSizeCanvas.LayoutTransform>
                     <ScaleTransform ScaleX="{Binding Path=ScaleRatio,
-                    RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=c:AutoSizeCanvas}}" 
+                        RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=c:AutoSizeCanvas}}" 
                                 ScaleY="{Binding Path=ScaleRatio,
-                    RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=c:AutoSizeCanvas}}"/>
+                        RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=c:AutoSizeCanvas}}"/>
                 </c:AutoSizeCanvas.LayoutTransform>
             </c:AutoSizeCanvas>
-    </ScrollViewer>
+        </ScrollViewer>
+        <!--搜索框-->
+        <c:NodeSearchBox x:Name="searchBox" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+        <!--框选框-->
+        <Border x:Name="selectBorder" 
+                Background="#88FF5555" 
+                BorderBrush="Red" BorderThickness="1"
+                VerticalAlignment="Top" HorizontalAlignment="Left"
+                IsHitTestVisible="False" Visibility="Hidden"></Border>
+    </Grid>
 </UserControl>

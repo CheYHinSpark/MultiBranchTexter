@@ -19,6 +19,9 @@
     <Compile Update="Controls\NodeButton.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controls\NodeSearchBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Controls\ConnectingLine.xaml">
@@ -28,6 +31,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Controls\FlowChartContainer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\NodeSearchBox.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Resources\Dictionary.xaml">

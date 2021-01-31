@@ -58,7 +58,7 @@ namespace MultiBranchTexter
             }
         }
 
-        private void nodeButton_MouseDown(object sender, MouseButtonEventArgs e)
+        private void nodeButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.OriginalSource is Border)
             {
@@ -163,16 +163,18 @@ namespace MultiBranchTexter
             parent.IsResizing = true;
             isMoving = true;
         }
-
-        public void Move(double xPos, double yPos)
+        /// <summary>
+        /// 移动方法
+        /// </summary>
+        public void Move(double xTrans, double yTrans)
         {
-            xPos += Canvas.GetLeft(this);
-            yPos += Canvas.GetTop(this);
+            xTrans += Canvas.GetLeft(this);
+            yTrans += Canvas.GetTop(this);
             //自身位置
-            xPos = xPos >= 0 ? xPos : 0;
-            yPos = yPos >= 0 ? yPos : 0;
-            Canvas.SetLeft(this, xPos);
-            Canvas.SetTop(this, yPos);
+            xTrans = xTrans >= 0 ? xTrans : 0;
+            yTrans = yTrans >= 0 ? yTrans : 0;
+            Canvas.SetLeft(this, xTrans);
+            Canvas.SetTop(this, yTrans);
             //调整线条
             foreach (ConnectingLine line in preLines)
             { line.Drawing(); }
@@ -186,6 +188,13 @@ namespace MultiBranchTexter
         public void SetParent(AutoSizeCanvas canvas)
         {
             parent = canvas;
+        }
+        /// <summary>
+       /// 根据输入的字符串，返回是否被查询到，当前只查询标题
+       /// </summary>
+        public bool BeSearch(string findStr)
+        {
+            return titleBox.Text.Contains(findStr);
         }
         #endregion
     }

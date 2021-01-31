@@ -48,12 +48,9 @@
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsMouseOver" Value="True"/>
-                            </MultiTrigger.Conditions>
+                        <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource mainHighBrush}"/>
-                        </MultiTrigger>
+                        </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsMouseOver" Value="True"/>
@@ -226,6 +223,30 @@
         <ControlTemplate.Triggers>
             <Trigger Property="IsFocused" Value="True">
                 <Setter Property="BorderBrush" Value="{StaticResource textBoxHighlightBorderBrush}" TargetName="BD"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <!--searchBox的按钮模板-->
+    <ControlTemplate x:Key="searchBoxBtnTemp" TargetType="{x:Type Button}">
+        <Border x:Name="MainBorder" Background="Transparent">
+            <Grid>
+                <Path x:Name="CP" Stroke="White" StrokeThickness="2" Data="M4,10 L16,10 M12,5 16,10 L12,15"/>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource mainHighBrush}"/>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                    <Condition Property="Name" Value="closeBtn"/>
+                </MultiTrigger.Conditions>
+                <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource redBrush}"/>
+            </MultiTrigger>
+            <Trigger Property="Name" Value="closeBtn">
+                <Setter TargetName="CP" Property="Data" Value="M5,5 L15,15 M5,15 L15,5"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>

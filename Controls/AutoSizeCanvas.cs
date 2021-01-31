@@ -30,6 +30,29 @@ namespace MultiBranchTexter.Controls
         public bool IsResizing = false;
         private Size oldSize;
 
+        public AutoSizeCanvas()
+        {
+            //InitializeComponent();
+            //MouseDown += AutoSizeCanvas_MouseDown;
+            //PreviewMouseDown += AutoSizeCanvas_PreviewMouseDown;
+            //MouseLeftButtonDown += AutoSizeCanvas_MouseLeftButtonDown;
+        }
+
+        private void AutoSizeCanvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Debug.WriteLine("canvasLeftDown");
+        }
+
+        private void AutoSizeCanvas_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Debug.WriteLine("canvasPreMouseDown");
+        }
+
+        private void AutoSizeCanvas_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Debug.WriteLine("canvasMouseDown");
+        }
+
         protected override Size MeasureOverride(Size constraint)
         {
             base.MeasureOverride(constraint);

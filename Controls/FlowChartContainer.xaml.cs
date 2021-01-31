@@ -19,8 +19,14 @@ namespace MultiBranchTexter
     {
         private DispatcherTimer timer = null;
 
-        public List<NodeButton> selectedNodes = new List<NodeButton>();
+        //public List<NodeButton> selectedNodes = new List<NodeButton>();
+        
+        //与拖拽、移动有关的变量
         private Point _clickPoint;
+        private bool isDragScroll = false;
+        //搜索相关的变量
+        private List<NodeButton> searchedNodes = new List<NodeButton>();
+        private int searchedIndex = -1;
 
         public FlowChartContainer()
         {
@@ -30,6 +36,7 @@ namespace MultiBranchTexter
         #region 事件
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            searchBox.SetFlowChartContainer(this);
             //测试读取Test文件夹下的mbtxt文件
             string path = System.AppDomain.CurrentDomain.BaseDirectory + "Test\\test.mbtxt";
             MBFileReader reader = new MBFileReader(path);
@@ -37,7 +44,79 @@ namespace MultiBranchTexter
             DrawFlowChart(reader.Read());
         }
 
+        //滚轮事件
+        private void scrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            // 按住Ctrl，开始放大缩小
+            if (Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                e.Handled = true;
+                container.ScaleRatio += 0.1 * Math.Sign(e.Delta);
+            }
+        }
+
+        //鼠标移动
+        private void scrollViewer_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.OriginalSource is Grid)
+            {
+                if (isDragScroll)
+                {
+                    double x, y;
+                    Point p = e.GetPosition((ScrollViewer)sender);
+
+                    x = _clickPoint.X - p.X;
+                    y = _clickPoint.Y - p.Y;
+
+                    scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + x);
+                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + y);
+
+                    _clickPoint = e.GetPosition((ScrollViewer)sender);
+                }
+                else { this.Cursor = Cursors.Arrow; }
+            }
+            if (selectBorder.Visibility == Visibility.Visible)
+            {
+                // TODO: 没有解决负宽度问题
+                Point p = e.GetPosition((ScrollViewer)sender);
+                //selectBorder.Width = p.X - _clickPoint.X;
+                //selectBorder.Height = p.Y - _clickPoint.Y;
+            }
+        }
+
+        //点击scrollViewer
+        private void scrollViewer_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //表示点击到了空白部分
+            if (e.OriginalSource is Grid)
+            {
+                if (Keyboard.Modifiers == ModifierKeys.Control)
+                {
+                    selectBorder.Visibility = Visibility.Visible;
+                    _clickPoint = e.GetPosition((ScrollViewer)sender);
+                    selectBorder.Margin = new Thickness(_clickPoint.X, _clickPoint.Y, 0, 0);
+                    selectBorder.Width = 0;
+                    selectBorder.Height = 0;
+                }
+                else
+                {
+                    //准备拖拽
+                    isDragScroll = true;
+                    this.Cursor = Cursors.Hand;
+                    _clickPoint = e.GetPosition((ScrollViewer)sender);
+                }
+            }
+
+        }
+
+        private void scrollViewer_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            isDragScroll = false;
+            this.Cursor = Cursors.Arrow;
+            selectBorder.Visibility = Visibility.Hidden;
+        }
         #endregion
+
 
         #region 方法
 
@@ -160,7 +239,6 @@ namespace MultiBranchTexter
         }
         #endregion
 
-
         /// <summary>
         /// 获得textNode列表
         /// </summary>
@@ -177,6 +255,56 @@ namespace MultiBranchTexter
             return textNodes;
         }
 
+        #region 节点搜索功能
+        /// <summary>
+        /// 根据信息搜索目标节点
+        /// </summary>
+        /// <param name="info"></param>
+        public void SearchNode(string info)
+        {
+            searchedNodes.Clear();
+            foreach (UserControl control in container.Children)
+            {
+                if (control is NodeButton)
+                {
+                    if ((control as NodeButton).BeSearch(info))
+                    { searchedNodes.Add((control as NodeButton)); }
+                }
+            }
+            //如果不为空，跳转到第一个查到的node
+            if (searchedNodes.Count > 0)
+            {
+                searchedIndex = 0;
+                ScrollToNode(searchedNodes[0]);
+            }
+        }
+
+        /// <summary>
+        /// 搜索到的下一个
+        /// </summary>
+        public void SearchNext()
+        {
+            if (searchedNodes.Count == 0)
+            { return; }
+            searchedIndex++;
+            if (searchedIndex >= searchedNodes.Count)
+            { searchedIndex = 0; }
+            ScrollToNode(searchedNodes[searchedIndex]);
+        }
+
+        /// <summary>
+        /// 滚动到目标节点
+        /// </summary>
+        /// <param name="node"></param>
+        private void ScrollToNode(NodeButton node)
+        {
+            double x, y;
+            x = Canvas.GetLeft(node) + node.ActualWidth / 2;
+            y = Canvas.GetTop(node) + node.ActualHeight / 2;
+            scrollViewer.ScrollToHorizontalOffset(x * container.ScaleRatio - scrollViewer.ActualWidth / 2);
+            scrollViewer.ScrollToVerticalOffset(y * container.ScaleRatio - scrollViewer.ActualHeight / 2);
+        }
+        #endregion
 
         #endregion
 
@@ -250,34 +378,5 @@ namespace MultiBranchTexter
         //}
         #endregion
 
-        private void scrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
-        {
-            if (Keyboard.Modifiers == ModifierKeys.Control)
-            {
-                e.Handled = true;
-                container.ScaleRatio += 0.1 * Math.Sign(e.Delta);
-            }
-        }
-
-        private void container_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.OriginalSource is ScrollViewer)
-            {
-                if (e.LeftButton == MouseButtonState.Pressed)
-                {
-                    this.Cursor = Cursors.Hand;
-                    double x, y;
-                    Point p = e.GetPosition((ScrollViewer)sender);
-
-                    x = _clickPoint.X - p.X;
-                    y = _clickPoint.Y - p.Y;
-
-                    scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + x);
-                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + y);
-                }
-                else { this.Cursor = Cursors.Arrow; }
-                _clickPoint = e.GetPosition((ScrollViewer)sender);
-            }
-        }
     }
 }
