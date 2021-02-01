@@ -262,4 +262,16 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    
+    <!--yesno答案框-->
+    <ControlTemplate x:Key="yesnoAnswerTemplate" TargetType="{x:Type c:NodeBase}">
+        <Border Background="White" BorderBrush="DarkRed" BorderThickness="1" CornerRadius="4">
+            <Path x:Name="CP" StrokeThickness="2" Stroke="Black" Data="M2,2 4,8 L8,2"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="Name" Value="noNode">
+                <Setter Property="Data" Value="M3,3 L6,6 M3,6 L6,3" TargetName="CP"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 </ResourceDictionary>

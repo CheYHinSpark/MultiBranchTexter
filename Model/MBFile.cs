@@ -80,17 +80,32 @@ namespace MultiBranchTexter.Model
                 {
                     //以-分隔字符串
                     string[] vs = line.Split("-");
-                    int preIndex = int.Parse(vs[0]);
-                    //以,分隔后一段字符串
-                    string[] vs1 = vs[1].Split(",");
-                    int postIndex;
-                    //为Node添加postNode
-                    for (int i = 0; i < vs1.Length; i++)
+                    if (vs[1] == "yn")
                     {
-                        postIndex = int.Parse(vs1[i]);
-                        result[preIndex].AddPostNode(result[postIndex]);
-                        result[postIndex].AddPreNode(result[preIndex]);
+                        string[] vs1 = vs[3].Split(",");
+                        YesNoCondition condition = new YesNoCondition
+                        {
+                            Question = vs[2],
+                            YesNode = result[int.Parse(vs1[0])],
+                            NoNode = result[int.Parse(vs1[0])]
+                        };
+                        result[int.Parse(vs[0])].endCondition = condition;
+                        TextNode.Link(result[int.Parse(vs[0])], result[int.Parse(vs1[0])]);
+                        TextNode.Link(result[int.Parse(vs[0])], result[int.Parse(vs1[1])]);
                     }
+                    else
+                    {
+                        TextNode.Link(result[int.Parse(vs[0])],result[int.Parse(vs[1])]);
+                    }
+                    //以,分隔后一段字符串
+
+                    //为Node添加postNode
+                    //for (int i = 0; i < vs1.Length; i++)
+                    //{
+                    //    postIndex = int.Parse(vs1[i]);
+                    //    result[preIndex].AddPostNode(result[postIndex]);
+                    //    result[postIndex].AddPreNode(result[preIndex]);
+                    //}
                 }
                 catch
                 {

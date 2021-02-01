@@ -9,6 +9,7 @@ using System.Windows.Shapes;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Windows.Media;
+using System.Threading.Tasks;
 
 namespace MultiBranchTexter.Controls
 {
@@ -160,11 +161,28 @@ namespace MultiBranchTexter.Controls
             {
                 List<int> postIndex = textNodes[i].GetPostNodeIndex(textNodes);
                 //为矩阵赋值，如果i有j作为后继，则ij位置为真
-                for (int j = 0; j < postIndex.Count; j++)
+                if (textNodes[i].endCondition == null)
                 {
-                    mat[i, postIndex[j]] = true;
-                    //为nodeButton添加post
-                    NodeButton.Link(nodeButtons[i], nodeButtons[postIndex[j]]);
+                    for (int j = 0; j < postIndex.Count; j++)
+                    {
+                        mat[i, postIndex[j]] = true;
+                        //为nodeButton添加post
+                        NodeButton.Link(nodeButtons[i], nodeButtons[postIndex[j]]);
+                    }
+                }
+                else if (textNodes[i].endCondition is YesNoCondition)
+                {
+                    for (int j = 0; j < postIndex.Count; j++)
+                    {
+                        mat[i, postIndex[j]] = true;
+                        //为nodeButton添加post
+                        nodeButtons[i].postNodes.Add(nodeButtons[postIndex[j]]);
+                        nodeButtons[postIndex[j]].preNodes.Add(nodeButtons[i]);
+                    }
+                }
+                else if (textNodes[i].endCondition is MultiAnswerCondition)
+                { 
+
                 }
             }
             while (hasDoneIndex.Count < num)
@@ -215,9 +233,10 @@ namespace MultiBranchTexter.Controls
                 }
             }
             //连线
+            //连线现在放到别的地方执行
             for (int i = 0; i < textNodes.Count; i++)
             {
-                nodeButtons[i].DrawPostLines(container);
+                nodeButtons[i].ShowEndCondition();
             }
         }
 
@@ -238,12 +257,13 @@ namespace MultiBranchTexter.Controls
             DrawFlowChart(textNodes);
         }
 
-        public void AddNodeButton(TextNode newNode,NodeButton preNode,NodeButton postNode, double xPos, double yPos)
+        public void AddNodeButton(TextNode newNode,NodeBase preNode,NodeButton postNode, double xPos, double yPos)
         {
             NodeButton nodeButton = new NodeButton(newNode);
             nodeButton.SetParent(container);
+            nodeButton.fatherNode = nodeButton;
             //连接三个点
-            NodeButton.Link(preNode, nodeButton);
+            NodeButton.Link(preNode.fatherNode, nodeButton);
             NodeButton.Link(nodeButton, postNode);
             container.Children.Add(nodeButton);
             Canvas.SetLeft(nodeButton, xPos);
@@ -252,7 +272,7 @@ namespace MultiBranchTexter.Controls
             nodeButton.Move(-nodeButton.ActualWidth / 2, -nodeButton.ActualHeight / 2);
             //画两条线
             preNode.DrawPostLine(container, nodeButton);
-            nodeButton.DrawPostLine(container,postNode);
+            nodeButton.DrawPostLine(container, postNode);
         }
         #endregion
 

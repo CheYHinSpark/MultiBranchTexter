@@ -13,17 +13,22 @@ namespace MultiBranchTexter.Controls
     public partial class NodeButton : NodeBase
     {
         private TextBox titleBox;
+        private Border endContainer;
+        private NodeBase endNode;
         private AutoSizeCanvas parent;
 
         public TextNode textNode;
         public List<NodeButton> postNodes = new List<NodeButton>();
+        public List<NodeButton> preNodes = new List<NodeButton>();
 
-        public List<ConnectingLine> preLines = new List<ConnectingLine>();
         public List<ConnectingLine> postLines = new List<ConnectingLine>();
- 
+        public List<ConnectingLine> preLines = new List<ConnectingLine>();
+
+        // 移动相关
         private Point oldPoint = new Point();
         private bool isMoving = false;
         public bool IsMoving { get { return isMoving; } }
+
         public NodeButton()
         { }
         public NodeButton(TextNode newNode)
@@ -37,11 +42,14 @@ namespace MultiBranchTexter.Controls
         //加载完成
         private void NodeBase_Loaded(object sender, RoutedEventArgs e)
         {
+            endContainer = GetTemplateChild("endContainer") as Border;
+            endContainer.Child = endNode;
             titleBox = GetTemplateChild("titleBox") as TextBox;
             //显示标题
             titleBox.Text = textNode.Name;
             //设置显示顺序为2，以显示在connectingline上面
             Panel.SetZIndex(this, 2);
+            DrawPostLines(ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this));
         }
         #region 移动事件
         private void nodeButton_MouseMove(object sender, MouseEventArgs e)
@@ -121,8 +129,9 @@ namespace MultiBranchTexter.Controls
             //检查是否已经存在这个后节点
 
             //添加
-            TextNode.Link(pre.textNode, post.textNode);
             pre.postNodes.Add(post);
+            post.preNodes.Add(pre);
+            TextNode.Link(pre.textNode, post.textNode);
         }
         public static void UnLink(NodeButton pre, NodeButton post)
         {
@@ -130,9 +139,36 @@ namespace MultiBranchTexter.Controls
 
             //移除
             pre.postNodes.Remove(post);
+            post.preNodes.Remove(pre);
             TextNode.UnLink(pre.textNode, post.textNode);
         }
         #endregion
+
+        /// <summary>
+        /// 显示后继条件框框
+        /// </summary>
+        public void ShowEndCondition()
+        {
+            fatherNode = this;
+            if (textNode.endCondition == null)//表示是无选项的
+            {
+                //把可能存在的东西删掉
+                if (endContainer != null)
+                { endContainer.Child = null; }
+            }
+            else if (textNode.endCondition is YesNoCondition)
+            {
+                endNode = new NodeEndYesNo();
+                (endNode as NodeEndYesNo).SetFather(this);
+                //TODO:根据textnode修改
+            }
+            else if (textNode.endCondition is MultiAnswerCondition)
+            {
+
+            }
+            UpdateLayout();
+        }
+
 
         /// <summary>
         /// 根据textNode的连接情况在自己和后续节点间生成连线
@@ -140,40 +176,69 @@ namespace MultiBranchTexter.Controls
         /// <param name="container"></param>
         public void DrawPostLines(Panel container)
         {
-            foreach (NodeButton node in postNodes)
+            if (textNode.endCondition == null)//表示是无选项的
             {
+                if (postNodes.Count == 0)
+                { return; }
                 ConnectingLine line = new ConnectingLine
                 {
-                    BeginElement = this,
-                    EndElement = node
+                    BeginNode = this,
+                    EndNode = postNodes[0]
                 };
                 postLines.Add(line);
-                node.preLines.Add(line);
+                postNodes[0].preLines.Add(line);
                 container.Children.Add(line);
                 container.UpdateLayout();// <--没有将无法显示
                 line.Drawing();
             }
+            else if (textNode.endCondition is YesNoCondition)
+            {
+                NodeEndYesNo tempNode = endNode as NodeEndYesNo;
+                ConnectingLine line1 = new ConnectingLine
+                {
+                    BeginNode = tempNode.yesNode,
+                    EndNode = postNodes[0]
+                }; 
+                ConnectingLine line2 = new ConnectingLine
+                {
+                    BeginNode = tempNode.noNode,
+                    EndNode = postNodes[1]
+                };
+                postNodes[0].preLines.Add(line1);
+                postNodes[1].preLines.Add(line2);
+                postLines.Add(line1);
+                postLines.Add(line2);
+                container.Children.Add(line1);
+                container.Children.Add(line2);
+                container.UpdateLayout();
+                line1.Drawing();
+                line2.Drawing();
+            }
+            else if (textNode.endCondition is MultiAnswerCondition)
+            {
+
+            }
         }
 
-        /// <summary>
-        /// 根据一个后继节点自己和后续节点间生成连线
-        /// </summary>
-        /// <param name="container"></param>
-        public void DrawPostLine(Panel container, NodeButton postNode)
-        {
-            if (!postNodes.Contains(postNode))
-            { throw new System.Exception("没有目标后继节点"); }
-            ConnectingLine line = new ConnectingLine
-            {
-                BeginElement = this,
-                EndElement = postNode
-            };
-            postLines.Add(line);
-            postNode.preLines.Add(line);
-            container.Children.Add(line);
-            container.UpdateLayout();// <--没有将无法显示
-            line.Drawing();
-        }
+        ///// <summary>
+        ///// 根据一个后继节点自己和后续节点间生成连线
+        ///// </summary>
+        ///// <param name="container"></param>
+        //public void DrawPostLine(Panel container, NodeButton postNode)
+        //{
+        //    if (!postNodes.Contains(postNode))
+        //    { throw new System.Exception("没有目标后继节点"); }
+        //    ConnectingLine line = new ConnectingLine
+        //    {
+        //        BeginNode = this,
+        //        EndNode = postNode
+        //    };
+        //    postLines.Add(line);
+        //    postNode.preLines.Add(line);
+        //    container.Children.Add(line);
+        //    container.UpdateLayout();// <--没有将无法显示
+        //    line.Drawing();
+        //}
 
 
         /// <summary>

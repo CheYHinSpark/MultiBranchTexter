@@ -19,16 +19,15 @@ namespace MultiBranchTexter
             InitializeComponent();
         }
 
-
         #region 成员变量
         /// <summary>
         /// 起始节点
         /// </summary>
-        public NodeButton BeginElement { get; set; }
+        public NodeBase BeginNode { get; set; }
         /// <summary>
         /// 终止节点
         /// </summary>
-        public NodeButton EndElement { get; set; }
+        public NodeButton EndNode { get; set; }
         //记录鼠标位置
         private Point mousePt = new Point();
         #endregion
@@ -60,9 +59,9 @@ namespace MultiBranchTexter
         private void deleteLine_Click(object sender, RoutedEventArgs e)
         {
             //断开起始点和终止点
-            NodeButton.UnLink(BeginElement, EndElement);
-            BeginElement.postLines.Remove(this);
-            EndElement.preLines.Remove(this);
+            NodeButton.UnLink(BeginNode.fatherNode, EndNode);
+            BeginNode.fatherNode.postLines.Remove(this);
+            EndNode.preLines.Remove(this);
             //删去本线条
             ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).DeleteLine(this);
         }
@@ -70,12 +69,12 @@ namespace MultiBranchTexter
         private void addNode_Click(object sender, RoutedEventArgs e)
         {
             //断开起始点和终止点
-            NodeButton.UnLink(BeginElement, EndElement);
-            BeginElement.postLines.Remove(this);
-            EndElement.preLines.Remove(this);
+            NodeButton.UnLink(BeginNode.fatherNode, EndNode);
+            BeginNode.fatherNode.postLines.Remove(this);
+            EndNode.preLines.Remove(this);
             //加入新节点，相关的link和画线都在fcc里完成
             ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).AddNodeButton(new TextNode(),
-                BeginElement, EndElement, mousePt.X, mousePt.Y);
+                BeginNode, EndNode, mousePt.X, mousePt.Y);
             //删去本线条
             ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).DeleteLine(this);
         }
@@ -89,19 +88,21 @@ namespace MultiBranchTexter
         /// </summary>
         public void Drawing()
         {
-            if (BeginElement == null || EndElement == null)
+            if (BeginNode == null || EndNode == null)
             { return; }
-            Vector beginVec = VisualTreeHelper.GetOffset(BeginElement);
-            Vector endVec = VisualTreeHelper.GetOffset(EndElement);
-            Point beginPt = new Point(beginVec.X + BeginElement.ActualWidth / 2.0, beginVec.Y + BeginElement.ActualHeight / 2.0);
-            Point endPt = new Point(endVec.X + EndElement.ActualWidth / 2.0, endVec.Y + EndElement.ActualHeight / 2.0);
+            Point beginPt = BeginNode
+                .TransformToAncestor(ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(BeginNode))
+                .Transform(new Point(BeginNode.ActualWidth / 2.0, BeginNode.ActualHeight / 2.0));
+            Point endPt = EndNode
+                .TransformToAncestor(ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(EndNode))
+                .Transform(new Point(EndNode.ActualWidth / 2.0, EndNode.ActualHeight / 2.0));
             Point c1Pt = new Point(beginPt.X, beginPt.Y * 0.5 + endPt.Y * 0.5);
             Point c2Pt = new Point(endPt.X, beginPt.Y * 0.5 + endPt.Y * 0.5);
             //三次bezier曲线
             Path.Data = Geometry.Parse("M" + beginPt.ToString() + " C" + c1Pt.ToString() + " "
                 + c2Pt.ToString() + " " + endPt.ToString());
             //更新tooltip
-            Path.ToolTip = "从" + BeginElement.textNode.Name + "\n到" + EndElement.textNode.Name;
+            //Path.ToolTip = "从" + BeginElement.textNode.Name + "\n到" + EndElement.textNode.Name;
         }
         #endregion
     }

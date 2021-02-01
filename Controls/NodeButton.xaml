@@ -6,43 +6,51 @@
             HorizontalAlignment="Left" VerticalAlignment="Top">
     <c:NodeBase.Template>
         <ControlTemplate TargetType="{x:Type c:NodeBase}">
-            <Border x:Name="bgBorder" Padding="10,4,10,4"
-            Background="AliceBlue" 
-                       BorderBrush="DarkRed"
-            MouseLeftButtonDown="nodeButton_MouseLeftButtonDown"
-            MouseMove="nodeButton_MouseMove"
-            MouseLeftButtonUp="nodeButton_MouseLeftButtonUp"
-            MouseWheel="nodeButton_MouseWheel"
-            BorderThickness="1" CornerRadius="4">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="24"/>
-                    </Grid.RowDefinitions>
-                    <Rectangle Grid.Row="0" Grid.ColumnSpan="2"
-                       Margin="2"
-                       VerticalAlignment="Bottom" Fill="Gray" Height="2"/>
-                    <TextBox x:Name="titleBox" Margin="2"
-                     Grid.Row="0" Grid.ColumnSpan="2"
-                     Focusable="False"
-                     Template="{StaticResource textBoxTemplate}"
-                     PreviewMouseDoubleClick="titleBox_PreviewMouseDoubleClick"
-                     LostFocus="titleBox_LostFocus"
-                     />
-                    <Button x:Name="editBtn" Grid.Row="1" Grid.Column="0"
-                    Template="{StaticResource generalButtonTemplate}"
-                    Click="editBtn_Click"/>
-                    <Button x:Name="gotoBtn" Grid.Row="1" Grid.Column="1"
-                    Template="{StaticResource generalButtonTemplate}" 
-                    Click="gotoBtn_Click">
-                        <Path Fill="White" Data="M0,0 0,10 8,5Z"/>
-                    </Button>
-                </Grid>
-            </Border>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Border x:Name="bgBorder" Padding="10,4,10,4" Grid.Row="0"
+                        Background="AliceBlue" 
+                        BorderBrush="DarkRed"
+                        MouseLeftButtonDown="nodeButton_MouseLeftButtonDown"
+                        MouseMove="nodeButton_MouseMove"
+                        MouseLeftButtonUp="nodeButton_MouseLeftButtonUp"
+                        MouseWheel="nodeButton_MouseWheel"
+                        BorderThickness="1" CornerRadius="4">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="24"/>
+                        </Grid.RowDefinitions>
+                        <Rectangle Grid.Row="0" Grid.ColumnSpan="2"
+                                   Margin="2"
+                                   VerticalAlignment="Bottom" Fill="Gray" Height="2"/>
+                        <TextBox x:Name="titleBox" Margin="2"
+                                 Grid.Row="0" Grid.ColumnSpan="2"
+                                 Focusable="False"
+                                 Template="{StaticResource textBoxTemplate}"
+                                 PreviewMouseDoubleClick="titleBox_PreviewMouseDoubleClick"
+                                 LostFocus="titleBox_LostFocus"
+                                 />
+                        <Button x:Name="editBtn" Grid.Row="1" Grid.Column="0"
+                                Template="{StaticResource generalButtonTemplate}"
+                                Click="editBtn_Click"/>
+                        <Button x:Name="gotoBtn" Grid.Row="1" Grid.Column="1"
+                                Template="{StaticResource generalButtonTemplate}" 
+                                Click="gotoBtn_Click">
+                            <Path Fill="White" Data="M0,0 0,10 8,5Z"/>
+                        </Button>
+                    </Grid>
+                </Border>
+                <Border x:Name="endContainer" Grid.Row="1"/>
+            </Grid>
+            
             <ControlTemplate.Triggers>
                 <Trigger Property="NodeState" Value="Selected">
                     <Setter Property="BorderBrush" Value="Red" TargetName="bgBorder"/>

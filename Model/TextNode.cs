@@ -8,6 +8,8 @@ namespace MultiBranchTexter.Model
         public string Name = "";
         // 文字内容
         public string Text = "";
+        // 后继条件
+        public EndCondition endCondition;
         // 前节点
         private List<TextNode> preNodes = new List<TextNode>();
         // 后节点
@@ -28,11 +30,13 @@ namespace MultiBranchTexter.Model
         {
             pre.AddPostNode(post);
             post.AddPreNode(pre);
+            //TODO:修改后继条件
         }
         public static void UnLink(TextNode pre, TextNode post)
         {
             pre.DeletePostNode(post);
             post.DeletePreNode(pre);
+            //TODO:修改后继条件
         }
         #endregion
 
@@ -72,11 +76,6 @@ namespace MultiBranchTexter.Model
                 {
                     vs.Add(i);
                 }
-                //for (int j = 0; j < postNodes.Count; j++)
-                //{
-                //    if (textNodes[i].Name == postNodes[j].Name)
-                //    { vs.Add(i); }
-                //}
             }
             return vs;
         }
