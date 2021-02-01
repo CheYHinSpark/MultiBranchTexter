@@ -1,0 +1,4 @@
+[submodule "KTDU"]
+	path = KTDU
+	url = git@github.com:komsomolskinari/KTDU
+	branch = rm

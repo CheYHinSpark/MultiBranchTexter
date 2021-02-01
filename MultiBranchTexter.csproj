@@ -6,4 +6,15 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="KTDU\**" />
+    <EmbeddedResource Remove="KTDU\**" />
+    <None Remove="KTDU\**" />
+    <Page Remove="KTDU\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="KTDU\KTDU.Parser\KTDU.Parser.csproj" />
+  </ItemGroup>
+
 </Project>
