@@ -94,6 +94,13 @@ namespace MultiBranchTexter.Controls
             //表示点击到了空白部分
             if (e.OriginalSource is Grid)
             {
+                //右键点击
+                if (e.RightButton == MouseButtonState.Pressed)
+                {
+                    PostNodeChoosed(null);
+                    return;
+                }
+                //非右键点击
                 if (Keyboard.Modifiers == ModifierKeys.Control)
                 {
                     selectBorder.Visibility = Visibility.Visible;
@@ -426,12 +433,6 @@ namespace MultiBranchTexter.Controls
 
         public void WaitClick(NodeBase waiter)
         {
-            //Task<NodeButton> task = new Task<NodeButton>(() =>
-            //{
-            //    while (true)
-            //    { Thread.Sleep(100); }
-            //    return null;
-            //});
             waitingNode = waiter;
             //开启等待点击
             foreach (UserControl control in container.Children)
@@ -453,9 +454,26 @@ namespace MultiBranchTexter.Controls
                     (control as NodeButton).UpperBd.Visibility = Visibility.Hidden;
                 }
             }
-            //选择完成，在waitNode和Post之间连线
-
-            //连接
+            if (post == null)//没有选择
+            {
+                waitingNode = null;
+                return;
+            }
+            //首先断开waitNode原有的连线
+            ConnectingLine cline = null;//原本的连线
+            foreach (ConnectingLine line in waitingNode.fatherNode.postLines)
+            {
+                if (line.BeginNode == waitingNode)
+                { cline = line; }
+            }
+            if (cline != null)
+            {
+                NodeButton.UnLink(waitingNode, cline.EndNode);
+                waitingNode.fatherNode.postLines.Remove(cline);
+                cline.EndNode.preLines.Remove(cline);
+                container.Children.Remove(cline);
+            }
+            //在waitNode和Post之间连线
             NodeButton.Link(waitingNode, post);
             ConnectingLine cl = new ConnectingLine
             {

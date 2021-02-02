@@ -16,7 +16,7 @@ namespace MultiBranchTexter.Controls
         public Border UpperBd;
         private TextBox titleBox;
         private Border endContainer;
-        private NodeBase endNode;
+        private NodeBase endNode;//这个只是挂在屁股下面的那个容器里的东西
         private AutoSizeCanvas parent;
 
         public TextNode textNode;
@@ -98,11 +98,6 @@ namespace MultiBranchTexter.Controls
         }
         #endregion
 
-        //点击editBtn……咦我想要什么功能来着
-        private void editBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         //点击gotobtn，跳转到相应的标签页
         private void gotoBtn_Click(object sender, RoutedEventArgs e)
@@ -206,6 +201,15 @@ namespace MultiBranchTexter.Controls
         }
         #endregion
 
+        #region 绘制与布局
+        /// <summary>
+        /// 设置父控件
+        /// </summary>
+        public void SetParent(AutoSizeCanvas canvas)
+        {
+            parent = canvas;
+        }
+
         /// <summary>
         /// 显示后继条件框框
         /// </summary>
@@ -260,7 +264,7 @@ namespace MultiBranchTexter.Controls
                 {
                     BeginNode = tempNode.yesNode,
                     EndNode = postNodes[0]
-                }; 
+                };
                 ConnectingLine line2 = new ConnectingLine
                 {
                     BeginNode = tempNode.noNode,
@@ -281,7 +285,9 @@ namespace MultiBranchTexter.Controls
 
             }
         }
+        #endregion
 
+        #region 移动
         /// <summary>
         /// 切换是否移动
         /// </summary>
@@ -317,14 +323,9 @@ namespace MultiBranchTexter.Controls
             foreach (ConnectingLine line in postLines)
             { line.Drawing(); }
         }
+        #endregion
 
-        /// <summary>
-        /// 设置父控件
-        /// </summary>
-        public void SetParent(AutoSizeCanvas canvas)
-        {
-            parent = canvas;
-        }
+
         /// <summary>
        /// 根据输入的字符串，返回是否被查询到，当前只查询标题
        /// </summary>
@@ -346,10 +347,66 @@ namespace MultiBranchTexter.Controls
             }
             return null;
         }
+
         private void UpperBd_MouseDown(object sender, MouseButtonEventArgs e)
         {
             //通知流程图容器自己被选中
             ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).PostNodeChoosed(this);
+        }
+
+        private void DeleteNode_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult warnResult = MessageBox.Show
+                (
+                ControlTreeHelper.FindParentOfType<MainWindow>(this),
+                "确定要删除节点吗？\n这将同时断开节点的所有连接线，并且此操作不可撤销！",
+                "警告",
+                MessageBoxButton.YesNo
+                );
+            if (warnResult == MessageBoxResult.No)
+            { return; }
+            FlowChartContainer fcc = ControlTreeHelper.FindParentOfType<FlowChartContainer>(this);
+            List<ConnectingLine> readyToRemoveLines = new List<ConnectingLine>();
+            while (preNodes.Count >0)
+            {
+                readyToRemoveLines.Clear();
+                foreach (ConnectingLine line in preNodes[0].fatherNode.postLines)
+                {
+                    if (line.EndNode == this)
+                    {
+                        readyToRemoveLines.Add(line);
+                        fcc.DeleteLine(line);
+                    }
+                }
+                foreach (ConnectingLine line in readyToRemoveLines)
+                {
+                    preNodes[0].fatherNode.postLines.Remove(line);
+                }
+                NodeButton.UnLink(preNodes[0], this);
+            }
+            foreach (ConnectingLine line in postLines)
+            {
+                NodeButton.UnLink(line.BeginNode, line.EndNode);
+                line.EndNode.preLines.Remove(line);
+                fcc.DeleteLine(line);
+            }
+            fcc.container.Children.Remove(this);
+        }
+
+        private void NodeBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (e.OriginalSource is Border)
+            {
+                //这样，就表示点击到了主题border上
+                if ((e.OriginalSource as Border).Name == "bgBorder" && textNode.endCondition == null)
+                {
+                    FlowChartContainer parent = ControlTreeHelper.FindParentOfType<FlowChartContainer>(this);
+                    if (parent.IsWaiting)
+                    { return; }
+                    //进入选择模式
+                    parent.WaitClick(this);
+                }
+            }
         }
     }
 }

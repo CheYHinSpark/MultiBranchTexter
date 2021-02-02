@@ -32,6 +32,7 @@ namespace MultiBranchTexter.Controls
             endCondition = yesNoCond;
         }
 
+        #region 事件
         //加载完成
         private void NodeBase_Loaded(object sender, RoutedEventArgs e)
         {
@@ -54,6 +55,18 @@ namespace MultiBranchTexter.Controls
             // TODO 检查并完成标题修改
         }
 
+        private void yesnoNode_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            NodeBase node = sender as NodeBase;
+            FlowChartContainer parent = ControlTreeHelper.FindParentOfType<FlowChartContainer>(node.fatherNode);
+            if (parent.IsWaiting)
+            { return; }
+            //进入选择模式
+            parent.WaitClick(node);
+        }
+        #endregion
+
+
         public void SetFather(NodeButton father)
         {
             yesNode.fatherNode = father;
@@ -61,29 +74,5 @@ namespace MultiBranchTexter.Controls
         }
 
 
-        private void yesnoNode_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            NodeBase node = sender as NodeBase;
-            FlowChartContainer parent = ControlTreeHelper.FindParentOfType<FlowChartContainer>(node.fatherNode);
-            if (parent.IsWaiting)
-            { return; }
-            //断开连接
-            //断开waitNode原有连线
-            ConnectingLine cline = null;
-            foreach (ConnectingLine line in node.fatherNode.postLines)
-            {
-                if (line.BeginNode == node)
-                { cline = line; }
-            }
-            if (cline != null)
-            {
-                NodeButton.UnLink(node.fatherNode, cline.EndNode);
-                node.fatherNode.postLines.Remove(cline);
-                cline.EndNode.preLines.Remove(cline);
-                parent.container.Children.Remove(cline);
-            }
-            //进入选择模式
-            parent.WaitClick(node);
-        }
     }
 }

@@ -3,6 +3,7 @@
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             xmlns:c="clr-namespace:MultiBranchTexter.Controls"
             Width="100" Loaded="NodeBase_Loaded"
+            MouseDoubleClick="NodeBase_MouseDoubleClick"
             HorizontalAlignment="Left" VerticalAlignment="Top">
     <c:NodeBase.Template>
         <ControlTemplate TargetType="{x:Type c:NodeBase}">
@@ -19,29 +20,33 @@
                         MouseLeftButtonUp="nodeButton_MouseLeftButtonUp"
                         MouseWheel="nodeButton_MouseWheel"
                         BorderThickness="1" CornerRadius="4">
+                    <Border.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="删除节点" Click="DeleteNode_Click"/>
+                            <MenuItem Header="变更后继节点">
+                                <MenuItem Header="单一后继节点"/>
+                                <MenuItem Header="是非判断后继"/>
+                                <MenuItem Header="多选后继"/>
+                            </MenuItem>
+                        </ContextMenu>
+                    </Border.ContextMenu>
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="24"/>
+                            <RowDefinition Height="18"/>
                         </Grid.RowDefinitions>
-                        <Rectangle Grid.Row="0" Grid.ColumnSpan="2"
+                        <Rectangle Grid.Row="0"
                                    Margin="2"
                                    VerticalAlignment="Bottom" Fill="Gray" Height="2"/>
                         <TextBox x:Name="titleBox" Margin="2"
-                                 Grid.Row="0" Grid.ColumnSpan="2"
+                                 Grid.Row="0"
                                  Focusable="False"
                                  Template="{StaticResource textBoxTemplate}"
                                  PreviewMouseDoubleClick="titleBox_PreviewMouseDoubleClick"
                                  LostFocus="titleBox_LostFocus"
                                  />
-                        <Button x:Name="editBtn" Grid.Row="1" Grid.Column="0"
-                                Template="{StaticResource generalButtonTemplate}"
-                                Click="editBtn_Click"/>
-                        <Button x:Name="gotoBtn" Grid.Row="1" Grid.Column="1"
+                        <Button x:Name="gotoBtn" Grid.Row="1"
+                                Margin="8,0,8,-6"
                                 Template="{StaticResource generalButtonTemplate}" 
                                 Click="gotoBtn_Click">
                             <Path Fill="White" Data="M0,0 0,10 8,5Z"/>
