@@ -59,7 +59,7 @@ namespace MultiBranchTexter
         private void deleteLine_Click(object sender, RoutedEventArgs e)
         {
             //断开起始点和终止点
-            NodeButton.UnLink(BeginNode.fatherNode, EndNode);
+            NodeButton.UnLink(BeginNode, EndNode);
             BeginNode.fatherNode.postLines.Remove(this);
             EndNode.preLines.Remove(this);
             //删去本线条
@@ -69,7 +69,7 @@ namespace MultiBranchTexter
         private void addNode_Click(object sender, RoutedEventArgs e)
         {
             //断开起始点和终止点
-            NodeButton.UnLink(BeginNode.fatherNode, EndNode);
+            NodeButton.UnLink(BeginNode, EndNode);
             BeginNode.fatherNode.postLines.Remove(this);
             EndNode.preLines.Remove(this);
             //加入新节点，相关的link和画线都在fcc里完成

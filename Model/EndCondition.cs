@@ -9,7 +9,6 @@ namespace MultiBranchTexter.Model
     /// </summary>
     public class EndCondition
     {
-        public TextNode Owner;
         public string Question;
     }
 

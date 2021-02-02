@@ -27,8 +27,12 @@
                                  LostFocus="titleBox_LostFocus"/>
                     </Grid>
                 </Border>
-                <c:NodeBase x:Name="yesNode" Template="{StaticResource yesnoAnswerTemplate}" Grid.Row="1" Grid.Column="0"/>
-                <c:NodeBase x:Name="noNode" Template="{StaticResource yesnoAnswerTemplate}" Grid.Row="1" Grid.Column="1"/>
+                <c:NodeBase x:Name="yesNode" Template="{StaticResource yesnoAnswerTemplate}" 
+                            Grid.Row="1" Grid.Column="0"
+                            MouseDoubleClick="yesnoNode_MouseDoubleClick"/>
+                <c:NodeBase x:Name="noNode" Template="{StaticResource yesnoAnswerTemplate}" 
+                            Grid.Row="1" Grid.Column="1"
+                            MouseDoubleClick="yesnoNode_MouseDoubleClick"/>
             </Grid>
         
 </c:NodeBase>

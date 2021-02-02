@@ -1,6 +1,7 @@
 ﻿using MultiBranchTexter.Model;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,6 +13,7 @@ namespace MultiBranchTexter.Controls
     /// </summary>
     public partial class NodeButton : NodeBase
     {
+        public Border UpperBd;
         private TextBox titleBox;
         private Border endContainer;
         private NodeBase endNode;
@@ -42,6 +44,7 @@ namespace MultiBranchTexter.Controls
         //加载完成
         private void NodeBase_Loaded(object sender, RoutedEventArgs e)
         {
+            UpperBd = GetTemplateChild("UpperBd") as Border;
             endContainer = GetTemplateChild("endContainer") as Border;
             endContainer.Child = endNode;
             titleBox = GetTemplateChild("titleBox") as TextBox;
@@ -126,21 +129,80 @@ namespace MultiBranchTexter.Controls
         #region 静态方法
         public static void Link(NodeButton pre, NodeButton post)
         {
-            //检查是否已经存在这个后节点
-
             //添加
             pre.postNodes.Add(post);
             post.preNodes.Add(pre);
             TextNode.Link(pre.textNode, post.textNode);
         }
+        public static void Link(NodeButton pre, NodeButton post,bool yesno)
+        {
+            //添加
+            pre.postNodes.Add(post);
+            post.preNodes.Add(pre);
+            TextNode.Link(pre.textNode, post.textNode, yesno);
+        }
+        public static void Link(NodeButton pre, NodeButton post,string answer)
+        {
+            //添加
+            pre.postNodes.Add(post);
+            post.preNodes.Add(pre);
+            TextNode.Link(pre.textNode, post.textNode, answer);
+        }
         public static void UnLink(NodeButton pre, NodeButton post)
         {
-            //检查是否存在这个后节点
-
             //移除
             pre.postNodes.Remove(post);
             post.preNodes.Remove(pre);
             TextNode.UnLink(pre.textNode, post.textNode);
+        }
+        public static void UnLink(NodeButton pre, NodeButton post,bool yesno)
+        {
+            //移除
+            pre.postNodes.Remove(post);
+            post.preNodes.Remove(pre);
+            TextNode.UnLink(pre.textNode, post.textNode, yesno);
+        }
+        public static void UnLink(NodeButton pre, NodeButton post,string answer)
+        {
+            //移除
+            pre.postNodes.Remove(post);
+            post.preNodes.Remove(pre);
+            TextNode.UnLink(pre.textNode, post.textNode, answer);
+        }
+
+        /// <summary>
+        /// 已经有相当信息的link，能根据信息自动选择连接方式
+        /// </summary>
+        public static void Link(NodeBase pre, NodeButton post)
+        {
+            if (pre.fatherNode.textNode.endCondition == null)
+            { NodeButton.Link(pre.fatherNode, post); }
+            else if (pre.fatherNode.textNode.endCondition is YesNoCondition)
+            {
+                if (pre.Name == "yesNode")
+                { NodeButton.Link(pre.fatherNode, post, true); }
+                else
+                { NodeButton.Link(pre.fatherNode, post, false); }
+            }
+            else if (pre.fatherNode.textNode.endCondition is MultiAnswerCondition)
+            { }
+        }
+        /// <summary>
+        /// 已经有相当信息的unLink，能根据信息自动选择断开方式
+        /// </summary>
+        public static void UnLink(NodeBase pre, NodeButton post)
+        {
+            if (pre.fatherNode.textNode.endCondition == null)
+            { NodeButton.UnLink(pre.fatherNode, post); }
+            else if (pre.fatherNode.textNode.endCondition is YesNoCondition)
+            {
+                if (pre.Name == "yesNode")
+                { NodeButton.UnLink(pre.fatherNode, post, true); }
+                else
+                { NodeButton.UnLink(pre.fatherNode, post, false); }
+            }
+            else if (pre.fatherNode.textNode.endCondition is MultiAnswerCondition)
+            { }
         }
         #endregion
 
@@ -220,27 +282,6 @@ namespace MultiBranchTexter.Controls
             }
         }
 
-        ///// <summary>
-        ///// 根据一个后继节点自己和后续节点间生成连线
-        ///// </summary>
-        ///// <param name="container"></param>
-        //public void DrawPostLine(Panel container, NodeButton postNode)
-        //{
-        //    if (!postNodes.Contains(postNode))
-        //    { throw new System.Exception("没有目标后继节点"); }
-        //    ConnectingLine line = new ConnectingLine
-        //    {
-        //        BeginNode = this,
-        //        EndNode = postNode
-        //    };
-        //    postLines.Add(line);
-        //    postNode.preLines.Add(line);
-        //    container.Children.Add(line);
-        //    container.UpdateLayout();// <--没有将无法显示
-        //    line.Drawing();
-        //}
-
-
         /// <summary>
         /// 切换是否移动
         /// </summary>
@@ -291,7 +332,24 @@ namespace MultiBranchTexter.Controls
         {
             return titleBox.Text.Contains(findStr);
         }
-        #endregion
 
+
+        #endregion
+        public ConnectingLine GetPostLine(NodeButton post)
+        {
+            for (int i=0;i<postLines.Count;i++)
+            {
+                if (postLines[i].EndNode == post)
+                {
+                    return postLines[i];
+                }
+            }
+            return null;
+        }
+        private void UpperBd_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //通知流程图容器自己被选中
+            ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).PostNodeChoosed(this);
+        }
     }
 }

@@ -80,20 +80,18 @@ namespace MultiBranchTexter.Model
                 {
                     //以-分隔字符串
                     string[] vs = line.Split("-");
-                    if (vs[1] == "yn")
+                    if (vs[1] == "yn")//是否判断
                     {
                         string[] vs1 = vs[3].Split(",");
                         YesNoCondition condition = new YesNoCondition
                         {
-                            Question = vs[2],
-                            YesNode = result[int.Parse(vs1[0])],
-                            NoNode = result[int.Parse(vs1[0])]
+                            Question = vs[2]
                         };
                         result[int.Parse(vs[0])].endCondition = condition;
-                        TextNode.Link(result[int.Parse(vs[0])], result[int.Parse(vs1[0])]);
-                        TextNode.Link(result[int.Parse(vs[0])], result[int.Parse(vs1[1])]);
+                        TextNode.Link(result[int.Parse(vs[0])], result[int.Parse(vs1[0])], true);
+                        TextNode.Link(result[int.Parse(vs[0])], result[int.Parse(vs1[1])], false);
                     }
-                    else
+                    else//普通连接
                     {
                         TextNode.Link(result[int.Parse(vs[0])],result[int.Parse(vs[1])]);
                     }

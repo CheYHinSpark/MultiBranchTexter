@@ -28,15 +28,63 @@ namespace MultiBranchTexter.Model
         #region 静态方法
         public static void Link(TextNode pre, TextNode post)
         {
+            //pre清除所有post
+            pre.ClearAllPostNode();
+            pre.AddPostNode(post);
+            post.AddPreNode(pre);
+        }
+        public static void Link(TextNode pre, TextNode post, bool yesNo)
+        {
+            if (!(pre.endCondition is YesNoCondition))
+            {
+                //TODO:删除
+                pre.ClearAllPostNode();
+                pre.endCondition = new YesNoCondition();
+            }
+            pre.AddPostNode(post);
+            post.AddPreNode(pre);
+            //修改后继条件
+            if (yesNo)
+            { (pre.endCondition as YesNoCondition).YesNode = post; }
+            else
+            { (pre.endCondition as YesNoCondition).NoNode = post; }
+        }
+        public static void Link(TextNode pre, TextNode post, string answer)
+        {
             pre.AddPostNode(post);
             post.AddPreNode(pre);
             //TODO:修改后继条件
         }
+
         public static void UnLink(TextNode pre, TextNode post)
         {
             pre.DeletePostNode(post);
             post.DeletePreNode(pre);
+        }
+        
+        public static void UnLink(TextNode pre, TextNode post, bool yesNo)
+        {
+            pre.DeletePostNode(post);
+            post.DeletePreNode(pre);
+            //修改后继条件
+            if (pre.endCondition is YesNoCondition)
+            {
+                if (yesNo)
+                { (pre.endCondition as YesNoCondition).YesNode = null; }
+                else
+                { (pre.endCondition as YesNoCondition).NoNode = null; }
+            }
+        }
+
+        public static void UnLink(TextNode pre, TextNode post, string answer)
+        {
+            pre.DeletePostNode(post);
+            post.DeletePreNode(pre);
             //TODO:修改后继条件
+            if (pre.endCondition is MultiAnswerCondition)
+            {
+
+            }
         }
         #endregion
 
@@ -59,6 +107,10 @@ namespace MultiBranchTexter.Model
         {
             //TODO 判断是否已经存在
             postNodes.Remove(node);
+        }
+        public void ClearAllPostNode()
+        {
+            postNodes.Clear();
         }
         #endregion
 

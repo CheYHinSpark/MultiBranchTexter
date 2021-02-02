@@ -10,11 +10,12 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using System.Windows.Media;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace MultiBranchTexter.Controls
 {
     /// <summary>
-    /// FlowChartContainer.xaml 的交互逻辑
+    /// 流程图容器
     /// </summary>
     public partial class FlowChartContainer : UserControl
     {
@@ -23,7 +24,9 @@ namespace MultiBranchTexter.Controls
         private bool isDragScroll = false;
         //选择相关的变量
         public List<NodeButton> selectedNodes = new List<NodeButton>();
-
+        //等待选择后继节点的node
+        private NodeBase waitingNode;
+        public bool IsWaiting { get { return waitingNode != null; } }
         //搜索相关的变量
         public List<NodeButton> searchedNodes = new List<NodeButton>();
         private int searchedIndex = -1;
@@ -159,10 +162,10 @@ namespace MultiBranchTexter.Controls
             }
             for (int i = 0; i < textNodes.Count; i++)
             {
-                List<int> postIndex = textNodes[i].GetPostNodeIndex(textNodes);
-                //为矩阵赋值，如果i有j作为后继，则ij位置为真
                 if (textNodes[i].endCondition == null)
                 {
+                    List<int> postIndex = textNodes[i].GetPostNodeIndex(textNodes);
+                    //为矩阵赋值，如果i有j作为后继，则ij位置为真
                     for (int j = 0; j < postIndex.Count; j++)
                     {
                         mat[i, postIndex[j]] = true;
@@ -172,18 +175,23 @@ namespace MultiBranchTexter.Controls
                 }
                 else if (textNodes[i].endCondition is YesNoCondition)
                 {
-                    for (int j = 0; j < postIndex.Count; j++)
+                    YesNoCondition ync = textNodes[i].endCondition as YesNoCondition;
+                    for (int j = 0; j < textNodes.Count; j++)
                     {
-                        mat[i, postIndex[j]] = true;
-                        //为nodeButton添加post
-                        nodeButtons[i].postNodes.Add(nodeButtons[postIndex[j]]);
-                        nodeButtons[postIndex[j]].preNodes.Add(nodeButtons[i]);
+                        if (ync.YesNode == textNodes[j])
+                        {
+                            mat[i, j] = true;
+                            NodeButton.Link(nodeButtons[i],nodeButtons[j],true);
+                        }
+                        else if (ync.NoNode == textNodes[j])
+                        {
+                            mat[i, j] = true;
+                            NodeButton.Link(nodeButtons[i], nodeButtons[j], false);
+                        }
                     }
                 }
                 else if (textNodes[i].endCondition is MultiAnswerCondition)
-                { 
-
-                }
+                { }
             }
             while (hasDoneIndex.Count < num)
             {
@@ -263,7 +271,7 @@ namespace MultiBranchTexter.Controls
             nodeButton.SetParent(container);
             nodeButton.fatherNode = nodeButton;
             //连接三个点
-            NodeButton.Link(preNode.fatherNode, nodeButton);
+            NodeButton.Link(preNode, nodeButton);
             NodeButton.Link(nodeButton, postNode);
             container.Children.Add(nodeButton);
             Canvas.SetLeft(nodeButton, xPos);
@@ -415,8 +423,51 @@ namespace MultiBranchTexter.Controls
         }
         #endregion
 
+
+        public void WaitClick(NodeBase waiter)
+        {
+            //Task<NodeButton> task = new Task<NodeButton>(() =>
+            //{
+            //    while (true)
+            //    { Thread.Sleep(100); }
+            //    return null;
+            //});
+            waitingNode = waiter;
+            //开启等待点击
+            foreach (UserControl control in container.Children)
+            {
+                if (control is NodeButton)
+                {
+                    //开启nodebutton的上层border，等待点击其中一个
+                    (control as NodeButton).UpperBd.Visibility = Visibility.Visible;
+                }
+            }
+            waiter.fatherNode.UpperBd.Visibility = Visibility.Hidden;
+        }
+        public void PostNodeChoosed(NodeButton post)
+        {
+            foreach (UserControl control in container.Children)
+            {
+                if (control is NodeButton)
+                {
+                    (control as NodeButton).UpperBd.Visibility = Visibility.Hidden;
+                }
+            }
+            //选择完成，在waitNode和Post之间连线
+
+            //连接
+            NodeButton.Link(waitingNode, post);
+            ConnectingLine cl = new ConnectingLine
+            {
+                BeginNode = waitingNode,
+                EndNode = post
+            };
+            waitingNode.fatherNode.postLines.Add(cl);
+            post.preLines.Add(cl);
+            container.Children.Add(cl);
+            cl.Drawing();
+            waitingNode = null;
+        }
         #endregion
-
-
     }
 }

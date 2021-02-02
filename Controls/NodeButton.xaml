@@ -48,6 +48,11 @@
                         </Button>
                     </Grid>
                 </Border>
+                <!--等待点击-->
+                <Border x:Name="UpperBd" Background="Aqua" Grid.Row="0" Opacity="0.5"
+                        MouseDown="UpperBd_MouseDown"
+                        Visibility="Hidden"/>
+                <!--尾巴放置容器-->
                 <Border x:Name="endContainer" Grid.Row="1"/>
             </Grid>
             

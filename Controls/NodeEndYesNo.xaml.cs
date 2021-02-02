@@ -59,5 +59,31 @@ namespace MultiBranchTexter.Controls
             yesNode.fatherNode = father;
             noNode.fatherNode = father;
         }
+
+
+        private void yesnoNode_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            NodeBase node = sender as NodeBase;
+            FlowChartContainer parent = ControlTreeHelper.FindParentOfType<FlowChartContainer>(node.fatherNode);
+            if (parent.IsWaiting)
+            { return; }
+            //断开连接
+            //断开waitNode原有连线
+            ConnectingLine cline = null;
+            foreach (ConnectingLine line in node.fatherNode.postLines)
+            {
+                if (line.BeginNode == node)
+                { cline = line; }
+            }
+            if (cline != null)
+            {
+                NodeButton.UnLink(node.fatherNode, cline.EndNode);
+                node.fatherNode.postLines.Remove(cline);
+                cline.EndNode.preLines.Remove(cline);
+                parent.container.Children.Remove(cline);
+            }
+            //进入选择模式
+            parent.WaitClick(node);
+        }
     }
 }
