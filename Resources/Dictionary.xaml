@@ -12,6 +12,8 @@
     <SolidColorBrush x:Key="mainHighBrush" Color="{StaticResource mainHighColor}"/>
     <SolidColorBrush x:Key="redBrush" Color="#FFD44C45"/>
     <SolidColorBrush x:Key="textBoxHighlightBorderBrush" Color="#FF64BAE0"/>
+    <SolidColorBrush x:Key="nodeBgBrush" Color="AliceBlue"/>
+    <SolidColorBrush x:Key="nodeBgHBrush" Color="#FFC9EAFF"/>
 
     <!--转换器-->
     <cvt:NumberToPercentStrConverter x:Key="numToPerCvt" />
@@ -265,11 +267,15 @@
     
     <!--yesno答案框-->
     <ControlTemplate x:Key="yesnoAnswerTemplate" TargetType="{x:Type c:NodeBase}">
-        <Border Background="White" BorderBrush="DarkRed" BorderThickness="1" CornerRadius="4">
+        <Border x:Name="ynBd" Background="{StaticResource nodeBgBrush}" BorderBrush="DarkRed" 
+                BorderThickness="1" CornerRadius="4">
             <Path x:Name="CP" StrokeThickness="2" Stroke="Black" Data="M0,0 4,8 L10,0"
                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Border>
         <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource nodeBgHBrush}" TargetName="ynBd"/>
+            </Trigger>
             <Trigger Property="Name" Value="noNode">
                 <Setter Property="Data" Value="M0,0 L9,9 M9,0 L0,9" TargetName="CP"/>
             </Trigger>

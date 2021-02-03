@@ -189,7 +189,7 @@ namespace MultiBranchTexter.Controls
                         if (ync.YesNode == textNodes[j])
                         {
                             mat[i, j] = true;
-                            NodeButton.Link(nodeButtons[i],nodeButtons[j],true);
+                            NodeButton.Link(nodeButtons[i],nodeButtons[j], true);
                         }
                         else if (ync.NoNode == textNodes[j])
                         {
@@ -249,7 +249,7 @@ namespace MultiBranchTexter.Controls
                 }
             }
             //连线
-            //连线现在放到别的地方执行
+            //连线现在放到别的地方，即nodebutton的loaded里面执行
             for (int i = 0; i < textNodes.Count; i++)
             {
                 nodeButtons[i].ShowEndCondition();

@@ -13,7 +13,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Border x:Name="bgBorder" Padding="10,4,10,4" Grid.Row="0"
-                        Background="AliceBlue" 
+                        Background="{StaticResource nodeBgBrush}" 
                         BorderBrush="DarkRed"
                         MouseLeftButtonDown="nodeButton_MouseLeftButtonDown"
                         MouseMove="nodeButton_MouseMove"
@@ -24,8 +24,8 @@
                         <ContextMenu>
                             <MenuItem Header="删除节点" Click="DeleteNode_Click"/>
                             <MenuItem Header="变更后继节点">
-                                <MenuItem Header="单一后继节点" Click="ChangeEnd_Click"/>
-                                <MenuItem Header="是非判断后继" Click="ChangeEnd_Click"/>
+                                <MenuItem Header="单一后继" Click="ChangeEnd_Click"/>
+                                <MenuItem Header="判断后继" Click="ChangeEnd_Click"/>
                                 <MenuItem Header="多选后继" Click="ChangeEnd_Click"/>
                             </MenuItem>
                         </ContextMenu>
@@ -41,10 +41,10 @@
                         <TextBox x:Name="titleBox" Margin="2"
                                  Grid.Row="0"
                                  Focusable="False"
+                                 ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"
                                  Template="{StaticResource textBoxTemplate}"
                                  PreviewMouseDoubleClick="titleBox_PreviewMouseDoubleClick"
-                                 LostFocus="titleBox_LostFocus"
-                                 />
+                                 LostFocus="titleBox_LostFocus"/>
                         <Button x:Name="gotoBtn" Grid.Row="1"
                                 Margin="8,0,8,-6"
                                 Template="{StaticResource generalButtonTemplate}" 
@@ -62,6 +62,9 @@
             </Grid>
             
             <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True" SourceName="bgBorder">
+                    <Setter Property="Background" Value="{StaticResource nodeBgHBrush}" TargetName="bgBorder"/>
+                </Trigger>
                 <Trigger Property="NodeState" Value="Selected">
                     <Setter Property="BorderBrush" Value="Red" TargetName="bgBorder"/>
                     <Setter Property="Effect" TargetName="bgBorder">

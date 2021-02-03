@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -95,15 +96,6 @@ namespace MultiBranchTexter.Model
                     {
                         TextNode.Link(result[int.Parse(vs[0])],result[int.Parse(vs[1])]);
                     }
-                    //以,分隔后一段字符串
-
-                    //为Node添加postNode
-                    //for (int i = 0; i < vs1.Length; i++)
-                    //{
-                    //    postIndex = int.Parse(vs1[i]);
-                    //    result[preIndex].AddPostNode(result[postIndex]);
-                    //    result[postIndex].AddPreNode(result[preIndex]);
-                    //}
                 }
                 catch
                 {

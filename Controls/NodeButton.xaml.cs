@@ -116,7 +116,10 @@ namespace MultiBranchTexter.Controls
         private void titleBox_LostFocus(object sender, RoutedEventArgs e)
         {
             titleBox.Focusable = false;
-            // TODO 检查并完成标题修改
+            titleBox.SelectionStart = 0;
+            // TODO 检查重复
+            textNode.Name = titleBox.Text;
+            // TODO 通知窗体改变相应的标签页
         }
         #endregion
 
@@ -224,7 +227,7 @@ namespace MultiBranchTexter.Controls
             }
             else if (textNode.endCondition is YesNoCondition)
             {
-                endNode = new NodeEndYesNo();
+                endNode = new NodeEndYesNo(textNode.endCondition as YesNoCondition);
                 (endNode as NodeEndYesNo).SetFather(this);
                 //TODO:根据textnode修改
             }
@@ -407,13 +410,16 @@ namespace MultiBranchTexter.Controls
                 fcc.DeleteLine(line);
             }
             fcc.container.Children.Remove(this);
+            //TODO通知窗体把对应的标签删掉
         }
-
-        
 
         private void ChangeEnd_Click(object sender, RoutedEventArgs e)
         {
             string header = (string)(sender as MenuItem).Header;
+            if ((header == "单一后继" && textNode.endCondition == null)
+                || (header == "判断后继" && textNode.endCondition is YesNoCondition)
+                || (header == "多选后继" && textNode.endCondition is MultiAnswerCondition))
+            { return; }
             MessageBoxResult warnResult = MessageBox.Show
                 (
                 ControlTreeHelper.FindParentOfType<MainWindow>(this),
@@ -423,6 +429,31 @@ namespace MultiBranchTexter.Controls
                 );
             if (warnResult == MessageBoxResult.No)
             { return; }
+            FlowChartContainer fcc = ControlTreeHelper.FindParentOfType<FlowChartContainer>(this);
+            foreach (ConnectingLine line in postLines)
+            {
+                NodeButton.UnLink(line.BeginNode, line.EndNode);
+                line.EndNode.preLines.Remove(line);
+                fcc.DeleteLine(line);
+            }
+            postLines.Clear();
+            if (header == "单一后继")
+            {
+                textNode.endCondition = null;
+                endContainer.Child = null;
+            }
+            else if (header == "判断后继")
+            {
+                textNode.endCondition = new YesNoCondition();
+                NodeEndYesNo newNode = new NodeEndYesNo();
+                newNode.SetFather(this);
+                endContainer.Child = newNode;
+            }
+            else
+            {
+
+            }
+            //TODO通知窗体把对应的标签改了
         }
     }
 }

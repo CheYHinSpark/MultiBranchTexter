@@ -20,7 +20,6 @@ namespace MultiBranchTexter.Controls
     /// </summary>
     public partial class NodeEndYesNo : NodeBase
     {
-        public YesNoCondition endCondition = new YesNoCondition();
         public NodeEndYesNo()
         {
             InitializeComponent();
@@ -29,15 +28,13 @@ namespace MultiBranchTexter.Controls
         public NodeEndYesNo(YesNoCondition yesNoCond)
         {
             InitializeComponent();
-            endCondition = yesNoCond;
+            titleBox.Text = yesNoCond.Question;
         }
 
         #region 事件
         //加载完成
         private void NodeBase_Loaded(object sender, RoutedEventArgs e)
         {
-            //显示标题
-            titleBox.Text = endCondition.Question;
             //设置显示顺序为2，以显示在connectingline上面
             Panel.SetZIndex(this, 2);
         }
@@ -52,9 +49,13 @@ namespace MultiBranchTexter.Controls
         private void titleBox_LostFocus(object sender, RoutedEventArgs e)
         {
             titleBox.Focusable = false;
-            // TODO 检查并完成标题修改
+            // 完成问题修改
+            fatherNode.textNode.endCondition.Question = titleBox.Text;
+            titleBox.SelectionStart = 0;
+            // TODO 还要通知窗口改变相应的标签页
         }
 
+        //虽然0个引用，但这是双击两个小节点启动调整后继功能
         private void yesnoNode_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             NodeBase node = sender as NodeBase;
@@ -66,13 +67,22 @@ namespace MultiBranchTexter.Controls
         }
         #endregion
 
-
+        /// <summary>
+        /// 设置真正的Node
+        /// </summary>
         public void SetFather(NodeButton father)
         {
+            this.fatherNode = father;
             yesNode.fatherNode = father;
             noNode.fatherNode = father;
         }
-
-
+        /// <summary>
+        /// 设置问题文本
+        /// </summary>
+        /// <param name="q"></param>
+        public void SetQuestion(string q)
+        {
+            titleBox.Text = q;
+        }
     }
 }
