@@ -41,11 +41,14 @@
         <StackPanel Orientation="Horizontal" 
                     Grid.Row="1" 
                     Background="{StaticResource mainColorBrush}">
+            <TextBlock x:Name="stateHint" Width="Auto"
+                       MinWidth="80" Foreground="White"
+                       VerticalAlignment="Center"/>
+            <Rectangle Width="1" Fill="White" Margin="4,0,4,0"/>
             <TextBlock Text="{Binding ScaleRatio, 
                 Converter={StaticResource numToPerCvt}, 
                 ElementName=container}" Width="Auto" Foreground="White"
-                       VerticalAlignment="Center"
-                   />
+                       VerticalAlignment="Center"/>
         </StackPanel>
     </Grid>
 </UserControl>

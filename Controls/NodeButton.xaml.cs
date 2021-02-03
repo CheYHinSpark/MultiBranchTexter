@@ -348,12 +348,28 @@ namespace MultiBranchTexter.Controls
             return null;
         }
 
+        //上层bd被点击，这是在重新选择后继节点时可以被选中
         private void UpperBd_MouseDown(object sender, MouseButtonEventArgs e)
         {
             //通知流程图容器自己被选中
             ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).PostNodeChoosed(this);
         }
-
+        //虽然0次引用，但是这是有用的，这是单一后继节点模式下重新选择后继节点功能
+        private void NodeBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (e.OriginalSource is Border)
+            {
+                //这样，就表示点击到了主题border上
+                if ((e.OriginalSource as Border).Name == "bgBorder" && textNode.endCondition == null)
+                {
+                    FlowChartContainer parent = ControlTreeHelper.FindParentOfType<FlowChartContainer>(this);
+                    if (parent.IsWaiting)
+                    { return; }
+                    //进入选择模式
+                    parent.WaitClick(this);
+                }
+            }
+        }
         private void DeleteNode_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult warnResult = MessageBox.Show
@@ -393,20 +409,20 @@ namespace MultiBranchTexter.Controls
             fcc.container.Children.Remove(this);
         }
 
-        private void NodeBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        
+
+        private void ChangeEnd_Click(object sender, RoutedEventArgs e)
         {
-            if (e.OriginalSource is Border)
-            {
-                //这样，就表示点击到了主题border上
-                if ((e.OriginalSource as Border).Name == "bgBorder" && textNode.endCondition == null)
-                {
-                    FlowChartContainer parent = ControlTreeHelper.FindParentOfType<FlowChartContainer>(this);
-                    if (parent.IsWaiting)
-                    { return; }
-                    //进入选择模式
-                    parent.WaitClick(this);
-                }
-            }
+            string header = (string)(sender as MenuItem).Header;
+            MessageBoxResult warnResult = MessageBox.Show
+                (
+                ControlTreeHelper.FindParentOfType<MainWindow>(this),
+                "确定要变更后继条件吗？\n这将同时断开节点的所有后继连接线以及与所有后继节点的连接。\n此操作不可撤销！",
+                "警告",
+                MessageBoxButton.YesNo
+                );
+            if (warnResult == MessageBoxResult.No)
+            { return; }
         }
     }
 }

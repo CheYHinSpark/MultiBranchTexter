@@ -24,9 +24,9 @@
                         <ContextMenu>
                             <MenuItem Header="删除节点" Click="DeleteNode_Click"/>
                             <MenuItem Header="变更后继节点">
-                                <MenuItem Header="单一后继节点"/>
-                                <MenuItem Header="是非判断后继"/>
-                                <MenuItem Header="多选后继"/>
+                                <MenuItem Header="单一后继节点" Click="ChangeEnd_Click"/>
+                                <MenuItem Header="是非判断后继" Click="ChangeEnd_Click"/>
+                                <MenuItem Header="多选后继" Click="ChangeEnd_Click"/>
                             </MenuItem>
                         </ContextMenu>
                     </Border.ContextMenu>

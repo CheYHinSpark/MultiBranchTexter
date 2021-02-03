@@ -94,14 +94,14 @@ namespace MultiBranchTexter.Controls
             //表示点击到了空白部分
             if (e.OriginalSource is Grid)
             {
-                //右键点击
+                //右键点击，取消选择后继
                 if (e.RightButton == MouseButtonState.Pressed)
                 {
                     PostNodeChoosed(null);
                     return;
                 }
                 //非右键点击
-                if (Keyboard.Modifiers == ModifierKeys.Control)
+                if (Keyboard.Modifiers == ModifierKeys.Control)//同时按下Ctrl
                 {
                     selectBorder.Visibility = Visibility.Visible;
                     _clickPoint = e.GetPosition((ScrollViewer)sender);
@@ -109,10 +109,11 @@ namespace MultiBranchTexter.Controls
                     selectBorder.Width = 0;
                     selectBorder.Height = 0;
                 }
-                else
+                else//没有按下Ctrl
                 {
                     //取消选择
                     ClearSelection();
+                    stateHint.Text = "";
                     //准备拖拽
                     isDragScroll = true;
                     this.Cursor = Cursors.Hand;
@@ -310,7 +311,7 @@ namespace MultiBranchTexter.Controls
         #region 节点搜索功能
         public void ClearSearch()
         {
-            for (int i =0;i<searchedNodes.Count;i++)
+            for (int i =0; i < searchedNodes.Count;i++)
             {
                 if (selectedNodes.Contains(searchedNodes[i]))
                 {
@@ -387,17 +388,19 @@ namespace MultiBranchTexter.Controls
         public void NewSelection(NodeButton node)
         {
             ClearSelection();
+            stateHint.Text = "选中节点";
             selectedNodes.Add(node);
             selectedNodes[0].NodeState = NodeState.Selected;
         }
         public void NewSelection(List<NodeButton> nodes)
         {
             ClearSelection();
-            for (int i =0; i<nodes.Count;i++)
+            for (int i =0; i < nodes.Count;i++)
             {
                 nodes[i].NodeState = NodeState.Selected;
             }
             selectedNodes = nodes;
+            stateHint.Text = "选中节点";
         }
         public void ClearSelection()
         {
@@ -434,6 +437,7 @@ namespace MultiBranchTexter.Controls
         public void WaitClick(NodeBase waiter)
         {
             waitingNode = waiter;
+            stateHint.Text = "选择一个后继节点";
             //开启等待点击
             foreach (UserControl control in container.Children)
             {
@@ -447,6 +451,7 @@ namespace MultiBranchTexter.Controls
         }
         public void PostNodeChoosed(NodeButton post)
         {
+            stateHint.Text = "";
             foreach (UserControl control in container.Children)
             {
                 if (control is NodeButton)
