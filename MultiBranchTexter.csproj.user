@@ -19,6 +19,12 @@
     <Compile Update="Controls\NodeButton.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controls\NodeEndMA.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\NodeEndMAAnswer.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Controls\NodeEndYesNo.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -34,6 +40,12 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Controls\FlowChartContainer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\NodeEndMA.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\NodeEndMAAnswer.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Controls\NodeEndYesNo.xaml">

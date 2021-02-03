@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,19 +15,18 @@ using MultiBranchTexter.Model;
 namespace MultiBranchTexter.Controls
 {
     /// <summary>
-    /// NodeEndYesNo.xaml 的交互逻辑
+    /// NodeEndMA.xaml 的交互逻辑
     /// </summary>
-    public partial class NodeEndYesNo : NodeBase
+    public partial class NodeEndMA : NodeBase
     {
-        public NodeEndYesNo()
+        public NodeEndMA()
         {
             InitializeComponent();
         }
-
-        public NodeEndYesNo(YesNoCondition yesNoCond)
+        public NodeEndMA(MultiAnswerCondition mac)
         {
             InitializeComponent();
-            titleBox.Text = yesNoCond.Question;
+            titleBox.Text = mac.Question;
         }
 
         #region 事件
@@ -54,28 +52,8 @@ namespace MultiBranchTexter.Controls
             titleBox.SelectionStart = 0;
             // TODO 还要通知窗口改变相应的标签页
         }
-
-        //虽然0个引用，但这是双击两个小节点启动调整后继功能
-        private void yesnoNode_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            NodeBase node = sender as NodeBase;
-            FlowChartContainer parent = ControlTreeHelper.FindParentOfType<FlowChartContainer>(node.fatherNode);
-            if (parent.IsWaiting)
-            { return; }
-            //进入选择模式
-            parent.WaitClick(node);
-        }
         #endregion
 
-        /// <summary>
-        /// 设置真正的Node
-        /// </summary>
-        public new void SetFather(NodeButton father)
-        {
-            this.fatherNode = father;
-            yesNode.fatherNode = father;
-            noNode.fatherNode = father;
-        }
         /// <summary>
         /// 设置问题文本
         /// </summary>

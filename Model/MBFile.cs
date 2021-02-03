@@ -85,12 +85,21 @@ namespace MultiBranchTexter.Model
                     {
                         string[] vs1 = vs[3].Split(",");
                         YesNoCondition condition = new YesNoCondition
-                        {
-                            Question = vs[2]
-                        };
+                        { Question = vs[2] };
                         result[int.Parse(vs[0])].endCondition = condition;
                         TextNode.Link(result[int.Parse(vs[0])], result[int.Parse(vs1[0])], true);
                         TextNode.Link(result[int.Parse(vs[0])], result[int.Parse(vs1[1])], false);
+                    }
+                    else if (vs[1] == "ma")//多选
+                    {
+                        MultiAnswerCondition condition = new MultiAnswerCondition
+                        { Question = vs[2] };
+                        result[int.Parse(vs[0])].endCondition = condition;
+                        for (int i = 3; i < vs.Length; i++)
+                        {
+                            string[] vs1 = vs[i].Split(",");
+                            TextNode.Link(result[int.Parse(vs[0])], result[int.Parse(vs1[1])], vs1[0]);
+                        }
                     }
                     else//普通连接
                     {

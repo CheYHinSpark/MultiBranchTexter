@@ -183,7 +183,9 @@ namespace MultiBranchTexter.Controls
                 { NodeButton.Link(pre.fatherNode, post, false); }
             }
             else if (pre.fatherNode.textNode.endCondition is MultiAnswerCondition)
-            { }
+            {
+                NodeButton.Link(pre.fatherNode, post, (pre as NodeEndMAAnswer).Answer);
+            }
         }
         /// <summary>
         /// 已经有相当信息的unLink，能根据信息自动选择断开方式
@@ -200,7 +202,9 @@ namespace MultiBranchTexter.Controls
                 { NodeButton.UnLink(pre.fatherNode, post, false); }
             }
             else if (pre.fatherNode.textNode.endCondition is MultiAnswerCondition)
-            { }
+            {
+                NodeButton.UnLink(pre.fatherNode, post, (pre as NodeEndMAAnswer).Answer);
+            }
         }
         #endregion
 
@@ -229,13 +233,12 @@ namespace MultiBranchTexter.Controls
             {
                 endNode = new NodeEndYesNo(textNode.endCondition as YesNoCondition);
                 (endNode as NodeEndYesNo).SetFather(this);
-                //TODO:根据textnode修改
             }
             else if (textNode.endCondition is MultiAnswerCondition)
             {
-
+                endNode = new NodeEndMA(textNode.endCondition as MultiAnswerCondition);
+                endNode.SetFather(this);
             }
-            UpdateLayout();
         }
 
 
@@ -257,7 +260,7 @@ namespace MultiBranchTexter.Controls
                 postLines.Add(line);
                 postNodes[0].preLines.Add(line);
                 container.Children.Add(line);
-                container.UpdateLayout();// <--没有将无法显示
+                //container.UpdateLayout();
                 line.Drawing();
             }
             else if (textNode.endCondition is YesNoCondition)
@@ -279,7 +282,7 @@ namespace MultiBranchTexter.Controls
                 postLines.Add(line2);
                 container.Children.Add(line1);
                 container.Children.Add(line2);
-                container.UpdateLayout();
+                container.UpdateLayout();// <--没有会出错
                 line1.Drawing();
                 line2.Drawing();
             }

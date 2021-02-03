@@ -242,8 +242,8 @@ namespace MultiBranchTexter.Controls
             {
                 for (int j = 0; j < groupedNodes[i].Count; j++)
                 {
-                    Canvas.SetLeft(groupedNodes[i][j], 40 + 120 * j);
-                    Canvas.SetTop(groupedNodes[i][j], 60 + 160 * i);
+                    Canvas.SetLeft(groupedNodes[i][j], 50 + 150 * j);
+                    Canvas.SetTop(groupedNodes[i][j], 80 + 200 * i);
                     container.Children.Add(groupedNodes[i][j]);
                     groupedNodes[i][j].SetParent(container);
                 }

@@ -43,5 +43,13 @@ namespace MultiBranchTexter.Controls
             container.UpdateLayout();// <--没有将无法显示
             line.Drawing();
         }
+
+        /// <summary>
+        /// 设置真正的NodeButton
+        /// </summary>
+        public void SetFather(NodeButton node)
+        {
+            this.fatherNode = node;
+        }
     }
 }

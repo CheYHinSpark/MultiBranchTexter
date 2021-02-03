@@ -281,4 +281,58 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+    <!--多选后继的单个答案框-->
+    <ControlTemplate x:Key="multiAnswerTemplate" TargetType="{x:Type c:NodeBase}">
+        <Grid Height="24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="maCloseBtn" Grid.Column="0" Width="0" Height="18">
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="maBd" CornerRadius="6,0,0,6" Background="Gray">
+                            <Path x:Name="CP" Stroke="White" 
+                                  StrokeThickness="1" Data="M5,5 L13,13 M5,13 L13,5"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource redBrush}" TargetName="maBd"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Border x:Name="maBd"  Grid.Column="1"
+                    Background="{StaticResource nodeBgBrush}" BorderBrush="DarkRed" 
+                    BorderThickness="1" CornerRadius="4">
+                <TextBox x:Name="answerTxt" Margin="2"/>
+        </Border>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource nodeBgHBrush}" TargetName="maBd"/>
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetName="maCloseBtn"
+                                Storyboard.TargetProperty="(Button.Width)"
+                                To="16" Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetName="maCloseBtn"
+                                Storyboard.TargetProperty="(Button.Width)"
+                                To="0" Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 </ResourceDictionary>

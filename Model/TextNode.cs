@@ -51,9 +51,34 @@ namespace MultiBranchTexter.Model
         }
         public static void Link(TextNode pre, TextNode post, string answer)
         {
+            if (!(pre.endCondition is MultiAnswerCondition))
+            {
+                //TODO:删除
+                pre.ClearAllPostNode();
+                pre.endCondition = new MultiAnswerCondition();
+            }
             pre.AddPostNode(post);
             post.AddPreNode(pre);
-            //TODO:修改后继条件
+            //修改后继条件
+            bool hasAnswer = false;
+            foreach (AnswerToNode atn in (pre.endCondition as MultiAnswerCondition).AnswerToNodes)
+            {
+                if (atn.Answer == answer)
+                {
+                    atn.PostNode = post;
+                    hasAnswer = true;
+                    break;
+                }
+            }
+            if (!hasAnswer)
+            {
+                (pre.endCondition as MultiAnswerCondition).AnswerToNodes
+                    .Add(new AnswerToNode
+                    {
+                        Answer = answer,
+                        PostNode = post
+                    });
+            }
         }
 
         public static void UnLink(TextNode pre, TextNode post)
@@ -80,10 +105,19 @@ namespace MultiBranchTexter.Model
         {
             pre.DeletePostNode(post);
             post.DeletePreNode(pre);
-            //TODO:修改后继条件
+            //修改后继条件
             if (pre.endCondition is MultiAnswerCondition)
             {
-
+                AnswerToNode needRemove = null;
+                foreach (AnswerToNode atn in (pre.endCondition as MultiAnswerCondition).AnswerToNodes)
+                {
+                    if (atn.Answer == answer)
+                    {
+                        needRemove = atn;
+                        break;
+                    }
+                }
+                (pre.endCondition as MultiAnswerCondition).AnswerToNodes.Remove(needRemove);
             }
         }
         #endregion

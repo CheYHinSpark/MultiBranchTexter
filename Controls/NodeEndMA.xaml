@@ -1,0 +1,31 @@
+﻿<c:NodeBase x:Class="MultiBranchTexter.Controls.NodeEndMA"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:c="clr-namespace:MultiBranchTexter.Controls"
+            Loaded="NodeBase_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <Border Padding="6,0,6,0" Grid.Row="0"
+                Background="{StaticResource nodeBgBrush}" BorderBrush="DarkRed"
+                BorderThickness="1" CornerRadius="4">
+            <Grid>
+                <Rectangle Margin="1"
+                           VerticalAlignment="Bottom" Fill="Gray" Height="2"/>
+                <TextBox x:Name="titleBox" Margin="1"
+                         Focusable="False"
+                         ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"
+                         Template="{StaticResource textBoxTemplate}"
+                         PreviewMouseDoubleClick="titleBox_PreviewMouseDoubleClick"
+                         LostFocus="titleBox_LostFocus"/>
+            </Grid>
+        </Border>
+        <StackPanel x:Name="answerContainer" Orientation="Vertical" Grid.Row="1">
+            <c:NodeEndMAAnswer/>
+        </StackPanel>
+        <Button Grid.Row="2" Width="40" Content="+"/>
+    </Grid>
+</c:NodeBase>

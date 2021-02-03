@@ -23,7 +23,7 @@ namespace MultiBranchTexter.Model
         public List<AnswerToNode> AnswerToNodes = new List<AnswerToNode>();
     }
 
-    public struct AnswerToNode
+    public class AnswerToNode
     {
         public string Answer;
         public TextNode PostNode;
