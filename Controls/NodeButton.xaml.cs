@@ -396,7 +396,7 @@ namespace MultiBranchTexter.Controls
         /// </summary>
         public void UpdatePreLines()
         {
-            for (int i = 0; i < postLines.Count; i++)
+            for (int i = 0; i < preLines.Count; i++)
             {
                 preLines[i].Update();
             }

@@ -55,13 +55,15 @@ namespace MultiBranchTexter
         private void Path_MouseEnter(object sender, MouseEventArgs e)
         {
             //设置显示顺序为1，以显示在其他connectingline上面
-            Panel.SetZIndex(this, 1);
+            Panel.SetZIndex(this, 5);
+            Opacity = 0.6;
             Path.StrokeThickness = 4;
         }
         //鼠标离开
         private void Path_MouseLeave(object sender, MouseEventArgs e)
         {
             Panel.SetZIndex(this, 0);
+            Opacity = 1;
             Path.StrokeThickness = 3;
         }
 
