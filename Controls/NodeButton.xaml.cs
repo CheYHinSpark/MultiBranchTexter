@@ -54,6 +54,7 @@ namespace MultiBranchTexter.Controls
             Panel.SetZIndex(this, 2);
             DrawPostLines(ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this));
         }
+
         #region 移动事件
         private void nodeButton_MouseMove(object sender, MouseEventArgs e)
         {
@@ -121,9 +122,98 @@ namespace MultiBranchTexter.Controls
             textNode.Name = titleBox.Text;
             // TODO 通知窗体改变相应的标签页
         }
+
+        //上层bd被点击，这是在重新选择后继节点时可以被选中
+        private void UpperBd_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //通知流程图容器自己被选中
+            ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).PostNodeChoosed(this);
+        }
+
+        //虽然0次引用，但是这是有用的，这是单一后继节点模式下重新选择后继节点功能
+        private void NodeBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (e.OriginalSource is Border)
+            {
+                //这样，就表示点击到了主题border上
+                if ((e.OriginalSource as Border).Name == "bgBorder" && textNode.endCondition == null)
+                {
+                    FlowChartContainer parent = ControlTreeHelper.FindParentOfType<FlowChartContainer>(this);
+                    if (parent.IsWaiting)
+                    { return; }
+                    //进入选择模式
+                    parent.WaitClick(this);
+                }
+            }
+        }
+
+        #region 右键菜单功能
+        private void DeleteNode_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult warnResult = MessageBox.Show
+                (
+                ControlTreeHelper.FindParentOfType<MainWindow>(this),
+                "确定要删除节点吗？\n这将同时断开节点的所有连接线，并且此操作不可撤销！",
+                "警告",
+                MessageBoxButton.YesNo
+                );
+            if (warnResult == MessageBoxResult.No)
+            { return; }
+            //清除所有前驱
+            while (preLines.Count > 0)
+            {
+                NodeButton.UnLink(preLines[0].BeginNode, preLines[0].EndNode);
+                preLines[0].Delete();
+            }
+            UnLinkAllPost();//清除所有后继
+            ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this).Children.Remove(this);
+            //TODO通知窗体把对应的标签删掉
+        }
+
+        private void ChangeEnd_Click(object sender, RoutedEventArgs e)
+        {
+            string header = (string)(sender as MenuItem).Header;
+            if ((header == "单一后继" && textNode.endCondition == null)
+                || (header == "判断后继" && textNode.endCondition is YesNoCondition)
+                || (header == "多选后继" && textNode.endCondition is MultiAnswerCondition))
+            { return; }
+            MessageBoxResult warnResult = MessageBox.Show
+                (
+                ControlTreeHelper.FindParentOfType<MainWindow>(this),
+                "确定要变更后继条件吗？\n这将同时断开节点的所有后继连接线以及与所有后继节点的连接。\n此操作不可撤销！",
+                "警告",
+                MessageBoxButton.YesNo
+                );
+            if (warnResult == MessageBoxResult.No)
+            { return; }
+            UnLinkAllPost();//清除后继
+            if (header == "单一后继")
+            {
+                textNode.endCondition = null;
+                endContainer.Child = null;
+            }
+            else if (header == "判断后继")
+            {
+                textNode.endCondition = new YesNoCondition();
+                NodeEndYesNo newNode = new NodeEndYesNo();
+                newNode.SetFather(this);
+                endContainer.Child = newNode;
+            }
+            else
+            {
+                textNode.endCondition = new MultiAnswerCondition();
+                NodeEndMA newNode = new NodeEndMA();
+                newNode.SetFather(this);
+                endContainer.Child = newNode;
+            }
+            //TODO通知窗体把对应的标签改了
+        }
+        #endregion
+
         #endregion
 
         #region 方法
+
         #region 静态方法
         public static void Link(NodeButton pre, NodeButton post)
         {
@@ -237,7 +327,8 @@ namespace MultiBranchTexter.Controls
             else if (textNode.endCondition is MultiAnswerCondition)
             {
                 endNode = new NodeEndMA(textNode.endCondition as MultiAnswerCondition);
-                endNode.SetFather(this);
+                (endNode as NodeEndMA).SetFather(this);
+
             }
         }
 
@@ -288,7 +379,34 @@ namespace MultiBranchTexter.Controls
             }
             else if (textNode.endCondition is MultiAnswerCondition)
             {
+                NodeEndMA tempNode = endNode as NodeEndMA;
+                int i = 0;
+                foreach (UserControl control in tempNode.answerContainer.Children)
+                {
+                    ConnectingLine line = new ConnectingLine
+                    {
+                        BeginNode = control as NodeBase,
+                        EndNode = postNodes[i]
+                    };
+                    postNodes[i].preLines.Add(line);
+                    postLines.Add(line);
+                    container.Children.Add(line);
+                    container.UpdateLayout();// <--没有会出错
+                    line.Drawing();
+                    i++;
+                }
+            }
+        }
 
+        /// <summary>
+        /// 断开自身与所有后继节点，删除所有后继连线
+        /// </summary>
+        public void UnLinkAllPost()
+        {
+            while (postLines.Count > 0)
+            {
+                NodeButton.UnLink(postLines[0].BeginNode, postLines[0].EndNode);
+                postLines[0].Delete();
             }
         }
         #endregion
@@ -339,124 +457,6 @@ namespace MultiBranchTexter.Controls
         {
             return titleBox.Text.Contains(findStr);
         }
-
-
         #endregion
-        public ConnectingLine GetPostLine(NodeButton post)
-        {
-            for (int i=0;i<postLines.Count;i++)
-            {
-                if (postLines[i].EndNode == post)
-                {
-                    return postLines[i];
-                }
-            }
-            return null;
-        }
-
-        //上层bd被点击，这是在重新选择后继节点时可以被选中
-        private void UpperBd_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            //通知流程图容器自己被选中
-            ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).PostNodeChoosed(this);
-        }
-        //虽然0次引用，但是这是有用的，这是单一后继节点模式下重新选择后继节点功能
-        private void NodeBase_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (e.OriginalSource is Border)
-            {
-                //这样，就表示点击到了主题border上
-                if ((e.OriginalSource as Border).Name == "bgBorder" && textNode.endCondition == null)
-                {
-                    FlowChartContainer parent = ControlTreeHelper.FindParentOfType<FlowChartContainer>(this);
-                    if (parent.IsWaiting)
-                    { return; }
-                    //进入选择模式
-                    parent.WaitClick(this);
-                }
-            }
-        }
-        private void DeleteNode_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBoxResult warnResult = MessageBox.Show
-                (
-                ControlTreeHelper.FindParentOfType<MainWindow>(this),
-                "确定要删除节点吗？\n这将同时断开节点的所有连接线，并且此操作不可撤销！",
-                "警告",
-                MessageBoxButton.YesNo
-                );
-            if (warnResult == MessageBoxResult.No)
-            { return; }
-            FlowChartContainer fcc = ControlTreeHelper.FindParentOfType<FlowChartContainer>(this);
-            List<ConnectingLine> readyToRemoveLines = new List<ConnectingLine>();
-            while (preNodes.Count >0)
-            {
-                readyToRemoveLines.Clear();
-                foreach (ConnectingLine line in preNodes[0].fatherNode.postLines)
-                {
-                    if (line.EndNode == this)
-                    {
-                        readyToRemoveLines.Add(line);
-                        fcc.DeleteLine(line);
-                    }
-                }
-                foreach (ConnectingLine line in readyToRemoveLines)
-                {
-                    preNodes[0].fatherNode.postLines.Remove(line);
-                }
-                NodeButton.UnLink(preNodes[0], this);
-            }
-            foreach (ConnectingLine line in postLines)
-            {
-                NodeButton.UnLink(line.BeginNode, line.EndNode);
-                line.EndNode.preLines.Remove(line);
-                fcc.DeleteLine(line);
-            }
-            fcc.container.Children.Remove(this);
-            //TODO通知窗体把对应的标签删掉
-        }
-
-        private void ChangeEnd_Click(object sender, RoutedEventArgs e)
-        {
-            string header = (string)(sender as MenuItem).Header;
-            if ((header == "单一后继" && textNode.endCondition == null)
-                || (header == "判断后继" && textNode.endCondition is YesNoCondition)
-                || (header == "多选后继" && textNode.endCondition is MultiAnswerCondition))
-            { return; }
-            MessageBoxResult warnResult = MessageBox.Show
-                (
-                ControlTreeHelper.FindParentOfType<MainWindow>(this),
-                "确定要变更后继条件吗？\n这将同时断开节点的所有后继连接线以及与所有后继节点的连接。\n此操作不可撤销！",
-                "警告",
-                MessageBoxButton.YesNo
-                );
-            if (warnResult == MessageBoxResult.No)
-            { return; }
-            FlowChartContainer fcc = ControlTreeHelper.FindParentOfType<FlowChartContainer>(this);
-            foreach (ConnectingLine line in postLines)
-            {
-                NodeButton.UnLink(line.BeginNode, line.EndNode);
-                line.EndNode.preLines.Remove(line);
-                fcc.DeleteLine(line);
-            }
-            postLines.Clear();
-            if (header == "单一后继")
-            {
-                textNode.endCondition = null;
-                endContainer.Child = null;
-            }
-            else if (header == "判断后继")
-            {
-                textNode.endCondition = new YesNoCondition();
-                NodeEndYesNo newNode = new NodeEndYesNo();
-                newNode.SetFather(this);
-                endContainer.Child = newNode;
-            }
-            else
-            {
-
-            }
-            //TODO通知窗体把对应的标签改了
-        }
     }
 }

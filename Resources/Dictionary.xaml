@@ -306,7 +306,7 @@
             <Border x:Name="maBd"  Grid.Column="1"
                     Background="{StaticResource nodeBgBrush}" BorderBrush="DarkRed" 
                     BorderThickness="1" CornerRadius="4">
-                <TextBox x:Name="answerTxt" Margin="2"/>
+                <TextBox x:Name="answerTxt" Margin="2,2,8,2"/>
         </Border>
         </Grid>
         <ControlTemplate.Triggers>

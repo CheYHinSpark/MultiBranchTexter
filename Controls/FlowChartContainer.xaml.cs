@@ -199,7 +199,20 @@ namespace MultiBranchTexter.Controls
                     }
                 }
                 else if (textNodes[i].endCondition is MultiAnswerCondition)
-                { }
+                {
+                    MultiAnswerCondition mac = textNodes[i].endCondition as MultiAnswerCondition;
+                    for (int j =0;j < mac.AnswerToNodes.Count;j++)
+                    {
+                        for (int k = 0; k < textNodes.Count; k++)
+                        {
+                            if (mac.AnswerToNodes[j].PostNode == textNodes[k])
+                            {
+                                mat[i, k] = true;
+                                NodeButton.Link(nodeButtons[i], nodeButtons[k], mac.AnswerToNodes[j].Answer);
+                            }
+                        }
+                    }
+                }
             }
             while (hasDoneIndex.Count < num)
             {
@@ -256,12 +269,7 @@ namespace MultiBranchTexter.Controls
             }
         }
 
-        //删除连线
-        public void DeleteLine(ConnectingLine line)
-        {
-            container.Children.Remove(line);
-        }
-
+        
         /// <summary>
         /// 重新绘制流程图
         /// </summary>
@@ -433,7 +441,9 @@ namespace MultiBranchTexter.Controls
         }
         #endregion
 
-
+        /// <summary>
+        /// 进入等待点击以选择一个新的后继节点的状态
+        /// </summary>
         public void WaitClick(NodeBase waiter)
         {
             waitingNode = waiter;
@@ -449,6 +459,9 @@ namespace MultiBranchTexter.Controls
             }
             waiter.fatherNode.UpperBd.Visibility = Visibility.Hidden;
         }
+        /// <summary>
+        /// 新的后继节点选择完成了，传入null表示取消选择
+        /// </summary>
         public void PostNodeChoosed(NodeButton post)
         {
             stateHint.Text = "";
@@ -465,13 +478,13 @@ namespace MultiBranchTexter.Controls
                 return;
             }
             //首先断开waitNode原有的连线
-            ConnectingLine cline = null;//原本的连线
+            ConnectingLine cline = null;//找到原本的连线
             foreach (ConnectingLine line in waitingNode.fatherNode.postLines)
             {
                 if (line.BeginNode == waitingNode)
                 { cline = line; }
             }
-            if (cline != null)
+            if (cline != null)//不一定有这条原本连线
             {
                 NodeButton.UnLink(waitingNode, cline.EndNode);
                 waitingNode.fatherNode.postLines.Remove(cline);

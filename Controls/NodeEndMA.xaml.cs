@@ -27,6 +27,11 @@ namespace MultiBranchTexter.Controls
         {
             InitializeComponent();
             titleBox.Text = mac.Question;
+            foreach (AnswerToNode atn in mac.AnswerToNodes)
+            {
+                NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(atn);
+                answerContainer.Children.Add(nodeEnd);
+            }
         }
 
         #region 事件
@@ -52,15 +57,63 @@ namespace MultiBranchTexter.Controls
             titleBox.SelectionStart = 0;
             // TODO 还要通知窗口改变相应的标签页
         }
+
+        //点击添加按钮
+        private void addBtn_Click(object sender, RoutedEventArgs e)
+        {
+            AnswerToNode atn = new AnswerToNode();
+            List<AnswerToNode> atns = (fatherNode.textNode.endCondition as MultiAnswerCondition).AnswerToNodes;
+            //创造一个不重名的
+            string newAnswer = "新回答";
+            int i = 1;
+            bool repeated = true;
+            while (repeated)
+            {
+                repeated = false;
+                for (int j = 0; j < atns.Count; j++)
+                {
+                    if (atns[j].Answer == newAnswer + i.ToString())
+                    {
+                        repeated = true;
+                        i++;
+                        break;
+                    }
+                }
+            }
+            atn.Answer = newAnswer + i.ToString();
+            atns.Add(atn);
+            NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(atn);
+            nodeEnd.fatherNode = fatherNode;
+            answerContainer.Children.Add(nodeEnd);
+        }
         #endregion
 
+        #region 方法
         /// <summary>
-        /// 设置问题文本
+        /// 设置真正的father
         /// </summary>
-        /// <param name="q"></param>
-        public void SetQuestion(string q)
+        public new void SetFather(NodeButton father)
         {
-            titleBox.Text = q;
+            this.fatherNode = father;
+            foreach (UserControl control in answerContainer.Children)
+            {
+                (control as NodeEndMAAnswer).fatherNode = father;
+            }
         }
+
+        /// <summary>
+        /// 输入一个回答，检查回答是否有重复，即数量在2即以上
+        /// </summary>
+        public bool CheckRepeatedAnswer(string newAnswer)
+        {
+            int n = 0;
+            foreach (UserControl control in answerContainer.Children)
+            {
+                if ((control as NodeEndMAAnswer).Answer == newAnswer)
+                { n++; }
+            }
+            return n > 1;
+        }
+        #endregion
     }
 }

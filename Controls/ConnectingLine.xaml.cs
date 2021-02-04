@@ -60,23 +60,21 @@ namespace MultiBranchTexter
         {
             //断开起始点和终止点
             NodeButton.UnLink(BeginNode, EndNode);
-            BeginNode.fatherNode.postLines.Remove(this);
-            EndNode.preLines.Remove(this);
             //删去本线条
-            ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).DeleteLine(this);
+            Delete();
         }
         //添加节点
         private void addNode_Click(object sender, RoutedEventArgs e)
         {
             //断开起始点和终止点
             NodeButton.UnLink(BeginNode, EndNode);
-            BeginNode.fatherNode.postLines.Remove(this);
-            EndNode.preLines.Remove(this);
+            //BeginNode.fatherNode.postLines.Remove(this);
+            //EndNode.preLines.Remove(this);已经在Delete里面完成了
             //加入新节点，相关的link和画线都在fcc里完成
             ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).AddNodeButton(new TextNode(),
                 BeginNode, EndNode, mousePt.X, mousePt.Y);
             //删去本线条
-            ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).DeleteLine(this);
+            Delete();
         }
         #endregion
 
@@ -102,7 +100,17 @@ namespace MultiBranchTexter
             Path.Data = Geometry.Parse("M" + beginPt.ToString() + " C" + c1Pt.ToString() + " "
                 + c2Pt.ToString() + " " + endPt.ToString());
             //更新tooltip
-            //Path.ToolTip = "从" + BeginElement.textNode.Name + "\n到" + EndElement.textNode.Name;
+            Path.ToolTip = "从" + BeginNode.fatherNode.textNode.Name + "\n到" + EndNode.textNode.Name;
+        }
+
+        /// <summary>
+        /// 从前后两个节点删除自身，然后从容器移除自身
+        /// </summary>
+        public void Delete()
+        {
+            BeginNode.fatherNode.postLines.Remove(this);
+            EndNode.preLines.Remove(this);
+            ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this).Children.Remove(this);
         }
         #endregion
     }

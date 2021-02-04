@@ -76,13 +76,5 @@ namespace MultiBranchTexter.Controls
             yesNode.fatherNode = father;
             noNode.fatherNode = father;
         }
-        /// <summary>
-        /// 设置问题文本
-        /// </summary>
-        /// <param name="q"></param>
-        public void SetQuestion(string q)
-        {
-            titleBox.Text = q;
-        }
     }
 }

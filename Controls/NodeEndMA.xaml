@@ -23,9 +23,7 @@
                          LostFocus="titleBox_LostFocus"/>
             </Grid>
         </Border>
-        <StackPanel x:Name="answerContainer" Orientation="Vertical" Grid.Row="1">
-            <c:NodeEndMAAnswer/>
-        </StackPanel>
-        <Button Grid.Row="2" Width="40" Content="+"/>
+        <StackPanel x:Name="answerContainer" Orientation="Vertical" Grid.Row="1"/>
+        <Button x:Name="addBtn" Grid.Row="2" Width="40" Content="+" Click="addBtn_Click"/>
     </Grid>
 </c:NodeBase>
