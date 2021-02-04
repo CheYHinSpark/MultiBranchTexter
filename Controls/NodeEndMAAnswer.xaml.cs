@@ -108,5 +108,14 @@ namespace MultiBranchTexter.Controls
             ControlTreeHelper.FindParentOfType<StackPanel>(this).Children.Remove(this);
         }
         #endregion
+
+        /// <summary>
+        /// 获得在StackPanel里面的顺序
+        /// </summary>
+        public int GetIndex()
+        {
+            StackPanel panel = ControlTreeHelper.FindParentOfType<StackPanel>(this);
+            return panel.Children.IndexOf(this);
+        }
     }
 }

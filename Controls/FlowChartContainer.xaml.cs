@@ -255,18 +255,20 @@ namespace MultiBranchTexter.Controls
             {
                 for (int j = 0; j < groupedNodes[i].Count; j++)
                 {
-                    Canvas.SetLeft(groupedNodes[i][j], 50 + 150 * j);
-                    Canvas.SetTop(groupedNodes[i][j], 80 + 200 * i);
+                    Canvas.SetLeft(groupedNodes[i][j], 60 + 160 * j);
+                    Canvas.SetTop(groupedNodes[i][j], 80 + 240 * i);
                     container.Children.Add(groupedNodes[i][j]);
                     groupedNodes[i][j].SetParent(container);
                 }
             }
-            //连线
+            //添加线
             //连线现在放到别的地方，即nodebutton的loaded里面执行
             for (int i = 0; i < textNodes.Count; i++)
             {
                 nodeButtons[i].ShowEndCondition();
+                nodeButtons[i].AddPostLines(container);
             }
+            Debug.WriteLine("节点创建完成");
         }
 
         
@@ -493,15 +495,13 @@ namespace MultiBranchTexter.Controls
             }
             //在waitNode和Post之间连线
             NodeButton.Link(waitingNode, post);
-            ConnectingLine cl = new ConnectingLine
-            {
-                BeginNode = waitingNode,
-                EndNode = post
-            };
-            waitingNode.fatherNode.postLines.Add(cl);
-            post.preLines.Add(cl);
+            ConnectingLine cl = new ConnectingLine(waitingNode, post);
+            //waitingNode.fatherNode.postLines.Add(cl);
+            //post.preLines.Add(cl);
             container.Children.Add(cl);
-            cl.Drawing();
+            //cl.Update();
+            //waitingNode.fatherNode.UpdatePostLines();
+            //post.UpdatePreLines();
             waitingNode = null;
         }
         #endregion

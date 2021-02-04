@@ -30,7 +30,7 @@ namespace MultiBranchTexter.Controls
         private Point oldPoint = new Point();
         private bool isMoving = false;
         public bool IsMoving { get { return isMoving; } }
-
+        
         public NodeButton()
         { }
         public NodeButton(TextNode newNode)
@@ -52,7 +52,8 @@ namespace MultiBranchTexter.Controls
             titleBox.Text = textNode.Name;
             //设置显示顺序为2，以显示在connectingline上面
             Panel.SetZIndex(this, 2);
-            DrawPostLines(ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this));
+            UpdateLayout();
+            UpdatePostLines();
         }
 
         #region 移动事件
@@ -336,8 +337,7 @@ namespace MultiBranchTexter.Controls
         /// <summary>
         /// 根据textNode的连接情况在自己和后续节点间生成连线
         /// </summary>
-        /// <param name="container"></param>
-        public void DrawPostLines(Panel container)
+        public void AddPostLines(Panel container)
         {
             if (textNode.endCondition == null)//表示是无选项的
             {
@@ -351,8 +351,6 @@ namespace MultiBranchTexter.Controls
                 postLines.Add(line);
                 postNodes[0].preLines.Add(line);
                 container.Children.Add(line);
-                //container.UpdateLayout();
-                line.Drawing();
             }
             else if (textNode.endCondition is YesNoCondition)
             {
@@ -373,9 +371,6 @@ namespace MultiBranchTexter.Controls
                 postLines.Add(line2);
                 container.Children.Add(line1);
                 container.Children.Add(line2);
-                container.UpdateLayout();// <--没有会出错
-                line1.Drawing();
-                line2.Drawing();
             }
             else if (textNode.endCondition is MultiAnswerCondition)
             {
@@ -391,17 +386,37 @@ namespace MultiBranchTexter.Controls
                     postNodes[i].preLines.Add(line);
                     postLines.Add(line);
                     container.Children.Add(line);
-                    container.UpdateLayout();// <--没有会出错
-                    line.Drawing();
                     i++;
                 }
             }
         }
 
         /// <summary>
+        /// 刷新前驱线
+        /// </summary>
+        public void UpdatePreLines()
+        {
+            for (int i = 0; i < postLines.Count; i++)
+            {
+                preLines[i].Update();
+            }
+        }
+
+        /// <summary>
+        /// 刷新后继线
+        /// </summary>
+        public void UpdatePostLines()
+        {
+            for (int i = 0; i < postLines.Count; i++)
+            {
+                postLines[i].Update();
+            }
+        }
+
+        /// <summary>
         /// 断开自身与所有后继节点，删除所有后继连线
         /// </summary>
-        public void UnLinkAllPost()
+        private void UnLinkAllPost()
         {
             while (postLines.Count > 0)
             {
@@ -412,6 +427,7 @@ namespace MultiBranchTexter.Controls
         #endregion
 
         #region 移动
+
         /// <summary>
         /// 切换是否移动
         /// </summary>
@@ -443,19 +459,37 @@ namespace MultiBranchTexter.Controls
             Canvas.SetTop(this, yTrans);
             //调整线条
             foreach (ConnectingLine line in preLines)
-            { line.Drawing(); }
+            { line.Update(); }
             foreach (ConnectingLine line in postLines)
-            { line.Drawing(); }
+            { line.Update(); }
         }
         #endregion
 
-
         /// <summary>
-       /// 根据输入的字符串，返回是否被查询到，当前只查询标题
-       /// </summary>
+        /// 根据输入的字符串，返回是否被查询到，当前只查询标题
+        /// </summary>
         public bool BeSearch(string findStr)
         {
             return titleBox.Text.Contains(findStr);
+        }
+
+        /// <summary>
+        /// 输入一条前驱连接线，返回其应有的偏移量
+        /// </summary>
+        public Vector GetPreLineEnd(ConnectingLine line)
+        {
+            Vector point = new Vector(50, 25);
+            if (preLines.Count == 1)
+            { return point; }
+            for (int i = 0;i < preLines.Count; i++)
+            {
+                if (preLines[i] == line)
+                {
+                    point.X += -30 + 60.0 * i / (preLines.Count - 1);
+                    return point;
+                }
+            }
+            return point;
         }
         #endregion
     }

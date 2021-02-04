@@ -32,16 +32,8 @@ namespace MultiBranchTexter.Controls
         /// <param name="container"></param>
         public void DrawPostLine(Panel container, NodeButton postNode)
         {
-            ConnectingLine line = new ConnectingLine
-            {
-                BeginNode = this,
-                EndNode = postNode
-            };
-            fatherNode.postLines.Add(line);
-            postNode.preLines.Add(line);
+            ConnectingLine line = new ConnectingLine(this, postNode);
             container.Children.Add(line);
-            container.UpdateLayout();// <--没有将无法显示
-            line.Drawing();
         }
 
         /// <summary>
@@ -50,6 +42,16 @@ namespace MultiBranchTexter.Controls
         public void SetFather(NodeButton node)
         {
             this.fatherNode = node;
+        }
+
+        /// <summary>
+        /// 获得左上角坐标
+        /// </summary>
+        /// <returns></returns>
+        public Point GetCanvasOffset()
+        {
+            return TransformToAncestor(fatherNode).Transform(new Point(0,0))
+                + new Vector(Canvas.GetLeft(fatherNode), Canvas.GetTop(fatherNode));
         }
     }
 }

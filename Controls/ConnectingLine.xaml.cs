@@ -1,5 +1,6 @@
 ﻿using MultiBranchTexter.Controls;
 using MultiBranchTexter.Model;
+using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,6 +20,20 @@ namespace MultiBranchTexter
             InitializeComponent();
         }
 
+        /// <summary>
+        /// 前后lines添加，并且会刷新线条
+        /// </summary>
+        public ConnectingLine(NodeBase begin, NodeButton end)
+        {
+            InitializeComponent();
+            BeginNode = begin;
+            EndNode = end;
+            begin.fatherNode.postLines.Add(this);
+            end.preLines.Add(this);
+            begin.fatherNode.UpdatePostLines();
+            end.UpdatePreLines();
+        }
+
         #region 成员变量
         /// <summary>
         /// 起始节点
@@ -30,6 +45,8 @@ namespace MultiBranchTexter
         public NodeButton EndNode { get; set; }
         //记录鼠标位置
         private Point mousePt = new Point();
+        private Point beginOffset = new Point(0, 0);
+        private Point endOffset = new Point(0, 0);
         #endregion
 
         #region 事件
@@ -68,8 +85,6 @@ namespace MultiBranchTexter
         {
             //断开起始点和终止点
             NodeButton.UnLink(BeginNode, EndNode);
-            //BeginNode.fatherNode.postLines.Remove(this);
-            //EndNode.preLines.Remove(this);已经在Delete里面完成了
             //加入新节点，相关的link和画线都在fcc里完成
             ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).AddNodeButton(new TextNode(),
                 BeginNode, EndNode, mousePt.X, mousePt.Y);
@@ -82,23 +97,63 @@ namespace MultiBranchTexter
 
         #region 方法
         /// <summary>
-        /// 画线
+        /// 画线，现在该方法已经不需要线条本身在容器里，但是前后节点必须已经在容器里面
         /// </summary>
-        public void Drawing()
+        public void Update()
         {
             if (BeginNode == null || EndNode == null)
             { return; }
-            Point beginPt = BeginNode
-                .TransformToAncestor(ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(BeginNode))
-                .Transform(new Point(BeginNode.ActualWidth / 2.0, BeginNode.ActualHeight / 2.0));
-            Point endPt = EndNode
-                .TransformToAncestor(ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(EndNode))
-                .Transform(new Point(EndNode.ActualWidth / 2.0, EndNode.ActualHeight / 2.0));
-            Point c1Pt = new Point(beginPt.X, beginPt.Y * 0.5 + endPt.Y * 0.5);
-            Point c2Pt = new Point(endPt.X, beginPt.Y * 0.5 + endPt.Y * 0.5);
-            //三次bezier曲线
-            Path.Data = Geometry.Parse("M" + beginPt.ToString() + " C" + c1Pt.ToString() + " "
-                + c2Pt.ToString() + " " + endPt.ToString());
+            //获取起始点
+            Point beginPt = BeginNode.GetCanvasOffset() + new Vector(BeginNode.ActualWidth / 2.0, BeginNode.ActualHeight / 2.0);
+            Point endPt = EndNode.GetCanvasOffset() + EndNode.GetPreLineEnd(this);
+            if (BeginNode.fatherNode.textNode.endCondition is MultiAnswerCondition)
+            {
+                //如果前驱是个多选模式节点，则特别处理
+                //取得偏移点
+                Point beginOffsetPt = new Point(beginPt.X + 60 + 10 * (BeginNode as NodeEndMAAnswer).GetIndex(), beginPt.Y);
+                Point c1Pt, c2Pt;
+                double xt = endPt.X - beginOffsetPt.X;
+                double yt = endPt.Y - beginOffsetPt.Y;
+                if (Math.Abs(xt) + 80 - Math.Abs(yt) > 0)
+                {
+                    //这表示横向差距较大
+                    c1Pt = new Point(beginOffsetPt.X, beginOffsetPt.Y * 0.5 + endPt.Y * 0.5);
+                    c2Pt = new Point(endPt.X, beginOffsetPt.Y * 0.5 + endPt.Y * 0.5);
+
+                }
+                else//这表示横向差距不够大
+                {
+                    c1Pt = new Point(beginOffsetPt.X,
+                        beginOffsetPt.Y * 0.5 + endPt.Y * 0.5 - Math.Sign(yt) * Math.Abs(xt / 2));
+                    c2Pt = new Point(endPt.X,
+                        beginOffsetPt.Y * 0.5 + endPt.Y * 0.5 + Math.Sign(yt) * Math.Abs(xt / 2));
+                }
+                Path.Data = Geometry.Parse("M" + beginPt.ToString() + " " 
+                    + beginOffsetPt.ToString() + " " + c1Pt.ToString() + " "
+                    + c2Pt.ToString() + " L" + endPt.ToString());
+            }
+            else
+            {
+                Point c1Pt, c2Pt;
+                double xt = endPt.X - beginPt.X;
+                double yt = endPt.Y - beginPt.Y;
+                if (Math.Abs(xt) + 80 - Math.Abs(yt) > 0)
+                {
+                    //这表示横向差距较大
+                    c1Pt = new Point(beginPt.X, beginPt.Y * 0.5 + endPt.Y * 0.5);
+                    c2Pt = new Point(endPt.X, beginPt.Y * 0.5 + endPt.Y * 0.5);
+                    
+                }
+                else//这表示横向差距不够大
+                {
+                    c1Pt = new Point(beginPt.X, 
+                        beginPt.Y * 0.5 + endPt.Y * 0.5 - Math.Sign(yt) * Math.Abs(xt / 2));
+                    c2Pt = new Point(endPt.X, 
+                        beginPt.Y * 0.5 + endPt.Y * 0.5 + Math.Sign(yt) * Math.Abs(xt / 2));
+                }
+                Path.Data = Geometry.Parse("M" + beginPt.ToString() + " " + c1Pt.ToString() + " "
+                    + c2Pt.ToString() + " L" + endPt.ToString());
+            }
             //更新tooltip
             Path.ToolTip = "从" + BeginNode.fatherNode.textNode.Name + "\n到" + EndNode.textNode.Name;
         }
@@ -110,6 +165,8 @@ namespace MultiBranchTexter
         {
             BeginNode.fatherNode.postLines.Remove(this);
             EndNode.preLines.Remove(this);
+            BeginNode.fatherNode.UpdatePostLines();
+            EndNode.UpdatePreLines();
             ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this).Children.Remove(this);
         }
         #endregion
