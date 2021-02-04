@@ -13,19 +13,19 @@
     <Compile Update="Controls\MBTabItem.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\FlowChartContainer.xaml.cs">
+    <Compile Update="Controls\Panel\FlowChartContainer.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\NodeButton.xaml.cs">
+    <Compile Update="Controls\Node\NodeButton.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\NodeEndMA.xaml.cs">
+    <Compile Update="Controls\Node\NodeEndMA.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\NodeEndMAAnswer.xaml.cs">
+    <Compile Update="Controls\Node\NodeEndMAAnswer.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\NodeEndYesNo.xaml.cs">
+    <Compile Update="Controls\Node\NodeEndYesNo.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Controls\NodeSearchBox.xaml.cs">
@@ -39,16 +39,16 @@
     <Page Update="Controls\MBTabItem.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\FlowChartContainer.xaml">
+    <Page Update="Controls\Panel\FlowChartContainer.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\NodeEndMA.xaml">
+    <Page Update="Controls\Node\NodeEndMA.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\NodeEndMAAnswer.xaml">
+    <Page Update="Controls\Node\NodeEndMAAnswer.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\NodeEndYesNo.xaml">
+    <Page Update="Controls\Node\NodeEndYesNo.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Controls\NodeSearchBox.xaml">
@@ -57,10 +57,10 @@
     <Page Update="Resources\Dictionary.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\MainWindow.xaml">
+    <Page Update="Controls\Window\MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\NodeButton.xaml">
+    <Page Update="Controls\Node\NodeButton.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

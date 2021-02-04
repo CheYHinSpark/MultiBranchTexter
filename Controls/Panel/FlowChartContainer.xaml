@@ -32,11 +32,11 @@
         <c:NodeSearchBox x:Name="searchBox" Visibility="Hidden"
                          VerticalAlignment="Top" HorizontalAlignment="Right"/>
         <!--框选框-->
-        <Border x:Name="selectBorder" Grid.Row="0"
-                Background="#88FF5555" 
-                BorderBrush="Red" BorderThickness="1"
-                VerticalAlignment="Top" HorizontalAlignment="Left"
-                IsHitTestVisible="False" Visibility="Hidden"/>
+        <c:NegaBorder x:Name="selectBorder" Grid.Row="0"
+                      Background="#88FF5555" 
+                      BorderBrush="Red" BorderThickness="1"
+                      VerticalAlignment="Top" HorizontalAlignment="Left"
+                      IsHitTestVisible="False" Visibility="Hidden"/>
         <!--下方信息栏-->
         <StackPanel Orientation="Horizontal" 
                     Grid.Row="1" 

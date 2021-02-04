@@ -81,10 +81,8 @@ namespace MultiBranchTexter.Controls
             }
             if (selectBorder.Visibility == Visibility.Visible)
             {
-                // TODO: 没有解决框选框负宽度问题
                 Point p = e.GetPosition((ScrollViewer)sender);
-                //selectBorder.Width = p.X - _clickPoint.X;
-                //selectBorder.Height = p.Y - _clickPoint.Y;
+                selectBorder.SetEndPt(p.X, p.Y);
             }
         }
 
@@ -104,8 +102,7 @@ namespace MultiBranchTexter.Controls
                 if (Keyboard.Modifiers == ModifierKeys.Control)//同时按下Ctrl
                 {
                     selectBorder.Visibility = Visibility.Visible;
-                    _clickPoint = e.GetPosition((ScrollViewer)sender);
-                    selectBorder.Margin = new Thickness(_clickPoint.X, _clickPoint.Y, 0, 0);
+                    selectBorder.StartPt = e.GetPosition((ScrollViewer)sender);
                     selectBorder.Width = 0;
                     selectBorder.Height = 0;
                 }
