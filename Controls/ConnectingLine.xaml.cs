@@ -88,8 +88,9 @@ namespace MultiBranchTexter
             //断开起始点和终止点
             NodeButton.UnLink(BeginNode, EndNode);
             //加入新节点，相关的link和画线都在fcc里完成
-            ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).AddNodeButton(new TextNode(),
-                BeginNode, EndNode, mousePt.X, mousePt.Y);
+            ControlTreeHelper
+                .FindParentOfType<FlowChartContainer>(this)
+                .AddNodeButton(BeginNode, EndNode, mousePt.X, mousePt.Y);
             //删去本线条
             Delete();
         }

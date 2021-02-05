@@ -10,11 +10,11 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <ScrollViewer x:Name="scrollViewer" Background="White"
+                      FocusVisualStyle="{x:Null}"
                       PreviewMouseDown="scrollViewer_PreviewMouseDown"
                       PreviewMouseUp="scrollViewer_PreviewMouseUp"
                       PreviewMouseWheel="scrollViewer_PreviewMouseWheel"
                       MouseMove="scrollViewer_MouseMove"
-                      Margin="0"
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Auto">
             <c:AutoSizeCanvas x:Name="container"

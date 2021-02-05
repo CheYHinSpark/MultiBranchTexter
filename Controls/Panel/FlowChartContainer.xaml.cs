@@ -23,7 +23,6 @@ namespace MultiBranchTexter.Controls
     {
         //与拖拽、移动有关的变量
         private Point _clickPoint;
-        private bool isDragScroll = false;
         //等待选择后继节点的node
         private NodeBase waitingNode;
         public bool IsWaiting { get { return waitingNode != null; } }
@@ -85,7 +84,7 @@ namespace MultiBranchTexter.Controls
         {
             if (e.OriginalSource is Grid)
             {
-                if (isDragScroll)
+                if (Keyboard.Modifiers == ModifierKeys.None && e.LeftButton == MouseButtonState.Pressed)
                 {
                     double x, y;
                     Point p = e.GetPosition((ScrollViewer)sender);
@@ -95,6 +94,21 @@ namespace MultiBranchTexter.Controls
 
                     scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + x);
                     scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + y);
+
+                    _clickPoint = e.GetPosition((ScrollViewer)sender);
+                }
+                else if (Keyboard.Modifiers == ModifierKeys.Alt && e.LeftButton == MouseButtonState.Pressed)
+                {
+                    double x, y;
+                    Point p = e.GetPosition((ScrollViewer)sender);
+
+                    x = p.X - _clickPoint.X;
+                    y = p.Y - _clickPoint.Y;
+
+                    for (int i =0;i<SelectedNodes.Count;i++)
+                    {
+                        SelectedNodes[i].Move(x / container.ScaleRatio, y / container.ScaleRatio);
+                    }
 
                     _clickPoint = e.GetPosition((ScrollViewer)sender);
                 }
@@ -113,6 +127,8 @@ namespace MultiBranchTexter.Controls
             //表示点击到了空白部分
             if (e.OriginalSource is Grid)
             {
+                //更新点击点
+                _clickPoint = e.GetPosition((ScrollViewer)sender);
                 //右键点击，取消选择后继
                 if (e.RightButton == MouseButtonState.Pressed)
                 {
@@ -120,17 +136,19 @@ namespace MultiBranchTexter.Controls
                     {
                         PostNodeChoosed(null);
                     }
-                    //更新点击点
-                    _clickPoint = e.GetPosition((ScrollViewer)sender);
                     return;
                 }
                 //非右键点击
                 if (Keyboard.Modifiers == ModifierKeys.Control)//同时按下Ctrl
                 {
                     selectBorder.Visibility = Visibility.Visible;
-                    selectBorder.StartPt = e.GetPosition((ScrollViewer)sender);
+                    selectBorder.StartPt = _clickPoint;
                     selectBorder.Width = 0;
                     selectBorder.Height = 0;
+                }
+                else if (Keyboard.Modifiers == ModifierKeys.Alt)//同时按下了Alt，进入移动选中的节点模式
+                {
+                    this.Cursor = Cursors.Hand;
                 }
                 else//没有按下Ctrl
                 {
@@ -138,18 +156,15 @@ namespace MultiBranchTexter.Controls
                     ClearSelection();
                     stateHint.Text = "";
                     //准备拖拽
-                    isDragScroll = true;
                     this.Cursor = Cursors.Hand;
-                    _clickPoint = e.GetPosition((ScrollViewer)sender);
                 }
             }
         }
 
         private void scrollViewer_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            isDragScroll = false;
             this.Cursor = Cursors.Arrow;
-            //如果是多选
+            //如果是完成多选
             if (selectBorder.Visibility == Visibility.Visible)
             {
                 //需要得到selectBd关于canvas的坐标
@@ -460,9 +475,9 @@ namespace MultiBranchTexter.Controls
             DrawFlowChart(textNodes);
         }
 
-        public void AddNodeButton(TextNode newNode,NodeBase preNode,NodeButton postNode, double xPos, double yPos)
+        public void AddNodeButton(NodeBase preNode,NodeButton postNode, double xPos, double yPos)
         {
-            NodeButton nodeButton = new NodeButton(newNode);
+            NodeButton nodeButton = new NodeButton(new TextNode(GetNewName(), ""));
             nodeButton.SetParent(container);
             nodeButton.fatherNode = nodeButton;
             //连接三个点
@@ -496,6 +511,10 @@ namespace MultiBranchTexter.Controls
             return textNodes;
         }
 
+        /// <summary>
+        /// 获得一个新名字
+        /// </summary>
+        /// <returns></returns>
         public string GetNewName()
         {
             List<TextNode> tns = GetTextNodes();
@@ -517,6 +536,19 @@ namespace MultiBranchTexter.Controls
                 }
             }
             return newName + i.ToString() + ".txt";
+        }
+
+        public bool CheckRepeat(string newName)
+        {
+            List<TextNode> tns = GetTextNodes();
+            for (int j = 0; j < tns.Count; j++)
+            {
+                if (tns[j].Name == newName)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         #endregion
 

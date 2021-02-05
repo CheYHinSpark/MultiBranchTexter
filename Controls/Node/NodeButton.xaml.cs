@@ -118,8 +118,20 @@ namespace MultiBranchTexter.Controls
             titleBox.Focusable = false;
             titleBox.SelectionStart = 0;
             // TODO 检查重复
-            textNode.Name = titleBox.Text;
-            // TODO 通知窗体改变相应的标签页
+            if (titleBox.Text != textNode.Name)
+            {
+                if (ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).CheckRepeat(titleBox.Text))
+                {
+                    titleBox.Text = textNode.Name;
+                    MessageBox.Show("节点名称重复，已还原");
+                }
+                else
+                {
+                    //没有重复，完成修改
+                    textNode.Name = titleBox.Text;
+                    // TODO 通知窗体改变相应的标签页
+                }
+            }
         }
 
         //上层bd被点击，这是在重新选择后继节点时可以被选中
@@ -429,7 +441,7 @@ namespace MultiBranchTexter.Controls
         /// <summary>
         /// 切换是否移动
         /// </summary>
-        private void SwitchMoving()
+        public void SwitchMoving()
         {
             // 如果正在移动，切换为不移动
             if (isMoving)

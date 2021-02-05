@@ -26,7 +26,6 @@ namespace MultiBranchTexter.Controls
             set { SetValue(ScaleRatioProperty, value); }
         }
 
-
         public bool IsResizing = false;
         private Size oldSize;
 
@@ -36,7 +35,7 @@ namespace MultiBranchTexter.Controls
             if (!base.InternalChildren.OfType<UIElement>().Any()) 
                 return new Size(100, 100);
             double width, height;
-            if (IsResizing)
+            if (IsResizing)//这是为了优化总大小缩小时的操作手感
             {
                 width = base
                 .InternalChildren
