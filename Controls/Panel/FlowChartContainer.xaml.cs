@@ -1,4 +1,5 @@
-﻿using MultiBranchTexter.Model;
+﻿using MultiBranchTexter.Converters;
+using MultiBranchTexter.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,25 +12,25 @@ using System.Windows.Threading;
 using System.Windows.Media;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Windows.Data;
 
 namespace MultiBranchTexter.Controls
 {
     /// <summary>
     /// 流程图容器
     /// </summary>
-    public partial class FlowChartContainer : UserControl
+    public partial class FlowChartContainer : FlowChartBase
     {
         //与拖拽、移动有关的变量
         private Point _clickPoint;
         private bool isDragScroll = false;
-        //选择相关的变量
-        public List<NodeButton> selectedNodes = new List<NodeButton>();
         //等待选择后继节点的node
         private NodeBase waitingNode;
         public bool IsWaiting { get { return waitingNode != null; } }
         //搜索相关的变量
         public List<NodeButton> searchedNodes = new List<NodeButton>();
         private int searchedIndex = -1;
+        
 
         public FlowChartContainer()
         {
@@ -45,6 +46,26 @@ namespace MultiBranchTexter.Controls
             MBFileReader reader = new MBFileReader(path);
             //reader.Read();
             DrawFlowChart(reader.Read());
+
+            //绑定数据
+            Binding binding1 = new Binding
+            {
+                Source = this,
+                Mode = BindingMode.OneWay,
+                Path = new PropertyPath("SelectedNodes"),
+                Converter = new ListToBoolConverter(),
+                ConverterParameter = 1//为两个统一坐标的Para
+            };
+            Binding binding2 = new Binding
+            {
+                Source = this,
+                Mode = BindingMode.OneWay,
+                Path = new PropertyPath("SelectedNodes"),
+                Converter = new ListToBoolConverter(),
+            };
+            BindingOperations.SetBinding(unitXMenuItem, IsEnabledProperty, binding1);
+            BindingOperations.SetBinding(unitYMenuItem, IsEnabledProperty, binding1);
+            BindingOperations.SetBinding(deleteItem, IsEnabledProperty, binding2);
         }
 
         //滚轮事件
@@ -95,7 +116,12 @@ namespace MultiBranchTexter.Controls
                 //右键点击，取消选择后继
                 if (e.RightButton == MouseButtonState.Pressed)
                 {
-                    PostNodeChoosed(null);
+                    if (IsWaiting)
+                    {
+                        PostNodeChoosed(null);
+                    }
+                    //更新点击点
+                    _clickPoint = e.GetPosition((ScrollViewer)sender);
                     return;
                 }
                 //非右键点击
@@ -123,8 +149,162 @@ namespace MultiBranchTexter.Controls
         {
             isDragScroll = false;
             this.Cursor = Cursors.Arrow;
-            selectBorder.Visibility = Visibility.Hidden;
+            //如果是多选
+            if (selectBorder.Visibility == Visibility.Visible)
+            {
+                //需要得到selectBd关于canvas的坐标
+                //获得了canvas相对于自身的坐标，这个point是经过放缩的
+                GeneralTransform gt = container.TransformToAncestor(this);
+                Point point = gt.Transform(new Point(0, 0));
+                point.X *= -1;//需要负号
+                point.Y *= -1;
+                Point lt = point + selectBorder.GetLeftTop();
+                Point rb = point + selectBorder.GetRightBottom();
+                List<NodeButton> newSelect = new List<NodeButton>();
+                foreach (UserControl control in container.Children)
+                {
+                    if (control is NodeButton)
+                    {
+                        Vector ct = (control as NodeButton).GetCenter() * container.ScaleRatio;
+                        //如果在selecBox内部
+                        if (lt.X < ct.X && lt.Y < ct.Y
+                            && rb.X > ct.X && rb.Y > ct.Y)
+                        {
+                            newSelect.Add(control as NodeButton);
+                        }
+                    }
+                }
+                selectBorder.Visibility = Visibility.Hidden;
+                NewSelection(newSelect);
+            }
         }
+
+
+        #region 右键菜单
+        private void addItem_Click(object sender, RoutedEventArgs e)
+        {
+            //需要得到selectBd关于canvas的坐标
+            //获得了canvas相对于scrollviewer的坐标，这个point是经过放缩的
+            GeneralTransform gt = container.TransformToAncestor(this);
+            Point point = gt.Transform(new Point(0, 0));
+            point.X *= -1;//需要负号
+            point.Y *= -1;
+            point.X += _clickPoint.X;
+            point.Y += _clickPoint.Y;
+            NodeButton newNode = new NodeButton(new TextNode(GetNewName(), ""));
+            newNode.SetParent(container);
+            container.Children.Add(newNode);
+            Canvas.SetLeft(newNode, Math.Max(0, point.X / container.ScaleRatio - 50));
+            Canvas.SetTop(newNode, Math.Max(0, point.Y / container.ScaleRatio - 25));
+        }
+
+        private void deleteItem_Click(object sender, RoutedEventArgs e)
+        {
+            int n = SelectedNodes.Count;
+            MessageBoxResult warnResult = MessageBox.Show
+                (
+                ControlTreeHelper.FindParentOfType<MainWindow>(this),
+                "你即将删除" + n.ToString()
+                + "个节点！\n这将同时断开这些节点的所有连接线，并且此操作不可撤销！",
+                "警告",
+                MessageBoxButton.YesNo
+                );
+            if (warnResult == MessageBoxResult.No)
+            { return; }
+            while (SelectedNodes.Count > 0)
+            {
+                SelectedNodes[0].Delete();
+                SelectedNodes.RemoveAt(0);
+            }
+            SelectedNodes = new List<NodeButton>();
+        }
+
+        private void XItem_Click(object sender, RoutedEventArgs e)
+        {
+            string mode = (sender as MenuItem).Name;
+            double nX = Canvas.GetLeft(SelectedNodes[0]);
+            if (mode == "xavg")
+            {
+                for (int i = 1; i < SelectedNodes.Count; i++)
+                {
+                    nX += Canvas.GetLeft(SelectedNodes[i]);
+                }
+                nX /= SelectedNodes.Count;
+            }
+            else if (mode == "xmin")
+            {
+                for (int i = 1; i < SelectedNodes.Count; i++)
+                {
+                    double temp = Canvas.GetLeft(SelectedNodes[i]);
+                    if (nX > temp)
+                    {
+                        nX = temp;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 1; i < SelectedNodes.Count; i++)
+                {
+                    double temp = Canvas.GetLeft(SelectedNodes[i]);
+                    if (nX < temp)
+                    {
+                        nX = temp;
+                    }
+                }
+            }
+            //统一
+            for (int i = 0; i < SelectedNodes.Count; i++)
+            {
+                Canvas.SetLeft(SelectedNodes[i], nX);
+                SelectedNodes[i].UpdatePostLines();
+                SelectedNodes[i].UpdatePreLines();
+            }
+        }
+        private void YItem_Click(object sender, RoutedEventArgs e)
+        {
+            string mode = (sender as MenuItem).Name;
+            double nY = Canvas.GetTop(SelectedNodes[0]);
+            if (mode == "yavg")
+            {
+                for (int i = 1; i < SelectedNodes.Count; i++)
+                {
+                    nY += Canvas.GetTop(SelectedNodes[i]);
+                }
+                nY /= SelectedNodes.Count;
+            }
+            else if (mode == "ymin")
+            {
+                for (int i = 1; i < SelectedNodes.Count; i++)
+                {
+                    double temp = Canvas.GetTop(SelectedNodes[i]);
+                    if (nY > temp)
+                    {
+                        nY = temp;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 1; i < SelectedNodes.Count; i++)
+                {
+                    double temp = Canvas.GetTop(SelectedNodes[i]);
+                    if (nY < temp)
+                    {
+                        nY = temp;
+                    }
+                }
+            }
+            //统一
+            for (int i = 0; i < SelectedNodes.Count; i++)
+            {
+                Canvas.SetTop(SelectedNodes[i], nY);
+                SelectedNodes[i].UpdatePostLines();
+                SelectedNodes[i].UpdatePreLines();
+            }
+        }
+        #endregion
+
         #endregion
 
 
@@ -299,6 +479,7 @@ namespace MultiBranchTexter.Controls
         }
         #endregion
 
+        #region 节点累计、获取List、获取新节点名字
         /// <summary>
         /// 获得textNode列表
         /// </summary>
@@ -315,12 +496,36 @@ namespace MultiBranchTexter.Controls
             return textNodes;
         }
 
+        public string GetNewName()
+        {
+            List<TextNode> tns = GetTextNodes();
+            //创造一个不重名的
+            string newName = "new-node-";
+            int i = 1;
+            bool repeated = true;
+            while (repeated)
+            {
+                repeated = false;
+                for (int j = 0; j < tns.Count; j++)
+                {
+                    if (tns[j].Name == newName + i.ToString() + ".txt")
+                    {
+                        repeated = true;
+                        i++;
+                        break;
+                    }
+                }
+            }
+            return newName + i.ToString() + ".txt";
+        }
+        #endregion
+
         #region 节点搜索功能
         public void ClearSearch()
         {
             for (int i =0; i < searchedNodes.Count;i++)
             {
-                if (selectedNodes.Contains(searchedNodes[i]))
+                if (SelectedNodes.Contains(searchedNodes[i]))
                 {
                     searchedNodes[i].NodeState = NodeState.Selected;
                 }
@@ -391,13 +596,13 @@ namespace MultiBranchTexter.Controls
         }
         #endregion
 
-        #region 节点选择功能
+        #region 节点选择功能与选择新后继节点功能
         public void NewSelection(NodeButton node)
         {
             ClearSelection();
             stateHint.Text = "选中节点";
-            selectedNodes.Add(node);
-            selectedNodes[0].NodeState = NodeState.Selected;
+            SelectedNodes = new List<NodeButton> { node };//这里不能用Add，否则无法通知到右键菜单
+            SelectedNodes[0].NodeState = NodeState.Selected;
         }
         public void NewSelection(List<NodeButton> nodes)
         {
@@ -406,39 +611,39 @@ namespace MultiBranchTexter.Controls
             {
                 nodes[i].NodeState = NodeState.Selected;
             }
-            selectedNodes = nodes;
+            SelectedNodes = nodes;
             stateHint.Text = "选中节点";
         }
         public void ClearSelection()
         {
-            for (int i =0;i<selectedNodes.Count;i++)
+            for (int i =0;i<SelectedNodes.Count;i++)
             {
-                if (searchedNodes.Contains(selectedNodes[i]))
+                if (searchedNodes.Contains(SelectedNodes[i]))
                 {
-                    selectedNodes[i].NodeState = NodeState.Searched;
+                    SelectedNodes[i].NodeState = NodeState.Searched;
                 }
                 else
                 {
-                    selectedNodes[i].NodeState = NodeState.Normal;
+                    SelectedNodes[i].NodeState = NodeState.Normal;
                 }
             }
-            selectedNodes.Clear();
+            SelectedNodes = new List<NodeButton>();//只能这样不能Clear，否则无法通知到右键菜单
         }
 
         public void AddSelection(NodeButton node)
         {
             node.NodeState = NodeState.Selected;
-            selectedNodes.Add(node);
+            SelectedNodes.Add(node);
         }
+
         public void AddSelection(List<NodeButton> nodes)
         {
             for (int i = 0; i < nodes.Count; i++)
             {
                 nodes[i].NodeState = NodeState.Selected;
-                selectedNodes.Add(nodes[i]);
+                SelectedNodes.Add(nodes[i]);
             }
         }
-        #endregion
 
         /// <summary>
         /// 进入等待点击以选择一个新的后继节点的状态
@@ -493,14 +698,11 @@ namespace MultiBranchTexter.Controls
             //在waitNode和Post之间连线
             NodeButton.Link(waitingNode, post);
             ConnectingLine cl = new ConnectingLine(waitingNode, post);
-            //waitingNode.fatherNode.postLines.Add(cl);
-            //post.preLines.Add(cl);
             container.Children.Add(cl);
-            //cl.Update();
-            //waitingNode.fatherNode.UpdatePostLines();
-            //post.UpdatePreLines();
             waitingNode = null;
         }
+        #endregion
+
         #endregion
     }
 }

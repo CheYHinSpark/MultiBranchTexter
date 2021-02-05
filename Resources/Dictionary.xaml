@@ -17,8 +17,9 @@
 
     <!--转换器-->
     <cvt:NumberToPercentStrConverter x:Key="numToPerCvt" />
+    <cvt:ListToBoolConverter x:Key="listToBoolCvt"/>
 
-    
+
     <!--右键菜单style-->
     <Style TargetType="{x:Type ContextMenu}">
         <Setter Property="SnapsToDevicePixels" Value="True" />

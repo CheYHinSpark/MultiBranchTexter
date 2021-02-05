@@ -22,5 +22,14 @@ namespace MultiBranchTexter.Controls
             Width = Math.Abs(StartPt.X - ex);
             Height = Math.Abs(StartPt.Y - ey);
         }
+
+        public Vector GetLeftTop()
+        {
+            return new Vector(Margin.Left, Margin.Top);
+        }
+        public Vector GetRightBottom()
+        {
+            return new Vector(Margin.Left + Width, Margin.Top + Height);
+        }
     }
 }

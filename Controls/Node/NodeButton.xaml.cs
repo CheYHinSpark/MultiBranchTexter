@@ -31,14 +31,12 @@ namespace MultiBranchTexter.Controls
         private bool isMoving = false;
         public bool IsMoving { get { return isMoving; } }
         
-        public NodeButton()
-        { }
         public NodeButton(TextNode newNode)
         {
             InitializeComponent();
             textNode = newNode;
+            fatherNode = this;
         }
-
 
         #region 事件
         //加载完成
@@ -160,15 +158,7 @@ namespace MultiBranchTexter.Controls
                 );
             if (warnResult == MessageBoxResult.No)
             { return; }
-            //清除所有前驱
-            while (preLines.Count > 0)
-            {
-                NodeButton.UnLink(preLines[0].BeginNode, preLines[0].EndNode);
-                preLines[0].Delete();
-            }
-            UnLinkAllPost();//清除所有后继
-            ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this).Children.Remove(this);
-            //TODO通知窗体把对应的标签删掉
+            Delete();
         }
 
         private void ChangeEnd_Click(object sender, RoutedEventArgs e)
@@ -424,6 +414,14 @@ namespace MultiBranchTexter.Controls
                 postLines[0].Delete();
             }
         }
+
+        /// <summary>
+        /// 获得中心坐标，不受放缩影响
+        /// </summary>
+        public Vector GetCenter()
+        {
+            return new Vector(Canvas.GetLeft(this) + 50, Canvas.GetTop(this) + 25);
+        }
         #endregion
 
         #region 移动
@@ -464,6 +462,22 @@ namespace MultiBranchTexter.Controls
             { line.Update(); }
         }
         #endregion
+
+        /// <summary>
+        /// 删除该节点，这将同时去掉所有连线
+        /// </summary>
+        public void Delete()
+        {
+            //清除所有前驱
+            while (preLines.Count > 0)
+            {
+                NodeButton.UnLink(preLines[0].BeginNode, preLines[0].EndNode);
+                preLines[0].Delete();
+            }
+            UnLinkAllPost();//清除所有后继
+            ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this).Children.Remove(this);
+            //TODO通知窗体把对应的标签删掉
+        }
 
         /// <summary>
         /// 根据输入的字符串，返回是否被查询到，当前只查询标题
