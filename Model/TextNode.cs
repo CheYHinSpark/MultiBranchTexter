@@ -14,7 +14,7 @@ namespace MultiBranchTexter.Model
         private List<TextNode> preNodes = new List<TextNode>();
         // 后节点
         private List<TextNode> postNodes = new List<TextNode>();
-        
+        public List<TextNode> PostNodes { get { return postNodes; } }
 
         public TextNode() { }
         // TODO

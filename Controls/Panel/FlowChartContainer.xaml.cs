@@ -617,7 +617,6 @@ namespace MultiBranchTexter.Controls
         /// <summary>
         /// 滚动到目标节点
         /// </summary>
-        /// <param name="node"></param>
         private void ScrollToNode(NodeButton node)
         {
             double x, y;
@@ -625,6 +624,23 @@ namespace MultiBranchTexter.Controls
             y = Canvas.GetTop(node) + node.ActualHeight / 2;
             scrollViewer.ScrollToHorizontalOffset(x * container.ScaleRatio - scrollViewer.ActualWidth / 2);
             scrollViewer.ScrollToVerticalOffset(y * container.ScaleRatio - scrollViewer.ActualHeight / 2);
+        }
+        /// <summary>
+        /// 滚动到目标节点
+        /// </summary>
+        public void ScrollToNode(TextNode node)
+        {
+            foreach (UserControl control in container.Children)
+            {
+                if (control is NodeButton)
+                {
+                    if ((control as NodeButton).textNode  == node )
+                    {
+                        ScrollToNode(control as NodeButton);
+                        return;
+                    }
+                }
+            }
         }
         #endregion
 

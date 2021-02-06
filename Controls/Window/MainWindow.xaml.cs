@@ -1,4 +1,5 @@
 ﻿using MultiBranchTexter.Model;
+using MultiBranchTexter.Controls;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
@@ -62,10 +63,10 @@ namespace MultiBranchTexter
         //打开标签页
         public void OpenMBTabItem(TextNode node)
         {
-            //遍历已有的标签页看看是否已经存在同name的标签
+            //遍历已有的标签页看看是否已经存在同标签
             foreach (MBTabItem mBTabItem in workTabControl.Items)
             {
-                if (mBTabItem.textNode.Name == node.Name)
+                if (mBTabItem.textNode == node)
                 {
                     workTabControl.SelectedItem = mBTabItem;
                     //隐藏flowChart
@@ -79,12 +80,22 @@ namespace MultiBranchTexter
             flowChart.Visibility = Visibility.Hidden;
         }
 
-        //返回首页
+        /// <summary>
+        /// 返回首页
+        /// </summary>
         public void BackToFront()
         {
             flowChart.Visibility = Visibility.Visible;
         }
+        /// <summary>
+        /// 返回首页，并且跳到对应节点位置
+        /// </summary>
+        public void BackToFront(TextNode node)
+        {
+            flowChart.Visibility = Visibility.Visible;
+            flowChart.ScrollToNode(node);
+        }
         #endregion
-      
+
     }
 }

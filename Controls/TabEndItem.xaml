@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="MultiBranchTexter.Controls.TabEndItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Height="20">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" SharedSizeGroup="Answer"/>
+            <ColumnDefinition Width="Auto" SharedSizeGroup="NextName"/>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="40"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Name="answerTxt" Grid.Column="0"
+                   HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <TextBlock x:Name="postNameTxt" Grid.Column="1"
+                   HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Button x:Name="nextBtn" Grid.Column="2" Content=">"
+                Click="nextBtn_Click" Template="{StaticResource generalButtonTemplate}"/>
+        <Button x:Name="changeBtn" Grid.Column="3" Content="E"
+                Click="changeBtn_Click" Template="{StaticResource generalButtonTemplate}"/>
+    </Grid>
+</UserControl>

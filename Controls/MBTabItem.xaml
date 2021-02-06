@@ -1,15 +1,23 @@
-﻿<TabItem x:Class="MultiBranchTexter.MBTabItem"
+﻿<TabItem x:Class="MultiBranchTexter.Controls.MBTabItem"
          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:c="clr-namespace:MultiBranchTexter.Controls"
          Loaded="TabItem_Loaded"
          MinHeight="24"
+         Padding="0"
          Template="{StaticResource MBTabItemTemplate}">
     <Grid>
-        <TextBox x:Name="textBox" 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="textBox"
                  VerticalScrollBarVisibility="Auto"
                  AcceptsTab="True" AcceptsReturn="True"
                  TextWrapping="Wrap" 
                  Template="{StaticResource textBoxTemplate}">
         </TextBox>
+        <!--下方信息栏-->
+        <c:TabEnd x:Name="tabEnd" Grid.Row="1"></c:TabEnd>
     </Grid>
 </TabItem>

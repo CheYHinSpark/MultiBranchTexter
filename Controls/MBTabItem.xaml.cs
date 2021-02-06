@@ -3,7 +3,7 @@ using MultiBranchTexter.Model;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace MultiBranchTexter
+namespace MultiBranchTexter.Controls
 {
     /// <summary>
     /// MBTabItem.xaml 的交互逻辑
@@ -16,6 +16,7 @@ namespace MultiBranchTexter
             textNode = node;
             Header = node.Name;
             textBox.Text = node.Text;
+            tabEnd.SetTabEnd(node);
         }
 
         #region 成员变量
