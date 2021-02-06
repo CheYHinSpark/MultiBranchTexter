@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace MultiBranchTexter.Model
 {
+    /// <summary>
+    /// 文本节点类
+    /// </summary>
     public class TextNode
     {
         // 文件名
@@ -17,7 +21,7 @@ namespace MultiBranchTexter.Model
         public List<TextNode> PostNodes { get { return postNodes; } }
 
         public TextNode() { }
-        // TODO
+        
         public TextNode(string name, string text)
         {
             Name = name;
@@ -37,7 +41,7 @@ namespace MultiBranchTexter.Model
         {
             if (!(pre.endCondition is YesNoCondition))
             {
-                //TODO:删除
+                //删除
                 pre.ClearAllPostNode();
                 pre.endCondition = new YesNoCondition();
             }
@@ -53,7 +57,7 @@ namespace MultiBranchTexter.Model
         {
             if (!(pre.endCondition is MultiAnswerCondition))
             {
-                //TODO:删除
+                //删除
                 pre.ClearAllPostNode();
                 pre.endCondition = new MultiAnswerCondition();
             }
@@ -151,8 +155,6 @@ namespace MultiBranchTexter.Model
         /// <summary>
         /// 得到postNodes在参数List中的指标，目前是根据内存地址判断
         /// </summary>
-        /// <param name="textNodes"></param>
-        /// <returns></returns>
         public List<int> GetPostNodeIndex(List<TextNode> textNodes)
         {
             List<int> vs = new List<int>();
@@ -164,6 +166,35 @@ namespace MultiBranchTexter.Model
                 }
             }
             return vs;
+        }
+
+        public int GetPostNodeIndex(List<TextNodeWithLeftTop> textNodes)
+        {
+            for (int i = 0; i < textNodes.Count; i++)
+            {
+                if (postNodes.Contains(textNodes[i].Node))
+                { return i; }
+            }
+            throw new System.Exception("什么东西啊？");
+        }
+    }
+
+
+    /// <summary>
+    /// 带左上角坐标的文本节点，用于读取和保存数据
+    /// </summary>
+    public class TextNodeWithLeftTop
+    {
+        public TextNode Node;
+        public double Left;
+        public double Top;
+        public TextNodeWithLeftTop()
+        { }
+        public TextNodeWithLeftTop(TextNode node, double left, double top)
+        {
+            Node = node;
+            Left = left;
+            Top = top;
         }
     }
 }

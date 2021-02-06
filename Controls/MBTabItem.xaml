@@ -5,13 +5,14 @@
          Loaded="TabItem_Loaded"
          MinHeight="24"
          Padding="0"
+         KeyDown="TabItem_KeyDown"
          Template="{StaticResource MBTabItemTemplate}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="textBox"
+        <TextBox x:Name="textBox" FontSize="14"
                  VerticalScrollBarVisibility="Auto"
                  AcceptsTab="True" AcceptsReturn="True"
                  TextWrapping="Wrap" 

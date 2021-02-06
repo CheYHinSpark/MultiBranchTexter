@@ -40,7 +40,14 @@ namespace MultiBranchTexter.Controls
         {
             questionTxt = GetTemplateChild("questionTxt") as TextBlock;
             container = GetTemplateChild("container") as Grid;
-       
+            LoadTabEnd();
+        }
+
+        /// <summary>
+        /// 重新装载tabend
+        /// </summary>
+        public void LoadTabEnd()
+        { 
             questionTxt.Text = "查看后继节点";
             container.Children.Clear();
             container.RowDefinitions.Clear();//清理container
@@ -97,7 +104,6 @@ namespace MultiBranchTexter.Controls
         /// <summary>
         /// 设置节点
         /// </summary>
-        /// <param name="node"></param>
         public void SetTabEnd(TextNode node)
         {
             textNode = node;

@@ -55,7 +55,8 @@ namespace MultiBranchTexter.Controls
             // 完成问题修改
             fatherNode.textNode.endCondition.Question = titleBox.Text;
             titleBox.SelectionStart = 0;
-            // TODO 还要通知窗口改变相应的标签页
+            // 还要通知窗口改变相应的标签页
+            ControlTreeHelper.FindParentOfType<MainWindow>(fatherNode).ReLoadTab(fatherNode.textNode);
         }
 
         //点击添加按钮

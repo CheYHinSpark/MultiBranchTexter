@@ -46,7 +46,7 @@
                                  PreviewMouseDoubleClick="titleBox_PreviewMouseDoubleClick"
                                  LostFocus="titleBox_LostFocus"/>
                         <Button x:Name="gotoBtn" Grid.Row="1"
-                                Margin="8,0,8,-6"
+                                Margin="8,-2,8,-4"
                                 Template="{StaticResource generalButtonTemplate}" 
                                 Click="gotoBtn_Click">
                             <Path Fill="White" Data="M0,0 0,10 8,5Z"/>

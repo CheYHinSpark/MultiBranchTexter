@@ -40,12 +40,6 @@ namespace MultiBranchTexter.Controls
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             searchBox.SetFlowChartContainer(this);
-            //测试读取Test文件夹下的mbtxt文件
-            string path = System.AppDomain.CurrentDomain.BaseDirectory + "Test\\test.mbtxt";
-            MBFileReader reader = new MBFileReader(path);
-            //reader.Read();
-            DrawFlowChart(reader.Read());
-
             //绑定数据
             Binding binding1 = new Binding
             {
@@ -65,6 +59,8 @@ namespace MultiBranchTexter.Controls
             BindingOperations.SetBinding(unitXMenuItem, IsEnabledProperty, binding1);
             BindingOperations.SetBinding(unitYMenuItem, IsEnabledProperty, binding1);
             BindingOperations.SetBinding(deleteItem, IsEnabledProperty, binding2);
+            //测试读取Test文件夹下的mbtxt文件
+            //Load(System.AppDomain.CurrentDomain.BaseDirectory + "Test\\test.mbtxt");
         }
 
         //滚轮事件
@@ -324,11 +320,23 @@ namespace MultiBranchTexter.Controls
 
 
         #region 方法
+        /// <summary>
+        /// 输入文件路径加载之
+        /// </summary>
+        public void Load(string mbtxtPath)
+        {
+            container.Children.Clear();
+            SelectedNodes = new List<NodeButton>();// <--必须
+            //测试读取Test文件夹下的mbtxt文件
+            MBFileReader reader = new MBFileReader(mbtxtPath);
+            DrawFlowChart(reader.Read());
+        }
 
         #region 流程图绘制方法
-        //根据List<TextNode>建立树状图
-        //不处理循坏连接的情况
-        //有向无环图排序
+        /// <summary>
+        ///  根据List<TextNode>建立树状图
+        /// 不处理循坏连接的情况，有向无环图排序
+        /// </summary>
         private void DrawFlowChart(List<TextNode> textNodes)
         {
             //nodeButtons总表
@@ -460,17 +468,78 @@ namespace MultiBranchTexter.Controls
                 nodeButtons[i].ShowEndCondition();
                 nodeButtons[i].AddPostLines(container);
             }
-            Debug.WriteLine("节点创建完成");
+            Debug.WriteLine("节点图创建完成");
         }
 
-        
+        /// <summary>
+        /// 根据List<TextNodeWithLeftTop>建立树状图，这个就简单许多
+        /// </summary>
+        private void DrawFlowChart(List<TextNodeWithLeftTop> textNodes)
+        {
+            //nodeButtons总表
+            List<NodeButton> nodeButtons = new List<NodeButton>();
+
+            for (int i = 0; i < textNodes.Count; i++)
+            {
+                //初始化button
+                nodeButtons.Add(new NodeButton(textNodes[i].Node));
+            }
+            for (int i = 0; i < textNodes.Count; i++)
+            {
+                if (textNodes[i].Node.endCondition == null)
+                {
+                    int postIndex = textNodes[i].Node.GetPostNodeIndex(textNodes);
+                    //为nodeButton添加post
+                    NodeButton.Link(nodeButtons[i], nodeButtons[postIndex]);
+                }
+                else if (textNodes[i].Node.endCondition is YesNoCondition)
+                {
+                    YesNoCondition ync = textNodes[i].Node.endCondition as YesNoCondition;
+                    for (int j = 0; j < textNodes.Count; j++)
+                    {
+                        if (ync.YesNode == textNodes[j].Node)
+                        { NodeButton.Link(nodeButtons[i], nodeButtons[j], true); }
+                        else if (ync.NoNode == textNodes[j].Node)
+                        { NodeButton.Link(nodeButtons[i], nodeButtons[j], false); }
+                    }
+                }
+                else if (textNodes[i].Node.endCondition is MultiAnswerCondition)
+                {
+                    MultiAnswerCondition mac = textNodes[i].Node.endCondition as MultiAnswerCondition;
+                    for (int j = 0; j < mac.AnswerToNodes.Count; j++)
+                    {
+                        for (int k = 0; k < textNodes.Count; k++)
+                        {
+                            if (mac.AnswerToNodes[j].PostNode == textNodes[k].Node)
+                            { NodeButton.Link(nodeButtons[i], nodeButtons[k], mac.AnswerToNodes[j].Answer); }
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < textNodes.Count; i++)
+            {
+                Canvas.SetLeft(nodeButtons[i], Math.Max(0, textNodes[i].Left));
+                Canvas.SetTop(nodeButtons[i], Math.Max(0, textNodes[i].Top));
+                container.Children.Add(nodeButtons[i]);
+                nodeButtons[i].SetParent(container);
+            }
+            //添加线
+            //连线现在放到别的地方，即nodebutton的loaded里面执行
+            for (int i = 0; i < textNodes.Count; i++)
+            {
+                nodeButtons[i].ShowEndCondition();
+                nodeButtons[i].AddPostLines(container);
+            }
+            Debug.WriteLine("节点图创建完成");
+        }
+
         /// <summary>
         /// 重新绘制流程图
         /// </summary>
         /// <param name="newNode"></param>
         public void ReDrawFlowChart()
         {
-            List<TextNode> textNodes = GetTextNodes();
+            List<TextNode> textNodes = GetTextNodeList();
             container.Children.Clear();
             DrawFlowChart(textNodes);
         }
@@ -495,10 +564,27 @@ namespace MultiBranchTexter.Controls
         #endregion
 
         #region 节点累计、获取List、获取新节点名字
+
+        public List<TextNodeWithLeftTop> GetTextNodeWithLeftTopList()
+        {
+            List<TextNodeWithLeftTop> textNodes = new List<TextNodeWithLeftTop>();
+            foreach (UserControl control in container.Children)
+            {
+                if (control is NodeButton)
+                {
+                    textNodes.Add(new TextNodeWithLeftTop(
+                        (control as NodeButton).textNode,
+                        Canvas.GetLeft(control),
+                        Canvas.GetTop(control)));//注意left和top都不受scale影响
+                }
+            }
+            return textNodes;
+        }
+
         /// <summary>
         /// 获得textNode列表
         /// </summary>
-        public List<TextNode> GetTextNodes()
+        public List<TextNode> GetTextNodeList()
         {
             List<TextNode> textNodes = new List<TextNode>();
             foreach (UserControl control in container.Children)
@@ -517,7 +603,7 @@ namespace MultiBranchTexter.Controls
         /// <returns></returns>
         public string GetNewName()
         {
-            List<TextNode> tns = GetTextNodes();
+            List<TextNode> tns = GetTextNodeList();
             //创造一个不重名的
             string newName = "new-node-";
             int i = 1;
@@ -540,7 +626,7 @@ namespace MultiBranchTexter.Controls
 
         public bool CheckRepeat(string newName)
         {
-            List<TextNode> tns = GetTextNodes();
+            List<TextNode> tns = GetTextNodeList();
             for (int j = 0; j < tns.Count; j++)
             {
                 if (tns[j].Name == newName)
@@ -747,6 +833,8 @@ namespace MultiBranchTexter.Controls
             NodeButton.Link(waitingNode, post);
             ConnectingLine cl = new ConnectingLine(waitingNode, post);
             container.Children.Add(cl);
+            //修改标签页
+            ControlTreeHelper.FindParentOfType<MainWindow>(this).ReLoadTab(waitingNode.fatherNode.textNode);
             waitingNode = null;
         }
         #endregion

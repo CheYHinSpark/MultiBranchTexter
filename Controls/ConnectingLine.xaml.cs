@@ -159,6 +159,10 @@ namespace MultiBranchTexter
             }
             //更新tooltip
             Path.ToolTip = "从" + BeginNode.fatherNode.textNode.Name + "\n到" + EndNode.textNode.Name;
+            //如果后继在上面，调整颜色
+            if (beginPt.Y > endPt.Y)
+            { Path.Tag = "1"; }
+            else { Path.Tag = "0"; }
         }
 
         /// <summary>

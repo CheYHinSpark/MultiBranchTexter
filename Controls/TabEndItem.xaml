@@ -19,9 +19,16 @@
               HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <TextBlock x:Name="postNameTxt" Grid.Column="2" Margin="4,2,4,2"
                    HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        <Button x:Name="nextBtn" Grid.Column="3" Content=">"
-                Click="nextBtn_Click" Template="{StaticResource generalButtonTemplate}"/>
-        <Button x:Name="changeBtn" Grid.Column="4" Content="E"
-                Click="changeBtn_Click" Template="{StaticResource generalButtonTemplate}"/>
+        <Button x:Name="nextBtn" Grid.Column="3" ToolTip="转到相应节点"
+                Click="nextBtn_Click" Template="{StaticResource generalButtonTemplate}">
+            <Path HorizontalAlignment="Center" VerticalAlignment="Center"
+                  Fill="White" Data="M0,0 0,8 6,4Z"/>
+        </Button>
+        <Button x:Name="changeBtn" Grid.Column="4" ToolTip="回首页编辑"
+                Click="changeBtn_Click" Template="{StaticResource generalButtonTemplate}">
+            <Path HorizontalAlignment="Center" VerticalAlignment="Center"
+                  StrokeThickness="1"
+                  Stroke="White" Data="M4,0 8,0 8,6 L0,6 M1,0 L1,3"/>
+        </Button>
     </Grid>
 </UserControl>

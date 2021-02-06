@@ -40,7 +40,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!-- TopLevelHeader -->
     <ControlTemplate x:Key="{x:Static MenuItem.TopLevelHeaderTemplateKey}"
                      TargetType="{x:Type MenuItem}">
@@ -111,7 +111,7 @@
                  TargetType="{x:Type MenuItem}">
         <Border x:Name="Border" BorderThickness="1" Background="Transparent">
             <Grid>
-               <ContentPresenter x:Name="HeaderHost"
+                <ContentPresenter x:Name="HeaderHost"
                                  Margin="10,2,10,2"
                                  ContentSource="Header"
                                  HorizontalAlignment="Center"
@@ -202,9 +202,9 @@
         </Style.Triggers>
     </Style>
 
-    
-    
-    
+
+
+
     <!--ScrollBar-->
     <Style x:Key="ScrollBarLineButton" TargetType="{x:Type RepeatButton}">
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -347,15 +347,13 @@
         </Style.Triggers>
     </Style>
 
-    
+
     <!--通用按钮样式-->
     <ControlTemplate x:Key="generalButtonTemplate" TargetType="{x:Type Button}">
-        <Border x:Name="BD" BorderThickness="1" CornerRadius="4"
-                Margin="2"
-                Background="{StaticResource mainColorBrush}"
-                BorderBrush="{StaticResource darkBorderBrush}">
+        <Border x:Name="BD" CornerRadius="4" Margin="2"
+                Background="{StaticResource mainColorBrush}">
             <ContentPresenter x:Name="CP" TextElement.Foreground="White"
-                              Margin="6,4,6,4"
+                              Margin="2"
                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Border>
         <ControlTemplate.Triggers>
@@ -622,14 +620,21 @@
         <Setter Property="Stroke" Value="Aqua"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Stroke" Value="Orange"/>
+                <Setter Property="Stroke" Value="DarkOrange"/>
             </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Tag" Value="1"/>
+                    <Condition Property="IsMouseOver" Value="False"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Stroke" Value="Goldenrod"/>
+            </MultiTrigger>
         </Style.Triggers>
     </Style>
-    
+
     <!--yesno答案框-->
     <ControlTemplate x:Key="yesnoAnswerTemplate" TargetType="{x:Type c:NodeBase}">
-        <Border x:Name="ynBd" Background="{StaticResource nodeBgBrush}" BorderBrush="DarkRed" 
+        <Border x:Name="ynBd" Background="AliceBlue" BorderBrush="DarkRed" 
                 BorderThickness="1" CornerRadius="4">
             <Path x:Name="CP" StrokeThickness="2" Stroke="Black" Data="M0,0 4,8 L10,0"
                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -669,7 +674,7 @@
                     Background="{StaticResource nodeBgBrush}" BorderBrush="DarkRed" 
                     BorderThickness="1" CornerRadius="4">
                 <TextBox x:Name="answerTxt" Margin="2,2,8,2"/>
-        </Border>
+            </Border>
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -701,10 +706,8 @@
 
     <!--控制下面东西升降的按钮的template-->
     <ControlTemplate x:Key="upDownCheckBoxTemplate" TargetType="{x:Type CheckBox}">
-        <Border x:Name="cbBd" BorderBrush="{StaticResource darkBorderBrush}"
-                Background="{StaticResource mainColorBrush}" BorderThickness="1"
-                Width="18" Height="18"
-                CornerRadius="4">
+        <Border x:Name="cbBd" Background="{StaticResource mainColorBrush}"
+                Width="18" Height="18" CornerRadius="4">
             <Path x:Name="CP" Data="M0,4 4,0 L8,4 M0,8 4,4 L8,8"
                   HorizontalAlignment="Center" VerticalAlignment="Center"
                   Stroke="White" StrokeThickness="1"/>
@@ -718,7 +721,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    
+
     <!--每个标签页末尾的东西-->
     <ControlTemplate x:Key="tabEndTemplate" TargetType="{x:Type UserControl}">
         <Grid Background="{StaticResource mainColorBrush}">
@@ -751,7 +754,7 @@
                         <Storyboard>
                             <DoubleAnimation Storyboard.TargetName="sv"
                                              Storyboard.TargetProperty="(ScrollViewer.Height)"
-                                             Duration="0:0:0.2" 
+                                             Duration="0:0:0.5" 
                                              To="120"/>
                         </Storyboard>
                     </BeginStoryboard>
@@ -761,7 +764,7 @@
                         <Storyboard>
                             <DoubleAnimation Storyboard.TargetName="sv"
                                              Storyboard.TargetProperty="(ScrollViewer.Height)"
-                                             Duration="0:0:0.2" 
+                                             Duration="0:0:0.5" 
                                              To="0"/>
                         </Storyboard>
                     </BeginStoryboard>

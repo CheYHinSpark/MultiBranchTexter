@@ -117,7 +117,7 @@ namespace MultiBranchTexter.Controls
         {
             titleBox.Focusable = false;
             titleBox.SelectionStart = 0;
-            // TODO 检查重复
+            // 检查重复
             if (titleBox.Text != textNode.Name)
             {
                 if (ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).CheckRepeat(titleBox.Text))
@@ -129,7 +129,8 @@ namespace MultiBranchTexter.Controls
                 {
                     //没有重复，完成修改
                     textNode.Name = titleBox.Text;
-                    // TODO 通知窗体改变相应的标签页
+                    //通知窗体改变相应的标签页
+                    ControlTreeHelper.FindParentOfType<MainWindow>(this).ReLoadTab(textNode);
                 }
             }
         }
@@ -209,7 +210,8 @@ namespace MultiBranchTexter.Controls
                 newNode.SetFather(this);
                 endContainer.Child = newNode;
             }
-            //TODO通知窗体把对应的标签改了
+            //通知窗体把对应的标签改了
+            ControlTreeHelper.FindParentOfType<MainWindow>(this).ReLoadTab(textNode);
         }
         #endregion
 
@@ -487,8 +489,10 @@ namespace MultiBranchTexter.Controls
                 preLines[0].Delete();
             }
             UnLinkAllPost();//清除所有后继
+            //通知窗体把对应的标签删掉
+            ControlTreeHelper.FindParentOfType<MainWindow>(this).DeleteTab(textNode);
+            //删掉自己
             ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this).Children.Remove(this);
-            //TODO通知窗体把对应的标签删掉
         }
 
         /// <summary>

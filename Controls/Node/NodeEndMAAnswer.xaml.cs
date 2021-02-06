@@ -79,7 +79,8 @@ namespace MultiBranchTexter.Controls
             else
             {
                 answerToNode.Answer = answerTxt.Text;
-                //TODO:通知标签页改变
+                //通知标签页改变
+                ControlTreeHelper.FindParentOfType<MainWindow>(fatherNode).ReLoadTab(fatherNode.textNode);
             }
             answerTxt.SelectionStart = 0;
         }
