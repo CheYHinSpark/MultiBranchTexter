@@ -697,4 +697,76 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
+
+    <!--控制下面东西升降的按钮的template-->
+    <ControlTemplate x:Key="upDownCheckBoxTemplate" TargetType="{x:Type CheckBox}">
+        <Border x:Name="cbBd" BorderBrush="{StaticResource darkBorderBrush}"
+                Background="{StaticResource mainColorBrush}" BorderThickness="1"
+                Width="18" Height="18"
+                CornerRadius="4">
+            <Path x:Name="CP" Data="M0,4 4,0 L8,4 M0,8 4,4 L8,8"
+                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                  Stroke="White" StrokeThickness="1"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource mainHighBrush}" TargetName="cbBd"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Data" Value="M0,0 4,4 L8,0 M0,4 4,8 L8,4" TargetName="CP"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <!--每个标签页末尾的东西-->
+    <ControlTemplate x:Key="tabEndTemplate" TargetType="{x:Type UserControl}">
+        <Grid Background="{StaticResource mainColorBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <CheckBox x:Name="showHideBtn" IsChecked="False"
+                      Template="{StaticResource upDownCheckBoxTemplate}"
+                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock x:Name="questionTxt" Grid.Column="1" Foreground="White"
+                       Margin="8,0,0,0"
+                       VerticalAlignment="Center"/>
+            <ScrollViewer x:Name="sv" Grid.Row="1" Height="0" Grid.ColumnSpan="3"
+                          Background="White"
+                          FocusVisualStyle="{x:Null}"
+                          HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <Grid x:Name="container" Grid.IsSharedSizeScope="True"/>
+            </ScrollViewer>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="True" SourceName="showHideBtn">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="sv"
+                                             Storyboard.TargetProperty="(ScrollViewer.Height)"
+                                             Duration="0:0:0.2" 
+                                             To="120"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="sv"
+                                             Storyboard.TargetProperty="(ScrollViewer.Height)"
+                                             Duration="0:0:0.2" 
+                                             To="0"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 </ResourceDictionary>

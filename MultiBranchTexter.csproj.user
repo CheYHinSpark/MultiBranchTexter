@@ -31,7 +31,7 @@
     <Compile Update="Controls\NodeSearchBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\TabEnd.xaml.cs">
+    <Compile Update="Controls\TabEnd.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Controls\TabEndItem.xaml.cs">
@@ -58,9 +58,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Controls\NodeSearchBox.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Controls\TabEnd.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Controls\TabEndItem.xaml">

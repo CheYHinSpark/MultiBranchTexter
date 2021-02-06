@@ -18,28 +18,30 @@ namespace MultiBranchTexter.Controls
     /// <summary>
     /// TabEnd.xaml 的交互逻辑
     /// </summary>
-    public partial class TabEnd : UserControl
+    public class TabEnd : UserControl
     {
+        //控件
+        private TextBlock questionTxt;
+        private Grid container;
+        //信息
         private TextNode textNode;
         public TextNode nextNode;
        
         public TabEnd()
         {
-            InitializeComponent();
-        }
-        public TabEnd(TextNode newNode)
-        {
-            InitializeComponent();
-            SetTabEnd(newNode);
+            Template = FindResource("tabEndTemplate") as ControlTemplate;
+            Loaded += TabEnd_Loaded;
         }
 
         /// <summary>
-        /// 输入一个节点，根据其结尾信息生成自身
+        /// Load
         /// </summary>
-        public void SetTabEnd(TextNode node)
+        private void TabEnd_Loaded(object sender, RoutedEventArgs e)
         {
-            textNode = node;
-            questionTxt.Text = "";
+            questionTxt = GetTemplateChild("questionTxt") as TextBlock;
+            container = GetTemplateChild("container") as Grid;
+       
+            questionTxt.Text = "查看后继节点";
             container.Children.Clear();
             container.RowDefinitions.Clear();//清理container
             //开始根据后继类型
@@ -57,7 +59,7 @@ namespace MultiBranchTexter.Controls
             }
             else if (textNode.endCondition is YesNoCondition)
             {
-                questionTxt.Text = (textNode.endCondition as YesNoCondition).Question;
+                questionTxt.Text += "：" + (textNode.endCondition as YesNoCondition).Question;
                 TextNode yes = (textNode.endCondition as YesNoCondition).YesNode;
                 TextNode no = (textNode.endCondition as YesNoCondition).NoNode;
                 RowDefinition row1 = new RowDefinition { Height = new GridLength(20) };
@@ -73,7 +75,7 @@ namespace MultiBranchTexter.Controls
             }
             else
             {
-                questionTxt.Text = (textNode.endCondition as MultiAnswerCondition).Question;
+                questionTxt.Text += "：" + (textNode.endCondition as MultiAnswerCondition).Question;
                 List<AnswerToNode> atns = (textNode.endCondition as MultiAnswerCondition).AnswerToNodes;
                 for (int i =0;i<atns.Count;i++)
                 {
@@ -85,7 +87,21 @@ namespace MultiBranchTexter.Controls
                 }
             }
             container.UpdateLayout();
-            Debug.WriteLine(container.RowDefinitions.Count);
+            //调整scrollviewer的最大高度
+            ControlTreeHelper
+                .FindParentOfType<ScrollViewer>(container)
+                .MaxHeight = Math.Min(120, container.ActualHeight);
+
         }
+
+        /// <summary>
+        /// 设置节点
+        /// </summary>
+        /// <param name="node"></param>
+        public void SetTabEnd(TextNode node)
+        {
+            textNode = node;
+        }
+
     }
 }

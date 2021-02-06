@@ -18,6 +18,6 @@
                  Template="{StaticResource textBoxTemplate}">
         </TextBox>
         <!--下方信息栏-->
-        <c:TabEnd x:Name="tabEnd" Grid.Row="1"></c:TabEnd>
+        <c:TabEnd x:Name="tabEnd" Grid.Row="1" HorizontalAlignment="Stretch"/>
     </Grid>
 </TabItem>
