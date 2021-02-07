@@ -51,7 +51,6 @@ namespace MultiBranchTexter.Controls
             }
             if (parent != null)
             { Load(); }
-            Debug.WriteLine(textBox.FontSize);
         }
 
         /// <summary>
@@ -176,7 +175,7 @@ namespace MultiBranchTexter.Controls
             if (parent.Items.Count == 0)
             {
                 // 本控件已经移除，所以依赖对象不能是this
-                ControlTreeHelper.FindParentOfType<MainWindow>(parent).BackToFront();
+                ControlTreeHelper.FindParentOfType<MainWindow>(parent).CloseWorkTab();
             }
         }
         #endregion

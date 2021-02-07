@@ -658,7 +658,6 @@ namespace MultiBranchTexter.Controls
         /// <summary>
         /// 根据信息搜索目标节点
         /// </summary>
-        /// <param name="info"></param>
         public void SearchNode(string info)
         {
             ClearSearch();
@@ -672,7 +671,7 @@ namespace MultiBranchTexter.Controls
                     { searchedNodes.Add((control as NodeButton)); }
                 }
             }
-            for (int i =0;i<searchedNodes.Count;i++)
+            for (int i =0;i < searchedNodes.Count;i++)
             {
                 searchedNodes[i].NodeState = NodeState.Searched;
             }
@@ -681,6 +680,29 @@ namespace MultiBranchTexter.Controls
             {
                 searchedIndex = 0;
                 ScrollToNode(searchedNodes[0]);
+            }
+        }
+
+        /// <summary>
+        /// 根据节点找到
+        /// </summary>
+        public void SearchNode(TextNode node)
+        {
+            ClearSearch();
+            foreach (UserControl control in container.Children)
+            {
+                if (control is NodeButton)
+                {
+                    NodeButton nb = control as NodeButton;
+                    if (nb.textNode == node)
+                    { 
+                        searchedNodes.Add(nb);
+                        nb.NodeState = NodeState.Searched;
+                        searchedIndex = 0;
+                        ScrollToNode(nb);
+                        return;
+                    }
+                }
             }
         }
 
@@ -711,22 +733,13 @@ namespace MultiBranchTexter.Controls
             scrollViewer.ScrollToHorizontalOffset(x * container.ScaleRatio - scrollViewer.ActualWidth / 2);
             scrollViewer.ScrollToVerticalOffset(y * container.ScaleRatio - scrollViewer.ActualHeight / 2);
         }
+
         /// <summary>
         /// 滚动到目标节点
         /// </summary>
         public void ScrollToNode(TextNode node)
         {
-            foreach (UserControl control in container.Children)
-            {
-                if (control is NodeButton)
-                {
-                    if ((control as NodeButton).textNode  == node )
-                    {
-                        ScrollToNode(control as NodeButton);
-                        return;
-                    }
-                }
-            }
+            SearchNode(node);
         }
         #endregion
 

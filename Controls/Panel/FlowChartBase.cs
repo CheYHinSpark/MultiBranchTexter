@@ -29,9 +29,7 @@ namespace MultiBranchTexter.Controls
             { 
                 SetValue(SelectedNodesProperty, value);
                 if (this.PropertyChanged != null)
-                {
-                    this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SelectedNodes"));
-                }
+                { this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SelectedNodes")); }
             }
         }
     }

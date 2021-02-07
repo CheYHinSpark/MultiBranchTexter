@@ -360,9 +360,67 @@
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource mainHighBrush}" TargetName="BD"/>
             </Trigger>
+            <Trigger Property="Tag" Value="l">
+                <Setter Property="CornerRadius" TargetName="BD" Value="0,4,4,0"/>
+                <Setter Property="Margin" TargetName="BD" Value="0,2,2,2"/>
+            </Trigger>
+            <Trigger Property="Tag" Value="t">
+                <Setter Property="CornerRadius" TargetName="BD" Value="0,0,4,4"/>
+                <Setter Property="Margin" TargetName="BD" Value="2,0,2,2"/>
+            </Trigger>
+            <Trigger Property="Tag" Value="r">
+                <Setter Property="CornerRadius" TargetName="BD" Value="4,0,0,4"/>
+                <Setter Property="Margin" TargetName="BD" Value="2,2,0,2"/>
+            </Trigger>
+            <Trigger Property="Tag" Value="b">
+                <Setter Property="CornerRadius" TargetName="BD" Value="4,4,0,0"/>
+                <Setter Property="Margin" TargetName="BD" Value="2,2,2,0"/>
+            </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
+    <!--通用CheckBox样式-->
+    <ControlTemplate x:Key="generalCheckTemplate" TargetType="{x:Type CheckBox}">
+        <Border x:Name="BD" CornerRadius="4" Margin="2"
+                Background="{StaticResource mainColorBrush}">
+            <ContentPresenter x:Name="CP" Margin="2"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource mainHighBrush}" TargetName="BD"/>
+            </Trigger>
+            <Trigger Property="Tag" Value="l">
+                <Setter Property="CornerRadius" TargetName="BD" Value="0,4,4,0"/>
+                <Setter Property="Margin" TargetName="BD" Value="0,2,2,2"/>
+            </Trigger>
+            <Trigger Property="Tag" Value="t">
+                <Setter Property="CornerRadius" TargetName="BD" Value="0,0,4,4"/>
+                <Setter Property="Margin" TargetName="BD" Value="2,0,2,2"/>
+            </Trigger>
+            <Trigger Property="Tag" Value="r">
+                <Setter Property="CornerRadius" TargetName="BD" Value="4,0,0,4"/>
+                <Setter Property="Margin" TargetName="BD" Value="2,2,0,2"/>
+            </Trigger>
+            <Trigger Property="Tag" Value="b">
+                <Setter Property="CornerRadius" TargetName="BD" Value="4,4,0,0"/>
+                <Setter Property="Margin" TargetName="BD" Value="2,2,2,0"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <!--通用checkBox的Style-->
+    <Style x:Key="generalCheckBoxStyle" TargetType="{x:Type CheckBox}">
+        <Setter Property="Foreground" Value="Gray"/>
+        <Setter Property="Template" Value="{StaticResource generalCheckTemplate}"/>
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Foreground" Value="White"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    
+    
     <!--最小化和关闭按钮样式-->
     <Style x:Key="WinMinCloseBtnStyle" TargetType="{x:Type Button}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -551,7 +609,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabControl}">
-                    <Grid KeyboardNavigation.TabNavigation="Local">
+                    <Grid KeyboardNavigation.TabNavigation="Local" Background="White">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
@@ -561,13 +619,14 @@
                                   Panel.ZIndex="1"
                                   IsItemsHost="True"
                                   KeyboardNavigation.TabIndex="1"
-                                  Background="Transparent" />
+                                  Background="{StaticResource mainColorBrush}" />
+                        <TextBlock Text="请从节点图中打开一个节点" FontSize="24" Grid.Row="1"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <Border x:Name="Border"
                                 Grid.Row="1"
                                 KeyboardNavigation.TabNavigation="Local"
                                 KeyboardNavigation.DirectionalNavigation="Contained"
-                                KeyboardNavigation.TabIndex="2"
-                                Background="White">
+                                KeyboardNavigation.TabIndex="2">
                             <ContentPresenter x:Name="PART_SelectedContentHost"
                                               ContentSource="SelectedContent" />
                         </Border>
@@ -580,7 +639,7 @@
 
     <!--textBox的模板-->
     <ControlTemplate x:Key="textBoxTemplate" TargetType="{x:Type TextBox}">
-        <Border x:Name="BD" BorderThickness="2" BorderBrush="Transparent">
+        <Border x:Name="BD" Background="White" BorderThickness="2" BorderBrush="Transparent">
             <ScrollViewer Margin="0"
                           x:Name="PART_ContentHost" />
         </Border>

@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.IO;
+using System.ComponentModel;
 
 namespace MultiBranchTexter
 {
@@ -14,6 +15,55 @@ namespace MultiBranchTexter
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
+        #region 依赖属性
+        public static DependencyProperty FlowChartWidthProperty =
+          DependencyProperty.Register("FlowChartWidth", typeof(string),
+              typeof(MainWindow), new PropertyMetadata("*"));
+
+        public string FlowChartWidth
+        {
+            get { return (string)GetValue(FlowChartWidthProperty); }
+            set 
+            {
+                SetValue(FlowChartWidthProperty, value);
+                if (value == "*")
+                { flowChartBtn.IsChecked = true; }
+                else
+                { flowChartBtn.IsChecked = false; }
+                flowChartBtn.IsEnabled = true;
+                workTabBtn.IsEnabled = true;
+                if (workTabBtn.IsChecked != true)
+                { flowChartBtn.IsEnabled = false; }
+                else if (flowChartBtn.IsChecked != true)
+                { workTabBtn.IsEnabled = false; }
+            }
+        }
+
+        public static DependencyProperty WorkTabWidthProperty =
+          DependencyProperty.Register("WorkTabWidth", typeof(string),
+              typeof(MainWindow), new PropertyMetadata("0"));
+
+        public string WorkTabWidth
+        {
+            get { return (string)GetValue(WorkTabWidthProperty); }
+            set 
+            {
+                SetValue(WorkTabWidthProperty, value);
+                if (value == "*")
+                { workTabBtn.IsChecked = true; }
+                else
+                { workTabBtn.IsChecked = false; }
+                flowChartBtn.IsEnabled = true;
+                workTabBtn.IsEnabled = true;
+                if (flowChartBtn.IsChecked != true)
+                { workTabBtn.IsEnabled = false; }
+                else if (workTabBtn.IsChecked != true)
+                { flowChartBtn.IsEnabled = false; }
+            }
+        }
+        #endregion
+
+
         private int tabFontSize = 14;
         public int TabFontSize
         {
@@ -31,6 +81,7 @@ namespace MultiBranchTexter
         }
 
         public string FileDirPath = "";//文件夹位置
+
 
         public MainWindow()
         {
@@ -59,7 +110,7 @@ namespace MultiBranchTexter
                 //Ctrl+F 寻找
                 if (e.Key == Key.F)
                 {
-                    if (flowChart.Visibility == Visibility.Visible)
+                    if (FlowChartWidth == "*")
                     {
                         flowChart.searchBox.Visibility = Visibility.Visible;
                     }
@@ -68,21 +119,22 @@ namespace MultiBranchTexter
                 if (e.Key == Key.H)
                 { }
             }
-            //Esc
-            if (e.Key == Key.Escape)
-            {
-                if (flowChart.Visibility == Visibility.Hidden)
-                { flowChart.Visibility = Visibility.Visible; }
-                else if (workTabControl.Items.Count > 0)//可以切换回标签们
-                { flowChart.Visibility = Visibility.Hidden; }
-            }
         }
 
+        //这是控制显示模式的
         private void frontBtn_Click(object sender, RoutedEventArgs e)
         {
-            flowChart.Visibility = Visibility.Visible;
+            string name = (sender as CheckBox).Name;
+            if (name == "flowChartBtn")//点击了节点图
+            {
+                FlowChartWidth = flowChartBtn.IsChecked == true ? "*" : "0";
+            }
+            else
+            {
+                WorkTabWidth = workTabBtn.IsChecked == true ? "*" : "0";
+                
+            }
         }
-
 
         private void FontBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -109,23 +161,24 @@ namespace MultiBranchTexter
                 if (mBTabItem.textNode == node)
                 {
                     workTabControl.SelectedItem = mBTabItem;
-                    //隐藏flowChart
-                    flowChart.Visibility = Visibility.Hidden;
+                    //打开worktab
+                    WorkTabWidth = "*";
                     return;
                 }
             }
             workTabControl.Items.Add(new MBTabItem(node));
             workTabControl.SelectedIndex = workTabControl.Items.Count - 1;
-            //隐藏flowChart
-            flowChart.Visibility = Visibility.Hidden;
+            //打开worktab
+            WorkTabWidth = "*";
         }
 
         /// <summary>
         /// 返回首页
         /// </summary>
-        public void BackToFront()
+        public void CloseWorkTab()
         {
-            flowChart.Visibility = Visibility.Visible;
+            FlowChartWidth = "*";
+            WorkTabWidth = "0";
         }
 
         /// <summary>
@@ -133,7 +186,7 @@ namespace MultiBranchTexter
         /// </summary>
         public void BackToFront(TextNode node)
         {
-            flowChart.Visibility = Visibility.Visible;
+            FlowChartWidth = "*";
             flowChart.ScrollToNode(node);
         }
 
@@ -191,8 +244,7 @@ namespace MultiBranchTexter
                 }
                 //打开新文件
                 flowChart.Load(dialog.FileName);
-                flowChart.Visibility = Visibility.Visible;
-                workTabControl.Visibility = Visibility.Visible;
+                workGrid.Visibility = Visibility.Visible;
             }
         }
         #endregion
