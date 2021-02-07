@@ -12,19 +12,348 @@
     <SolidColorBrush x:Key="mainHighBrush" Color="{StaticResource mainHighColor}"/>
     <SolidColorBrush x:Key="redBrush" Color="#FFD44C45"/>
     <SolidColorBrush x:Key="textBoxHighlightBorderBrush" Color="#FF64BAE0"/>
+    <SolidColorBrush x:Key="nodeBgBrush" Color="AliceBlue"/>
+    <SolidColorBrush x:Key="nodeBgHBrush" Color="#FFC9EAFF"/>
 
     <!--转换器-->
     <cvt:NumberToPercentStrConverter x:Key="numToPerCvt" />
+    <cvt:ListToBoolConverter x:Key="listToBoolCvt"/>
+
+
+    <!--右键菜单style-->
+    <Style TargetType="{x:Type ContextMenu}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Grid.IsSharedSizeScope" Value="true" />
+        <Setter Property="HasDropShadow" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ContextMenu}">
+                    <Border x:Name="Border"
+                            Background="{StaticResource nodeBgBrush}"
+                            BorderThickness="1"
+                            BorderBrush="{StaticResource mainColorBrush}">
+                        <StackPanel IsItemsHost="True"
+                                    KeyboardNavigation.DirectionalNavigation="Cycle" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- TopLevelHeader -->
+    <ControlTemplate x:Key="{x:Static MenuItem.TopLevelHeaderTemplateKey}"
+                     TargetType="{x:Type MenuItem}">
+        <Border x:Name="Border" BorderThickness="1" Background="Transparent">
+            <Grid>
+                <ContentPresenter Margin="10,2,10,2"
+                                  ContentSource="Header"
+                                  RecognizesAccessKey="True" />
+                <Popup x:Name="Popup"
+                       Placement="Bottom"
+                       IsOpen="{TemplateBinding IsSubmenuOpen}"
+                       AllowsTransparency="True"
+                       Focusable="False"
+                       PopupAnimation="Fade">
+                    <Border x:Name="SubmenuBorder"
+                            SnapsToDevicePixels="True"
+                            BorderThickness="1"
+                            Background="{StaticResource nodeBgBrush}"
+                            BorderBrush="{StaticResource mainColorBrush}">
+                        <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Auto">
+                            <StackPanel IsItemsHost="True"
+                                        KeyboardNavigation.DirectionalNavigation="Cycle" />
+                        </ScrollViewer>
+                    </Border>
+                </Popup>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsHighlighted" Value="true">
+                <Setter Property="BorderBrush" Value="{StaticResource mainColorBrush}" TargetName="Border"/>
+                <Setter Property="Background" Value="{StaticResource nodeBgHBrush}" TargetName="Border"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground">
+                    <Setter.Value>
+                        <SolidColorBrush Color="Gray" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- TopLevelItem -->
+    <ControlTemplate x:Key="{x:Static MenuItem.TopLevelItemTemplateKey}"
+                 TargetType="{x:Type MenuItem}">
+        <Border x:Name="Border" BorderThickness="1" Background="Transparent">
+            <ContentPresenter Margin="10,2,10,2"
+                              ContentSource="Header"
+                              RecognizesAccessKey="True" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsHighlighted" Value="true">
+                <Setter Property="BorderBrush" Value="{StaticResource mainColorBrush}" TargetName="Border"/>
+                <Setter Property="Background" Value="{StaticResource nodeBgHBrush}" TargetName="Border"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground">
+                    <Setter.Value>
+                        <SolidColorBrush Color="Gray" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- SubmenuItem -->
+    <ControlTemplate x:Key="{x:Static MenuItem.SubmenuHeaderTemplateKey}"
+                 TargetType="{x:Type MenuItem}">
+        <Border x:Name="Border" BorderThickness="1" Background="Transparent">
+            <Grid>
+                <ContentPresenter x:Name="HeaderHost"
+                                 Margin="10,2,10,2"
+                                 ContentSource="Header"
+                                 HorizontalAlignment="Center"
+                                 RecognizesAccessKey="True" />
+                <Path HorizontalAlignment="Right" Margin="2"
+                      VerticalAlignment="Center"
+                      Data="M 0 0 L 0 10 L 5 5 Z" Fill="Black"/>
+                <Popup x:Name="Popup"
+                       Placement="Right"
+                       HorizontalOffset="0"
+                       IsOpen="{TemplateBinding IsSubmenuOpen}"
+                       AllowsTransparency="True"
+                       Focusable="False"
+                       PopupAnimation="Fade">
+                    <Border x:Name="SubmenuBorder"
+                            SnapsToDevicePixels="True"
+                            Background="{StaticResource nodeBgBrush}"
+                            BorderThickness="1"
+                            BorderBrush="{StaticResource mainColorBrush}">
+                        <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Hidden">
+                            <StackPanel IsItemsHost="True"
+                                        KeyboardNavigation.DirectionalNavigation="Cycle" />
+                        </ScrollViewer>
+                    </Border>
+                </Popup>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsHighlighted" Value="true">
+                <Setter Property="BorderBrush" Value="{StaticResource mainColorBrush}" TargetName="Border"/>
+                <Setter Property="Background" Value="{StaticResource nodeBgHBrush}" TargetName="Border"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground">
+                    <Setter.Value>
+                        <SolidColorBrush Color="Gray" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <ControlTemplate x:Key="{x:Static MenuItem.SubmenuItemTemplateKey}"
+                 TargetType="{x:Type MenuItem}">
+        <Border x:Name="Border" BorderThickness="1" Background="Transparent">
+            <ContentPresenter x:Name="HeaderHost"
+                              Margin="10,2,10,2"
+                              ContentSource="Header"
+                              HorizontalAlignment="Center"
+                              RecognizesAccessKey="True" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsHighlighted" Value="true">
+                <Setter Property="BorderBrush" Value="{StaticResource mainColorBrush}" TargetName="Border"/>
+                <Setter Property="Background" Value="{StaticResource nodeBgHBrush}" TargetName="Border"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground">
+                    <Setter.Value>
+                        <SolidColorBrush Color="Gray" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <!-- MenuItem Style -->
+    <Style TargetType="{x:Type MenuItem}">
+        <Setter Property="MinWidth" Value="100"/>
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Style.Triggers>
+            <Trigger Property="Role" Value="TopLevelHeader">
+                <Setter Property="Template"
+                        Value="{StaticResource {x:Static MenuItem.TopLevelHeaderTemplateKey}}" />
+                <Setter Property="Grid.IsSharedSizeScope"
+                        Value="true" />
+            </Trigger>
+            <Trigger Property="Role" Value="TopLevelItem">
+                <Setter Property="Template"
+                        Value="{StaticResource {x:Static MenuItem.TopLevelItemTemplateKey}}" />
+            </Trigger>
+            <Trigger Property="Role" Value="SubmenuHeader">
+                <Setter Property="Template"
+                        Value="{StaticResource {x:Static MenuItem.SubmenuHeaderTemplateKey}}" />
+            </Trigger>
+            <Trigger Property="Role" Value="SubmenuItem">
+                <Setter Property="Template"
+                        Value="{StaticResource {x:Static MenuItem.SubmenuItemTemplateKey}}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
+
+
+    <!--ScrollBar-->
+    <Style x:Key="ScrollBarLineButton" TargetType="{x:Type RepeatButton}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Focusable" Value="false" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <Border x:Name="Border" Background="{StaticResource mainColorBrush}">
+                        <Path Fill="White"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              Data="{Binding Content, 
+                            RelativeSource={RelativeSource TemplatedParent}}" >
+                        </Path>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource mainHighBrush}" TargetName="Border"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <Border Background="Transparent" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Border x:Name="thumbBd" Background="{StaticResource mainColorBrush}"/>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource mainHighBrush}" TargetName="thumbBd"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
+        <Grid Background="LightGray">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="12" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="12" />
+            </Grid.RowDefinitions>
+            <RepeatButton Grid.Row="0"
+                          Style="{StaticResource ScrollBarLineButton}"
+                          Command="ScrollBar.LineUpCommand"
+                          Content="M 0 4 L 8 4 L 4 0 Z" />
+            <Track x:Name="PART_Track"
+                   Grid.Row="1"
+                   IsDirectionReversed="True">
+                <Track.DecreaseRepeatButton>
+                    <RepeatButton Style="{StaticResource ScrollBarPageButton}"
+                                  Command="ScrollBar.PageUpCommand" />
+                </Track.DecreaseRepeatButton>
+                <Track.Thumb>
+                    <Thumb Style="{StaticResource ScrollBarThumb}"/>
+                </Track.Thumb>
+                <Track.IncreaseRepeatButton>
+                    <RepeatButton Style="{StaticResource ScrollBarPageButton}"
+                                  Command="ScrollBar.PageDownCommand" />
+                </Track.IncreaseRepeatButton>
+            </Track>
+            <RepeatButton Grid.Row="2"
+                          Style="{StaticResource ScrollBarLineButton}"
+                          Command="ScrollBar.LineDownCommand"
+                          Content="M 0 0 L 4 4 L 8 0 Z" />
+        </Grid>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="HorizontalScrollBar" TargetType="{x:Type ScrollBar}">
+        <Grid Background="LightGray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="12" />
+            </Grid.ColumnDefinitions>
+            <RepeatButton Grid.Column="0"
+                          Style="{StaticResource ScrollBarLineButton}"
+                          Command="ScrollBar.LineLeftCommand"
+                          Content="M 4 0 L 4 8 L 0 4 Z" />
+            <Track x:Name="PART_Track"
+                   Grid.Column="1"
+                   IsDirectionReversed="False">
+                <Track.DecreaseRepeatButton>
+                    <RepeatButton Style="{StaticResource ScrollBarPageButton}"
+                                  Command="ScrollBar.PageLeftCommand" />
+                </Track.DecreaseRepeatButton>
+                <Track.Thumb>
+                    <Thumb Style="{StaticResource ScrollBarThumb}"/>
+                </Track.Thumb>
+                <Track.IncreaseRepeatButton>
+                    <RepeatButton Style="{StaticResource ScrollBarPageButton}"
+                                  Command="ScrollBar.PageRightCommand" />
+                </Track.IncreaseRepeatButton>
+            </Track>
+            <RepeatButton Grid.Column="2"
+                          Style="{StaticResource ScrollBarLineButton}"
+                          Command="ScrollBar.LineRightCommand"
+                          Content="M 0 0 L 4 4 L 0 8 Z" />
+        </Grid>
+    </ControlTemplate>
+
+    <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="Width" Value="Auto" />
+                <Setter Property="Height" Value="12" />
+                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+            </Trigger>
+            <Trigger Property="Orientation" Value="Vertical">
+                <Setter Property="Width" Value="12" />
+                <Setter Property="Height" Value="Auto" />
+                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
 
     <!--通用按钮样式-->
     <ControlTemplate x:Key="generalButtonTemplate" TargetType="{x:Type Button}">
-        <Border x:Name="BD" BorderThickness="1" CornerRadius="4"
-                Margin="2"
-                Background="{StaticResource mainColorBrush}"
-                BorderBrush="{StaticResource darkBorderBrush}">
+        <Border x:Name="BD" CornerRadius="4" Margin="2"
+                Background="{StaticResource mainColorBrush}">
             <ContentPresenter x:Name="CP" TextElement.Foreground="White"
-                              Margin="6,4,6,4"
+                              Margin="2"
                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Border>
         <ControlTemplate.Triggers>
@@ -215,6 +544,39 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+    <!--TabControl Style-->
+    <Style TargetType="{x:Type TabControl}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabControl}">
+                    <Grid KeyboardNavigation.TabNavigation="Local">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TabPanel x:Name="HeaderPanel"
+                                  Grid.Row="0"
+                                  Panel.ZIndex="1"
+                                  IsItemsHost="True"
+                                  KeyboardNavigation.TabIndex="1"
+                                  Background="Transparent" />
+                        <Border x:Name="Border"
+                                Grid.Row="1"
+                                KeyboardNavigation.TabNavigation="Local"
+                                KeyboardNavigation.DirectionalNavigation="Contained"
+                                KeyboardNavigation.TabIndex="2"
+                                Background="White">
+                            <ContentPresenter x:Name="PART_SelectedContentHost"
+                                              ContentSource="SelectedContent" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 
     <!--textBox的模板-->
     <ControlTemplate x:Key="textBoxTemplate" TargetType="{x:Type TextBox}">
@@ -258,8 +620,156 @@
         <Setter Property="Stroke" Value="Aqua"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Stroke" Value="Orange"/>
+                <Setter Property="Stroke" Value="DarkOrange"/>
             </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Tag" Value="1"/>
+                    <Condition Property="IsMouseOver" Value="False"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Stroke" Value="Goldenrod"/>
+            </MultiTrigger>
         </Style.Triggers>
     </Style>
+
+    <!--yesno答案框-->
+    <ControlTemplate x:Key="yesnoAnswerTemplate" TargetType="{x:Type c:NodeBase}">
+        <Border x:Name="ynBd" Background="AliceBlue" BorderBrush="DarkRed" 
+                BorderThickness="1" CornerRadius="4">
+            <Path x:Name="CP" StrokeThickness="2" Stroke="Black" Data="M0,0 4,8 L10,0"
+                  VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource nodeBgHBrush}" TargetName="ynBd"/>
+            </Trigger>
+            <Trigger Property="Name" Value="noNode">
+                <Setter Property="Data" Value="M0,0 L9,9 M9,0 L0,9" TargetName="CP"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <!--多选后继的单个答案框-->
+    <ControlTemplate x:Key="multiAnswerTemplate" TargetType="{x:Type c:NodeBase}">
+        <Grid Height="24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="maCloseBtn" Grid.Column="0" Width="0" Height="18">
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="maBd" CornerRadius="6,0,0,6" Background="Gray">
+                            <Path x:Name="CP" Stroke="White" 
+                                  StrokeThickness="1" Data="M5,5 L13,13 M5,13 L13,5"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource redBrush}" TargetName="maBd"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Border x:Name="maBd"  Grid.Column="1"
+                    Background="{StaticResource nodeBgBrush}" BorderBrush="DarkRed" 
+                    BorderThickness="1" CornerRadius="4">
+                <TextBox x:Name="answerTxt" Margin="2,2,8,2"/>
+            </Border>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource nodeBgHBrush}" TargetName="maBd"/>
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetName="maCloseBtn"
+                                Storyboard.TargetProperty="(Button.Width)"
+                                To="16" Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetName="maCloseBtn"
+                                Storyboard.TargetProperty="(Button.Width)"
+                                To="0" Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+
+    <!--控制下面东西升降的按钮的template-->
+    <ControlTemplate x:Key="upDownCheckBoxTemplate" TargetType="{x:Type CheckBox}">
+        <Border x:Name="cbBd" Background="{StaticResource mainColorBrush}"
+                Width="18" Height="18" CornerRadius="4">
+            <Path x:Name="CP" Data="M0,4 4,0 L8,4 M0,8 4,4 L8,8"
+                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                  Stroke="White" StrokeThickness="1"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource mainHighBrush}" TargetName="cbBd"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Data" Value="M0,0 4,4 L8,0 M0,4 4,8 L8,4" TargetName="CP"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!--每个标签页末尾的东西-->
+    <ControlTemplate x:Key="tabEndTemplate" TargetType="{x:Type UserControl}">
+        <Grid Background="{StaticResource mainColorBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <CheckBox x:Name="showHideBtn" IsChecked="False"
+                      Template="{StaticResource upDownCheckBoxTemplate}"
+                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock x:Name="questionTxt" Grid.Column="1" Foreground="White"
+                       Margin="8,0,0,0"
+                       VerticalAlignment="Center"/>
+            <ScrollViewer x:Name="sv" Grid.Row="1" Height="0" Grid.ColumnSpan="3"
+                          Background="White"
+                          FocusVisualStyle="{x:Null}"
+                          HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <Grid x:Name="container" Grid.IsSharedSizeScope="True"/>
+            </ScrollViewer>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="True" SourceName="showHideBtn">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="sv"
+                                             Storyboard.TargetProperty="(ScrollViewer.Height)"
+                                             Duration="0:0:0.5" 
+                                             To="120"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="sv"
+                                             Storyboard.TargetProperty="(ScrollViewer.Height)"
+                                             Duration="0:0:0.5" 
+                                             To="0"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 </ResourceDictionary>

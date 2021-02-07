@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -80,16 +81,29 @@ namespace MultiBranchTexter.Model
                 {
                     //以-分隔字符串
                     string[] vs = line.Split("-");
-                    int preIndex = int.Parse(vs[0]);
-                    //以,分隔后一段字符串
-                    string[] vs1 = vs[1].Split(",");
-                    int postIndex;
-                    //为Node添加postNode
-                    for (int i = 0; i < vs1.Length; i++)
+                    if (vs[1] == "yn")//是否判断
                     {
-                        postIndex = int.Parse(vs1[i]);
-                        result[preIndex].AddPostNode(result[postIndex]);
-                        result[postIndex].AddPreNode(result[preIndex]);
+                        string[] vs1 = vs[3].Split(",");
+                        YesNoCondition condition = new YesNoCondition
+                        { Question = vs[2] };
+                        result[int.Parse(vs[0])].endCondition = condition;
+                        TextNode.Link(result[int.Parse(vs[0])], result[int.Parse(vs1[0])], true);
+                        TextNode.Link(result[int.Parse(vs[0])], result[int.Parse(vs1[1])], false);
+                    }
+                    else if (vs[1] == "ma")//多选
+                    {
+                        MultiAnswerCondition condition = new MultiAnswerCondition
+                        { Question = vs[2] };
+                        result[int.Parse(vs[0])].endCondition = condition;
+                        for (int i = 3; i < vs.Length; i++)
+                        {
+                            string[] vs1 = vs[i].Split(",");
+                            TextNode.Link(result[int.Parse(vs[0])], result[int.Parse(vs1[1])], vs1[0]);
+                        }
+                    }
+                    else//普通连接
+                    {
+                        TextNode.Link(result[int.Parse(vs[0])],result[int.Parse(vs[1])]);
                     }
                 }
                 catch

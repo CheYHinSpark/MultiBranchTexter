@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 
@@ -19,9 +20,12 @@ namespace MultiBranchTexter.Controls
         {
             DependencyObject dObj = VisualTreeHelper.GetParent(reference);
             if (dObj == null)
-                throw new Exception("无法找到目标类型的父控件");
+                throw new Exception("无法找到目标类型为" + typeof(T).ToString() + "的父控件");
             if (dObj.GetType() == typeof(T))
-                return (T)dObj;
+            {
+                Debug.WriteLine("找到目标控件" + typeof(T).ToString());
+                return (T)dObj; 
+            }
             else
                 return FindParentOfType<T>(dObj);
         }

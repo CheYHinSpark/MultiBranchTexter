@@ -12,6 +12,7 @@
         </ContextMenu>
     </UserControl.Resources>
     <Path x:Name="Path" StrokeThickness="3" 
+          Tag="0"
           MouseDown="Path_MouseDown"
           MouseEnter="Path_MouseEnter"
           MouseLeave="Path_MouseLeave"

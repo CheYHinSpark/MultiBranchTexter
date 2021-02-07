@@ -1,9 +1,11 @@
 ﻿using MultiBranchTexter.Controls;
 using MultiBranchTexter.Model;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
-namespace MultiBranchTexter
+namespace MultiBranchTexter.Controls
 {
     /// <summary>
     /// MBTabItem.xaml 的交互逻辑
@@ -16,6 +18,7 @@ namespace MultiBranchTexter
             textNode = node;
             Header = node.Name;
             textBox.Text = node.Text;
+            tabEnd.SetTabEnd(node);
         }
 
         #region 成员变量
@@ -48,6 +51,7 @@ namespace MultiBranchTexter
             }
             if (parent != null)
             { Load(); }
+            Debug.WriteLine(textBox.FontSize);
         }
 
         /// <summary>
@@ -55,36 +59,7 @@ namespace MultiBranchTexter
         /// </summary>
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (parent == null)
-            { return; }
-
-            //移除自身
-            parent.Items.Remove(this);
-            //移除事件
-            parent.SizeChanged -= parent_SizeChanged;
-
-            //调整剩余项大小
-            //保持约定宽度item的临界个数
-            int criticalCount = (int)((parent.ActualWidth - 5) / conventionWidth);
-            //平均宽度
-            double perWidth = (parent.ActualWidth - 5) / parent.Items.Count;
-            foreach (MBTabItem item in parent.Items)
-            {
-                if (parent.Items.Count <= criticalCount)
-                {
-                    item.Width = conventionWidth;
-                }
-                else
-                {
-                    item.Width = perWidth;
-                }
-            }
-            //如果是最后一项被关掉了
-            if (parent.Items.Count == 0)
-            {
-                // 本控件已经移除，所以依赖对象不能是this
-                ControlTreeHelper.FindParentOfType<MainWindow>(parent).BackToFront();
-            }
+            Close();
         }
         /// <summary>
         /// 父级TabControl尺寸发生变化
@@ -104,6 +79,20 @@ namespace MultiBranchTexter
                 //大于临界个数 等于平均宽度
                 double perWidth = (parent.ActualWidth - 5) / parent.Items.Count;
                 this.Width = perWidth;
+            }
+        }
+
+        /// <summary>
+        /// 按键
+        /// </summary>
+        private void TabItem_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                if (e.Key == Key.S)//保存
+                {
+                    textNode.Text = textBox.Text;
+                }
             }
         }
         #endregion
@@ -146,6 +135,51 @@ namespace MultiBranchTexter
         {
             textBox.FontSize = newSize;
         }
+
+        /// <summary>
+        /// 重置TabEnd
+        /// </summary>
+        public void ReLoadTabEnd()
+        {
+            tabEnd.LoadTabEnd();
+        }
+        /// <summary>
+        /// 关闭自身
+        /// </summary>
+        public void Close()
+        {
+            if (parent == null)
+            { return; }
+
+            //移除自身
+            parent.Items.Remove(this);
+            //移除事件
+            parent.SizeChanged -= parent_SizeChanged;
+
+            //调整剩余项大小
+            //保持约定宽度item的临界个数
+            int criticalCount = (int)((parent.ActualWidth - 5) / conventionWidth);
+            //平均宽度
+            double perWidth = (parent.ActualWidth - 5) / parent.Items.Count;
+            foreach (MBTabItem item in parent.Items)
+            {
+                if (parent.Items.Count <= criticalCount)
+                {
+                    item.Width = conventionWidth;
+                }
+                else
+                {
+                    item.Width = perWidth;
+                }
+            }
+            //如果是最后一项被关掉了
+            if (parent.Items.Count == 0)
+            {
+                // 本控件已经移除，所以依赖对象不能是this
+                ControlTreeHelper.FindParentOfType<MainWindow>(parent).BackToFront();
+            }
+        }
         #endregion
+
     }
 }

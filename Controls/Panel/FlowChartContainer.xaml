@@ -1,0 +1,74 @@
+﻿<c:FlowChartBase x:Class="MultiBranchTexter.Controls.FlowChartContainer"
+                 x:Name="FCC"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:c="clr-namespace:MultiBranchTexter.Controls"
+                 Loaded="UserControl_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer x:Name="scrollViewer" Background="White"
+                      FocusVisualStyle="{x:Null}"
+                      PreviewMouseDown="scrollViewer_PreviewMouseDown"
+                      PreviewMouseUp="scrollViewer_PreviewMouseUp"
+                      PreviewMouseWheel="scrollViewer_PreviewMouseWheel"
+                      MouseMove="scrollViewer_MouseMove"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Auto">
+            <c:AutoSizeCanvas x:Name="container"
+                              Width="Auto" Height="Auto" 
+                              Margin="0,0,20,20"
+                              HorizontalAlignment="Left" 
+                              VerticalAlignment="Top">
+                <c:AutoSizeCanvas.LayoutTransform>
+                    <ScaleTransform ScaleX="{Binding ScaleRatio, 
+                        RelativeSource={RelativeSource AncestorType={x:Type c:AutoSizeCanvas}, 
+                        Mode=FindAncestor}}" 
+                                    ScaleY="{Binding ScaleRatio, 
+                        RelativeSource={RelativeSource AncestorType={x:Type c:AutoSizeCanvas}, 
+                        Mode=FindAncestor}}"/>
+                </c:AutoSizeCanvas.LayoutTransform>
+            </c:AutoSizeCanvas>
+            <ScrollViewer.ContextMenu>
+                <ContextMenu x:Name="sv_cm">
+                    <MenuItem x:Name="addNodeItem" Header="新建节点" Click="addItem_Click"/>
+                    <MenuItem x:Name="unitXMenuItem" Header="统一横坐标">
+                        <MenuItem x:Name="xavg" Header="平均值" Click="XItem_Click"/>
+                        <MenuItem x:Name="xmin" Header="最小值" Click="XItem_Click"/>
+                        <MenuItem x:Name="xmax" Header="最大值" Click="XItem_Click"/>
+                    </MenuItem>
+                    <MenuItem x:Name="unitYMenuItem" Header="统一纵坐标">
+                        <MenuItem x:Name="yavg" Header="平均值" Click="YItem_Click"/>
+                        <MenuItem x:Name="ymin" Header="最小值" Click="YItem_Click"/>
+                        <MenuItem x:Name="ymax" Header="最大值" Click="YItem_Click"/>
+                    </MenuItem>
+                    <MenuItem x:Name="deleteItem" Header="删除节点" Click="deleteItem_Click"/>
+                </ContextMenu>
+            </ScrollViewer.ContextMenu>
+        </ScrollViewer>
+        <!--搜索框-->
+        <c:NodeSearchBox x:Name="searchBox" Visibility="Hidden"
+                         VerticalAlignment="Top" HorizontalAlignment="Right"/>
+        <!--框选框-->
+        <c:NegaBorder x:Name="selectBorder" Grid.Row="0"
+                      Background="#88FF5555" 
+                      BorderBrush="Red" BorderThickness="1"
+                      VerticalAlignment="Top" HorizontalAlignment="Left"
+                      IsHitTestVisible="False" Visibility="Hidden"/>
+        <!--下方信息栏-->
+        <StackPanel Orientation="Horizontal" 
+                    Grid.Row="1" 
+                    Background="{StaticResource mainColorBrush}">
+            <TextBlock x:Name="stateHint" Width="Auto"
+                       MinWidth="80" Foreground="White"
+                       VerticalAlignment="Center"/>
+            <Rectangle Width="1" Fill="White" Margin="4,0,4,0"/>
+            <TextBlock Text="{Binding ScaleRatio, 
+                Converter={StaticResource numToPerCvt}, 
+                ElementName=container}" Width="Auto" Foreground="White"
+                       VerticalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</c:FlowChartBase>
