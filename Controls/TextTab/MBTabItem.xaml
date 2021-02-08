@@ -6,18 +6,18 @@
          MinHeight="24"
          Padding="0"
          KeyDown="TabItem_KeyDown"
-         Template="{StaticResource MBTabItemTemplate}">
+         Template="{DynamicResource MBTabItemTemplate}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="textBox" FontSize="14"
-                 VerticalScrollBarVisibility="Auto"
-                 AcceptsTab="True" AcceptsReturn="True"
-                 TextWrapping="Wrap" Background="{DynamicResource MainBrush}"
-                 Template="{StaticResource textBoxTemplate}">
-        </TextBox>
+        <c:MBTextBox x:Name="textBox" FontSize="14" VerticalScrollBarVisibility="Auto"
+                     AcceptsTab="True" AcceptsReturn="True" TextWrapping="Wrap" 
+                     Template="{DynamicResource textBoxTemplate}"
+                     Foreground="{DynamicResource Text.Foreground.BaseBrush}"
+                     CaretBrush="{DynamicResource ThemeBrush}"
+                     Background="{DynamicResource MainBrush}"/>
         <!--下方信息栏-->
         <c:TabEnd x:Name="tabEnd" Grid.Row="1" HorizontalAlignment="Stretch"/>
     </Grid>

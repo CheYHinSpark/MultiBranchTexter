@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -6,9 +8,48 @@ namespace MultiBranchTexter
 {
     public class MetroWindow : Window
     {
-        private Button CloseButton;
+        #region 依赖属性
+        public static DependencyProperty IsDarkModeProperty =
+          DependencyProperty.Register("IsDarkMode", typeof(bool?),
+              typeof(MetroWindow), new PropertyMetadata(false));
+
+        public bool? IsDarkMode
+        {
+            get { return (bool?)GetValue(IsDarkModeProperty); }
+            set
+            {
+                DarkModeBtn.IsChecked = value;
+                if ((bool?)GetValue(IsDarkModeProperty) != value)
+                {
+                    SetValue(IsDarkModeProperty, value);
+                    Application.Current.Resources.MergedDictionaries.RemoveAt(1);
+                    Application.Current.Resources.MergedDictionaries
+                        .Add(new ResourceDictionary
+                        {
+                            Source = new Uri("pack://application:,,,/Resources/" +
+                            (value == true ? "Dark" : "Light") +
+                            "ColorDictionary.xaml")
+                        });
+                }
+            }
+        }
+
+        public static DependencyProperty ShowSettingsProperty =
+          DependencyProperty.Register("ShowSettings", typeof(bool),
+              typeof(MetroWindow), new PropertyMetadata(false));
+
+        public bool ShowSettings
+        {
+            get { return (bool)GetValue(ShowSettingsProperty); }
+            set { SetValue(ShowSettingsProperty, value); }
+        }
+        #endregion
+
+        private CheckBox DarkModeBtn;
+
+        //标题栏
+        //private Button SettingBtn;
         private CheckBox MaxButton;
-        private Button MinButton;
         private TextBlock WindowTitleTbl;
 
         public MetroWindow()
@@ -21,22 +62,39 @@ namespace MultiBranchTexter
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // 查找窗体模板
-            if (App.Current.Resources["MetroWindowTemplate"] is ControlTemplate metroWindowTemplate)
+            if (App.Current.Resources["MetroWindowTemplate"] is ControlTemplate mWTemplate)
             {
-                CloseButton = metroWindowTemplate.FindName("CloseWinButton", this) as Button;
-                MaxButton = metroWindowTemplate.FindName("MaxWinButton", this) as CheckBox;
-                MinButton = metroWindowTemplate.FindName("MinWinButton", this) as Button;
+                DarkModeBtn = mWTemplate.FindName("darkModeBtn", this) as CheckBox;
+                MaxButton = mWTemplate.FindName("MaxWinButton", this) as CheckBox;
 
-                CloseButton.Click += CloseButton_Click;
+                DarkModeBtn.Click += DarkModeBtn_Click;
                 MaxButton.Click += MaxButton_Click;
-                MinButton.Click += MinButton_Click;
+                (mWTemplate.FindName("SettingButton", this) as Button).Click += SettingBtn_Click;
+                (mWTemplate.FindName("CloseWinButton", this) as Button).Click += CloseButton_Click;
+                (mWTemplate.FindName("MinWinButton", this) as Button).Click += MinButton_Click;
+                (mWTemplate.FindName("UpperBd", this) as Border).MouseDown += UpperBd_MouseDown; 
 
-                WindowTitleTbl = metroWindowTemplate.FindName("WindowTitleTbl", this) as TextBlock;
+                WindowTitleTbl = mWTemplate.FindName("WindowTitleTbl", this) as TextBlock;
                 WindowTitleTbl.Text = Title;
             }
         }
 
-        private void CloseButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void UpperBd_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ShowSettings = false;
+        }
+
+        private void SettingBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ShowSettings = !ShowSettings;
+        }
+
+        private void DarkModeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            IsDarkMode = DarkModeBtn.IsChecked;
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
@@ -53,9 +111,9 @@ namespace MultiBranchTexter
             }
         }
 
-        private void MinButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void MinButton_Click(object sender, RoutedEventArgs e)
         {
-            this.WindowState = System.Windows.WindowState.Minimized;
+            this.WindowState = WindowState.Minimized;
         }
 
         // 实现窗体移动

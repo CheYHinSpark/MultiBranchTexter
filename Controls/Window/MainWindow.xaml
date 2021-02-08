@@ -5,11 +5,11 @@
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                    xmlns:local="clr-namespace:MultiBranchTexter"
                    xmlns:c="clr-namespace:MultiBranchTexter.Controls"
-                   Style="{StaticResource MetroWindowStyle}"
+                   Style="{DynamicResource MetroWindowStyle}"
                    mc:Ignorable="d"
                    Title="MultiBranchTexter" Height="450" Width="800"
                    KeyDown="MainWindow_KeyDown">
-    <Grid Background="{StaticResource BaseBrush}">
+    <Grid Background="{DynamicResource BaseBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="28"/>
             <RowDefinition Height="*"/>
@@ -19,53 +19,53 @@
                     Grid.Row="0">
             <Button x:Name="newFileBtn" Width="28"
                     ToolTip="新建文件"
-                    Style="{StaticResource generalButtonStyle}"
+                    Style="{DynamicResource generalButtonStyle}"
                     Content="M0,9 L6,9 M3,6 3,12
                       M2,5 2,0 9,0 12,3 12,14 2,14 L2,13
                       M9,0 9,3 L12,3"/>
             <Button x:Name="openFileBtn" Width="28"
                     ToolTip="打开文件"
-                    Style="{StaticResource generalButtonStyle}"
+                    Style="{DynamicResource generalButtonStyle}"
                     Content="M1,12 13,12 16,6 4,6 Z
                       M1,12 0,12 0,4 2,2 6,2 8,4 13,4 L13,6"/>
             <Button x:Name="saveFileBtn" Width="28"
                     ToolTip="保存文件"
-                    Style="{StaticResource generalButtonStyle}"
+                    Style="{DynamicResource generalButtonStyle}"
                     Content="M0,14 0,0 3,0 3,5 8,5 8,0 9,0 12,3 12,14 Z
                       M4,0 6,0 L6,4"/>
-            <Separator Width="1" Margin="4" Background="{StaticResource ThemeBrush}" Opacity="0.5"
-                       Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
+                       Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
             <CheckBox x:Name="flowChartBtn" Width="28" Tag="r" ToolTip="节点图"
-                      Style="{StaticResource generalCheckBoxStyle}" IsChecked="True" IsEnabled="False"
+                      Style="{DynamicResource generalCheckBoxStyle}" IsChecked="True" IsEnabled="False"
                       Click="frontBtn_Click"
                       Content="M0,0 0,3 6,3 6,0 Z
                       M3,3 L3,11 M11,3 11,7 5,7 L5,11
                       M1,11 1,14 7,14 7,11 Z
                       M8,0 8,3 14,3 14,0 Z"/>
             <CheckBox x:Name="workTabBtn" Width="28" Tag="l" ToolTip="文本页"
-                      Style="{StaticResource generalCheckBoxStyle}"
+                      Style="{DynamicResource generalCheckBoxStyle}"
                       Click="frontBtn_Click"
                       Content="M0,0 L14,0
                       M0,4 L14,4 M0,8 L9,8 M0,12 L14,12"/>
-            <Separator Width="1" Margin="4" Background="{StaticResource ThemeBrush}" Opacity="0.5"
-                       Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
+                       Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
             <Button x:Name="fontDownBtn" Width="28"
                     ToolTip="字体缩小" Click="FontBtn_Click"
-                    Style="{StaticResource generalButtonStyle}"
+                    Style="{DynamicResource generalButtonStyle}"
                     Content="M0,16 5,4 L10,16 M2,11 L8,11
                       M12,16 14,11.2 16,16
                       M10,4 16,4"/>
             <Button x:Name="fontUpBtn" Width="28"
                     ToolTip="字体放大" Click="FontBtn_Click"
-                    Style="{StaticResource generalButtonStyle}"
+                    Style="{DynamicResource generalButtonStyle}"
                     Content="M6,16 11,4 L16,16 M8,11 L14,11
                       M0,16 2,11.2 4,16
                       M0,4 6,4 M3,1 3,7"/>
-            <Separator Width="1" Margin="4" Background="{StaticResource ThemeBrush}" Opacity="0.5"
-                       Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-            <Border Margin="6,2,6,0" BorderThickness="1,0,0,1" BorderBrush="{StaticResource ThemeBrush}">
+            <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
+                       Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            <Border Margin="6,2,6,0" BorderThickness="1,0,0,1" BorderBrush="{DynamicResource ThemeBrush}">
                 <TextBlock x:Name="fileNameTxt" TextAlignment="Left" Width="400" 
-                           Foreground="{StaticResource Foreground.BaseBrush}" Margin="4,0,0,0"
+                           Foreground="{DynamicResource Foreground.BaseBrush}" Margin="4,0,0,0"
                        VerticalAlignment="Center">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
@@ -81,14 +81,14 @@
             </Border>
             <Button x:Name="fileBtn" Width="28" 
                     Click="fileBtn_Click" ToolTip="浏览文件"
-                    Style="{StaticResource generalButtonStyle}"
+                    Style="{DynamicResource generalButtonStyle}"
                     Content="M6,10 10,12 14,10 16,6 14,2 10,0 6,2 4,6 Z
                     M6,10 L0,16"/>
-            <Separator Width="1" Margin="4" Background="{StaticResource ThemeBrush}" Opacity="0.5"
-                       Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
+                       Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
             <Button x:Name="outPutBtn" Width="28"
                     ToolTip="导出"
-                    Style="{StaticResource generalButtonStyle}"
+                    Style="{DynamicResource generalButtonStyle}"
                     Content="M0,0 6,6 L0,12 M8,0 14,6 L8,12"/>
         </StackPanel>
         <!--没有加载文件时的提示文本-->

@@ -17,4 +17,11 @@
     <ProjectReference Include="KTDU\KTDU.Parser\KTDU.Parser.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Update="Resources\DarkColorDictionary.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
 </Project>

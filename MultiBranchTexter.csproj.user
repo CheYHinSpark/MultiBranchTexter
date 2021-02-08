@@ -10,7 +10,7 @@
     <Compile Update="Controls\ConnectingLine.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\MBTabItem.xaml.cs">
+    <Compile Update="Controls\TextTab\MBTabItem.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Controls\Panel\FlowChartContainer.xaml.cs">
@@ -31,10 +31,10 @@
     <Compile Update="Controls\NodeSearchBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\TabEnd.cs">
+    <Compile Update="Controls\TextTab\TabEnd.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\TabEndItem.xaml.cs">
+    <Compile Update="Controls\TextTab\TabEndItem.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -42,7 +42,7 @@
     <Page Update="Controls\ConnectingLine.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\MBTabItem.xaml">
+    <Page Update="Controls\TextTab\MBTabItem.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Controls\Panel\FlowChartContainer.xaml">
@@ -60,7 +60,13 @@
     <Page Update="Controls\NodeSearchBox.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\TabEndItem.xaml">
+    <Page Update="Controls\TextTab\TabEndItem.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\DarkColorDictionary.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\LightColorDictionary.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Resources\Dictionary.xaml">

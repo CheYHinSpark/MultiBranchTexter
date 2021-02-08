@@ -26,13 +26,11 @@ namespace MultiBranchTexter.Controls
         /// 相应的textNode
         /// </summary>
         public TextNode textNode;
-        /// <summary>
-        /// 父级TabControl
-        /// </summary>
+
+        // 父级TabControl
         private TabControl parent;
-        /// <summary>
-        /// 约定的宽度
-        /// </summary>
+
+        // 约定的宽度
         private double conventionWidth = 120;
         #endregion
 

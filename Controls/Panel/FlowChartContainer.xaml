@@ -60,14 +60,13 @@
         <!--下方信息栏-->
         <StackPanel Orientation="Horizontal" 
                     Grid.Row="1" 
-                    Background="{StaticResource ThemeBrush}">
+                    Background="{DynamicResource ThemeBrush}">
             <TextBlock x:Name="stateHint" Width="Auto"
-                       MinWidth="80" Foreground="White"
+                       MinWidth="80" Foreground="{DynamicResource Foreground.ThemeBrush}"
                        VerticalAlignment="Center"/>
-            <Rectangle Width="1" Fill="White" Margin="4,0,4,0"/>
-            <TextBlock Text="{Binding ScaleRatio, 
-                Converter={StaticResource numToPerCvt}, 
-                ElementName=container}" Width="Auto" Foreground="{DynamicResource Foreground.ThemeBrush}"
+            <Rectangle Width="1" Fill="{DynamicResource Foreground.ThemeBrush}" Margin="4,0,4,0"/>
+            <TextBlock Text="{Binding ScaleRatio, Converter={StaticResource numToPerCvt}, ElementName=container}" 
+                       Width="Auto" Foreground="{DynamicResource Foreground.ThemeBrush}"
                        VerticalAlignment="Center"/>
         </StackPanel>
     </Grid>

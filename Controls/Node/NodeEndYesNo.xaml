@@ -13,7 +13,7 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Border Padding="6,0,6,0" Grid.Row="0" Grid.ColumnSpan="2"
-                Background="{StaticResource NodeBgBrush}" BorderBrush="{DynamicResource ThemeBrush}"
+                Background="{DynamicResource NodeBgBrush}" BorderBrush="{DynamicResource ThemeBrush}"
                 BorderThickness="1" CornerRadius="4">
             <Grid>
                 <Rectangle Margin="1"
@@ -21,15 +21,14 @@
                 <TextBox x:Name="titleBox" Margin="1"
                          Focusable="False" Background="Transparent"
                          ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"
-                         Template="{StaticResource textBoxTemplate}"
                          PreviewMouseDoubleClick="titleBox_PreviewMouseDoubleClick"
                          LostFocus="titleBox_LostFocus"/>
             </Grid>
         </Border>
-        <c:NodeBase x:Name="yesNode" Template="{StaticResource yesnoAnswerTemplate}" 
+        <c:NodeBase x:Name="yesNode" Template="{DynamicResource yesnoAnswerTemplate}" 
                     Grid.Row="1" Grid.Column="0"
                     MouseDoubleClick="yesnoNode_MouseDoubleClick"/>
-        <c:NodeBase x:Name="noNode" Template="{StaticResource yesnoAnswerTemplate}"
+        <c:NodeBase x:Name="noNode" Template="{DynamicResource yesnoAnswerTemplate}"
                     Grid.Row="1" Grid.Column="1"
                     MouseDoubleClick="yesnoNode_MouseDoubleClick"/>
     </Grid>

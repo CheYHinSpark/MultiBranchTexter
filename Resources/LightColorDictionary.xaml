@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--深浅色-->
+    <SolidColorBrush x:Key="Text.Foreground.BaseBrush" Color="Black"/>
+    <SolidColorBrush x:Key="Foreground.BaseBrush" Color="Black"/>
+    <SolidColorBrush x:Key="Foreground.ThemeBrush" Color="White"/>
+    <SolidColorBrush x:Key="Highlight.BaseBrush" Color="{DynamicResource Theme}"/>
+    <!--工作界面背景颜色-->
+    <SolidColorBrush x:Key="MainBrush" Color="#EEEEEE"/>
+    <SolidColorBrush x:Key="BaseBrush" Color="#DDDDDD"/>
+    <SolidColorBrush x:Key="NodeBgBrush" Color="AliceBlue"/>
+    <SolidColorBrush x:Key="NodeBgHBrush" Color="#FFC9EAFF"/>
+</ResourceDictionary>

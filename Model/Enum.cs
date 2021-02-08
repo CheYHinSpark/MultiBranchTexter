@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MultiBranchTexter
+namespace MultiBranchTexter.Model
 {
     /// <summary>
     /// 节点状态枚举

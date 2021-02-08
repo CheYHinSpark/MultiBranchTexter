@@ -16,7 +16,7 @@
           MouseDown="Path_MouseDown"
           MouseEnter="Path_MouseEnter"
           MouseLeave="Path_MouseLeave"
-          Style="{StaticResource connectingLinePathStyle}"
-          ContextMenu="{StaticResource lineContextMenu}"
+          Style="{DynamicResource connectingLinePathStyle}"
+          ContextMenu="{DynamicResource lineContextMenu}"
           />
 </UserControl>

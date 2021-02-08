@@ -2,6 +2,6 @@
             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             xmlns:c="clr-namespace:MultiBranchTexter.Controls"
-            Template="{StaticResource multiAnswerTemplate}"
+            Template="{DynamicResource multiAnswerTemplate}"
             Loaded="NodeBase_Loaded">
 </c:NodeBase>

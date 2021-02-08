@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MultiBranchTexter.Controls"
              Height="56" Width="160">
-    <Grid Background="{StaticResource ThemeBrush}">
+    <Grid Background="{DynamicResource ThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
@@ -16,12 +16,13 @@
         </Grid.ColumnDefinitions>
         <TextBlock Text="搜索标题" Foreground="White" Margin="4" VerticalAlignment="Center"/>
         <Button x:Name="closeBtn" Grid.Column="1" Margin="4" 
-                Template="{StaticResource searchBoxBtnTemp}"
+                Template="{DynamicResource searchBoxBtnTemp}"
                 Click="closeBtn_Click"/>
-        <TextBox x:Name="findBox" Grid.Row="1" Grid.Column="0" Margin="4"
+        <TextBox x:Name="findBox" Grid.Row="1" Grid.Column="0" Margin="3"
+                 Background="{DynamicResource BaseBrush}"
                  TextChanged="findBox_TextChanged"/>
         <Button x:Name="nextBtn" Grid.Row="1" Grid.Column="1" Margin="4" 
-                Template="{StaticResource searchBoxBtnTemp}"
+                Template="{DynamicResource searchBoxBtnTemp}"
                 Click="nextBtn_Click"/>
     </Grid>
 </UserControl>
