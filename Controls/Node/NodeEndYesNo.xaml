@@ -13,13 +13,13 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Border Padding="6,0,6,0" Grid.Row="0" Grid.ColumnSpan="2"
-                Background="{StaticResource nodeBgBrush}" BorderBrush="DarkRed"
+                Background="{StaticResource NodeBgBrush}" BorderBrush="{DynamicResource ThemeBrush}"
                 BorderThickness="1" CornerRadius="4">
             <Grid>
                 <Rectangle Margin="1"
                            VerticalAlignment="Bottom" Fill="Gray" Height="2"/>
                 <TextBox x:Name="titleBox" Margin="1"
-                         Focusable="False"
+                         Focusable="False" Background="Transparent"
                          ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"
                          Template="{StaticResource textBoxTemplate}"
                          PreviewMouseDoubleClick="titleBox_PreviewMouseDoubleClick"

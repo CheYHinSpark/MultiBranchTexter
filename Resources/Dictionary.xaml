@@ -1,20 +1,29 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:MultiBranchTexter"
                     xmlns:c="clr-namespace:MultiBranchTexter.Controls"
                     xmlns:cvt="clr-namespace:MultiBranchTexter.Converters"
                     >
     <!--颜色部分-->
-    <Color x:Key="mainColor">#FF873674</Color>
-    <Color x:Key="mainHighColor">#FFDD88AA</Color>
-    <SolidColorBrush x:Key="mainColorBrush" Color="{StaticResource mainColor}"/>
-    <SolidColorBrush x:Key="darkBorderBrush" Color="#FF323232"/>
-    <SolidColorBrush x:Key="mainHighBrush" Color="{StaticResource mainHighColor}"/>
-    <SolidColorBrush x:Key="redBrush" Color="#FFD44C45"/>
-    <SolidColorBrush x:Key="textBoxHighlightBorderBrush" Color="#FF64BAE0"/>
-    <SolidColorBrush x:Key="nodeBgBrush" Color="AliceBlue"/>
-    <SolidColorBrush x:Key="nodeBgHBrush" Color="#FFC9EAFF"/>
-
+    <!--可变颜色与颜色刷-->
+    <Color x:Key="Theme">#EEAA16</Color><!--主题色-->
+    <!--深浅色-->
+    <Color x:Key="Base">#DDDDDD</Color>
+    <Color x:Key="Foreground.Base">Black</Color>
+    <SolidColorBrush x:Key="Highlight.BaseBrush" Color="{DynamicResource Theme}"/>
+    <!--工作界面背景颜色-->
+    <SolidColorBrush x:Key="MainBrush" Color="#EEEEEE"/>
+    <SolidColorBrush x:Key="NodeBgBrush" Color="AliceBlue"/>
+    <SolidColorBrush x:Key="NodeBgHBrush" Color="#FFC9EAFF"/>
+    
+    <!--不变颜色刷-->
+    <SolidColorBrush x:Key="MiddleBrush" Color="#808080"/><!--中间灰色-->
+    <SolidColorBrush x:Key="BaseBrush" Color="{DynamicResource Base}"/>
+    <SolidColorBrush x:Key="Foreground.BaseBrush" Color="{DynamicResource Foreground.Base}"/>
+    <SolidColorBrush x:Key="ThemeBrush" Color="{DynamicResource Theme}"/>
+    <SolidColorBrush x:Key="Foreground.ThemeBrush" Color="White"/>
+    <SolidColorBrush x:Key="Highlight.ThemeBrush" Color="#80FFFFFF"/>
+    <SolidColorBrush x:Key="RedBrush" Color="#FFD44C45"/>
+    
     <!--转换器-->
     <cvt:NumberToPercentStrConverter x:Key="numToPerCvt" />
     <cvt:ListToBoolConverter x:Key="listToBoolCvt"/>
@@ -30,9 +39,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ContextMenu}">
                     <Border x:Name="Border"
-                            Background="{StaticResource nodeBgBrush}"
+                            Background="{StaticResource NodeBgBrush}"
                             BorderThickness="1"
-                            BorderBrush="{StaticResource mainColorBrush}">
+                            BorderBrush="{StaticResource ThemeBrush}">
                         <StackPanel IsItemsHost="True"
                                     KeyboardNavigation.DirectionalNavigation="Cycle" />
                     </Border>
@@ -58,8 +67,8 @@
                     <Border x:Name="SubmenuBorder"
                             SnapsToDevicePixels="True"
                             BorderThickness="1"
-                            Background="{StaticResource nodeBgBrush}"
-                            BorderBrush="{StaticResource mainColorBrush}">
+                            Background="{StaticResource NodeBgBrush}"
+                            BorderBrush="{StaticResource ThemeBrush}">
                         <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Auto">
                             <StackPanel IsItemsHost="True"
                                         KeyboardNavigation.DirectionalNavigation="Cycle" />
@@ -70,15 +79,11 @@
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsHighlighted" Value="true">
-                <Setter Property="BorderBrush" Value="{StaticResource mainColorBrush}" TargetName="Border"/>
-                <Setter Property="Background" Value="{StaticResource nodeBgHBrush}" TargetName="Border"/>
+                <Setter Property="BorderBrush" Value="{StaticResource ThemeBrush}" TargetName="Border"/>
+                <Setter Property="Background" Value="{StaticResource NodeBgHBrush}" TargetName="Border"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground">
-                    <Setter.Value>
-                        <SolidColorBrush Color="Gray" />
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="Foreground" Value="{StaticResource MiddleBrush}"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -93,15 +98,11 @@
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsHighlighted" Value="true">
-                <Setter Property="BorderBrush" Value="{StaticResource mainColorBrush}" TargetName="Border"/>
-                <Setter Property="Background" Value="{StaticResource nodeBgHBrush}" TargetName="Border"/>
+                <Setter Property="BorderBrush" Value="{StaticResource ThemeBrush}" TargetName="Border"/>
+                <Setter Property="Background" Value="{StaticResource NodeBgHBrush}" TargetName="Border"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground">
-                    <Setter.Value>
-                        <SolidColorBrush Color="Gray" />
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="Foreground" Value="{StaticResource MiddleBrush}"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -128,9 +129,9 @@
                        PopupAnimation="Fade">
                     <Border x:Name="SubmenuBorder"
                             SnapsToDevicePixels="True"
-                            Background="{StaticResource nodeBgBrush}"
+                            Background="{StaticResource NodeBgBrush}"
                             BorderThickness="1"
-                            BorderBrush="{StaticResource mainColorBrush}">
+                            BorderBrush="{StaticResource ThemeBrush}">
                         <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Hidden">
                             <StackPanel IsItemsHost="True"
                                         KeyboardNavigation.DirectionalNavigation="Cycle" />
@@ -141,18 +142,15 @@
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsHighlighted" Value="true">
-                <Setter Property="BorderBrush" Value="{StaticResource mainColorBrush}" TargetName="Border"/>
-                <Setter Property="Background" Value="{StaticResource nodeBgHBrush}" TargetName="Border"/>
+                <Setter Property="BorderBrush" Value="{StaticResource ThemeBrush}" TargetName="Border"/>
+                <Setter Property="Background" Value="{StaticResource NodeBgHBrush}" TargetName="Border"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground">
-                    <Setter.Value>
-                        <SolidColorBrush Color="Gray" />
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="Foreground" Value="{StaticResource MiddleBrush}"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
     <ControlTemplate x:Key="{x:Static MenuItem.SubmenuItemTemplateKey}"
                  TargetType="{x:Type MenuItem}">
         <Border x:Name="Border" BorderThickness="1" Background="Transparent">
@@ -164,15 +162,11 @@
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsHighlighted" Value="true">
-                <Setter Property="BorderBrush" Value="{StaticResource mainColorBrush}" TargetName="Border"/>
-                <Setter Property="Background" Value="{StaticResource nodeBgHBrush}" TargetName="Border"/>
+                <Setter Property="BorderBrush" Value="{StaticResource ThemeBrush}" TargetName="Border"/>
+                <Setter Property="Background" Value="{StaticResource NodeBgHBrush}" TargetName="Border"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground">
-                    <Setter.Value>
-                        <SolidColorBrush Color="Gray" />
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="Foreground" Value="{StaticResource MiddleBrush}"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -209,12 +203,12 @@
     <Style x:Key="ScrollBarLineButton" TargetType="{x:Type RepeatButton}">
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
-        <Setter Property="Focusable" Value="false" />
+        <Setter Property="Focusable" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
-                    <Border x:Name="Border" Background="{StaticResource mainColorBrush}">
-                        <Path Fill="White"
+                    <Border x:Name="Border" Background="{StaticResource ThemeBrush}">
+                        <Path Fill="{DynamicResource Foreground.ThemeBrush}"
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
                               Data="{Binding Content, 
@@ -223,7 +217,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource mainHighBrush}" TargetName="Border"/>
+                            <Setter Property="Background" Value="{StaticResource Highlight.ThemeBrush}" TargetName="Border"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -253,10 +247,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border x:Name="thumbBd" Background="{StaticResource mainColorBrush}"/>
+                    <Border Background="{StaticResource ThemeBrush}">
+                        <Rectangle x:Name="thumbBd" Margin="1" Fill="Transparent"/>
+                    </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource mainHighBrush}" TargetName="thumbBd"/>
+                            <Setter Property="Fill" Value="{StaticResource Highlight.ThemeBrush}" TargetName="thumbBd"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -346,19 +342,70 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-
+    <Style TargetType="{x:Type ScrollViewer}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                    <Grid Background="{TemplateBinding Background}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <ScrollContentPresenter/>
+                        <ScrollBar x:Name="PART_VerticalScrollBar"
+                                   Grid.Column="1"
+                                   Value="{TemplateBinding VerticalOffset}"
+                                   Maximum="{TemplateBinding ScrollableHeight}"
+                                   ViewportSize="{TemplateBinding ViewportHeight}"
+                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                        <ScrollBar x:Name="PART_HorizontalScrollBar"
+                                   Orientation="Horizontal"
+                                   Grid.Row="1"
+                                   Value="{TemplateBinding HorizontalOffset}"
+                                   Maximum="{TemplateBinding ScrollableWidth}"
+                                   ViewportSize="{TemplateBinding ViewportWidth}"
+                                   Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
+                        <Rectangle Grid.Column="1" Grid.Row="1" Fill="{DynamicResource ThemeBrush}"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <!--通用按钮样式-->
     <ControlTemplate x:Key="generalButtonTemplate" TargetType="{x:Type Button}">
-        <Border x:Name="BD" CornerRadius="4" Margin="2"
-                Background="{StaticResource mainColorBrush}">
-            <ContentPresenter x:Name="CP" TextElement.Foreground="White"
-                              Margin="2"
-                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Border x:Name="BD" CornerRadius="4" Margin="2" BorderThickness="1" 
+                Background="Transparent" BorderBrush="Transparent">
+            <Path x:Name="CP" Stroke="{DynamicResource Foreground.BaseBrush}"
+                  HorizontalAlignment="Center" StrokeThickness="1"
+                  VerticalAlignment="Center"
+                  Data="{Binding Content, 
+                RelativeSource={RelativeSource TemplatedParent}}" >
+            </Path>
         </Border>
         <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource mainHighBrush}" TargetName="BD"/>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsPressed" Value="False"/>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="{StaticResource ThemeBrush}" TargetName="BD"/>
+                <Setter Property="Background" Value="{StaticResource Highlight.BaseBrush}" TargetName="BD"/>
+            </MultiTrigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource ThemeBrush}" TargetName="BD"/>
+                <Setter Property="Background" TargetName="BD">
+                    <Setter.Value>
+                        <RadialGradientBrush>
+                            <GradientStop Color="{DynamicResource Base}" Offset="0.4"/>
+                            <GradientStop Color="{DynamicResource Theme}" Offset="1"/>
+                        </RadialGradientBrush>
+                    </Setter.Value>
+                </Setter>
             </Trigger>
             <Trigger Property="Tag" Value="l">
                 <Setter Property="CornerRadius" TargetName="BD" Value="0,4,4,0"/>
@@ -376,19 +423,33 @@
                 <Setter Property="CornerRadius" TargetName="BD" Value="4,4,0,0"/>
                 <Setter Property="Margin" TargetName="BD" Value="2,2,2,0"/>
             </Trigger>
+            <Trigger Property="Tag" Value="f">
+                <Setter Property="Fill" TargetName="CP" Value="{DynamicResource Foreground.BaseBrush}"/>
+            </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-
+    <!--通用按钮style-->
+    <Style x:Key="generalButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Template" Value="{StaticResource generalButtonTemplate}"/>
+    </Style>
     <!--通用CheckBox样式-->
     <ControlTemplate x:Key="generalCheckTemplate" TargetType="{x:Type CheckBox}">
-        <Border x:Name="BD" CornerRadius="4" Margin="2"
-                Background="{StaticResource mainColorBrush}">
-            <ContentPresenter x:Name="CP" Margin="2"
-                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Border x:Name="BD" CornerRadius="4" Margin="2" BorderThickness="1"
+                Background="Transparent" BorderBrush="Transparent">
+            <Path x:Name="CP" Stroke="{TemplateBinding Foreground}"
+                  HorizontalAlignment="Center" StrokeThickness="1"
+                  VerticalAlignment="Center"
+                  Data="{Binding Content, 
+                RelativeSource={RelativeSource TemplatedParent}}" >
+            </Path>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource mainHighBrush}" TargetName="BD"/>
+                <Setter Property="BorderBrush" Value="{StaticResource ThemeBrush}" TargetName="BD"/>
+                <Setter Property="Background" Value="{StaticResource Highlight.BaseBrush}" TargetName="BD"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource ThemeBrush}" TargetName="BD"/>
             </Trigger>
             <Trigger Property="Tag" Value="l">
                 <Setter Property="CornerRadius" TargetName="BD" Value="0,4,4,0"/>
@@ -410,17 +471,17 @@
     </ControlTemplate>
     <!--通用checkBox的Style-->
     <Style x:Key="generalCheckBoxStyle" TargetType="{x:Type CheckBox}">
-        <Setter Property="Foreground" Value="Gray"/>
+        <Setter Property="Foreground" Value="{StaticResource MiddleBrush}"/>
         <Setter Property="Template" Value="{StaticResource generalCheckTemplate}"/>
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Foreground" Value="{StaticResource Foreground.BaseBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
-    
-    
-    
+
+
+
     <!--最小化和关闭按钮样式-->
     <Style x:Key="WinMinCloseBtnStyle" TargetType="{x:Type Button}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -439,14 +500,14 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource mainHighBrush}"/>
+                            <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource Highlight.ThemeBrush}"/>
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsMouseOver" Value="True"/>
                                 <Condition Property="Name" Value="CloseWinButton"/>
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource redBrush}"/>
+                            <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource RedBrush}"/>
                         </MultiTrigger>
                         <Trigger Property="Name" Value="CloseWinButton">
                             <Setter TargetName="CP" Property="Data" Value="M9,6 L21,18 M9,18 L21,6"/>
@@ -478,7 +539,7 @@
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsMouseOver" Value="True"/>
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource mainHighBrush}"/>
+                            <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource Highlight.ThemeBrush}"/>
                         </MultiTrigger>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="CP" Property="Data" Value="M8,10 8,18 18,18 18,10 Z M18,14 22,14 22,6 12,6 12,10"/>
@@ -492,27 +553,20 @@
     <!--窗体控件模板-->
     <ControlTemplate x:Key="MetroWindowTemplate" TargetType="{x:Type Window}">
         <Border>
-            <Grid x:Name="LayoutRoot" Background="Black">
+            <Grid x:Name="LayoutRoot" Background="{StaticResource ThemeBrush}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="24"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <!--标题栏-->
-                <Grid Grid.Row="0" Background="{StaticResource mainColorBrush}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="WindowTitleTbl" Grid.Column="0" Text="" 
-                               VerticalAlignment="Center" 
-                               Margin="10,0,0,0" Foreground="White"/>
+                <TextBlock x:Name="WindowTitleTbl" Grid.Row="0" Text="" 
+                           VerticalAlignment="Center" 
+                           Margin="10,0,0,0" Foreground="White"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
                     <Button x:Name="MinWinButton" Grid.Column="2" Style="{StaticResource WinMinCloseBtnStyle}"/>
                     <CheckBox x:Name="MaxWinButton" Grid.Column="3" Style="{StaticResource WinMaxBtnStyle}"/>
                     <Button x:Name="CloseWinButton" Grid.Column="4" Style="{StaticResource WinMinCloseBtnStyle}"/>
-                </Grid>
+                </StackPanel>
                 <!--内容部分-->
                 <AdornerDecorator Grid.Row="1">
                     <ContentPresenter/>
@@ -521,7 +575,7 @@
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="WindowState" Value="Maximized">
-                <Setter Property="Margin" Value="5,5,5,0" TargetName="LayoutRoot"/>
+                <Setter Property="Margin" Value="6,6,6,0" TargetName="LayoutRoot"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -553,21 +607,21 @@
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource redBrush}" TargetName="BD"/>
+                <Setter Property="Background" Value="{StaticResource RedBrush}" TargetName="BD"/>
             </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
                     <Condition Property="Uid" Value="1"/>
                     <Condition Property="IsMouseOver" Value="False"/>
                 </MultiTrigger.Conditions>
-                <Setter Property="Stroke" Value="Gray" TargetName="CP"/>
+                <Setter Property="Stroke" Value="Black" TargetName="CP"/>
             </MultiTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <!--TabItem模板-->
     <ControlTemplate x:Key="MBTabItemTemplate" TargetType="{x:Type TabItem}">
-        <Border x:Name="BD" BorderBrush="{StaticResource darkBorderBrush}" 
-                Background="{StaticResource mainColorBrush}"
+        <Border x:Name="BD" BorderBrush="{StaticResource MainBrush}" 
+                Background="{StaticResource MainBrush}"
                 BorderThickness="1" CornerRadius="4,4,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -575,9 +629,8 @@
                     <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
                 <ContentPresenter x:Name="CP" Grid.Column="0" 
-                                  ContentSource="Header" 
-                                  TextElement.Foreground="White"
-                                  Margin="2"
+                                  ContentSource="Header" Margin="2"
+                                  TextElement.Foreground="{DynamicResource Foreground.BaseBrush}"
                                   HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                 <Button Grid.Column="1" Name="CloseBtn" 
                         Width="16" Height="16" x:Uid="0"
@@ -591,13 +644,14 @@
                     <Condition Property="IsSelected" Value="False"/>
                     <Condition Property="IsMouseOver" Value="True"/>
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{StaticResource mainHighBrush}" TargetName="BD"/>
+                <Setter Property="Opacity" Value="0.8" TargetName="BD"/>
+                <Setter Property="Background" Value="{StaticResource ThemeBrush}" TargetName="BD"/>
             </MultiTrigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="TextElement.Foreground" Value="Black" TargetName="CP"/>
-                <Setter Property="Background" Value="White" TargetName="BD"/>
+                <Setter Property="TextElement.Foreground" Value="{StaticResource Foreground.ThemeBrush}" TargetName="CP"/>
+                <Setter Property="Background" Value="{StaticResource ThemeBrush}" TargetName="BD"/>
                 <Setter Property="BorderThickness" Value="2,2,2,0" TargetName="BD"/>
-                <Setter Property="BorderBrush" Value="{StaticResource textBoxHighlightBorderBrush}" TargetName="BD"/>
+                <Setter Property="BorderBrush" Value="{StaticResource ThemeBrush}" TargetName="BD"/>
                 <Setter Property="Uid" Value="1" TargetName="CloseBtn"/>
             </Trigger>
         </ControlTemplate.Triggers>
@@ -609,7 +663,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabControl}">
-                    <Grid KeyboardNavigation.TabNavigation="Local" Background="White">
+                    <Grid KeyboardNavigation.TabNavigation="Local" Background="{DynamicResource MainBrush}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
@@ -618,9 +672,9 @@
                                   Grid.Row="0"
                                   Panel.ZIndex="1"
                                   IsItemsHost="True"
-                                  KeyboardNavigation.TabIndex="1"
-                                  Background="{StaticResource mainColorBrush}" />
+                                  KeyboardNavigation.TabIndex="1"/>
                         <TextBlock Text="请从节点图中打开一个节点" FontSize="24" Grid.Row="1"
+                                   Foreground="{DynamicResource Foreground.BaseBrush}"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <Border x:Name="Border"
                                 Grid.Row="1"
@@ -639,13 +693,14 @@
 
     <!--textBox的模板-->
     <ControlTemplate x:Key="textBoxTemplate" TargetType="{x:Type TextBox}">
-        <Border x:Name="BD" Background="White" BorderThickness="2" BorderBrush="Transparent">
+        <Border x:Name="BD" Background="{TemplateBinding Background}" 
+                BorderThickness="2" BorderBrush="Transparent">
             <ScrollViewer Margin="0"
                           x:Name="PART_ContentHost" />
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsFocused" Value="True">
-                <Setter Property="BorderBrush" Value="{StaticResource textBoxHighlightBorderBrush}" TargetName="BD"/>
+                <Setter Property="BorderBrush" Value="{StaticResource ThemeBrush}" TargetName="BD"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -659,14 +714,14 @@
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource mainHighBrush}"/>
+                <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource Highlight.ThemeBrush}"/>
             </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
                     <Condition Property="IsMouseOver" Value="True"/>
                     <Condition Property="Name" Value="closeBtn"/>
                 </MultiTrigger.Conditions>
-                <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource redBrush}"/>
+                <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource RedBrush}"/>
             </MultiTrigger>
             <Trigger Property="Name" Value="closeBtn">
                 <Setter TargetName="CP" Property="Data" Value="M5,5 L15,15 M5,15 L15,5"/>
@@ -693,14 +748,15 @@
 
     <!--yesno答案框-->
     <ControlTemplate x:Key="yesnoAnswerTemplate" TargetType="{x:Type c:NodeBase}">
-        <Border x:Name="ynBd" Background="AliceBlue" BorderBrush="DarkRed" 
+        <Border x:Name="ynBd" Background="{DynamicResource NodeBgBrush}" 
+                BorderBrush="{DynamicResource ThemeBrush}" 
                 BorderThickness="1" CornerRadius="4">
             <Path x:Name="CP" StrokeThickness="2" Stroke="Black" Data="M0,0 4,8 L10,0"
                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource nodeBgHBrush}" TargetName="ynBd"/>
+                <Setter Property="Background" Value="{StaticResource NodeBgHBrush}" TargetName="ynBd"/>
             </Trigger>
             <Trigger Property="Name" Value="noNode">
                 <Setter Property="Data" Value="M0,0 L9,9 M9,0 L0,9" TargetName="CP"/>
@@ -717,27 +773,27 @@
             <Button x:Name="maCloseBtn" Grid.Column="0" Width="0" Height="18">
                 <Button.Template>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="maBd" CornerRadius="6,0,0,6" Background="Gray">
+                        <Border x:Name="maBd" CornerRadius="6,0,0,6" Background="{DynamicResource ThemeBrush}">
                             <Path x:Name="CP" Stroke="White" 
                                   StrokeThickness="1" Data="M5,5 L13,13 M5,13 L13,5"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{StaticResource redBrush}" TargetName="maBd"/>
+                                <Setter Property="Background" Value="{StaticResource RedBrush}" TargetName="maBd"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Button.Template>
             </Button>
             <Border x:Name="maBd"  Grid.Column="1"
-                    Background="{StaticResource nodeBgBrush}" BorderBrush="DarkRed" 
+                    Background="{StaticResource NodeBgBrush}" BorderBrush="{StaticResource ThemeBrush}" 
                     BorderThickness="1" CornerRadius="4">
                 <TextBox x:Name="answerTxt" Margin="2,2,8,2"/>
             </Border>
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource nodeBgHBrush}" TargetName="maBd"/>
+                <Setter Property="Background" Value="{StaticResource NodeBgHBrush}" TargetName="maBd"/>
                 <Trigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard>
@@ -761,11 +817,39 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+<!--多选后继下面的添加按钮-->
+    <ControlTemplate x:Key="addAnswerButtonTemplate" TargetType="{x:Type Button}">
+        <Border x:Name="BD" CornerRadius="0,0,4,4" BorderThickness="1,0,1,1" 
+                Background="{DynamicResource BaseBrush}" BorderBrush="{DynamicResource ThemeBrush}">
+            <Path Stroke="{DynamicResource Foreground.BaseBrush}"
+                  Data="M0,4 L8,4 M4,0 L4,8"
+                  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsPressed" Value="False"/>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="{StaticResource Highlight.BaseBrush}" TargetName="BD"/>
+            </MultiTrigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" TargetName="BD">
+                    <Setter.Value>
+                        <RadialGradientBrush>
+                            <GradientStop Color="{DynamicResource Base}" Offset="0.4"/>
+                            <GradientStop Color="{DynamicResource Theme}" Offset="1"/>
+                        </RadialGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 
 
     <!--控制下面东西升降的按钮的template-->
     <ControlTemplate x:Key="upDownCheckBoxTemplate" TargetType="{x:Type CheckBox}">
-        <Border x:Name="cbBd" Background="{StaticResource mainColorBrush}"
+        <Border x:Name="cbBd" Background="{StaticResource ThemeBrush}"
                 Width="18" Height="18" CornerRadius="4">
             <Path x:Name="CP" Data="M0,4 4,0 L8,4 M0,8 4,4 L8,8"
                   HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -773,7 +857,7 @@
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource mainHighBrush}" TargetName="cbBd"/>
+                <Setter Property="Background" Value="{StaticResource Highlight.ThemeBrush}" TargetName="cbBd"/>
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Data" Value="M0,0 4,4 L8,0 M0,4 4,8 L8,4" TargetName="CP"/>
@@ -783,7 +867,7 @@
 
     <!--每个标签页末尾的东西-->
     <ControlTemplate x:Key="tabEndTemplate" TargetType="{x:Type UserControl}">
-        <Grid Background="{StaticResource mainColorBrush}">
+        <Grid Background="{StaticResource ThemeBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="Auto"/>
@@ -796,11 +880,11 @@
             <CheckBox x:Name="showHideBtn" IsChecked="False"
                       Template="{StaticResource upDownCheckBoxTemplate}"
                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <TextBlock x:Name="questionTxt" Grid.Column="1" Foreground="White"
-                       Margin="8,0,0,0"
+            <TextBlock x:Name="questionTxt" Grid.Column="1" Margin="8,0,0,0"
+                       Foreground="{DynamicResource Foreground.ThemeBrush}"
                        VerticalAlignment="Center"/>
             <ScrollViewer x:Name="sv" Grid.Row="1" Height="0" Grid.ColumnSpan="3"
-                          Background="White"
+                          Background="{DynamicResource BaseBrush}"
                           FocusVisualStyle="{x:Null}"
                           HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                 <Grid x:Name="container" Grid.IsSharedSizeScope="True"/>

@@ -21,7 +21,7 @@ namespace MultiBranchTexter.Controls
     {
         private Button maCloseBtn;
         private TextBox answerTxt;
-        private AnswerToNode answerToNode = new AnswerToNode();
+        private readonly AnswerToNode answerToNode = new AnswerToNode();
         /// <summary>
         /// 获取或者设置回答文本
         /// </summary>

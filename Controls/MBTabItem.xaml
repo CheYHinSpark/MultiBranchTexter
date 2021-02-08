@@ -15,7 +15,7 @@
         <TextBox x:Name="textBox" FontSize="14"
                  VerticalScrollBarVisibility="Auto"
                  AcceptsTab="True" AcceptsReturn="True"
-                 TextWrapping="Wrap"
+                 TextWrapping="Wrap" Background="{DynamicResource MainBrush}"
                  Template="{StaticResource textBoxTemplate}">
         </TextBox>
         <!--下方信息栏-->

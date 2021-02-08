@@ -13,8 +13,8 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Border x:Name="bgBorder" Padding="10,4,10,4" Grid.Row="0"
-                        Background="{StaticResource nodeBgBrush}" 
-                        BorderBrush="DarkRed"
+                        Background="{StaticResource NodeBgBrush}" 
+                        BorderBrush="{DynamicResource ThemeBrush}"
                         MouseLeftButtonDown="nodeButton_MouseLeftButtonDown"
                         MouseMove="nodeButton_MouseMove"
                         MouseLeftButtonUp="nodeButton_MouseLeftButtonUp"
@@ -38,19 +38,17 @@
                         <Rectangle Grid.Row="0"
                                    Margin="2"
                                    VerticalAlignment="Bottom" Fill="Gray" Height="2"/>
-                        <TextBox x:Name="titleBox" Margin="2"
-                                 Grid.Row="0"
-                                 Focusable="False"
+                        <TextBox x:Name="titleBox" Margin="2" Grid.Row="0"
+                                 Focusable="False" Background="Transparent"
                                  ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"
                                  Template="{StaticResource textBoxTemplate}"
                                  PreviewMouseDoubleClick="titleBox_PreviewMouseDoubleClick"
                                  LostFocus="titleBox_LostFocus"/>
                         <Button x:Name="gotoBtn" Grid.Row="1"
-                                Margin="8,-2,8,-4"
+                                Margin="8,-2,8,-4" Tag="f"
                                 Template="{StaticResource generalButtonTemplate}" 
-                                Click="gotoBtn_Click">
-                            <Path Fill="White" Data="M0,0 0,10 8,5Z"/>
-                        </Button>
+                                Click="gotoBtn_Click"
+                                Content="M0,0 0,10 8,5Z"/>
                     </Grid>
                 </Border>
                 <!--等待点击-->
@@ -63,7 +61,7 @@
             
             <ControlTemplate.Triggers>
                 <Trigger Property="IsMouseOver" Value="True" SourceName="bgBorder">
-                    <Setter Property="Background" Value="{StaticResource nodeBgHBrush}" TargetName="bgBorder"/>
+                    <Setter Property="Background" Value="{StaticResource NodeBgHBrush}" TargetName="bgBorder"/>
                 </Trigger>
                 <Trigger Property="NodeState" Value="Selected">
                     <Setter Property="BorderBrush" Value="Red" TargetName="bgBorder"/>

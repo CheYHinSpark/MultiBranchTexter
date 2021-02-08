@@ -1,5 +1,4 @@
-﻿using MultiBranchTexter.Controls;
-using MultiBranchTexter.Model;
+﻿using MultiBranchTexter.Model;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -8,7 +7,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace MultiBranchTexter
+namespace MultiBranchTexter.Controls
 {
     /// <summary>
     /// ConnectingLine连接流程图中的两个节点
@@ -45,8 +44,6 @@ namespace MultiBranchTexter
         public NodeButton EndNode { get; set; }
         //记录鼠标位置
         private Point mousePt = new Point();
-        private Point beginOffset = new Point(0, 0);
-        private Point endOffset = new Point(0, 0);
         #endregion
 
         #region 事件

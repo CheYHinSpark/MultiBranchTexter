@@ -67,7 +67,7 @@ namespace MultiBranchTexter.Controls
         {
             //调整自身大小
             //保持约定宽度item的临界个数
-            int criticalCount = (int)((parent.ActualWidth - 5) / conventionWidth);
+            int criticalCount = (int)((parent.ActualWidth) / conventionWidth);
             if (parent.Items.Count <= criticalCount)
             {
                 //小于等于临界个数 等于约定宽度
@@ -76,7 +76,7 @@ namespace MultiBranchTexter.Controls
             else
             {
                 //大于临界个数 等于平均宽度
-                double perWidth = (parent.ActualWidth - 5) / parent.Items.Count;
+                double perWidth = (parent.ActualWidth) / parent.Items.Count;
                 this.Width = perWidth;
             }
         }
