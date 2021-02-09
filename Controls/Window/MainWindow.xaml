@@ -4,11 +4,15 @@
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                    xmlns:local="clr-namespace:MultiBranchTexter"
+                   xmlns:vm="clr-namespace:MultiBranchTexter.ViewModel"
                    xmlns:c="clr-namespace:MultiBranchTexter.Controls"
-                   Style="{DynamicResource MetroWindowStyle}"
+                   Style="{StaticResource MetroWindowStyle}"
                    mc:Ignorable="d"
                    Title="MultiBranchTexter" Height="450" Width="800"
                    KeyDown="MainWindow_KeyDown">
+    <local:MetroWindow.DataContext>
+        <vm:MainViewModel/>
+    </local:MetroWindow.DataContext>
     <Grid Background="{DynamicResource BaseBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="28"/>
@@ -36,15 +40,17 @@
             <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
                        Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
             <CheckBox x:Name="flowChartBtn" Width="28" Tag="r" ToolTip="节点图"
-                      Style="{DynamicResource generalCheckBoxStyle}" IsChecked="True" IsEnabled="False"
-                      Click="frontBtn_Click"
+                      Style="{DynamicResource generalCheckBoxStyle}" 
+                      IsChecked="{Binding IsFlowChartShowing}" 
+                      IsEnabled="{Binding CanHideFlowChart}"
                       Content="M0,0 0,3 6,3 6,0 Z
                       M3,3 L3,11 M11,3 11,7 5,7 L5,11
                       M1,11 1,14 7,14 7,11 Z
                       M8,0 8,3 14,3 14,0 Z"/>
             <CheckBox x:Name="workTabBtn" Width="28" Tag="l" ToolTip="文本页"
                       Style="{DynamicResource generalCheckBoxStyle}"
-                      Click="frontBtn_Click"
+                      IsChecked="{Binding IsWorkTabShowing}" 
+                      IsEnabled="{Binding CanHideWorkTab}"
                       Content="M0,0 L14,0
                       M0,4 L14,4 M0,8 L9,8 M0,12 L14,12"/>
             <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
@@ -102,13 +108,11 @@
         <!--正式的两个工作控件-->
         <Grid x:Name="workGrid" Grid.Row="1" Visibility="Hidden">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{Binding FlowChartWidth, 
-                    RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"/>
-                <ColumnDefinition Width="{Binding WorkTabWidth, 
-                    RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"/>
+                <ColumnDefinition Width="{Binding FlowChartWidth}"/>
+                <ColumnDefinition Width="{Binding WorkTabWidth}"/>
             </Grid.ColumnDefinitions>
             <c:FlowChartContainer x:Name="flowChart" Grid.Column="0" />
-            <TabControl x:Name="workTabControl" Grid.Column="1" Padding="0"/>
+            <TabControl x:Name="workTabControl" Grid.Column="1" Padding="0" />
         </Grid>
     </Grid>
 

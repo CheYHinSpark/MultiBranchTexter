@@ -620,13 +620,13 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <!--窗体控件Style-->
-    <Style x:Key="MetroWindowStyle" TargetType="{x:Type Window}">
+    <Style x:Key="MetroWindowStyle" TargetType="{x:Type local:MetroWindow}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="MinHeight" Value="300"/>
         <Setter Property="MinWidth" Value="400"/>
         <Setter Property="WindowStyle" Value="None"/>
-        <Setter Property="Template" Value="{DynamicResource MetroWindowTemplate}"/>
+        <Setter Property="Template" Value="{StaticResource MetroWindowTemplate}"/>
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
                 <!--允许调整窗口大小-->

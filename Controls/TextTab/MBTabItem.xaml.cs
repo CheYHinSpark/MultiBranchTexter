@@ -65,7 +65,7 @@ namespace MultiBranchTexter.Controls
         {
             //调整自身大小
             //保持约定宽度item的临界个数
-            int criticalCount = (int)((parent.ActualWidth) / conventionWidth);
+            int criticalCount = (int)(parent.ActualWidth / conventionWidth);
             if (parent.Items.Count <= criticalCount)
             {
                 //小于等于临界个数 等于约定宽度
@@ -74,7 +74,7 @@ namespace MultiBranchTexter.Controls
             else
             {
                 //大于临界个数 等于平均宽度
-                double perWidth = (parent.ActualWidth) / parent.Items.Count;
+                double perWidth = parent.ActualWidth / parent.Items.Count;
                 this.Width = perWidth;
             }
         }
@@ -106,7 +106,7 @@ namespace MultiBranchTexter.Controls
 
             //自适应
             //保持约定宽度item的临界个数
-            int criticalCount = (int)((parent.ActualWidth - 5) / conventionWidth);
+            int criticalCount = (int)(parent.ActualWidth / conventionWidth);
             if (parent.Items.Count <= criticalCount)
             {
                 //小于等于临界个数 等于约定宽度
@@ -115,7 +115,7 @@ namespace MultiBranchTexter.Controls
             else
             {
                 //大于临界个数 每项都设成平均宽度
-                double perWidth = (parent.ActualWidth - 5) / parent.Items.Count;
+                double perWidth = parent.ActualWidth / parent.Items.Count;
                 foreach (MBTabItem item in parent.Items)
                 {
                     item.Width = perWidth;
@@ -155,9 +155,9 @@ namespace MultiBranchTexter.Controls
 
             //调整剩余项大小
             //保持约定宽度item的临界个数
-            int criticalCount = (int)((parent.ActualWidth - 5) / conventionWidth);
+            int criticalCount = (int)(parent.ActualWidth / conventionWidth);
             //平均宽度
-            double perWidth = (parent.ActualWidth - 5) / parent.Items.Count;
+            double perWidth = parent.ActualWidth / parent.Items.Count;
             foreach (MBTabItem item in parent.Items)
             {
                 if (parent.Items.Count <= criticalCount)
