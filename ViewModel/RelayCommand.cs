@@ -8,19 +8,14 @@ namespace MultiBranchTexter.ViewModel
     {
 
         #region 字段
-
-        readonly Func<bool> _canExecute;
-
-        readonly Action _execute;
-
+        private readonly Func<object, bool> _canExecute;
+        private readonly Action<object> _execute;
         #endregion
 
-
         #region 构造函数
+        public RelayCommand(Action<object> execute) : this(execute, null) { }
 
-        public RelayCommand(Action execute) : this(execute, null) { }
-
-        public RelayCommand(Action execute, Func<bool> canExecute)
+        public RelayCommand(Action<object> execute, Func<object, bool> canExecute)
         {
             _execute = execute ?? throw new ArgumentNullException("execute");
             _canExecute = canExecute;
@@ -42,12 +37,15 @@ namespace MultiBranchTexter.ViewModel
             }
         }
 
-        [DebuggerStepThrough]
         public bool CanExecute(object parameter)
-        { return _canExecute == null ? true : _canExecute(); }
+        {
+            return _canExecute == null || _canExecute(parameter);
+        }
 
         public void Execute(object parameter)
-        { _execute(); }
+        {
+            _execute(parameter);
+        }
         #endregion
     }
 }

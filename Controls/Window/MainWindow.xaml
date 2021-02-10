@@ -8,11 +8,14 @@
                    xmlns:c="clr-namespace:MultiBranchTexter.Controls"
                    Style="{StaticResource MetroWindowStyle}"
                    mc:Ignorable="d"
-                   Title="MultiBranchTexter" Height="450" Width="800"
-                   KeyDown="MainWindow_KeyDown">
+                   Title="MultiBranchTexter" Height="450" Width="800">
     <local:MetroWindow.DataContext>
         <vm:MainViewModel/>
     </local:MetroWindow.DataContext>
+    <local:MetroWindow.InputBindings>
+        <KeyBinding Gesture="Ctrl+N" Command="{Binding NewFileCommand}" />
+        <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenFileCommand}" />
+    </local:MetroWindow.InputBindings>
     <Grid Background="{DynamicResource BaseBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="28"/>
@@ -21,25 +24,26 @@
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
                     Grid.Row="0">
-            <Button x:Name="newFileBtn" Width="28"
-                    ToolTip="新建文件"
+            <Button ToolTip="新建文件" Width="28"
                     Style="{DynamicResource generalButtonStyle}"
+                    Command="{Binding NewFileCommand}"
+                    CommandParameter="{Binding ElementName=flowChart}"
                     Content="M0,9 L6,9 M3,6 3,12
                       M2,5 2,0 9,0 12,3 12,14 2,14 L2,13
                       M9,0 9,3 L12,3"/>
-            <Button x:Name="openFileBtn" Width="28"
-                    ToolTip="打开文件"
+            <Button ToolTip="打开文件" Width="28"
                     Style="{DynamicResource generalButtonStyle}"
+                    Command="{Binding OpenFileCommand}"
+                    CommandParameter="{Binding ElementName=flowChart}"
                     Content="M1,12 13,12 16,6 4,6 Z
                       M1,12 0,12 0,4 2,2 6,2 8,4 13,4 L13,6"/>
-            <Button x:Name="saveFileBtn" Width="28"
-                    ToolTip="保存文件"
+            <Button ToolTip="保存文件" Width="28"
                     Style="{DynamicResource generalButtonStyle}"
                     Content="M0,14 0,0 3,0 3,5 8,5 8,0 9,0 12,3 12,14 Z
                       M4,0 6,0 L6,4"/>
             <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
                        Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
-            <CheckBox Width="28" Tag="r" ToolTip="节点图"
+            <CheckBox ToolTip="节点图" Width="28" Tag="r"
                       Style="{DynamicResource generalCheckBoxStyle}" 
                       IsChecked="{Binding IsFlowChartShowing}" 
                       IsEnabled="{Binding CanHideFlowChart}"
@@ -47,7 +51,7 @@
                       M3,3 L3,11 M11,3 11,7 5,7 L5,11
                       M1,11 1,14 7,14 7,11 Z
                       M8,0 8,3 14,3 14,0 Z"/>
-            <CheckBox Width="28" Tag="l" ToolTip="文本页"
+            <CheckBox ToolTip="文本页" Width="28" Tag="l"
                       Style="{DynamicResource generalCheckBoxStyle}"
                       IsChecked="{Binding IsWorkTabShowing}" 
                       IsEnabled="{Binding CanHideWorkTab}"
@@ -69,10 +73,10 @@
                       M0,4 6,4 M3,1 3,7"/>
             <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
                        Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
-            <Border Margin="6,2,6,0" BorderThickness="1,0,0,1" BorderBrush="{DynamicResource ThemeBrush}">
-                <TextBlock x:Name="fileNameTxt" TextAlignment="Left" Width="400" 
-                           Foreground="{DynamicResource Foreground.BaseBrush}" Margin="4,0,0,0"
-                       VerticalAlignment="Center">
+            <Border Margin="6,1,6,1" BorderThickness="1,0,0,1" BorderBrush="{DynamicResource ThemeBrush}">
+                <TextBlock TextAlignment="Left" Width="400" Margin="4,0,0,0"
+                           Text="{Binding FileName}" Foreground="{DynamicResource Foreground.BaseBrush}" 
+                           VerticalAlignment="Center">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Self}}"/>
@@ -85,8 +89,7 @@
                     </TextBlock.Style>
                 </TextBlock>
             </Border>
-            <Button x:Name="fileBtn" Width="28" 
-                    Click="fileBtn_Click" ToolTip="浏览文件"
+            <Button Width="28" ToolTip="浏览文件"
                     Style="{DynamicResource generalButtonStyle}"
                     Content="M6,10 10,12 14,10 16,6 14,2 10,0 6,2 4,6 Z
                     M6,10 L0,16"/>
@@ -106,7 +109,7 @@
                        Foreground="{DynamicResource Foreground.BaseBrush}" FontSize="24"/>
         </StackPanel>
         <!--正式的两个工作控件-->
-        <Grid x:Name="workGrid" Grid.Row="1" Visibility="Hidden">
+        <Grid Grid.Row="1" Visibility="{Binding IsWorkGridVisible}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding FlowChartWidth}"/>
                 <ColumnDefinition Width="{Binding WorkTabWidth}"/>

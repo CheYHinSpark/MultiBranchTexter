@@ -18,83 +18,20 @@ namespace MultiBranchTexter
     {
         private readonly MainViewModel _viewModel;
 
-        public string FileDirPath = "";//文件夹位置
-
         public MainWindow()
         {
             InitializeComponent();
             _viewModel = base.DataContext as MainViewModel;
         }
 
-        #region 事件
-        //各种按键
-        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
-        {
-            //Ctrl 配合
-            if (e.KeyboardDevice.Modifiers == ModifierKeys.Control)
-            {
-                //Ctrl+A 全选
-                if (e.Key == Key.A)
-                { }
-                //Ctrl+S 保存
-                if (e.Key == Key.S)
-                { }
-                //Ctrl+O 打开
-                if (e.Key == Key.O)
-                { OpenFile(); }
-                //Ctrl+N 新建
-                if (e.Key == Key.N)
-                { }
-                //Ctrl+F 寻找
-                if (e.Key == Key.F)
-                {
-                    if (_viewModel.FlowChartWidth == "*")
-                    {
-                        flowChart.searchBox.Visibility = Visibility.Visible;
-                    }
-                }
-                //Ctrl+H 替换
-                if (e.Key == Key.H)
-                { }
-            }
-        }
-
-        private void fileBtn_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFile();
-        }
-
-        #endregion
-
         #region 方法
         //打开标签页
         public void OpenMBTabItem(TextNode node)
         {
-            //遍历已有的标签页看看是否已经存在同标签
-            for (int i =0;i < _viewModel.WorkTabs.Count;i++)
-            {
-                if (_viewModel.WorkTabs[i].textNode == node)
-                {
-                    _viewModel.SelectedIndex = i;
-                    //打开worktab
-                    _viewModel.IsWorkTabShowing = true;
-                    return;
-                }
-            }
-            _viewModel.WorkTabs.Add(new MBTabItem(node));
-            _viewModel.SelectedIndex = workTabControl.Items.Count - 1;
-            //打开worktab
-            _viewModel.IsWorkTabShowing = true;
+            _viewModel.OpenMBTabItem(node);
         }
 
-        /// <summary>
-        /// 返回首页
-        /// </summary>
-        public void CloseWorkTab()
-        {
-            _viewModel.IsFlowChartShowing = true;
-            _viewModel.IsWorkTabShowing = false;
-        }
+      
 
         /// <summary>
         /// 返回首页，并且跳到对应节点位置
@@ -132,35 +69,6 @@ namespace MultiBranchTexter
                 }
             }
             theItem.Close();
-        }
-
-        private void OpenFile()
-        {
-            //TODO: 检查是否需要保存现有文件
-            // 文件夹对话框
-            Microsoft.Win32.OpenFileDialog dialog =
-                new Microsoft.Win32.OpenFileDialog
-                {
-                    RestoreDirectory = true,
-                    Filter = "多分支导航文件|*.mbtxt"
-                };
-            if (Directory.Exists(FileDirPath))
-            {
-                dialog.InitialDirectory = FileDirPath;
-            }
-            if (dialog.ShowDialog() == true)
-            {
-
-                fileNameTxt.Text = dialog.FileName;
-                //关闭原有标签页
-                while (workTabControl.Items.Count > 0)
-                {
-                    (workTabControl.SelectedItem as MBTabItem).Close();
-                }
-                //打开新文件
-                flowChart.Load(dialog.FileName);
-                workGrid.Visibility = Visibility.Visible;
-            }
         }
         #endregion
     }

@@ -343,6 +343,11 @@ namespace MultiBranchTexter.Controls
             List<NodeButton> nodeButtons = new List<NodeButton>();
 
             int num = textNodes.Count;
+            if (num == 0)
+            { 
+                Debug.WriteLine("创建了空节点图");
+                return;
+            }
             //node所在组数，实际是画图后的行数
             int[] groupIndexOfBtns = new int[num];
             //二维List，对NodeButton分组

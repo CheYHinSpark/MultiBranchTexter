@@ -1,11 +1,14 @@
 ﻿using MultiBranchTexter.Controls;
+using MultiBranchTexter.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -14,6 +17,12 @@ namespace MultiBranchTexter.ViewModel
     public class MainViewModel : ViewModelBase
     {
         #region 左右显示相关
+        private Visibility _isWorkGridVisible;
+        public Visibility IsWorkGridVisible
+        {
+            get { return _isWorkGridVisible; }
+            set { _isWorkGridVisible = value; RaisePropertyChanged("IsWorkGridVisible"); }
+        }
         private bool? _isFlowChartShowing;
         public bool? IsFlowChartShowing
         {
@@ -83,6 +92,22 @@ namespace MultiBranchTexter.ViewModel
         }
         #endregion
 
+        #region 文件相关
+        private string _fileName;
+        public string FileName
+        {
+            get { return _fileName; }
+            set 
+            {
+                _fileName = value;
+                if (value != "")
+                { _fileDirPath = value.Substring(0, value.LastIndexOfAny(new char[] { '\\', '/' }) + 1); }
+                RaisePropertyChanged("FileName");
+            }
+        }
+        private string _fileDirPath;
+        #endregion
+
         #region workTab相关
         private int _textFontSize;
         public int TextFontSize
@@ -116,14 +141,76 @@ namespace MultiBranchTexter.ViewModel
         #endregion
 
         #region 命令
-        public ICommand FontSizeUpCommand => new RelayCommand(() =>
+        public ICommand FontSizeUpCommand => new RelayCommand((t) =>
         { TextFontSize++; });
-        public ICommand FontSizeDownCommand => new RelayCommand(() =>
+        public ICommand FontSizeDownCommand => new RelayCommand((t) =>
         { TextFontSize--; });
+        public ICommand NewFileCommand => new RelayCommand((container) =>
+        {
+            try
+            {
+                FlowChartContainer flowChart = container as FlowChartContainer;
+                //TODO: 检查是否需要保存现有文件
+                // 文件夹对话框
+                Microsoft.Win32.SaveFileDialog dialog =
+                    new Microsoft.Win32.SaveFileDialog
+                    {
+                        RestoreDirectory = true,
+                        Filter = "多分支导航文件|*.mbtxt"
+                    };
+                if (Directory.Exists(_fileDirPath))
+                { dialog.InitialDirectory = _fileDirPath; }
+                if (dialog.ShowDialog() == true)
+                {
+                    Stream myStream;
+                    if ((myStream = dialog.OpenFile()) != null)
+                    {
+                        myStream.Write(new byte[] { 0 }, 0, 0);
+                        myStream.Close();
+                    }
+                    FileName = dialog.FileName;
+                    //关闭原有标签页
+                    WorkTabs.Clear();
+                    //打开新文件
+                    flowChart.Load(dialog.FileName);
+                    IsWorkGridVisible = Visibility.Visible;
+                }
+            }
+            catch { }
+        });
+        public ICommand OpenFileCommand => new RelayCommand((container) =>
+        {
+            try
+            {
+                FlowChartContainer flowChart = container as FlowChartContainer;
+                //TODO: 检查是否需要保存现有文件
+                // 文件夹对话框
+                Microsoft.Win32.OpenFileDialog dialog =
+                    new Microsoft.Win32.OpenFileDialog
+                    {
+                        RestoreDirectory = true,
+                        Filter = "多分支导航文件|*.mbtxt"
+                    };
+                if (Directory.Exists(_fileDirPath))
+                { dialog.InitialDirectory = _fileDirPath; }
+                if (dialog.ShowDialog() == true)
+                {
+                    FileName = dialog.FileName;
+                    //关闭原有标签页
+                    WorkTabs.Clear();
+                    //打开新文件
+                    flowChart.Load(dialog.FileName);
+                    IsWorkGridVisible = Visibility.Visible;
+                }
+            }
+            catch { }
+        });
         #endregion
 
         public MainViewModel()
         {
+            IsWorkGridVisible = Visibility.Hidden;
+            FileName = "";
             TextFontSize = 14;
             IsFlowChartShowing = true;
             IsWorkTabShowing = false;
@@ -157,7 +244,37 @@ namespace MultiBranchTexter.ViewModel
                 //    //item.PropertyChanged += EntityViewModelPropertyChanged;
                 //}
             }
+            else if (e.Action == NotifyCollectionChangedAction.Reset)
+            {
+                if (_workTabs.Count == 0)
+                {
+                    IsFlowChartShowing = true;
+                    IsWorkTabShowing = false;
+                }
+            }
             RaisePropertyChanged("WorkTabs");
         }
+
+        #region 方法
+        //打开标签页
+        public void OpenMBTabItem(TextNode node)
+        {
+            //遍历已有的标签页看看是否已经存在同标签
+            for (int i = 0; i < WorkTabs.Count; i++)
+            {
+                if (WorkTabs[i].textNode == node)
+                {
+                    SelectedIndex = i;
+                    //打开worktab
+                    IsWorkTabShowing = true;
+                    return;
+                }
+            }
+            WorkTabs.Add(new MBTabItem(node));
+            SelectedIndex = WorkTabs.Count - 1;
+            //打开worktab
+            IsWorkTabShowing = true;
+        }
+        #endregion
     }
 }

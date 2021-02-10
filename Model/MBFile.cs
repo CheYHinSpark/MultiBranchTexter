@@ -22,10 +22,8 @@ namespace MultiBranchTexter.Model
         public List<TextNode> Read()
         {
             if (!File.Exists(Path))
-            {
-                MessageBox.Show("文件不存在！");
-                return null;
-            }
+            { throw new System.Exception("文件不存在！"); }
+
             FileStream fs = new FileStream(Path, FileMode.Open, FileAccess.Read);
             StreamReader reader = new StreamReader(fs, Encoding.Default);
 
