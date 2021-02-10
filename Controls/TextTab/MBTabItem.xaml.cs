@@ -1,5 +1,6 @@
 ﻿using MultiBranchTexter.Controls;
 using MultiBranchTexter.Model;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -149,7 +150,7 @@ namespace MultiBranchTexter.Controls
             { return; }
 
             //移除自身
-            parent.Items.Remove(this);
+            (parent.ItemsSource as ObservableCollection<MBTabItem>).Remove(this);
             //移除事件
             parent.SizeChanged -= parent_SizeChanged;
 
@@ -169,14 +170,7 @@ namespace MultiBranchTexter.Controls
                     item.Width = perWidth;
                 }
             }
-            //如果是最后一项被关掉了
-            if (parent.Items.Count == 0)
-            {
-                // 本控件已经移除，所以依赖对象不能是this
-                ControlTreeHelper.FindParentOfType<MainWindow>(parent).CloseWorkTab();
-            }
         }
         #endregion
-
     }
 }

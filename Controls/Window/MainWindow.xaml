@@ -39,7 +39,7 @@
                       M4,0 6,0 L6,4"/>
             <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
                        Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
-            <CheckBox x:Name="flowChartBtn" Width="28" Tag="r" ToolTip="节点图"
+            <CheckBox Width="28" Tag="r" ToolTip="节点图"
                       Style="{DynamicResource generalCheckBoxStyle}" 
                       IsChecked="{Binding IsFlowChartShowing}" 
                       IsEnabled="{Binding CanHideFlowChart}"
@@ -47,7 +47,7 @@
                       M3,3 L3,11 M11,3 11,7 5,7 L5,11
                       M1,11 1,14 7,14 7,11 Z
                       M8,0 8,3 14,3 14,0 Z"/>
-            <CheckBox x:Name="workTabBtn" Width="28" Tag="l" ToolTip="文本页"
+            <CheckBox Width="28" Tag="l" ToolTip="文本页"
                       Style="{DynamicResource generalCheckBoxStyle}"
                       IsChecked="{Binding IsWorkTabShowing}" 
                       IsEnabled="{Binding CanHideWorkTab}"
@@ -55,14 +55,14 @@
                       M0,4 L14,4 M0,8 L9,8 M0,12 L14,12"/>
             <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
                        Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
-            <Button x:Name="fontDownBtn" Width="28"
-                    ToolTip="字体缩小" Click="FontBtn_Click"
+            <Button ToolTip="字体缩小" Width="28"
+                    Command="{Binding FontSizeDownCommand}"
                     Style="{DynamicResource generalButtonStyle}"
                     Content="M0,16 5,4 L10,16 M2,11 L8,11
                       M12,16 14,11.2 16,16
                       M10,4 16,4"/>
-            <Button x:Name="fontUpBtn" Width="28"
-                    ToolTip="字体放大" Click="FontBtn_Click"
+            <Button ToolTip="字体放大" Width="28"
+                    Command="{Binding FontSizeUpCommand}"
                     Style="{DynamicResource generalButtonStyle}"
                     Content="M6,16 11,4 L16,16 M8,11 L14,11
                       M0,16 2,11.2 4,16
@@ -112,7 +112,9 @@
                 <ColumnDefinition Width="{Binding WorkTabWidth}"/>
             </Grid.ColumnDefinitions>
             <c:FlowChartContainer x:Name="flowChart" Grid.Column="0" />
-            <TabControl x:Name="workTabControl" Grid.Column="1" Padding="0" />
+            <TabControl x:Name="workTabControl" Grid.Column="1" Padding="0" 
+                        ItemsSource="{Binding WorkTabs, Mode=TwoWay}"
+                        SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"/>
         </Grid>
     </Grid>
 

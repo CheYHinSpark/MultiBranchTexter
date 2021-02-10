@@ -59,14 +59,6 @@ namespace MultiBranchTexter
             }
         }
 
-        private void FontBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if ((sender as Button).Name == "fontDownBtn")
-            { _viewModel.TextFontSize--; }
-            else
-            { _viewModel.TextFontSize++; }
-        }
-
         private void fileBtn_Click(object sender, RoutedEventArgs e)
         {
             OpenFile();
@@ -79,18 +71,18 @@ namespace MultiBranchTexter
         public void OpenMBTabItem(TextNode node)
         {
             //遍历已有的标签页看看是否已经存在同标签
-            foreach (MBTabItem mBTabItem in workTabControl.Items)
+            for (int i =0;i < _viewModel.WorkTabs.Count;i++)
             {
-                if (mBTabItem.textNode == node)
+                if (_viewModel.WorkTabs[i].textNode == node)
                 {
-                    workTabControl.SelectedItem = mBTabItem;
+                    _viewModel.SelectedIndex = i;
                     //打开worktab
                     _viewModel.IsWorkTabShowing = true;
                     return;
                 }
             }
-            workTabControl.Items.Add(new MBTabItem(node));
-            workTabControl.SelectedIndex = workTabControl.Items.Count - 1;
+            _viewModel.WorkTabs.Add(new MBTabItem(node));
+            _viewModel.SelectedIndex = workTabControl.Items.Count - 1;
             //打开worktab
             _viewModel.IsWorkTabShowing = true;
         }
@@ -144,8 +136,9 @@ namespace MultiBranchTexter
 
         private void OpenFile()
         {
+            //TODO: 检查是否需要保存现有文件
             // 文件夹对话框
-            Microsoft.Win32.OpenFileDialog dialog =
+            Microsoft.Win32.OpenFileDialog dialog =
                 new Microsoft.Win32.OpenFileDialog
                 {
                     RestoreDirectory = true,
@@ -157,7 +150,6 @@ namespace MultiBranchTexter
             }
             if (dialog.ShowDialog() == true)
             {
-                //TODO: 检查是否需要保存现有文件
 
                 fileNameTxt.Text = dialog.FileName;
                 //关闭原有标签页

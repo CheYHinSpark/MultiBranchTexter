@@ -1,7 +1,13 @@
-﻿using System;
+﻿using MultiBranchTexter.Controls;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Text;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace MultiBranchTexter.ViewModel
 {
@@ -77,6 +83,7 @@ namespace MultiBranchTexter.ViewModel
         }
         #endregion
 
+        #region workTab相关
         private int _textFontSize;
         public int TextFontSize
         {
@@ -92,6 +99,29 @@ namespace MultiBranchTexter.ViewModel
             }
         }
 
+        private ObservableCollection<MBTabItem> _workTabs;
+        public ObservableCollection<MBTabItem> WorkTabs
+        {
+            get { return _workTabs; }
+            set
+            { _workTabs = value; RaisePropertyChanged("WorkTabs"); }
+        }
+
+        private int _selectedIndex;
+        public int SelectedIndex
+        {
+            get { return _selectedIndex; }
+            set { _selectedIndex = value; RaisePropertyChanged("SelectedIndex"); }
+        }
+        #endregion
+
+        #region 命令
+        public ICommand FontSizeUpCommand => new RelayCommand(() =>
+        { TextFontSize++; });
+        public ICommand FontSizeDownCommand => new RelayCommand(() =>
+        { TextFontSize--; });
+        #endregion
+
         public MainViewModel()
         {
             TextFontSize = 14;
@@ -99,6 +129,35 @@ namespace MultiBranchTexter.ViewModel
             IsWorkTabShowing = false;
             CanHideWorkTab = true;
             CanHideFlowChart = false;
+            WorkTabs = new ObservableCollection<MBTabItem>();
+            SelectedIndex = 0;
+            WorkTabs.CollectionChanged += WorkTabs_CollectionChanged;
+        }
+
+        private void WorkTabs_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                if (_workTabs.Count == 0)
+                {
+                    IsFlowChartShowing = true;
+                    IsWorkTabShowing = false;
+                }
+                //foreach (MBTabItem item in e.OldItems)
+                //{
+                //    //Removed items
+                //    //item.PropertyChanged -= EntityViewModelPropertyChanged;
+                //}
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                //foreach (MBTabItem item in e.NewItems)
+                //{
+                //    //Added items
+                //    //item.PropertyChanged += EntityViewModelPropertyChanged;
+                //}
+            }
+            RaisePropertyChanged("WorkTabs");
         }
     }
 }
