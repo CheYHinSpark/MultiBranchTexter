@@ -661,18 +661,21 @@
     <!--TabItem模板-->
     <ControlTemplate x:Key="MBTabItemTemplate" TargetType="{x:Type TabItem}">
         <Border x:Name="BD" BorderBrush="{DynamicResource MainBrush}" 
-                Background="{DynamicResource MainBrush}"
+                Background="{DynamicResource MainBrush}" TextElement.Foreground="AliceBlue"
                 BorderThickness="1" CornerRadius="4,4,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
                 <ContentPresenter x:Name="CP" Grid.Column="0" 
                                   ContentSource="Header" Margin="2"
-                                  TextElement.Foreground="{DynamicResource Foreground.BaseBrush}"
+                                  TextElement.Foreground="{Binding ElementName=TB, Path=Foreground}"
                                   HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                <Button Grid.Column="1" Name="CloseBtn" 
+                <TextBlock x:Name="TB" Grid.Column="1" Text="{Binding IsModified}" 
+                           Foreground="{DynamicResource Foreground.BaseBrush}" />
+                <Button Grid.Column="2" Name="CloseBtn" 
                         Width="16" Height="16" x:Uid="0"
                         Template="{DynamicResource TabItemCloseBtnTemplate}"
                         HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -685,11 +688,11 @@
                     <Condition Property="IsMouseOver" Value="True"/>
                 </MultiTrigger.Conditions>
                 <Setter Property="Opacity" Value="0.8" TargetName="BD"/>
-                <Setter Property="TextElement.Foreground" Value="{DynamicResource Foreground.ThemeBrush}" TargetName="CP"/>
+                <Setter Property="Foreground" Value="{DynamicResource Foreground.ThemeBrush}" TargetName="TB"/>
                 <Setter Property="Background" Value="{DynamicResource ThemeBrush}" TargetName="BD"/>
             </MultiTrigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="TextElement.Foreground" Value="{DynamicResource Foreground.ThemeBrush}" TargetName="CP"/>
+                <Setter Property="Foreground" Value="{DynamicResource Foreground.ThemeBrush}" TargetName="TB"/>
                 <Setter Property="Background" Value="{DynamicResource ThemeBrush}" TargetName="BD"/>
                 <Setter Property="BorderThickness" Value="2,2,2,0" TargetName="BD"/>
                 <Setter Property="BorderBrush" Value="{DynamicResource ThemeBrush}" TargetName="BD"/>

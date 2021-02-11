@@ -48,12 +48,6 @@ namespace MultiBranchTexter.Controls
 
             SelectionChanged += TextBox_SelectionChanged;
             TextChanged += TextBox_TextChanged;
-            //Binding binding = new Binding
-            //{
-            //    Source = ControlTreeHelper.FindParentOfType<MainWindow>(this),
-            //    Path = TextFontSize
-            //};
-            //SetBinding(FontSizeProperty,binding);
         }
 
         private void PART_ContentHost_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)

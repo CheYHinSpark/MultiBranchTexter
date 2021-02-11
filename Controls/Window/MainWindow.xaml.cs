@@ -31,8 +31,6 @@ namespace MultiBranchTexter
             _viewModel.OpenMBTabItem(node);
         }
 
-      
-
         /// <summary>
         /// 返回首页，并且跳到对应节点位置
         /// </summary>
@@ -47,28 +45,12 @@ namespace MultiBranchTexter
         /// </summary>
         public void ReLoadTab(TextNode node)
         {
-            foreach (MBTabItem item in workTabControl.Items)
-            {
-                if (item.textNode == node)
-                {
-                    item.ReLoadTabEnd();
-                    return;
-                }
-            }
+            _viewModel.ReLoadTab(node);
         }
 
         public void DeleteTab(TextNode node)
         {
-            MBTabItem theItem = null;
-            foreach (MBTabItem item in workTabControl.Items)
-            {
-                if (item.textNode == node)
-                {
-                    theItem = item;
-                    break;
-                }
-            }
-            theItem.Close();
+            _viewModel.DeleteTab(node);
         }
         #endregion
     }

@@ -12,9 +12,18 @@
     <local:MetroWindow.DataContext>
         <vm:MainViewModel/>
     </local:MetroWindow.DataContext>
+    
     <local:MetroWindow.InputBindings>
-        <KeyBinding Gesture="Ctrl+N" Command="{Binding NewFileCommand}" />
-        <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenFileCommand}" />
+        <KeyBinding Gesture="Ctrl+N" Command="{Binding NewFileCommand}" 
+                    CommandParameter="{Binding ElementName=flowChart}"/>
+        <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenFileCommand}"
+                    CommandParameter="{Binding ElementName=flowChart}"/>
+        <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveNodeCommand}" 
+                    CommandParameter="{Binding ElementName=flowChart}"/>
+        <KeyBinding Gesture="Ctrl+Alt+S" Command="{Binding SaveFileCommand}" 
+                    CommandParameter="{Binding ElementName=flowChart}"/>
+        <KeyBinding Gesture="Ctrl+Shift+S" Command="{Binding SaveAsFileCommand}" 
+                    CommandParameter="{Binding ElementName=flowChart}"/>
     </local:MetroWindow.InputBindings>
     <Grid Background="{DynamicResource BaseBrush}">
         <Grid.RowDefinitions>

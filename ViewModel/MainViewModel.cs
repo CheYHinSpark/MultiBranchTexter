@@ -145,10 +145,12 @@ namespace MultiBranchTexter.ViewModel
         { TextFontSize++; });
         public ICommand FontSizeDownCommand => new RelayCommand((t) =>
         { TextFontSize--; });
+        //新建文件命令
         public ICommand NewFileCommand => new RelayCommand((container) =>
         {
             try
             {
+                Debug.WriteLine("开始新建文件");
                 FlowChartContainer flowChart = container as FlowChartContainer;
                 //TODO: 检查是否需要保存现有文件
                 // 文件夹对话框
@@ -178,10 +180,12 @@ namespace MultiBranchTexter.ViewModel
             }
             catch { }
         });
+        //打开文件命令
         public ICommand OpenFileCommand => new RelayCommand((container) =>
         {
             try
             {
+                Debug.WriteLine("开始打开文件");
                 FlowChartContainer flowChart = container as FlowChartContainer;
                 //TODO: 检查是否需要保存现有文件
                 // 文件夹对话框
@@ -202,6 +206,49 @@ namespace MultiBranchTexter.ViewModel
                     flowChart.Load(dialog.FileName);
                     IsWorkGridVisible = Visibility.Visible;
                 }
+            }
+            catch { }
+        });
+        //保存单个节点命令，但是在worktab没有打开时将执行savefile
+        public ICommand SaveNodeCommand => new RelayCommand((container) =>
+        {
+            try
+            {
+                if (IsWorkTabShowing == true && WorkTabs.Count > 0)
+                { 
+                    Debug.WriteLine("开始保存单个节点");
+                    WorkTabs[SelectedIndex].Save();
+                }
+                else
+                { SaveFile(container as FlowChartContainer); }
+            }
+            catch { }
+        });
+        public ICommand SaveFileCommand => new RelayCommand((container) =>
+        { SaveFile(container as FlowChartContainer); });
+        public ICommand SaveAsFileCommand => new RelayCommand((container) =>
+        {
+            try
+            {
+                Debug.WriteLine("开始另存为文件");
+                //TODO让每个worktab保存
+                FlowChartContainer flowChart = container as FlowChartContainer;
+                // TODO
+                //flowChart.GetTextNodeWithLeftTopList();
+                Microsoft.Win32.SaveFileDialog dialog =
+                    new Microsoft.Win32.SaveFileDialog
+                    {
+                        RestoreDirectory = true,
+                        Filter = "多分支导航文件|*.mbtxt"
+                    };
+
+                if (Directory.Exists(_fileDirPath))
+                { dialog.InitialDirectory = _fileDirPath; }
+                if (dialog.ShowDialog() == true)
+                {
+                    FileName = dialog.FileName;
+                }
+                //TODO保存文件
             }
             catch { }
         });
@@ -274,6 +321,61 @@ namespace MultiBranchTexter.ViewModel
             SelectedIndex = WorkTabs.Count - 1;
             //打开worktab
             IsWorkTabShowing = true;
+        }
+        /// <summary>
+        /// 重置某个标签页的页尾
+        /// </summary>
+        public void ReLoadTab(TextNode node)
+        {
+            foreach (MBTabItem item in WorkTabs)
+            {
+                if (item.textNode == node)
+                { item.ReLoadTabEnd(); return; }
+            }
+        }
+
+        /// <summary>
+        /// 删除某个标签页
+        /// </summary>
+        public void DeleteTab(TextNode node)
+        {
+            MBTabItem theItem = null;
+            foreach (MBTabItem item in WorkTabs)
+            {
+                if (item.textNode == node)
+                { theItem = item; break; }
+            }
+            theItem.Close();
+        }
+
+        public void SaveFile(FlowChartContainer flowChart)
+        {
+            try
+            {
+                Debug.WriteLine("开始保存文件");
+                //TODO让每个worktab保存
+                //TODO获得textNodewithlefttop
+                //flowChart.GetTextNodeWithLeftTopList();
+                // 如果文件名不存在
+                if (!File.Exists(_fileName))
+                {
+                    Microsoft.Win32.SaveFileDialog dialog =
+                        new Microsoft.Win32.SaveFileDialog
+                        {
+                            RestoreDirectory = true,
+                            Filter = "多分支导航文件|*.mbtxt"
+                        };
+
+                    if (Directory.Exists(_fileDirPath))
+                    { dialog.InitialDirectory = _fileDirPath; }
+                    if (dialog.ShowDialog() == true)
+                    {
+                        FileName = dialog.FileName;
+                    }
+                }
+                //TODO保存文件
+            }
+            catch { }
         }
         #endregion
     }

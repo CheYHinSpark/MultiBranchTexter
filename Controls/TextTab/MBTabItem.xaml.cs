@@ -1,5 +1,6 @@
 ﻿using MultiBranchTexter.Controls;
 using MultiBranchTexter.Model;
+using MultiBranchTexter.ViewModel;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
@@ -13,13 +14,16 @@ namespace MultiBranchTexter.Controls
     /// </summary>
     public partial class MBTabItem : TabItem
     {
+      
         public MBTabItem(TextNode node)
         {
             InitializeComponent();
             textNode = node;
             Header = node.Name;
-            textBox.Text = node.Text;
             tabEnd.SetTabEnd(node);
+            _viewModel = DataContext as TabItemViewModel;
+            _viewModel.NodeText = node.Text;
+            _viewModel.IsModified = "";
         }
 
         #region 成员变量
@@ -32,7 +36,9 @@ namespace MultiBranchTexter.Controls
         private TabControl parent;
 
         // 约定的宽度
-        private double conventionWidth = 120;
+        private readonly double conventionWidth = 120;
+
+        private readonly TabItemViewModel _viewModel;
         #endregion
 
         #region 事件
@@ -59,6 +65,7 @@ namespace MultiBranchTexter.Controls
         {
             Close();
         }
+
         /// <summary>
         /// 父级TabControl尺寸发生变化
         /// </summary>
@@ -104,11 +111,12 @@ namespace MultiBranchTexter.Controls
         {
             //注册父级TabControl尺寸发生变化事件
             parent.SizeChanged += parent_SizeChanged;
+            ObservableCollection<MBTabItem> parentItems = (parent.ItemsSource as ObservableCollection<MBTabItem>);
 
             //自适应
             //保持约定宽度item的临界个数
             int criticalCount = (int)(parent.ActualWidth / conventionWidth);
-            if (parent.Items.Count <= criticalCount)
+            if (parentItems.Count <= criticalCount)
             {
                 //小于等于临界个数 等于约定宽度
                 this.Width = conventionWidth;
@@ -116,8 +124,8 @@ namespace MultiBranchTexter.Controls
             else
             {
                 //大于临界个数 每项都设成平均宽度
-                double perWidth = parent.ActualWidth / parent.Items.Count;
-                foreach (MBTabItem item in parent.Items)
+                double perWidth = parent.ActualWidth / parentItems.Count;
+                foreach (MBTabItem item in parentItems)
                 {
                     item.Width = perWidth;
                 }
@@ -127,20 +135,13 @@ namespace MultiBranchTexter.Controls
         #endregion
 
         /// <summary>
-        /// 设置字体大小
-        /// </summary>
-        public void SetFontSize(int newSize)
-        {
-            textBox.FontSize = newSize;
-        }
-
-        /// <summary>
         /// 重置TabEnd
         /// </summary>
         public void ReLoadTabEnd()
         {
             tabEnd.LoadTabEnd();
         }
+
         /// <summary>
         /// 关闭自身
         /// </summary>
@@ -148,9 +149,23 @@ namespace MultiBranchTexter.Controls
         {
             if (parent == null)
             { return; }
-
+            //检查保存
+            if (_viewModel.IsModified == "*")
+            {
+                MessageBoxResult result = MessageBox.Show(ControlTreeHelper.FindParentOfType<MainWindow>(this),
+                    "文本尚未保存，是否保存？",
+                    "警告",
+                    MessageBoxButton.YesNoCancel,
+                    MessageBoxImage.Warning,
+                    MessageBoxResult.Cancel);
+                if (result == MessageBoxResult.Cancel)
+                { return; }
+                else if (result == MessageBoxResult.Yes)
+                { Save(); }
+            }
             //移除自身
-            (parent.ItemsSource as ObservableCollection<MBTabItem>).Remove(this);
+            ObservableCollection<MBTabItem> parentItems = (parent.ItemsSource as ObservableCollection<MBTabItem>);
+            parentItems.Remove(this);
             //移除事件
             parent.SizeChanged -= parent_SizeChanged;
 
@@ -158,10 +173,10 @@ namespace MultiBranchTexter.Controls
             //保持约定宽度item的临界个数
             int criticalCount = (int)(parent.ActualWidth / conventionWidth);
             //平均宽度
-            double perWidth = parent.ActualWidth / parent.Items.Count;
-            foreach (MBTabItem item in parent.Items)
+            double perWidth = parent.ActualWidth / parentItems.Count;
+            foreach (MBTabItem item in parentItems)
             {
-                if (parent.Items.Count <= criticalCount)
+                if (parentItems.Count <= criticalCount)
                 {
                     item.Width = conventionWidth;
                 }
@@ -170,6 +185,12 @@ namespace MultiBranchTexter.Controls
                     item.Width = perWidth;
                 }
             }
+        }
+
+        public void Save()
+        {
+            textNode.Text = _viewModel.NodeText;
+            _viewModel.IsModified = "";
         }
         #endregion
     }
