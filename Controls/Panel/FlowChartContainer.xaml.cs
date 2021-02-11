@@ -1,5 +1,6 @@
 ﻿using MultiBranchTexter.Converters;
 using MultiBranchTexter.Model;
+using MultiBranchTexter.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,13 +14,14 @@ using System.Windows.Media;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Data;
+using System.Collections.ObjectModel;
 
 namespace MultiBranchTexter.Controls
 {
     /// <summary>
     /// 流程图容器
     /// </summary>
-    public partial class FlowChartContainer : FlowChartBase
+    public partial class FlowChartContainer : UserControl
     {
         //与拖拽、移动有关的变量
         private Point _clickPoint;
@@ -27,38 +29,20 @@ namespace MultiBranchTexter.Controls
         private NodeBase waitingNode;
         public bool IsWaiting { get { return waitingNode != null; } }
         //搜索相关的变量
-        public List<NodeButton> searchedNodes = new List<NodeButton>();
         private int searchedIndex = -1;
-        
+
+        public FCCViewModel _viewModel;
 
         public FlowChartContainer()
         {
             InitializeComponent();
+            _viewModel = DataContext as FCCViewModel;
         }
 
         #region 事件
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             searchBox.SetFlowChartContainer(this);
-            //绑定数据
-            Binding binding1 = new Binding
-            {
-                Source = this,
-                Mode = BindingMode.OneWay,
-                Path = new PropertyPath("SelectedNodes"),
-                Converter = new ListToBoolConverter(),
-                ConverterParameter = 1//为两个统一坐标的Para
-            };
-            Binding binding2 = new Binding
-            {
-                Source = this,
-                Mode = BindingMode.OneWay,
-                Path = new PropertyPath("SelectedNodes"),
-                Converter = new ListToBoolConverter(),
-            };
-            BindingOperations.SetBinding(unitXMenuItem, IsEnabledProperty, binding1);
-            BindingOperations.SetBinding(unitYMenuItem, IsEnabledProperty, binding1);
-            BindingOperations.SetBinding(deleteItem, IsEnabledProperty, binding2);
             //测试读取Test文件夹下的mbtxt文件
             //Load(System.AppDomain.CurrentDomain.BaseDirectory + "Test\\test.mbtxt");
         }
@@ -101,9 +85,9 @@ namespace MultiBranchTexter.Controls
                     x = p.X - _clickPoint.X;
                     y = p.Y - _clickPoint.Y;
 
-                    for (int i =0;i<SelectedNodes.Count;i++)
+                    for (int i =0;i<_viewModel.SelectedNodes.Count;i++)
                     {
-                        SelectedNodes[i].Move(x / container.ScaleRatio, y / container.ScaleRatio);
+                        _viewModel.SelectedNodes[i].Move(x / container.ScaleRatio, y / container.ScaleRatio);
                     }
 
                     _clickPoint = e.GetPosition((ScrollViewer)sender);
@@ -149,7 +133,7 @@ namespace MultiBranchTexter.Controls
                 else//没有按下Ctrl
                 {
                     //取消选择
-                    ClearSelection();
+                    _viewModel.ClearSelection();
                     stateHint.Text = "";
                     //准备拖拽
                     this.Cursor = Cursors.Hand;
@@ -171,7 +155,8 @@ namespace MultiBranchTexter.Controls
                 point.Y *= -1;
                 Point lt = point + selectBorder.GetLeftTop();
                 Point rb = point + selectBorder.GetRightBottom();
-                List<NodeButton> newSelect = new List<NodeButton>();
+                _viewModel.ClearSelection();
+                ObservableCollection<NodeButton> newSelect = new ObservableCollection<NodeButton>();
                 foreach (UserControl control in container.Children)
                 {
                     if (control is NodeButton)
@@ -189,133 +174,6 @@ namespace MultiBranchTexter.Controls
                 NewSelection(newSelect);
             }
         }
-
-
-        #region 右键菜单
-        private void addItem_Click(object sender, RoutedEventArgs e)
-        {
-            //需要得到selectBd关于canvas的坐标
-            //获得了canvas相对于scrollviewer的坐标，这个point是经过放缩的
-            GeneralTransform gt = container.TransformToAncestor(this);
-            Point point = gt.Transform(new Point(0, 0));
-            point.X *= -1;//需要负号
-            point.Y *= -1;
-            point.X += _clickPoint.X;
-            point.Y += _clickPoint.Y;
-            NodeButton newNode = new NodeButton(new TextNode(GetNewName(), ""));
-            newNode.SetParent(container);
-            container.Children.Add(newNode);
-            Canvas.SetLeft(newNode, Math.Max(0, point.X / container.ScaleRatio - 50));
-            Canvas.SetTop(newNode, Math.Max(0, point.Y / container.ScaleRatio - 25));
-        }
-
-        private void deleteItem_Click(object sender, RoutedEventArgs e)
-        {
-            int n = SelectedNodes.Count;
-            MessageBoxResult warnResult = MessageBox.Show
-                (
-                ControlTreeHelper.FindParentOfType<MainWindow>(this),
-                "你即将删除" + n.ToString()
-                + "个节点！\n这将同时断开这些节点的所有连接线，并且此操作不可撤销！",
-                "警告",
-                MessageBoxButton.YesNo
-                );
-            if (warnResult == MessageBoxResult.No)
-            { return; }
-            while (SelectedNodes.Count > 0)
-            {
-                SelectedNodes[0].Delete();
-                SelectedNodes.RemoveAt(0);
-            }
-            SelectedNodes = new List<NodeButton>();
-        }
-
-        private void XItem_Click(object sender, RoutedEventArgs e)
-        {
-            string mode = (sender as MenuItem).Name;
-            double nX = Canvas.GetLeft(SelectedNodes[0]);
-            if (mode == "xavg")
-            {
-                for (int i = 1; i < SelectedNodes.Count; i++)
-                {
-                    nX += Canvas.GetLeft(SelectedNodes[i]);
-                }
-                nX /= SelectedNodes.Count;
-            }
-            else if (mode == "xmin")
-            {
-                for (int i = 1; i < SelectedNodes.Count; i++)
-                {
-                    double temp = Canvas.GetLeft(SelectedNodes[i]);
-                    if (nX > temp)
-                    {
-                        nX = temp;
-                    }
-                }
-            }
-            else
-            {
-                for (int i = 1; i < SelectedNodes.Count; i++)
-                {
-                    double temp = Canvas.GetLeft(SelectedNodes[i]);
-                    if (nX < temp)
-                    {
-                        nX = temp;
-                    }
-                }
-            }
-            //统一
-            for (int i = 0; i < SelectedNodes.Count; i++)
-            {
-                Canvas.SetLeft(SelectedNodes[i], nX);
-                SelectedNodes[i].UpdatePostLines();
-                SelectedNodes[i].UpdatePreLines();
-            }
-        }
-        private void YItem_Click(object sender, RoutedEventArgs e)
-        {
-            string mode = (sender as MenuItem).Name;
-            double nY = Canvas.GetTop(SelectedNodes[0]);
-            if (mode == "yavg")
-            {
-                for (int i = 1; i < SelectedNodes.Count; i++)
-                {
-                    nY += Canvas.GetTop(SelectedNodes[i]);
-                }
-                nY /= SelectedNodes.Count;
-            }
-            else if (mode == "ymin")
-            {
-                for (int i = 1; i < SelectedNodes.Count; i++)
-                {
-                    double temp = Canvas.GetTop(SelectedNodes[i]);
-                    if (nY > temp)
-                    {
-                        nY = temp;
-                    }
-                }
-            }
-            else
-            {
-                for (int i = 1; i < SelectedNodes.Count; i++)
-                {
-                    double temp = Canvas.GetTop(SelectedNodes[i]);
-                    if (nY < temp)
-                    {
-                        nY = temp;
-                    }
-                }
-            }
-            //统一
-            for (int i = 0; i < SelectedNodes.Count; i++)
-            {
-                Canvas.SetTop(SelectedNodes[i], nY);
-                SelectedNodes[i].UpdatePostLines();
-                SelectedNodes[i].UpdatePreLines();
-            }
-        }
-        #endregion
-
         #endregion
 
 
@@ -326,7 +184,7 @@ namespace MultiBranchTexter.Controls
         public void Load(string mbtxtPath)
         {
             container.Children.Clear();
-            SelectedNodes = new List<NodeButton>();// <--必须
+            _viewModel.SelectedNodes.Clear();// <--必须
             //测试读取Test文件夹下的mbtxt文件
             MBFileReader reader = new MBFileReader(mbtxtPath);
             DrawFlowChart(reader.Read());
@@ -644,28 +502,14 @@ namespace MultiBranchTexter.Controls
         #endregion
 
         #region 节点搜索功能
-        public void ClearSearch()
-        {
-            for (int i =0; i < searchedNodes.Count;i++)
-            {
-                if (SelectedNodes.Contains(searchedNodes[i]))
-                {
-                    searchedNodes[i].NodeState = NodeState.Selected;
-                }
-                else
-                {
-                    searchedNodes[i].NodeState = NodeState.Normal;
-                }
-            }
-            searchedNodes.Clear();
-        }
+        
 
         /// <summary>
         /// 根据信息搜索目标节点
         /// </summary>
         public void SearchNode(string info)
         {
-            ClearSearch();
+            _viewModel.ClearSearch();
             if (info == "")
             { return; }
             foreach (UserControl control in container.Children)
@@ -673,35 +517,38 @@ namespace MultiBranchTexter.Controls
                 if (control is NodeButton)
                 {
                     if ((control as NodeButton).BeSearch(info))
-                    { searchedNodes.Add((control as NodeButton)); }
+                    { _viewModel.SearchedNodes.Add((control as NodeButton)); }
                 }
             }
-            for (int i =0;i < searchedNodes.Count;i++)
+            for (int i =0;i < _viewModel.SearchedNodes.Count;i++)
             {
-                searchedNodes[i].NodeState = NodeState.Searched;
+                _viewModel.SearchedNodes[i].NodeState = NodeState.Searched;
             }
             //如果不为空，跳转到第一个查到的node
-            if (searchedNodes.Count > 0)
+            if (_viewModel.SearchedNodes.Count > 0)
             {
                 searchedIndex = 0;
-                ScrollToNode(searchedNodes[0]);
+                ScrollToNode(_viewModel.SearchedNodes[0]);
             }
         }
+
+        public void ClearSearch()
+        { _viewModel.ClearSearch(); }
 
         /// <summary>
         /// 根据节点找到
         /// </summary>
         public void SearchNode(TextNode node)
         {
-            ClearSearch();
+            _viewModel.ClearSearch();
             foreach (UserControl control in container.Children)
             {
                 if (control is NodeButton)
                 {
                     NodeButton nb = control as NodeButton;
                     if (nb.textNode == node)
-                    { 
-                        searchedNodes.Add(nb);
+                    {
+                        _viewModel.SearchedNodes.Add(nb);
                         nb.NodeState = NodeState.Searched;
                         searchedIndex = 0;
                         ScrollToNode(nb);
@@ -716,15 +563,15 @@ namespace MultiBranchTexter.Controls
         /// </summary>
         public void SearchNext(string info)
         {
-            if (searchedNodes.Count == 0)
+            if (_viewModel.SearchedNodes.Count == 0)
             { 
                 SearchNode(info);
                 return;
             }
             searchedIndex++;
-            if (searchedIndex >= searchedNodes.Count)
+            if (searchedIndex >= _viewModel.SearchedNodes.Count)
             { searchedIndex = 0; }
-            ScrollToNode(searchedNodes[searchedIndex]);
+            ScrollToNode(_viewModel.SearchedNodes[searchedIndex]);
         }
 
         /// <summary>
@@ -751,41 +598,26 @@ namespace MultiBranchTexter.Controls
         #region 节点选择功能与选择新后继节点功能
         public void NewSelection(NodeButton node)
         {
-            ClearSelection();
+            _viewModel.ClearSelection();
             stateHint.Text = "选中节点";
-            SelectedNodes = new List<NodeButton> { node };//这里不能用Add，否则无法通知到右键菜单
-            SelectedNodes[0].NodeState = NodeState.Selected;
+            _viewModel.SelectedNodes.Add(node);
+            _viewModel.SelectedNodes[0].NodeState = NodeState.Selected;
         }
-        public void NewSelection(List<NodeButton> nodes)
+        public void NewSelection(ObservableCollection<NodeButton> nodes)
         {
-            ClearSelection();
+            _viewModel.ClearSelection();
             for (int i =0; i < nodes.Count;i++)
             {
                 nodes[i].NodeState = NodeState.Selected;
             }
-            SelectedNodes = nodes;
+            _viewModel.SelectedNodes = nodes;
             stateHint.Text = "选中节点";
-        }
-        public void ClearSelection()
-        {
-            for (int i =0;i<SelectedNodes.Count;i++)
-            {
-                if (searchedNodes.Contains(SelectedNodes[i]))
-                {
-                    SelectedNodes[i].NodeState = NodeState.Searched;
-                }
-                else
-                {
-                    SelectedNodes[i].NodeState = NodeState.Normal;
-                }
-            }
-            SelectedNodes = new List<NodeButton>();//只能这样不能Clear，否则无法通知到右键菜单
         }
 
         public void AddSelection(NodeButton node)
         {
             node.NodeState = NodeState.Selected;
-            SelectedNodes.Add(node);
+            _viewModel.SelectedNodes.Add(node);
         }
 
         public void AddSelection(List<NodeButton> nodes)
@@ -793,7 +625,7 @@ namespace MultiBranchTexter.Controls
             for (int i = 0; i < nodes.Count; i++)
             {
                 nodes[i].NodeState = NodeState.Selected;
-                SelectedNodes.Add(nodes[i]);
+                _viewModel.SelectedNodes.Add(nodes[i]);
             }
         }
 

@@ -343,9 +343,12 @@ namespace MultiBranchTexter.ViewModel
             foreach (MBTabItem item in WorkTabs)
             {
                 if (item.textNode == node)
-                { theItem = item; break; }
+                { 
+                    theItem = item; 
+                    theItem.Close();
+                    return; 
+                }
             }
-            theItem.Close();
         }
 
         public void SaveFile(FlowChartContainer flowChart)

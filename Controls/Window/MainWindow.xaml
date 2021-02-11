@@ -14,7 +14,7 @@
     </local:MetroWindow.DataContext>
     
     <local:MetroWindow.InputBindings>
-        <KeyBinding Gesture="Ctrl+N" Command="{Binding NewFileCommand}" 
+        <KeyBinding Gesture="Ctrl+Shift+N" Command="{Binding NewFileCommand}" 
                     CommandParameter="{Binding ElementName=flowChart}"/>
         <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenFileCommand}"
                     CommandParameter="{Binding ElementName=flowChart}"/>

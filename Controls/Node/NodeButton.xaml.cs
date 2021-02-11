@@ -164,7 +164,7 @@ namespace MultiBranchTexter.Controls
         {
             MessageBoxResult warnResult = MessageBox.Show
                 (
-                ControlTreeHelper.FindParentOfType<MainWindow>(this),
+                Application.Current.MainWindow,
                 "确定要删除节点吗？\n这将同时断开节点的所有连接线，并且此操作不可撤销！",
                 "警告",
                 MessageBoxButton.YesNo
@@ -183,7 +183,7 @@ namespace MultiBranchTexter.Controls
             { return; }
             MessageBoxResult warnResult = MessageBox.Show
                 (
-                ControlTreeHelper.FindParentOfType<MainWindow>(this),
+                Application.Current.MainWindow,
                 "确定要变更后继条件吗？\n这将同时断开节点的所有后继连接线以及与所有后继节点的连接。\n此操作不可撤销！",
                 "警告",
                 MessageBoxButton.YesNo

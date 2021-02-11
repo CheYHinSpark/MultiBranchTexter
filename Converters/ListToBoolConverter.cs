@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
@@ -18,7 +19,7 @@ namespace MultiBranchTexter.Converters
             int i = 0;
             if (parameter != null)
             { i++; }
-            List<NodeButton> nbs = value as List<NodeButton>;
+            ObservableCollection<NodeButton> nbs = value as ObservableCollection<NodeButton>;
             return (nbs.Count > i);
         }
 

@@ -152,7 +152,8 @@ namespace MultiBranchTexter.Controls
             //检查保存
             if (_viewModel.IsModified == "*")
             {
-                MessageBoxResult result = MessageBox.Show(ControlTreeHelper.FindParentOfType<MainWindow>(this),
+                MessageBoxResult result = MessageBox.Show(
+                    Application.Current.MainWindow,
                     "文本尚未保存，是否保存？",
                     "警告",
                     MessageBoxButton.YesNoCancel,

@@ -27,9 +27,7 @@ namespace MultiBranchTexter
         #region 方法
         //打开标签页
         public void OpenMBTabItem(TextNode node)
-        {
-            _viewModel.OpenMBTabItem(node);
-        }
+        { _viewModel.OpenMBTabItem(node); }
 
         /// <summary>
         /// 返回首页，并且跳到对应节点位置
@@ -44,14 +42,13 @@ namespace MultiBranchTexter
         /// 重置某个标签页的页尾
         /// </summary>
         public void ReLoadTab(TextNode node)
-        {
-            _viewModel.ReLoadTab(node);
-        }
+        { _viewModel.ReLoadTab(node); }
 
         public void DeleteTab(TextNode node)
-        {
-            _viewModel.DeleteTab(node);
-        }
+        { _viewModel.DeleteTab(node); }
+
+        public FlowChartContainer GetFCC()
+        { return flowChart; }
         #endregion
     }
 }
