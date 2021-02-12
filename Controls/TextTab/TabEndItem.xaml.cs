@@ -47,7 +47,7 @@ namespace MultiBranchTexter.Controls
         {
             if (nextNode == null)
             { return; }
-            ControlTreeHelper.FindParentOfType<MainWindow>(this).OpenMBTabItem(nextNode);
+            (Application.Current.MainWindow as MainWindow).OpenMBTabItem(nextNode);
         }
 
         private void changeBtn_Click(object sender, RoutedEventArgs e)

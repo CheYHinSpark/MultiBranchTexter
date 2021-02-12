@@ -175,7 +175,7 @@ namespace MultiBranchTexter.Model
                 if (postNodes.Contains(textNodes[i].Node))
                 { return i; }
             }
-            throw new System.Exception("什么东西啊？");
+            return -1;//可能没有后继了
         }
     }
 

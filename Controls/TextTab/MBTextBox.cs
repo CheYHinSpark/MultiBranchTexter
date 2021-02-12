@@ -75,6 +75,7 @@ namespace MultiBranchTexter.Controls
             { sv.ScrollToVerticalOffset(rect.Top + sv.ContentVerticalOffset - 2); }
             else if (rect.Top > ActualHeight)
             { sv.ScrollToVerticalOffset(rect.Bottom - ActualHeight + sv.ContentVerticalOffset + 2); }
+            (Application.Current.MainWindow as MainWindow).GetFCC().IsModified = "*";
         }
 
         // 竖向滚动方法

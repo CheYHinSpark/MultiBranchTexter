@@ -103,7 +103,7 @@ namespace MultiBranchTexter.Controls
         private void gotoBtn_Click(object sender, RoutedEventArgs e)
         {
             //通知窗体切换页面，打开相应的标签页
-            ControlTreeHelper.FindParentOfType<MainWindow>(this).OpenMBTabItem(textNode);
+            (Application.Current.MainWindow as MainWindow).OpenMBTabItem(textNode);
         }
 
         //双击标题，可以改标题
@@ -130,7 +130,7 @@ namespace MultiBranchTexter.Controls
                     //没有重复，完成修改
                     textNode.Name = titleBox.Text;
                     //通知窗体改变相应的标签页
-                    ControlTreeHelper.FindParentOfType<MainWindow>(this).ReLoadTab(textNode);
+                    (Application.Current.MainWindow as MainWindow).ReLoadTab(textNode);
                 }
             }
         }
@@ -211,7 +211,8 @@ namespace MultiBranchTexter.Controls
                 endContainer.Child = newNode;
             }
             //通知窗体把对应的标签改了
-            ControlTreeHelper.FindParentOfType<MainWindow>(this).ReLoadTab(textNode);
+            (Application.Current.MainWindow as MainWindow).GetFCC().IsModified = "*";
+            (Application.Current.MainWindow as MainWindow).ReLoadTab(textNode);
         }
         #endregion
 
@@ -333,7 +334,6 @@ namespace MultiBranchTexter.Controls
             {
                 endNode = new NodeEndMA(textNode.endCondition as MultiAnswerCondition);
                 (endNode as NodeEndMA).SetFather(this);
-
             }
         }
 
@@ -474,6 +474,7 @@ namespace MultiBranchTexter.Controls
             { line.Update(); }
             foreach (ConnectingLine line in postLines)
             { line.Update(); }
+            (Application.Current.MainWindow as MainWindow).GetFCC().IsModified = "*";
         }
         #endregion
 
@@ -490,7 +491,8 @@ namespace MultiBranchTexter.Controls
             }
             UnLinkAllPost();//清除所有后继
             //通知窗体把对应的标签删掉
-            ControlTreeHelper.FindParentOfType<MainWindow>(this).DeleteTab(textNode);
+            (Application.Current.MainWindow as MainWindow).DeleteTab(textNode);
+            (Application.Current.MainWindow as MainWindow).GetFCC().IsModified = "*";
             //删掉自己
             ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this).Children.Remove(this);
         }

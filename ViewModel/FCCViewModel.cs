@@ -51,6 +51,7 @@ namespace MultiBranchTexter.ViewModel
             Canvas.SetLeft(newNode, Math.Max(0, point.X - 50));
             Canvas.SetTop(newNode, Math.Max(0, point.Y - 25));
             Debug.WriteLine("新建节点成功");
+            fcc.IsModified = "*";
         });
 
         public ICommand UniteXCommand => new RelayCommand((sender) =>
@@ -88,6 +89,7 @@ namespace MultiBranchTexter.ViewModel
                 SelectedNodes[i].UpdatePostLines();
                 SelectedNodes[i].UpdatePreLines();
             }
+            (Application.Current.MainWindow as MainWindow).GetFCC().IsModified = "*";
         });
 
         public ICommand UniteYCommand => new RelayCommand((sender) =>
@@ -125,6 +127,7 @@ namespace MultiBranchTexter.ViewModel
                 SelectedNodes[i].UpdatePostLines();
                 SelectedNodes[i].UpdatePreLines();
             }
+            (Application.Current.MainWindow as MainWindow).GetFCC().IsModified = "*";
         });
 
         public ICommand DeleteCommand => new RelayCommand((sender) =>
@@ -150,6 +153,7 @@ namespace MultiBranchTexter.ViewModel
             }
             SelectedNodes.Clear();
             Debug.WriteLine("删除了" + n.ToString() + "个节点");
+            (Application.Current.MainWindow as MainWindow).GetFCC().IsModified = "*";
         });
 
         public ICommand StartSearchCommand => new RelayCommand((t) =>

@@ -23,6 +23,19 @@ namespace MultiBranchTexter.Controls
     /// </summary>
     public partial class FlowChartContainer : UserControl
     {
+        public static DependencyProperty IsModifiedProperty =
+           DependencyProperty.Register("IsModified", //属性名称
+               typeof(string), //属性类型
+               typeof(FlowChartContainer), //该属性所有者，即将该属性注册到那个类上
+               new PropertyMetadata("")//属性默认值
+               );
+
+        public string IsModified
+        {
+            get { return (string)GetValue(IsModifiedProperty); }
+            set { SetValue(IsModifiedProperty, value); }
+        }
+
         //与拖拽、移动有关的变量
         private Point _clickPoint;
         //等待选择后继节点的node
@@ -43,8 +56,6 @@ namespace MultiBranchTexter.Controls
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             searchBox.SetFlowChartContainer(this);
-            //测试读取Test文件夹下的mbtxt文件
-            //Load(System.AppDomain.CurrentDomain.BaseDirectory + "Test\\test.mbtxt");
         }
 
         //滚轮事件
@@ -91,6 +102,8 @@ namespace MultiBranchTexter.Controls
                     }
 
                     _clickPoint = e.GetPosition((ScrollViewer)sender);
+
+                    IsModified = "*";
                 }
                 else { this.Cursor = Cursors.Arrow; }
             }
@@ -185,7 +198,6 @@ namespace MultiBranchTexter.Controls
         {
             container.Children.Clear();
             _viewModel.SelectedNodes.Clear();// <--必须
-            //测试读取Test文件夹下的mbtxt文件
             MBFileReader reader = new MBFileReader(mbtxtPath);
             DrawFlowChart(reader.Read());
         }
@@ -195,7 +207,7 @@ namespace MultiBranchTexter.Controls
         ///  根据List<TextNode>建立树状图
         /// 不处理循坏连接的情况，有向无环图排序
         /// </summary>
-        private void DrawFlowChart(List<TextNode> textNodes)
+        private void ReDrawFlowChart(List<TextNode> textNodes)
         {
             //nodeButtons总表
             List<NodeButton> nodeButtons = new List<NodeButton>();
@@ -332,6 +344,7 @@ namespace MultiBranchTexter.Controls
                 nodeButtons[i].AddPostLines(container);
             }
             Debug.WriteLine("节点图创建完成");
+            IsModified = "*";
         }
 
         /// <summary>
@@ -339,6 +352,7 @@ namespace MultiBranchTexter.Controls
         /// </summary>
         private void DrawFlowChart(List<TextNodeWithLeftTop> textNodes)
         {
+            Debug.WriteLine("开始绘制节点图");
             //nodeButtons总表
             List<NodeButton> nodeButtons = new List<NodeButton>();
 
@@ -347,13 +361,15 @@ namespace MultiBranchTexter.Controls
                 //初始化button
                 nodeButtons.Add(new NodeButton(textNodes[i].Node));
             }
+            Debug.WriteLine("节点创建完成");
             for (int i = 0; i < textNodes.Count; i++)
             {
                 if (textNodes[i].Node.endCondition == null)
                 {
                     int postIndex = textNodes[i].Node.GetPostNodeIndex(textNodes);
                     //为nodeButton添加post
-                    NodeButton.Link(nodeButtons[i], nodeButtons[postIndex]);
+                    if (postIndex >= 0)
+                        NodeButton.Link(nodeButtons[i], nodeButtons[postIndex]);
                 }
                 else if (textNodes[i].Node.endCondition is YesNoCondition)
                 {
@@ -379,6 +395,7 @@ namespace MultiBranchTexter.Controls
                     }
                 }
             }
+            Debug.WriteLine("节点链接完成");
             for (int i = 0; i < textNodes.Count; i++)
             {
                 Canvas.SetLeft(nodeButtons[i], Math.Max(0, textNodes[i].Left));
@@ -386,6 +403,7 @@ namespace MultiBranchTexter.Controls
                 container.Children.Add(nodeButtons[i]);
                 nodeButtons[i].SetParent(container);
             }
+            Debug.WriteLine("节点绘制完成");
             //添加线
             //连线现在放到别的地方，即nodebutton的loaded里面执行
             for (int i = 0; i < textNodes.Count; i++)
@@ -404,7 +422,7 @@ namespace MultiBranchTexter.Controls
         {
             List<TextNode> textNodes = GetTextNodeList();
             container.Children.Clear();
-            DrawFlowChart(textNodes);
+            ReDrawFlowChart(textNodes);
         }
 
         public void AddNodeButton(NodeBase preNode,NodeButton postNode, double xPos, double yPos)
@@ -423,6 +441,8 @@ namespace MultiBranchTexter.Controls
             //画两条线
             preNode.DrawPostLine(container, nodeButton);
             nodeButton.DrawPostLine(container, postNode);
+
+            IsModified = "*";
         }
         #endregion
 
@@ -684,7 +704,7 @@ namespace MultiBranchTexter.Controls
             ConnectingLine cl = new ConnectingLine(waitingNode, post);
             container.Children.Add(cl);
             //修改标签页
-            ControlTreeHelper.FindParentOfType<MainWindow>(this).ReLoadTab(waitingNode.fatherNode.textNode);
+            (Application.Current.MainWindow as MainWindow).ReLoadTab(waitingNode.fatherNode.textNode);
             waitingNode = null;
         }
         #endregion

@@ -171,6 +171,7 @@ namespace MultiBranchTexter.Controls
             EndNode.preLines.Remove(this);
             BeginNode.fatherNode.UpdatePostLines();
             EndNode.UpdatePreLines();
+            ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).IsModified = "*";
             ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this).Children.Remove(this);
         }
         #endregion

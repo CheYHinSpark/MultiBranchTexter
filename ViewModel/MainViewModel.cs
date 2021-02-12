@@ -214,6 +214,8 @@ namespace MultiBranchTexter.ViewModel
         {
             try
             {
+                if (IsWorkGridVisible == Visibility.Hidden)
+                { return; }
                 if (IsWorkTabShowing == true && WorkTabs.Count > 0)
                 { 
                     Debug.WriteLine("开始保存单个节点");
@@ -225,16 +227,18 @@ namespace MultiBranchTexter.ViewModel
             catch { }
         });
         public ICommand SaveFileCommand => new RelayCommand((container) =>
-        { SaveFile(container as FlowChartContainer); });
+        {
+            if (IsWorkGridVisible == Visibility.Hidden)
+            { return; }
+            SaveFile(container as FlowChartContainer); 
+        });
         public ICommand SaveAsFileCommand => new RelayCommand((container) =>
         {
             try
             {
+                if (IsWorkGridVisible == Visibility.Hidden)
+                { return; }
                 Debug.WriteLine("开始另存为文件");
-                //TODO让每个worktab保存
-                FlowChartContainer flowChart = container as FlowChartContainer;
-                // TODO
-                //flowChart.GetTextNodeWithLeftTopList();
                 Microsoft.Win32.SaveFileDialog dialog =
                     new Microsoft.Win32.SaveFileDialog
                     {
@@ -248,7 +252,8 @@ namespace MultiBranchTexter.ViewModel
                 {
                     FileName = dialog.FileName;
                 }
-                //TODO保存文件
+                //保存文件
+                SaveFile(container as FlowChartContainer);
             }
             catch { }
         });
@@ -339,12 +344,11 @@ namespace MultiBranchTexter.ViewModel
         /// </summary>
         public void DeleteTab(TextNode node)
         {
-            MBTabItem theItem = null;
             foreach (MBTabItem item in WorkTabs)
             {
                 if (item.textNode == node)
-                { 
-                    theItem = item; 
+                {
+                    MBTabItem theItem = item;
                     theItem.Close();
                     return; 
                 }
@@ -356,9 +360,9 @@ namespace MultiBranchTexter.ViewModel
             try
             {
                 Debug.WriteLine("开始保存文件");
-                //TODO让每个worktab保存
-                //TODO获得textNodewithlefttop
-                //flowChart.GetTextNodeWithLeftTopList();
+                //让每个worktab保存
+                for (int i = 0; i < WorkTabs.Count; i++)
+                { WorkTabs[i].Save(); }
                 // 如果文件名不存在
                 if (!File.Exists(_fileName))
                 {
@@ -376,7 +380,11 @@ namespace MultiBranchTexter.ViewModel
                         FileName = dialog.FileName;
                     }
                 }
-                //TODO保存文件
+                //保存文件
+                MBFileWriter writer = new MBFileWriter(_fileName);
+                writer.Write(flowChart.GetTextNodeWithLeftTopList());
+                flowChart.IsModified = "";
+                Debug.WriteLine("文件保存成功");
             }
             catch { }
         }
