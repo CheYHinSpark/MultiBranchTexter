@@ -345,7 +345,7 @@ namespace MultiBranchTexter.Controls
         {
             if (textNode.endCondition == null)//表示是无选项的
             {
-                if (postNodes.Count == 0)
+                if (postNodes.Count == 0)//可能没有
                 { return; }
                 ConnectingLine line = new ConnectingLine
                 {
@@ -359,22 +359,31 @@ namespace MultiBranchTexter.Controls
             else if (textNode.endCondition is YesNoCondition)
             {
                 NodeEndYesNo tempNode = endNode as NodeEndYesNo;
-                ConnectingLine line1 = new ConnectingLine
+                foreach (NodeButton nodeButton in postNodes)
                 {
-                    BeginNode = tempNode.yesNode,
-                    EndNode = postNodes[0]
-                };
-                ConnectingLine line2 = new ConnectingLine
-                {
-                    BeginNode = tempNode.noNode,
-                    EndNode = postNodes[1]
-                };
-                postNodes[0].preLines.Add(line1);
-                postNodes[1].preLines.Add(line2);
-                postLines.Add(line1);
-                postLines.Add(line2);
-                container.Children.Add(line1);
-                container.Children.Add(line2);
+                    if ((textNode.endCondition as YesNoCondition).YesNode == nodeButton.textNode)
+                    {
+                        ConnectingLine line = new ConnectingLine
+                        {
+                            BeginNode = tempNode.yesNode,
+                            EndNode = nodeButton
+                        };
+                        nodeButton.preLines.Add(line);
+                        postLines.Add(line);
+                        container.Children.Add(line);
+                    }
+                    if ((textNode.endCondition as YesNoCondition).NoNode == nodeButton.textNode)
+                    {
+                        ConnectingLine line = new ConnectingLine
+                        {
+                            BeginNode = tempNode.noNode,
+                            EndNode = nodeButton
+                        };
+                        nodeButton.preLines.Add(line);
+                        postLines.Add(line);
+                        container.Children.Add(line);
+                    }
+                }
             }
             else if (textNode.endCondition is MultiAnswerCondition)
             {

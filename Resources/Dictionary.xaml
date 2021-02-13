@@ -4,6 +4,7 @@
                     xmlns:c="clr-namespace:MultiBranchTexter.Controls"
                     xmlns:cvt="clr-namespace:MultiBranchTexter.Converters"
                     >
+
     <!--颜色部分-->
     <!--主题色-->
     <Color x:Key="Theme">#EEAA16</Color>
@@ -544,8 +545,9 @@
 
     <!--窗体控件模板-->
     <ControlTemplate x:Key="MetroWindowTemplate" TargetType="{x:Type local:MetroWindow}">
-        <Border>
-            <Grid x:Name="LayoutRoot" Background="{DynamicResource ThemeBrush}">
+        <Border Background="Transparent" RenderTransformOrigin="0.5,0.5">
+            <Grid x:Name="LayoutRoot" Background="{DynamicResource ThemeBrush}"
+                  RenderTransformOrigin="0.5,0.5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="24"/>
                     <RowDefinition Height="Auto"/>
@@ -580,12 +582,12 @@
                               StrokeThickness="2" Data="M9,6 L21,18 M9,18 L21,6"/>
                     </Button>
                 </StackPanel>
-                <Grid x:Name="SettingPanel" Grid.Row="1" Height="0">
+                <Grid x:Name="SettingPanel" Grid.Row="1" Height="80" Opacity="0">
                     <CheckBox x:Name="darkModeBtn" Content="深色模式"/>
                 </Grid>
                 <!--内容部分-->
                 <AdornerDecorator Grid.Row="2">
-                    <ContentPresenter/>
+                    <ContentPresenter x:Name="CP" Opacity="0"/>
                 </AdornerDecorator>
                 <Border x:Name="UpperBd" Grid.Row="2" IsHitTestVisible="False"
                         Background="Transparent"/>
@@ -617,6 +619,23 @@
                     </BeginStoryboard>
                 </Trigger.ExitActions>
             </Trigger>
+            <EventTrigger RoutedEvent="Loaded">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation Duration="0:0:1" To="1"
+                                         Storyboard.TargetProperty="Opacity"
+                                         Storyboard.TargetName="CP"/>
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.Height)"
+                                             Storyboard.TargetName="SettingPanel">
+                            <SplineDoubleKeyFrame KeyTime="0:0:0" Value="60"/>
+                            <SplineDoubleKeyFrame KeyTime="0:0:1" Value="0" KeySpline="0.4,1,0.4,1"/>
+                        </DoubleAnimationUsingKeyFrames>
+                        <DoubleAnimation Duration="0:0:0" To="1" BeginTime="0:0:1.2"
+                                         Storyboard.TargetProperty="Opacity"
+                                         Storyboard.TargetName="SettingPanel"/>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <!--窗体控件Style-->
@@ -625,12 +644,11 @@
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="MinHeight" Value="300"/>
         <Setter Property="MinWidth" Value="400"/>
-        <Setter Property="WindowStyle" Value="None"/>
         <Setter Property="Template" Value="{StaticResource MetroWindowTemplate}"/>
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
                 <!--允许调整窗口大小-->
-                <WindowChrome GlassFrameThickness="-1" 
+                <WindowChrome GlassFrameThickness="0" 
                               CornerRadius="0" 
                               CaptionHeight="0"
                               UseAeroCaptionButtons="False"
@@ -754,148 +772,6 @@
         <Setter Property="CaretBrush" Value="{DynamicResource ThemeBrush}"/>
     </Style>
     
-    <!--searchBox的按钮模板-->
-    <ControlTemplate x:Key="searchBoxBtnTemp" TargetType="{x:Type Button}">
-        <Border x:Name="MainBorder" Background="Transparent">
-            <Grid>
-                <Path x:Name="CP" Stroke="White" StrokeThickness="2" Data="M4,10 L16,10 M12,5 16,10 L12,15"/>
-            </Grid>
-        </Border>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="MainBorder" Property="Background" Value="{DynamicResource Highlight.ThemeBrush}"/>
-            </Trigger>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="IsMouseOver" Value="True"/>
-                    <Condition Property="Name" Value="closeBtn"/>
-                </MultiTrigger.Conditions>
-                <Setter TargetName="MainBorder" Property="Background" Value="{DynamicResource RedBrush}"/>
-            </MultiTrigger>
-            <Trigger Property="Name" Value="closeBtn">
-                <Setter TargetName="CP" Property="Data" Value="M5,5 L15,15 M5,15 L15,5"/>
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-
-    <!--连接线style-->
-    <Style x:Key="connectingLinePathStyle" TargetType="{x:Type Path}">
-        <Setter Property="Stroke" Value="Aqua"/>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Stroke" Value="DarkOrange"/>
-            </Trigger>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="Tag" Value="1"/>
-                    <Condition Property="IsMouseOver" Value="False"/>
-                </MultiTrigger.Conditions>
-                <Setter Property="Stroke" Value="Goldenrod"/>
-            </MultiTrigger>
-        </Style.Triggers>
-    </Style>
-
-    <!--yesno答案框-->
-    <ControlTemplate x:Key="yesnoAnswerTemplate" TargetType="{x:Type c:NodeBase}">
-        <Border x:Name="ynBd" Background="{DynamicResource NodeBgBrush}" 
-                BorderBrush="{DynamicResource ThemeBrush}" 
-                BorderThickness="1" CornerRadius="4">
-            <Path x:Name="CP" StrokeThickness="2" Stroke="{DynamicResource Foreground.BaseBrush}" Data="M0,0 4,8 L10,0"
-                  VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        </Border>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource NodeBgHBrush}" TargetName="ynBd"/>
-            </Trigger>
-            <Trigger Property="Name" Value="noNode">
-                <Setter Property="Data" Value="M0,0 L9,9 M9,0 L0,9" TargetName="CP"/>
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-    <!--多选后继的单个答案框-->
-    <ControlTemplate x:Key="multiAnswerTemplate" TargetType="{x:Type c:NodeBase}">
-        <Grid Height="24">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button x:Name="maCloseBtn" Grid.Column="0" Width="0" Height="18">
-                <Button.Template>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="maBd" CornerRadius="6,0,0,6" Background="{DynamicResource ThemeBrush}">
-                            <Path x:Name="CP" Stroke="White" 
-                                  StrokeThickness="1" Data="M5,5 L13,13 M5,13 L13,5"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource RedBrush}" TargetName="maBd"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-            <Border x:Name="maBd"  Grid.Column="1"
-                    Background="{DynamicResource NodeBgBrush}" BorderBrush="{DynamicResource ThemeBrush}" 
-                    BorderThickness="1" CornerRadius="4">
-                <TextBox x:Name="answerTxt" Margin="2,2,8,2" Background="Transparent"/>
-            </Border>
-        </Grid>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource NodeBgHBrush}" TargetName="maBd"/>
-                <Trigger.EnterActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                                Storyboard.TargetName="maCloseBtn"
-                                Storyboard.TargetProperty="(Button.Width)"
-                                To="16" Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.EnterActions>
-                <Trigger.ExitActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                                Storyboard.TargetName="maCloseBtn"
-                                Storyboard.TargetProperty="(Button.Width)"
-                                To="0" Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.ExitActions>
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-    <!--多选后继下面的添加按钮-->
-    <ControlTemplate x:Key="addAnswerButtonTemplate" TargetType="{x:Type Button}">
-        <Border x:Name="BD" CornerRadius="0,0,4,4" BorderThickness="1,0,1,1" 
-                Background="{DynamicResource BaseBrush}" BorderBrush="{DynamicResource ThemeBrush}">
-            <Path Stroke="{DynamicResource Foreground.BaseBrush}"
-                  Data="M0,4 L8,4 M4,0 L4,8"
-                  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Border>
-        <ControlTemplate.Triggers>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="IsPressed" Value="False"/>
-                    <Condition Property="IsMouseOver" Value="True"/>
-                </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{DynamicResource Highlight.BaseBrush}" TargetName="BD"/>
-            </MultiTrigger>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" TargetName="BD">
-                    <Setter.Value>
-                        <RadialGradientBrush>
-                            <GradientStop Color="{DynamicResource Base}" Offset="0.4"/>
-                            <GradientStop Color="{DynamicResource Theme}" Offset="1"/>
-                        </RadialGradientBrush>
-                    </Setter.Value>
-                </Setter>
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-
-
     <!--控制下面东西升降的按钮的template-->
     <ControlTemplate x:Key="upDownCheckBoxTemplate" TargetType="{x:Type CheckBox}">
         <Border x:Name="cbBd" Background="{DynamicResource ThemeBrush}"

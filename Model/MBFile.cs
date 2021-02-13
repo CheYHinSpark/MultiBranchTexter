@@ -124,6 +124,7 @@ namespace MultiBranchTexter.Model
                 }
             }
             //关闭流
+            fs.Flush();
             reader.Close();
             fs.Close();
             Debug.WriteLine("读取文件" + Path + "成功");
@@ -152,7 +153,10 @@ namespace MultiBranchTexter.Model
             FileInfo fileInfo = new FileInfo(Path);
             string dir = fileInfo.DirectoryName;
 
-            FileStream fs = new FileStream(Path, FileMode.OpenOrCreate, FileAccess.Write);
+            FileStream fs = new FileStream(Path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            //清空文件
+            fs.Seek(0, SeekOrigin.Begin);
+            fs.SetLength(0);
             StreamWriter writer = new StreamWriter(fs, Encoding.Default);
             writer.WriteLine("[Nodes]");
             for (int i = 0;i < nodes.Count;i++)
@@ -161,9 +165,10 @@ namespace MultiBranchTexter.Model
                     + nodes[i].Left.ToString() + ","
                     + nodes[i].Top.ToString());
                 FileStream nodeFs = new FileStream(dir + "\\" + nodes[i].Node.Name,
-                    FileMode.OpenOrCreate, FileAccess.Write);
+                    FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 StreamWriter nodeWriter = new StreamWriter(nodeFs, Encoding.Default);
                 nodeWriter.Write(nodes[i].Node.Text);
+                nodeFs.Flush();
                 nodeWriter.Close();
                 nodeFs.Close();
             }
@@ -216,6 +221,7 @@ namespace MultiBranchTexter.Model
                     writer.WriteLine(vs);
                 }
             }
+            fs.Flush();
             writer.Close();
             fs.Close();
         }

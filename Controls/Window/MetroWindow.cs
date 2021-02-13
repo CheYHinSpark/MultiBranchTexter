@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 
 namespace MultiBranchTexter
 {
@@ -43,12 +44,15 @@ namespace MultiBranchTexter
             get { return (bool)GetValue(ShowSettingsProperty); }
             set { SetValue(ShowSettingsProperty, value); }
         }
+
+        public static DependencyProperty ScaleRatioProperty =
+          DependencyProperty.Register("ScaleRatio", typeof(double),
+              typeof(MetroWindow), new PropertyMetadata(0.0));
         #endregion
 
         private CheckBox DarkModeBtn;
 
         //标题栏
-        //private Button SettingBtn;
         private CheckBox MaxButton;
         private TextBlock WindowTitleTbl;
 
@@ -96,7 +100,9 @@ namespace MultiBranchTexter
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+           
+                Close();
+            
         }
 
         private void MaxButton_Click(object sender, RoutedEventArgs e)
@@ -113,7 +119,9 @@ namespace MultiBranchTexter
 
         private void MinButton_Click(object sender, RoutedEventArgs e)
         {
-            this.WindowState = WindowState.Minimized;
+           
+                this.WindowState = WindowState.Minimized;
+                
         }
 
         // 实现窗体移动

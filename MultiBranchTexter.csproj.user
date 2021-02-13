@@ -63,6 +63,9 @@
     <Page Update="Controls\TextTab\TabEndItem.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Resources\FCCResources.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Resources\DarkColorDictionary.xaml">
       <SubType>Designer</SubType>
     </Page>
