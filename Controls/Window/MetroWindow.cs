@@ -23,7 +23,8 @@ namespace MultiBranchTexter
                 if ((bool?)GetValue(IsDarkModeProperty) != value)
                 {
                     SetValue(IsDarkModeProperty, value);
-                    Application.Current.Resources.MergedDictionaries.RemoveAt(1);
+                    Application.Current.Resources.MergedDictionaries
+                        .RemoveAt(Application.Current.Resources.MergedDictionaries.Count - 1);
                     Application.Current.Resources.MergedDictionaries
                         .Add(new ResourceDictionary
                         {
@@ -100,9 +101,27 @@ namespace MultiBranchTexter
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-           
-                Close();
-            
+            if ((Application.Current.MainWindow as MainWindow).GetFCC().IsModified == "*")
+            {
+                MessageBoxResult warnResult = MessageBox.Show
+                    (
+                    Application.Current.MainWindow,
+                    "尚未保存，是否保存？",
+                    "警告",
+                    MessageBoxButton.YesNoCancel
+                    );
+                if (warnResult == MessageBoxResult.Yes)
+                {
+                    (Application.Current.MainWindow as MainWindow)
+                        .ViewModel.SaveFile((Application.Current.MainWindow as MainWindow).GetFCC());
+                    Close();
+                }
+                else if (warnResult == MessageBoxResult.No)
+                {
+                    Close();
+                }
+            }
+            else { Close(); }
         }
 
         private void MaxButton_Click(object sender, RoutedEventArgs e)
@@ -119,9 +138,7 @@ namespace MultiBranchTexter
 
         private void MinButton_Click(object sender, RoutedEventArgs e)
         {
-           
-                this.WindowState = WindowState.Minimized;
-                
+            this.WindowState = WindowState.Minimized;
         }
 
         // 实现窗体移动

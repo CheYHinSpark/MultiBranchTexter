@@ -152,7 +152,25 @@ namespace MultiBranchTexter.ViewModel
             {
                 Debug.WriteLine("开始新建文件");
                 FlowChartContainer flowChart = container as FlowChartContainer;
-                //TODO: 检查是否需要保存现有文件
+                // 检查是否需要保存现有文件
+                if (flowChart.IsModified == "*")
+                {
+                    MessageBoxResult warnResult = MessageBox.Show
+                    (
+                        Application.Current.MainWindow,
+                        "尚未保存，是否保存？",
+                        "警告",
+                        MessageBoxButton.YesNoCancel
+                    );
+                    if (warnResult == MessageBoxResult.Yes)
+                    {
+                        SaveFile(flowChart);
+                    }
+                    else if (warnResult == MessageBoxResult.Cancel)
+                    {
+                        return;
+                    }
+                }
                 // 文件夹对话框
                 Microsoft.Win32.SaveFileDialog dialog =
                     new Microsoft.Win32.SaveFileDialog
@@ -187,7 +205,25 @@ namespace MultiBranchTexter.ViewModel
             {
                 Debug.WriteLine("开始打开文件");
                 FlowChartContainer flowChart = container as FlowChartContainer;
-                //TODO: 检查是否需要保存现有文件
+                // 检查是否需要保存现有文件
+                if (flowChart.IsModified == "*")
+                {
+                    MessageBoxResult warnResult = MessageBox.Show
+                    (
+                        Application.Current.MainWindow,
+                        "尚未保存，是否保存？",
+                        "警告",
+                        MessageBoxButton.YesNoCancel
+                    );
+                    if (warnResult == MessageBoxResult.Yes)
+                    {
+                        SaveFile(flowChart);
+                    }
+                    else if (warnResult == MessageBoxResult.Cancel)
+                    {
+                        return;
+                    }
+                }
                 // 文件夹对话框
                 Microsoft.Win32.OpenFileDialog dialog =
                     new Microsoft.Win32.OpenFileDialog

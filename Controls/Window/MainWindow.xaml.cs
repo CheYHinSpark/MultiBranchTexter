@@ -17,6 +17,7 @@ namespace MultiBranchTexter
     public partial class MainWindow : MetroWindow
     {
         private readonly MainViewModel _viewModel;
+        public MainViewModel ViewModel { get { return _viewModel; } }
 
         public MainWindow()
         {

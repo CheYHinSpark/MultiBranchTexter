@@ -6,9 +6,11 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/Dictionary.xaml"/>
-                <ResourceDictionary Source="Resources/LightColorDictionary.xaml"/>
+                <ResourceDictionary Source="Resources/WindowResources.xaml"/>
                 <ResourceDictionary Source="Resources/FCCResources.xaml"/>
+                <ResourceDictionary Source="Resources/Dictionary.xaml"/>
+                <!--把换色字典放在最后-->
+                <ResourceDictionary Source="Resources/LightColorDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
