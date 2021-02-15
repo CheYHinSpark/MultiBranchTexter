@@ -14,6 +14,7 @@
         <Border Grid.ColumnSpan="6" Background="{DynamicResource BaseBrush}"
                 BorderThickness="0,1,0,1" BorderBrush="{DynamicResource ThemeBrush}"/>
         <TextBlock x:Name="answerTxt" Grid.Column="0" Margin="4,2,4,2"
+                   Foreground="{DynamicResource Foreground.BaseBrush}"
                    HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <Path Grid.Column="1" Stroke="{DynamicResource Foreground.BaseBrush}" StrokeThickness="1" Data="M0,4 L24,4 M20,0 24,4 L20,8"
               HorizontalAlignment="Center" VerticalAlignment="Center"/>

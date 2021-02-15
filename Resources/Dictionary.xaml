@@ -11,7 +11,7 @@
     
     <!--不变颜色刷-->
     <SolidColorBrush x:Key="MiddleBrush" Color="#808080"/><!--中间灰色-->
-    <SolidColorBrush x:Key="ThemeBrush" Color="{DynamicResource Theme}"/>
+    <SolidColorBrush x:Key="ThemeBrush" Color="#FFEEAA16"/>
     <SolidColorBrush x:Key="Highlight.ThemeBrush" Color="#80FFFFFF"/>
     <SolidColorBrush x:Key="RedBrush" Color="#FFD44C45"/>
     

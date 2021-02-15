@@ -10,32 +10,6 @@ namespace MultiBranchTexter
     public class MetroWindow : Window
     {
         #region 依赖属性
-        public static DependencyProperty IsDarkModeProperty =
-          DependencyProperty.Register("IsDarkMode", typeof(bool?),
-              typeof(MetroWindow), new PropertyMetadata(false));
-
-        public bool? IsDarkMode
-        {
-            get { return (bool?)GetValue(IsDarkModeProperty); }
-            set
-            {
-                DarkModeBtn.IsChecked = value;
-                if ((bool?)GetValue(IsDarkModeProperty) != value)
-                {
-                    SetValue(IsDarkModeProperty, value);
-                    Application.Current.Resources.MergedDictionaries
-                        .RemoveAt(Application.Current.Resources.MergedDictionaries.Count - 1);
-                    Application.Current.Resources.MergedDictionaries
-                        .Add(new ResourceDictionary
-                        {
-                            Source = new Uri("pack://application:,,,/Resources/" +
-                            (value == true ? "Dark" : "Light") +
-                            "ColorDictionary.xaml")
-                        });
-                }
-            }
-        }
-
         public static DependencyProperty ShowSettingsProperty =
           DependencyProperty.Register("ShowSettings", typeof(bool),
               typeof(MetroWindow), new PropertyMetadata(false));
@@ -45,13 +19,7 @@ namespace MultiBranchTexter
             get { return (bool)GetValue(ShowSettingsProperty); }
             set { SetValue(ShowSettingsProperty, value); }
         }
-
-        public static DependencyProperty ScaleRatioProperty =
-          DependencyProperty.Register("ScaleRatio", typeof(double),
-              typeof(MetroWindow), new PropertyMetadata(0.0));
         #endregion
-
-        private CheckBox DarkModeBtn;
 
         //标题栏
         private CheckBox MaxButton;
@@ -60,7 +28,7 @@ namespace MultiBranchTexter
         public MetroWindow()
         {
             this.Loaded += MetroWindow_Loaded;
-            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight - 7;
+            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             this.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
         }
 
@@ -69,10 +37,8 @@ namespace MultiBranchTexter
             // 查找窗体模板
             if (App.Current.Resources["MetroWindowTemplate"] is ControlTemplate mWTemplate)
             {
-                DarkModeBtn = mWTemplate.FindName("darkModeBtn", this) as CheckBox;
                 MaxButton = mWTemplate.FindName("MaxWinButton", this) as CheckBox;
 
-                DarkModeBtn.Click += DarkModeBtn_Click;
                 MaxButton.Click += MaxButton_Click;
                 (mWTemplate.FindName("SettingButton", this) as Button).Click += SettingBtn_Click;
                 (mWTemplate.FindName("CloseWinButton", this) as Button).Click += CloseButton_Click;
@@ -92,11 +58,6 @@ namespace MultiBranchTexter
         private void SettingBtn_Click(object sender, RoutedEventArgs e)
         {
             ShowSettings = !ShowSettings;
-        }
-
-        private void DarkModeBtn_Click(object sender, RoutedEventArgs e)
-        {
-            IsDarkMode = DarkModeBtn.IsChecked;
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
