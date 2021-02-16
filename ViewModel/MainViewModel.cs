@@ -188,12 +188,7 @@ namespace MultiBranchTexter.ViewModel
                         myStream.Write(new byte[] { 0 }, 0, 0);
                         myStream.Close();
                     }
-                    FileName = dialog.FileName;
-                    //关闭原有标签页
-                    WorkTabs.Clear();
-                    //打开新文件
-                    flowChart.Load(dialog.FileName);
-                    IsWorkGridVisible = Visibility.Visible;
+                    OpenFile(dialog.FileName);
                 }
             }
             catch { }
@@ -235,12 +230,7 @@ namespace MultiBranchTexter.ViewModel
                 { dialog.InitialDirectory = _fileDirPath; }
                 if (dialog.ShowDialog() == true)
                 {
-                    FileName = dialog.FileName;
-                    //关闭原有标签页
-                    WorkTabs.Clear();
-                    //打开新文件
-                    flowChart.Load(dialog.FileName);
-                    IsWorkGridVisible = Visibility.Visible;
+                    OpenFile(dialog.FileName);
                 }
             }
             catch { }
@@ -363,6 +353,7 @@ namespace MultiBranchTexter.ViewModel
             //打开worktab
             IsWorkTabShowing = true;
         }
+
         /// <summary>
         /// 重置某个标签页的页尾
         /// </summary>
@@ -423,6 +414,18 @@ namespace MultiBranchTexter.ViewModel
                 Debug.WriteLine("文件保存成功");
             }
             catch { }
+        }
+
+        public void OpenFile(string path)
+        {
+            if (!File.Exists(path))
+            { return; }
+            FileName = path;
+            //关闭原有标签页
+            WorkTabs.Clear();
+            //打开新文件
+            (Application.Current.MainWindow as MainWindow).GetFCC().Load(path);
+            IsWorkGridVisible = Visibility.Visible;
         }
         #endregion
     }
