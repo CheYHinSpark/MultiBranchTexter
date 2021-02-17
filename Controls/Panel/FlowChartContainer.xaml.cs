@@ -450,6 +450,7 @@ namespace MultiBranchTexter.Controls
 
         public List<TextNodeWithLeftTop> GetTextNodeWithLeftTopList()
         {
+            Debug.WriteLine("开始尝试取得节点与坐标信息");
             List<TextNodeWithLeftTop> textNodes = new List<TextNodeWithLeftTop>();
             foreach (UserControl control in container.Children)
             {
@@ -461,6 +462,7 @@ namespace MultiBranchTexter.Controls
                         Canvas.GetTop(control)));//注意left和top都不受scale影响
                 }
             }
+            Debug.WriteLine("成功取得节点与坐标信息");
             return textNodes;
         }
 

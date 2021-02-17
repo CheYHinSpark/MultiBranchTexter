@@ -8,6 +8,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -150,7 +152,6 @@ namespace MultiBranchTexter.ViewModel
         {
             try
             {
-                Debug.WriteLine("开始新建文件");
                 FlowChartContainer flowChart = container as FlowChartContainer;
                 // 检查是否需要保存现有文件
                 if (flowChart.IsModified == "*")
@@ -171,6 +172,7 @@ namespace MultiBranchTexter.ViewModel
                         return;
                     }
                 }
+                Debug.WriteLine("开始新建文件");
                 // 文件夹对话框
                 Microsoft.Win32.SaveFileDialog dialog =
                     new Microsoft.Win32.SaveFileDialog
@@ -198,7 +200,6 @@ namespace MultiBranchTexter.ViewModel
         {
             try
             {
-                Debug.WriteLine("开始打开文件");
                 FlowChartContainer flowChart = container as FlowChartContainer;
                 // 检查是否需要保存现有文件
                 if (flowChart.IsModified == "*")
@@ -219,6 +220,7 @@ namespace MultiBranchTexter.ViewModel
                         return;
                     }
                 }
+                Debug.WriteLine("开始打开文件");
                 // 文件夹对话框
                 Microsoft.Win32.OpenFileDialog dialog =
                     new Microsoft.Win32.OpenFileDialog
