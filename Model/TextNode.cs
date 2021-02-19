@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Linq;
+using Newtonsoft.Json;
 
 namespace MultiBranchTexter.Model
 {
@@ -15,11 +18,14 @@ namespace MultiBranchTexter.Model
         // 后继条件
         public EndCondition endCondition;
         // 前节点
+        //[JsonIgnore]
         private List<TextNode> preNodes = new List<TextNode>();
         // 后节点
-        private List<TextNode> postNodes = new List<TextNode>();
-        public List<TextNode> PostNodes { get { return postNodes; } }
+        //[JsonIgnore]
+        public List<TextNode> PostNodes { get; private set; } = new List<TextNode>();
 
+        public List<TextFragment> Fragments = new List<TextFragment>();
+        
         public TextNode() { }
         
         public TextNode(string name, string text)
@@ -134,7 +140,7 @@ namespace MultiBranchTexter.Model
         public void AddPostNode(TextNode node)
         {
             //TODO 判断是否已经存在
-            postNodes.Add(node);
+            PostNodes.Add(node);
         }
         public void DeletePreNode(TextNode node)
         {
@@ -144,11 +150,11 @@ namespace MultiBranchTexter.Model
         public void DeletePostNode(TextNode node)
         {
             //TODO 判断是否已经存在
-            postNodes.Remove(node);
+            PostNodes.Remove(node);
         }
         public void ClearAllPostNode()
         {
-            postNodes.Clear();
+            PostNodes.Clear();
         }
         #endregion
 
@@ -160,7 +166,7 @@ namespace MultiBranchTexter.Model
             List<int> vs = new List<int>();
             for (int i = 0; i < textNodes.Count; i++)
             {
-                if (postNodes.Contains(textNodes[i]))
+                if (PostNodes.Contains(textNodes[i]))
                 {
                     vs.Add(i);
                 }
@@ -172,10 +178,23 @@ namespace MultiBranchTexter.Model
         {
             for (int i = 0; i < textNodes.Count; i++)
             {
-                if (postNodes.Contains(textNodes[i].Node))
+                if (PostNodes.Contains(textNodes[i].Node))
                 { return i; }
             }
             return -1;//可能没有后继了
+        }
+    
+        public static List<TextNode> DeserializeFromFile(string file)
+        {
+            string txt = File.ReadAllText(file);
+            return JsonConvert.DeserializeObject<List<TextNode>>(txt);
+        }
+
+        public static string SerializeToFile(List<TextNode> nodes, string file)
+        {
+            string s = JsonConvert.SerializeObject(nodes);
+            File.WriteAllText(file, s);
+            return s;
         }
     }
 

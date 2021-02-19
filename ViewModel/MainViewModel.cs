@@ -237,6 +237,15 @@ namespace MultiBranchTexter.ViewModel
             }
             catch { }
         });
+
+        //序列化到单个JSON，仅供测试
+        public ICommand SaveJsonCommand => new RelayCommand(container =>
+          {
+              FlowChartContainer flowChart = container as FlowChartContainer;
+              var n = flowChart.GetTextNodeList();
+              TextNode.SerializeToFile(n, "test.json");
+          });
+
         //保存单个节点命令，但是在worktab没有打开时将执行savefile
         public ICommand SaveNodeCommand => new RelayCommand((container) =>
         {
