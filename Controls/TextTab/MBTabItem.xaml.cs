@@ -1,6 +1,7 @@
 ﻿using MultiBranchTexter.Controls;
 using MultiBranchTexter.Model;
 using MultiBranchTexter.ViewModel;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
@@ -14,7 +15,19 @@ namespace MultiBranchTexter.Controls
     /// </summary>
     public partial class MBTabItem : TabItem
     {
-      
+        //测试用
+        public MBTabItem()
+        {
+            TextNode node = new TextNode();
+            InitializeComponent();
+            textNode = node;
+            Header = node.Name;
+            tabEnd.SetTabEnd(node);
+            _viewModel = DataContext as TabItemViewModel;
+            // _viewModel.NodeText = node.Text;
+            LoadNode(node);
+            _viewModel.IsModified = "";
+        }
         public MBTabItem(TextNode node)
         {
             InitializeComponent();
@@ -22,7 +35,8 @@ namespace MultiBranchTexter.Controls
             Header = node.Name;
             tabEnd.SetTabEnd(node);
             _viewModel = DataContext as TabItemViewModel;
-            _viewModel.NodeText = node.Text;
+            // _viewModel.NodeText = node.Text;
+            LoadNode(node);
             _viewModel.IsModified = "";
         }
 
@@ -92,13 +106,13 @@ namespace MultiBranchTexter.Controls
         /// </summary>
         private void TabItem_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (Keyboard.Modifiers == ModifierKeys.Control)
-            {
-                if (e.Key == Key.S)//保存
-                {
-                    textNode.Text = textBox.Text;
-                }
-            }
+            //if (Keyboard.Modifiers == ModifierKeys.Control)
+            //{
+            //    if (e.Key == Key.S)//保存
+            //    {
+            //        //textNode.Text = textBox.Text;
+            //    }
+            //}
         }
         #endregion
 
@@ -109,6 +123,12 @@ namespace MultiBranchTexter.Controls
         /// </summary>
         private void Load()
         {
+            //测试用
+            return;
+            //测试用
+
+
+
             //注册父级TabControl尺寸发生变化事件
             parent.SizeChanged += parent_SizeChanged;
             ObservableCollection<MBTabItem> parentItems = (parent.ItemsSource as ObservableCollection<MBTabItem>);
@@ -190,9 +210,50 @@ namespace MultiBranchTexter.Controls
 
         public void Save()
         {
-            textNode.Text = _viewModel.NodeText;
+            //TODO:新的保存
+            SaveNode();
+            ////textNode.Text = _viewModel.NodeText;
             _viewModel.IsModified = "";
         }
         #endregion
+
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;// <--必须有
+            (fragmentContainer.Children[^1] as TextFragmentPresenter).GetFocus();
+        }
+
+        /// <summary>
+        /// 载入节点，根据其内容和后继生成相应的东西
+        /// </summary>
+        public void LoadNode(TextNode node)
+        {
+            textNode = node;
+            fragmentContainer.Children.Clear();
+
+            for (int i = 0; i < textNode.Fragments.Count; i++)
+            { fragmentContainer.Children.Add(new TextFragmentPresenter(textNode.Fragments[i])); }
+
+            if (fragmentContainer.Children.Count == 0)//至少要有一个
+            { fragmentContainer.Children.Add(new TextFragmentPresenter()); }
+
+            //TODO 载入后继信息
+
+        }
+
+
+        /// <summary>
+        /// 保存节点
+        /// </summary>
+        public void SaveNode()
+        {
+            List<TextFragment> newFragments = new List<TextFragment>();
+            for (int i = 0; i < fragmentContainer.Children.Count; i++)
+            {
+                newFragments.Add((fragmentContainer.Children[i] as TextFragmentPresenter).Fragment);
+            }
+            textNode.Fragments.Clear();
+            textNode.Fragments = newFragments;
+        }
     }
 }

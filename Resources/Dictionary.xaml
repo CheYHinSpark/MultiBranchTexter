@@ -657,7 +657,7 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
     
-    <!--片段显示的operation控制checkbox-->
+    <!--文本片段显示控件的operation控制checkbox-->
     <ControlTemplate x:Key="fragmentOperationCheckBoxTemplate" TargetType="{x:Type CheckBox}">
         <Grid>
             <Grid.RowDefinitions>
@@ -686,4 +686,46 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
+    <!--operationTextBox的模板-->
+    <ControlTemplate x:Key="operationTextBoxTemplate" TargetType="{x:Type TextBox}">
+        <Border x:Name="BD" Background="#60808080" Margin="20,0,120,0"
+                BorderThickness="1" BorderBrush="#8024DD24">
+            <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Text" Value=""/>
+                    <Condition Property="Height" Value="2"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="Transparent" TargetName="BD"/>
+            </MultiTrigger>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="BorderBrush" Value="#FF24DD24" TargetName="BD"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <!--片段内容的模板-->
+    <ControlTemplate x:Key="contentTextBoxTemplate" TargetType="{x:Type TextBox}">
+        <Border x:Name="BD" Background="Transparent"
+                BorderThickness="0,2,0,2" BorderBrush="Transparent">
+            <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="Background" Value="#5064FFBE" TargetName="BD"/>
+                <Setter Property="BorderBrush" Value="#AA64FFBE" TargetName="BD"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <!--textBox的Style-->
+    <Style x:Key="fragmentPresenterTextBoxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="AcceptsReturn" Value="True"/>
+        <Setter Property="AcceptsTab" Value="True"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="FontSize" Value="{Binding DataContext.TextFontSize, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Foreground.BaseBrush}"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource ThemeBrush}"/>
+    </Style>
 </ResourceDictionary>

@@ -18,6 +18,7 @@ namespace MultiBranchTexter.Controls
     /// <summary>
     /// UserControl1.xaml 的交互逻辑
     /// </summary>
+    [Obsolete]
     public partial class TextNodePresenter : UserControl
     {
         private TextNode textNode;

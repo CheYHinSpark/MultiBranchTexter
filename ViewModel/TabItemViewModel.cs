@@ -17,17 +17,17 @@ namespace MultiBranchTexter.ViewModel
             set { _isModified = value;RaisePropertyChanged("IsModified"); }
         }
 
-        private string _nodeText;
-        public string NodeText
-        {
-            get { return _nodeText; }
-            set 
-            {
-                _nodeText = value;
-                IsModified = "*";
-                RaisePropertyChanged("NodeText");
-            }
-        }
+        //private string _nodeText;
+        //public string NodeText
+        //{
+        //    get { return _nodeText; }
+        //    set 
+        //    {
+        //        _nodeText = value;
+        //        IsModified = "*";
+        //        RaisePropertyChanged("NodeText");
+        //    }
+        //}
 
         public TabItemViewModel()
         { }

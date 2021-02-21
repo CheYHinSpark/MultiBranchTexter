@@ -12,9 +12,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*" MinHeight="240"/>
             </Grid.RowDefinitions>
-            <StackPanel x:Name="fragmentContainer" Grid.Row="0" Orientation="Vertical">
-                <!--<c:TextFragmentPresenter/>-->
-            </StackPanel>
+            <StackPanel x:Name="fragmentContainer" Grid.Row="0" Orientation="Vertical"/>
             <Border Grid.Row="1" Background="Transparent" 
                     MouseLeftButtonDown="Border_MouseLeftButtonDown"/>
         </Grid>

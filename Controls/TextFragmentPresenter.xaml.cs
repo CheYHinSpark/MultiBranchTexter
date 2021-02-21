@@ -2,17 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MultiBranchTexter.Controls
 {
@@ -72,7 +65,7 @@ namespace MultiBranchTexter.Controls
                 Storyboard sb = new Storyboard();
                 DoubleAnimation da = new DoubleAnimation()
                 {
-                    From = 0,
+                    From = 2,
                     To = opContainer.ActualHeight,
                     Duration = new Duration(new TimeSpan(0, 0, 0, 0, 300)),
                     FillBehavior = FillBehavior.Stop
@@ -89,14 +82,14 @@ namespace MultiBranchTexter.Controls
                 DoubleAnimation da = new DoubleAnimation()
                 {
                     From = opContainer.ActualHeight,
-                    To = 0,
+                    To = 2,
                     Duration = new Duration(new TimeSpan(0, 0, 0, 0, 300)),
                     FillBehavior = FillBehavior.Stop
                 };
                 sb.Children.Add(da);
                 Storyboard.SetTarget(da, opContainer);
                 Storyboard.SetTargetProperty(da, new PropertyPath("Height"));
-                sb.Completed += delegate { opContainer.Height = 0; };
+                sb.Completed += delegate { opContainer.Height = 2; };
                 sb.Begin();
             }
         }
@@ -165,6 +158,19 @@ namespace MultiBranchTexter.Controls
                     AppendContent((parent.Children[i + 1] as TextFragmentPresenter).ContentText);
                     parent.Children.RemoveAt(i + 1);
                 }
+            }
+            //如果按下了Ctrl+Enter，则切断fragment
+            if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                int i = contentContainer.SelectionStart;
+                string oldF = contentContainer.Text.Substring(0, i);
+                string newF = contentContainer.Text[(i)..];
+                TextFragmentPresenter tfp = new TextFragmentPresenter(new TextFragment(newF));
+                parent.Children.Insert(parent.Children.IndexOf(this) + 1, tfp);
+                parent.UpdateLayout();// <--必须有
+                tfp.GetFocus();
+                tfp.contentContainer.Select(0, 0);
+                contentContainer.Text = oldF;
             }
         }
         #endregion

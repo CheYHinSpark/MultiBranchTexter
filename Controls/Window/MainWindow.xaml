@@ -133,9 +133,7 @@
             </Grid.ColumnDefinitions>
             <c:FlowChartContainer x:Name="flowChart" Grid.Column="0" />
             <TabControl x:Name="workTabControl" Grid.Column="1" Padding="0">
-                <TabItem Header="测试中">
-                    <c:TextNodePresenter/>
-                </TabItem>
+                <c:MBTabItem/>
             </TabControl>
             <!--<TabControl x:Name="workTabControl" Grid.Column="1" Padding="0" 
                         ItemsSource="{Binding WorkTabs, Mode=TwoWay}"
