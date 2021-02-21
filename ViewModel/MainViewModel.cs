@@ -298,11 +298,13 @@ namespace MultiBranchTexter.ViewModel
 
         public MainViewModel()
         {
-            IsWorkGridVisible = Visibility.Hidden;
+            IsWorkGridVisible = Visibility.Visible;//测试中，正式要改成hidden
             FileName = "";
             TextFontSize = 14;
-            IsFlowChartShowing = true;
-            IsWorkTabShowing = false;
+            IsFlowChartShowing = false;
+            IsWorkTabShowing = true; 
+            //IsFlowChartShowing = true;
+            //IsWorkTabShowing = false;
             CanHideWorkTab = true;
             CanHideFlowChart = false;
             WorkTabs = new ObservableCollection<MBTabItem>();
