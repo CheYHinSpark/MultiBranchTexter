@@ -13,14 +13,10 @@
                 <RowDefinition Height="*" MinHeight="240"/>
             </Grid.RowDefinitions>
             <StackPanel x:Name="fragmentContainer" Grid.Row="0" Orientation="Vertical">
-                <c:TextFragmentPresenter/>
+                <!--<c:TextFragmentPresenter/>-->
             </StackPanel>
             <Border Grid.Row="1" Background="Transparent" 
                     MouseLeftButtonDown="Border_MouseLeftButtonDown"/>
-            <Button x:Name="addFragmentBtn" Grid.Row="1"
-                    HorizontalAlignment="Center" VerticalAlignment="Top"
-                    Width="40" Height="30"
-                    Click="addFragmentBtn_Click"/>
         </Grid>
     </ScrollViewer>
 </UserControl>

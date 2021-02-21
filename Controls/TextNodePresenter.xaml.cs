@@ -21,16 +21,18 @@ namespace MultiBranchTexter.Controls
     public partial class TextNodePresenter : UserControl
     {
         private TextNode textNode;
+        public TextNode TextNode { get { return textNode; } }
 
         public TextNodePresenter()
         {
             InitializeComponent();
+            LoadNode(new TextNode());
         }
 
         public TextNodePresenter(TextNode node)
         {
             InitializeComponent();
-            textNode = node;
+            LoadNode(node);
         }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -39,10 +41,24 @@ namespace MultiBranchTexter.Controls
             (fragmentContainer.Children[^1] as TextFragmentPresenter).GetFocus();
         }
 
-        private void addFragmentBtn_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// 载入节点，根据其内容和后继生成相应的东西
+        /// </summary>
+        public void LoadNode(TextNode node)
         {
-            fragmentContainer.Children.Add(new TextFragmentPresenter(new TextFragment()));
+            textNode = node;
+            fragmentContainer.Children.Clear();
+
+            for (int i = 0; i < textNode.Fragments.Count; i++)
+            { fragmentContainer.Children.Add(new TextFragmentPresenter(textNode.Fragments[i])); }
+
+            if (fragmentContainer.Children.Count == 0)//至少要有一个
+            { fragmentContainer.Children.Add(new TextFragmentPresenter()); }
+
+            //TODO 载入后继信息
+
         }
+
 
         /// <summary>
         /// 保存节点

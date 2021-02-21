@@ -8,5 +8,8 @@ namespace MultiBranchTexter.Model
     {
         public List<string> Operations;
         public string Content;
+        public TextFragment() { }
+        public TextFragment(string newContent)
+        { Content = newContent; }
     }
 }

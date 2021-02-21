@@ -656,4 +656,34 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+    
+    <!--片段显示的operation控制checkbox-->
+    <ControlTemplate x:Key="fragmentOperationCheckBoxTemplate" TargetType="{x:Type CheckBox}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Path x:Name="upPath"  Grid.Row="0" ToolTip="隐藏备注"
+                  Fill="{DynamicResource ThemeBrush}" Data="M0,10 20,10 10,0Z"/>
+            <Path x:Name="downPath"  Grid.Row="1" ToolTip="添加备注"
+                  Fill="{DynamicResource ThemeBrush}" Data="M0,0 20,0 10,10Z"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="False">
+                <Setter Property="Visibility" Value="Hidden" TargetName="upPath"/>
+                <Setter Property="Visibility" Value="Visible" TargetName="downPath"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Visibility" Value="Hidden" TargetName="downPath"/>
+                <Setter Property="Visibility" Value="Visible" TargetName="upPath"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True" SourceName="upPath">
+                <Setter Property="Opacity" Value="0.7" TargetName="upPath"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True" SourceName="downPath">
+                <Setter Property="Opacity" Value="0.7" TargetName="downPath"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 </ResourceDictionary>
