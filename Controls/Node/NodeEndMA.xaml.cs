@@ -23,13 +23,13 @@ namespace MultiBranchTexter.Controls
         {
             InitializeComponent();
         }
-        public NodeEndMA(UniversalEndCondition uec)
+        public NodeEndMA(EndCondition maEnd)
         {
             InitializeComponent();
-            titleBox.Text = uec.Question;
-            foreach (string answer in uec.Answers.Keys)
+            titleBox.Text = maEnd.Question;
+            foreach (string answer in maEnd.Answers.Keys)
             {
-                NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(answer, uec.Answers[answer]);
+                NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(answer, maEnd.Answers[answer]);
                 answerContainer.Children.Add(nodeEnd);
             }
         }
@@ -62,7 +62,7 @@ namespace MultiBranchTexter.Controls
         //点击添加按钮
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
-            Dictionary<string,string> atns = (FatherTextNode.endCondition as UniversalEndCondition).Answers;
+            Dictionary<string,string> atns = FatherTextNode.endCondition.Answers;
             //创造一个不重名的回答
             string newAnswer = "新回答";
             int i = 1;

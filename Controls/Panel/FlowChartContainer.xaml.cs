@@ -245,43 +245,39 @@ namespace MultiBranchTexter.Controls
             }
             for (int i = 0; i < textNodes.Count; i++)
             {
-                if (textNodes[i].endCondition is SingleEndCondition)
+                EndCondition ec = textNodes[i].endCondition;
+
+                Dictionary<string, int> waitToLink = new Dictionary<string, int>();
+
+                foreach (string answer in ec.Answers.Keys)
                 {
-                    SingleEndCondition sec = textNodes[i].endCondition as SingleEndCondition;
-                    if (sec.NextNodeName != "")//如果有后继名称
+                    if (ec.Answers[answer] == "")
+                    { continue; }//直接跳过空的
+
+                    bool found = false;
+                    for (int k = 0; k < num; k++)
                     {
-                        //开始寻找后继名称的位置
-                        int j = 0;
-                        for (; j < num; j++)
+                        if (ec.Answers[answer] == textNodes[k].Name)
                         {
-                            if (textNodes[j].Name == sec.NextNodeName)
-                            { break; }
+                            found = true;
+                            //准备为nodeButton添加post
+                            waitToLink.Add(answer, k);
+
+                            break;
                         }
-                        if (j < num)//表示找到了
-                        {
-                            //为矩阵赋值，i有j作为后继，则ij位置为真
-                            mat[i, j] = true;
-                            //为nodeButton添加post
-                            NodeButton.Link(nodeButtons[i], nodeButtons[j]);
-                        }
-                        else
-                        { sec.NextNodeName = ""; }
                     }
+                    if (!found)
+                    { waitToLink.Add(answer, -1); }
                 }
-                else if (textNodes[i].endCondition is UniversalEndCondition)
+
+                foreach (string answer in waitToLink.Keys)
                 {
-                    UniversalEndCondition uec = textNodes[i].endCondition as UniversalEndCondition;
-                    foreach (string answer in uec.Answers.Keys)
+                    if (waitToLink[answer] == -1)
+                    { ec.Answers[answer] = ""; }
+                    else
                     {
-                        for (int k = 0; k < textNodes.Count; k++)
-                        {
-                            if (uec.Answers[answer] == textNodes[k].Name)
-                            {
-                                mat[i, k] = true;
-                                NodeButton.Link(nodeButtons[i], nodeButtons[k], answer);
-                                break;
-                            }
-                        }
+                        mat[i, waitToLink[answer]] = true;
+                        NodeButton.Link(nodeButtons[i], nodeButtons[waitToLink[answer]], answer);
                     }
                 }
             }
@@ -359,48 +355,37 @@ namespace MultiBranchTexter.Controls
             Debug.WriteLine("节点创建完成");
             for (int i = 0; i < textNodes.Count; i++)
             {
-                if (textNodes[i].Node.endCondition is SingleEndCondition)
-                {
-                    SingleEndCondition sec = textNodes[i].Node.endCondition as SingleEndCondition;
-                    if (sec.NextNodeName != "")//如果有后继名称
-                    {
-                        //开始寻找后继名称的位置
-                        int j = 0;
-                        for (; j < textNodes.Count; j++)
-                        {
-                            if (textNodes[j].Node.Name == sec.NextNodeName)
-                            { break; }
-                        }
-                        if (j < textNodes.Count)//表示找到了
-                        {
-                            //为nodeButton添加post
-                            NodeButton.Link(nodeButtons[i], nodeButtons[j]);
-                        }
-                        else
-                        { sec.NextNodeName = ""; }
-                    }
-                }
-                else if (textNodes[i].Node.endCondition is UniversalEndCondition)
-                {
-                    UniversalEndCondition uec = textNodes[i].Node.endCondition as UniversalEndCondition;
+                EndCondition ec = textNodes[i].Node.endCondition;
 
+                Dictionary<string, int> waitToLink = new Dictionary<string, int>();
+
+                foreach (string answer in ec.Answers.Keys)
+                {
+                    if (ec.Answers[answer] == "")
+                    { continue; }//直接跳过空的
+
+                    bool found = false;
                     for (int k = 0; k < textNodes.Count; k++)
                     {
-                        string answerFound = "";
-                        foreach (string answer in uec.Answers.Keys)
+                        if (ec.Answers[answer] == textNodes[k].Node.Name)
                         {
-                            if (uec.Answers[answer] == textNodes[k].Node.Name)
-                            {
-                                answerFound = answer;
-                                break;
-                            }
-                        }
-                        //不能把link放在对键值的循环中
-                        if (answerFound != "")
-                        {
-                            NodeButton.Link(nodeButtons[i], nodeButtons[k], answerFound);
+                            found = true;
+                            //准备为nodeButton添加post
+                            waitToLink.Add(answer, k);
+
+                            break;
                         }
                     }
+                    if (!found)
+                    { waitToLink.Add(answer, -1); }
+                }
+
+                foreach (string answer in waitToLink.Keys)
+                {
+                    if (waitToLink[answer] == -1)
+                    { ec.Answers[answer] = ""; }
+                    else
+                    { NodeButton.Link(nodeButtons[i], nodeButtons[waitToLink[answer]], answer); }
                 }
             }
             Debug.WriteLine("节点链接完成");
@@ -434,20 +419,20 @@ namespace MultiBranchTexter.Controls
 
         public void AddNodeButton(NodeBase preNode,NodeButton postNode, double xPos, double yPos)
         {
-            NodeButton nodeButton = new NodeButton(new TextNode(GetNewName(), ""));
-            nodeButton.SetParent(container);
-            nodeButton.FatherNode = nodeButton;
+            NodeButton newNodeButton = new NodeButton(new TextNode(GetNewName(), ""));
+            newNodeButton.SetParent(container);
+            newNodeButton.FatherNode = newNodeButton;
             //连接三个点
-            NodeButton.Link(preNode, nodeButton);
-            NodeButton.Link(nodeButton, postNode);
-            container.Children.Add(nodeButton);
-            Canvas.SetLeft(nodeButton, xPos);
-            Canvas.SetTop(nodeButton, yPos);
+            NodeButton.Link(preNode, newNodeButton);
+            NodeButton.Link(newNodeButton, postNode);
+            container.Children.Add(newNodeButton);
+            Canvas.SetLeft(newNodeButton, xPos);
+            Canvas.SetTop(newNodeButton, yPos);
             container.UpdateLayout();
-            nodeButton.Move(-nodeButton.ActualWidth / 2, -nodeButton.ActualHeight / 2);
-            //画两条线
-            preNode.DrawPostLine(container, nodeButton);
-            nodeButton.DrawPostLine(container, postNode);
+            newNodeButton.Move(-newNodeButton.ActualWidth / 2, -newNodeButton.ActualHeight / 2);
+            //画新线
+            container.Children.Add(new ConnectingLine(preNode, newNodeButton));
+            //newNodeButton到post不用画，因为创建newNodebutton时会自动画，否则会出现两条
 
             IsModified = "*";
         }

@@ -13,4 +13,14 @@ namespace MultiBranchTexter.Model
         Searched,
         Selected
     }
+
+    /// <summary>
+    /// 后继节点类型
+    /// </summary>
+    public enum EndType
+    {
+        Single,
+        YesNo,
+        MultiAnswers
+    }
 }

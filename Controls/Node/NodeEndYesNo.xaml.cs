@@ -25,7 +25,7 @@ namespace MultiBranchTexter.Controls
             InitializeComponent();
         }
 
-        public NodeEndYesNo(UniversalEndCondition yesNoCond)
+        public NodeEndYesNo(EndCondition yesNoCond)
         {
             InitializeComponent();
             titleBox.Text = yesNoCond.Question;

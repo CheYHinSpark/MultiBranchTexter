@@ -10,46 +10,71 @@ namespace MultiBranchTexter.Model
     public class EndCondition
     {
         public string Question;
-    }
 
-    public class SingleEndCondition : EndCondition
-    {
-        public string NextNodeName;
-    }
+        private readonly EndType _endType;
+        public EndType EndType { get { return _endType; } }
 
-    public class UniversalEndCondition : EndCondition
-    {
-        private readonly bool isExpression;
-        public bool IsExpression { get { return isExpression; } }//如果这个是false，则是yesno
         public Dictionary<string, string> Answers = new Dictionary<string, string>();
-        public UniversalEndCondition(bool isexpression) 
+
+        public EndCondition()
         { 
-            isExpression = isexpression;
-            if (!isexpression)
+            _endType = EndType.Single;
+            Answers.Add("", "");
+        }
+
+        public EndCondition(EndType endType)
+        {
+            _endType = endType;
+            if (_endType == EndType.Single)
+            { Answers.Add("", ""); }
+            else if (_endType == EndType.YesNo)
             {
-                Answers.Add("yes","");
-                Answers.Add("no","");
+                Answers.Add("yes", "");
+                Answers.Add("no", "");
             }
         }
     }
 
-    [Obsolete]
-    public class YesNoCondition : EndCondition
-    {
-        public TextNode YesNode;
-        public TextNode NoNode;
-    }
+    //[Obsolete]
+    //public class SingleEndCondition : EndCondition
+    //{
+    //    public string NextNodeName;
+    //}
 
-    [Obsolete]
-    public class MultiAnswerCondition : EndCondition
-    {
-        public List<AnswerToNode> AnswerToNodes = new List<AnswerToNode>();
-    }
+    //[Obsolete]
+    //public class UniversalEndCondition : EndCondition
+    //{
+    //    private readonly bool isExpression;
+    //    public bool IsExpression { get { return isExpression; } }//如果这个是false，则是yesno
+    //    //public Dictionary<string, string> Answers = new Dictionary<string, string>();
+    //    public UniversalEndCondition(bool isexpression) 
+    //    { 
+    //        isExpression = isexpression;
+    //        if (!isexpression)
+    //        {
+    //            Answers.Add("yes","");
+    //            Answers.Add("no","");
+    //        }
+    //    }
+    //}
 
-    [Obsolete]
-    public class AnswerToNode
-    {
-        public string Answer;
-        public TextNode PostNode;
-    }
+    //[Obsolete]
+    //public class YesNoCondition : EndCondition
+    //{
+    //    public TextNode YesNode;
+    //    public TextNode NoNode;
+    //}
+
+    //[Obsolete]
+    //public class MultiAnswerCondition : EndCondition
+    //{
+    //    public List<AnswerToNode> AnswerToNodes = new List<AnswerToNode>();
+    //}
+
+    //[Obsolete]
+    //public class AnswerToNode
+    //{
+    //    public string Answer;
+    //    public TextNode PostNode;
+    //}
 }

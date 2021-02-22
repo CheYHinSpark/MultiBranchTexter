@@ -7,8 +7,8 @@
     <UserControl.Resources>
         <!--右键菜单部分-->
         <ContextMenu x:Key="lineContextMenu">
-            <MenuItem x:Name="addNode" Header="添加节点" Click="addNode_Click"/>
-            <MenuItem x:Name="deleteLine" Header="删除连线" Click="deleteLine_Click"/>
+            <MenuItem x:Name="addNode" Header="添加节点" Click="AddNode_Click"/>
+            <MenuItem x:Name="deleteLine" Header="删除连线" Click="DeleteLine_Click"/>
         </ContextMenu>
     </UserControl.Resources>
     <Path x:Name="Path" StrokeThickness="3" 

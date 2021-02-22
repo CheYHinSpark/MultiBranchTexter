@@ -59,35 +59,18 @@ namespace MultiBranchTexter.Controls
         { 
             questionTxt.Text = "查看后继节点";
             container.Children.Clear();
-            container.RowDefinitions.Clear();//清理container
+            container.RowDefinitions.Clear(); //清理container
             //开始根据后继类型添加东西
-            if (textNode.endCondition is SingleEndCondition)
-            { 
-                //表示是单一后继或者无后继
-                if ((textNode.endCondition as SingleEndCondition).NextNodeName != "")
-                {
-                    RowDefinition row = new RowDefinition { Height = new GridLength(20) };
-                    container.RowDefinitions.Add(row);
-                    TabEndItem tei = new TabEndItem("", (textNode.endCondition as SingleEndCondition).NextNodeName);
-                    tei.SetValue(Grid.RowProperty, 0);
-                    container.Children.Add(tei);
-                }
-            }
-            else if (textNode.endCondition is UniversalEndCondition)
+            questionTxt.Text += "：" + textNode.endCondition.Question;
+            int i = 0;
+            foreach (string answer in textNode.endCondition.Answers.Keys)
             {
-
-                UniversalEndCondition uec = textNode.endCondition as UniversalEndCondition;
-                questionTxt.Text += "：" + uec.Question;
-                int i = 0;
-                foreach (string answer in uec.Answers.Keys)
-                {
-                    RowDefinition row = new RowDefinition { Height = new GridLength(20) };
-                    container.RowDefinitions.Add(row);
-                    TabEndItem tei = new TabEndItem(answer, uec.Answers[answer]);
-                    tei.SetValue(Grid.RowProperty, i);//设置行
-                    container.Children.Add(tei);
-                    i++;
-                }
+                RowDefinition row = new RowDefinition { Height = new GridLength(20) };
+                container.RowDefinitions.Add(row);
+                TabEndItem tei = new TabEndItem(answer, textNode.endCondition.Answers[answer]);
+                tei.SetValue(Grid.RowProperty, i);//设置行
+                container.Children.Add(tei);
+                i++;
             }
             container.UpdateLayout();
             //调整scrollviewer的最大高度

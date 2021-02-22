@@ -80,19 +80,25 @@ namespace MultiBranchTexter.Controls
         {
             if (answerTxt.Text == answer)//这说明没有修改
             { return; }
+            if (answerTxt.Text == "")//禁止为空
+            {
+                answerTxt.Text = answer;
+                MessageBox.Show("回答不能为空，已还原");
+                return;
+            }
             //取得节点的后继条件
-            UniversalEndCondition uec = FatherTextNode.endCondition as UniversalEndCondition;
-            if (uec.Answers.ContainsKey(Answer))
+            EndCondition ec = FatherTextNode.endCondition;
+            if (ec.Answers.ContainsKey(Answer))
             { 
                 answerTxt.Text = answer;
                 MessageBox.Show("回答出现重复，已还原");
             }
             else
             {
-                uec.Answers.Remove(answer);
+                ec.Answers.Remove(answer);
                 //没有重复，完成修改
                 answer = answerTxt.Text;
-                uec.Answers.Add(answer, nextNodeName);
+                ec.Answers.Add(answer, nextNodeName);
                 //通知标签页改变
                 ControlTreeHelper.FindParentOfType<MainWindow>(FatherNode).ReLoadTab(FatherTextNode);
             }
@@ -121,7 +127,7 @@ namespace MultiBranchTexter.Controls
             }
             else//如果没有连线，也要删除相应的key
             {
-                (FatherTextNode.endCondition as UniversalEndCondition).Answers.Remove(answer);
+                FatherTextNode.endCondition.Answers.Remove(answer);
             }
             //通知标签页改变
             ControlTreeHelper.FindParentOfType<MainWindow>(FatherNode).ReLoadTab(FatherTextNode);

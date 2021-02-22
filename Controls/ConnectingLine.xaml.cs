@@ -27,10 +27,7 @@ namespace MultiBranchTexter.Controls
             begin.FatherNode.postLines.Add(this);
             end.preLines.Add(this);
             begin.FatherNode.UpdatePostLines();
-            if (begin.FatherTextNode.endCondition is UniversalEndCondition)
-            {
-                isBeginMA = (begin.FatherTextNode.endCondition as UniversalEndCondition).IsExpression;
-            }
+            isBeginMA = begin.FatherTextNode.endCondition.EndType == EndType.MultiAnswers;
             end.UpdatePreLines();
         }
 
@@ -73,7 +70,7 @@ namespace MultiBranchTexter.Controls
 
         #region 右键菜单操作
         //删除线条
-        private void deleteLine_Click(object sender, RoutedEventArgs e)
+        private void DeleteLine_Click(object sender, RoutedEventArgs e)
         {
             //断开起始点和终止点
             NodeButton.UnLink(BeginNode, EndNode);
@@ -81,7 +78,7 @@ namespace MultiBranchTexter.Controls
             Delete();
         }
         //添加节点
-        private void addNode_Click(object sender, RoutedEventArgs e)
+        private void AddNode_Click(object sender, RoutedEventArgs e)
         {
             //断开起始点和终止点
             NodeButton.UnLink(BeginNode, EndNode);
@@ -174,6 +171,7 @@ namespace MultiBranchTexter.Controls
             EndNode.UpdatePreLines();
             ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).IsModified = "*";
             ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this).Children.Remove(this);
+            Debug.WriteLine("成功删除连线");
         }
         #endregion
     }
