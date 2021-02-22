@@ -92,17 +92,17 @@ namespace MultiBranchTexter.Model
                     if (vs[1] == "yn")//是否判断
                     {
                         string[] vs1 = vs[3].Split(",");
-                        YesNoCondition condition = new YesNoCondition
+                        UniversalEndCondition condition = new UniversalEndCondition(false)
                         { Question = vs[2] };
                         result[int.Parse(vs[0])].Node.endCondition = condition;
                         if (int.TryParse(vs1[0], out int i))
-                        { TextNode.Link(result[int.Parse(vs[0])].Node, result[i].Node, true); }
+                        { TextNode.Link(result[int.Parse(vs[0])].Node, result[i].Node, "yes"); }
                         if (int.TryParse(vs1[1], out int j))
-                        { TextNode.Link(result[int.Parse(vs[0])].Node, result[j].Node, false); }
+                        { TextNode.Link(result[int.Parse(vs[0])].Node, result[j].Node, "no"); }
                     }
                     else if (vs[1] == "ma")//多选
                     {
-                        MultiAnswerCondition condition = new MultiAnswerCondition
+                        UniversalEndCondition condition = new UniversalEndCondition(true)
                         { Question = vs[2] };
                         result[int.Parse(vs[0])].Node.endCondition = condition;
                         for (int i = 3; i < vs.Length; i++)
@@ -114,7 +114,7 @@ namespace MultiBranchTexter.Model
                     }
                     else//普通连接
                     {
-                        TextNode.Link(result[int.Parse(vs[0])].Node,result[int.Parse(vs[1])].Node);
+                        TextNode.Link(result[int.Parse(vs[0])].Node, result[int.Parse(vs[1])].Node);
                     }
                 }
                 catch
@@ -159,7 +159,7 @@ namespace MultiBranchTexter.Model
             fs.SetLength(0);
             StreamWriter writer = new StreamWriter(fs, Encoding.Default);
             writer.WriteLine("[Nodes]");
-            for (int i = 0;i < nodes.Count;i++)
+            for (int i = 0; i < nodes.Count; i++)
             {
                 writer.WriteLine(nodes[i].Node.Name + ","
                     + nodes[i].Left.ToString() + ","
@@ -167,7 +167,7 @@ namespace MultiBranchTexter.Model
                 FileStream nodeFs = new FileStream(dir + "\\" + nodes[i].Node.Name,
                     FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 StreamWriter nodeWriter = new StreamWriter(nodeFs, Encoding.Default);
-                nodeWriter.Write(nodes[i].Node.Text);
+                nodeWriter.Write(nodes[i].Node.Fragments[0].Content);
                 nodeFs.Flush();
                 nodeWriter.Close();
                 nodeFs.Close();
@@ -175,50 +175,53 @@ namespace MultiBranchTexter.Model
             writer.WriteLine("[Connections]");
             for (int i = 0; i < nodes.Count; i++)
             {
-                if (nodes[i].Node.endCondition == null)
+                if (nodes[i].Node.endCondition is SingleEndCondition)
                 {
-                    for (int j = 0; j < nodes.Count;j++)
+                    SingleEndCondition sec = nodes[i].Node.endCondition as SingleEndCondition;
+                    for (int j = 0; j < nodes.Count; j++)
                     {
-                        if (nodes[i].Node.PostNodes.Contains(nodes[j].Node))
+                        if (sec.NextNodeName == nodes[j].Node.Name)
                         {
                             writer.WriteLine(i.ToString() + "-" + j.ToString());
                             break;
                         }
                     }
                 }
-                else if (nodes[i].Node.endCondition is YesNoCondition)
+                else if (nodes[i].Node.endCondition is UniversalEndCondition)
                 {
-                    YesNoCondition ync = nodes[i].Node.endCondition as YesNoCondition;
-                    string vs = i.ToString() + "-yn-" + ync.Question + "-";
-                    string yes = "";
-                    string no = "";
-                    for (int j = 0; j < nodes.Count; j++)
+                    UniversalEndCondition uec = nodes[i].Node.endCondition as UniversalEndCondition;
+                    if (!uec.IsExpression)
                     {
-                        if (ync.YesNode == nodes[j].Node)
-                        { yes = j.ToString(); }
-                        if (ync.NoNode == nodes[j].Node)
-                        { no = j.ToString(); }
-                    }
-                    writer.WriteLine(vs + yes + "," + no);
-                }
-                else if (nodes[i].Node.endCondition is MultiAnswerCondition)
-                {
-                    MultiAnswerCondition mac = nodes[i].Node.endCondition as MultiAnswerCondition;
-                    string vs = i.ToString() + "-ma-" + mac.Question;
-                    foreach (AnswerToNode atn in mac.AnswerToNodes)
-                    {
-                        string an = "-" + atn.Answer + ",";
+                        string vs = i.ToString() + "-yn-" + uec.Question + "-";
+                        string yes = "";
+                        string no = "";
                         for (int j = 0; j < nodes.Count; j++)
                         {
-                            if (atn.PostNode == nodes[j].Node)
-                            {
-                                an += j.ToString();
-                                break;
-                            }
+                            if (uec.Answers["yes"] == nodes[j].Node.Name)
+                            { yes = j.ToString(); }
+                            if (uec.Answers["no"] == nodes[j].Node.Name)
+                            { no = j.ToString(); }
                         }
-                        vs += an;
+                        writer.WriteLine(vs + yes + "," + no);
                     }
-                    writer.WriteLine(vs);
+                    else
+                    {
+                        string vs = i.ToString() + "-ma-" + uec.Question;
+                        foreach (string answer in uec.Answers.Keys)
+                        {
+                            string an = "-" + answer + ",";
+                            for (int j = 0; j < nodes.Count; j++)
+                            {
+                                if (uec.Answers[answer] == nodes[j].Node.Name)
+                                {
+                                    an += j.ToString();
+                                    break;
+                                }
+                            }
+                            vs += an;
+                        }
+                        writer.WriteLine(vs);
+                    }
                 }
             }
             fs.Flush();

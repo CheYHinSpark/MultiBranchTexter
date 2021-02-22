@@ -12,7 +12,12 @@ namespace MultiBranchTexter.Controls
     /// </summary>
     public class NodeBase : UserControl
     {
-        public NodeButton fatherNode;
+        public NodeButton FatherNode;
+
+        /// <summary>
+        /// 获取fathernode的节点，即是这个控件真正对应的节点
+        /// </summary>
+        public TextNode FatherTextNode { get { return FatherNode.textNode; } }
 
         //注册依赖属性，节点状态，有常规、选中、被搜索到
         public static readonly DependencyProperty NodeStateProperty =
@@ -42,7 +47,7 @@ namespace MultiBranchTexter.Controls
         /// </summary>
         public void SetFather(NodeButton node)
         {
-            this.fatherNode = node;
+            this.FatherNode = node;
         }
 
         /// <summary>
@@ -51,8 +56,8 @@ namespace MultiBranchTexter.Controls
         /// <returns></returns>
         public Point GetCanvasOffset()
         {
-            return TransformToAncestor(fatherNode).Transform(new Point(0,0))
-                + new Vector(Canvas.GetLeft(fatherNode), Canvas.GetTop(fatherNode));
+            return TransformToAncestor(FatherNode).Transform(new Point(0,0))
+                + new Vector(Canvas.GetLeft(FatherNode), Canvas.GetTop(FatherNode));
         }
     }
 }

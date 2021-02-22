@@ -10,7 +10,7 @@
     <Compile Update="Controls\ConnectingLine.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\TextFragmentPresenter.xaml.cs">
+    <Compile Update="Controls\TextTab\TextFragmentPresenter.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Controls\TextTab\MBTabItem.xaml.cs">
@@ -40,15 +40,12 @@
     <Compile Update="Controls\TextTab\TabEndItem.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\TextNodePresenter.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Controls\ConnectingLine.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\TextFragmentPresenter.xaml">
+    <Page Update="Controls\TextTab\TextFragmentPresenter.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Controls\TextTab\MBTabItem.xaml">
@@ -70,9 +67,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Controls\TextTab\TabEndItem.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Controls\TextNodePresenter.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Resources\FCCResources.xaml">

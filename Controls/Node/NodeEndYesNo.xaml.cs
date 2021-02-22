@@ -25,7 +25,7 @@ namespace MultiBranchTexter.Controls
             InitializeComponent();
         }
 
-        public NodeEndYesNo(YesNoCondition yesNoCond)
+        public NodeEndYesNo(UniversalEndCondition yesNoCond)
         {
             InitializeComponent();
             titleBox.Text = yesNoCond.Question;
@@ -40,27 +40,27 @@ namespace MultiBranchTexter.Controls
         }
 
         //双击标题，可以改标题
-        private void titleBox_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void TitleBox_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             titleBox.Focusable = true;
         }
 
         //标题失去焦点，恢复为不可聚焦并完成标题修改
-        private void titleBox_LostFocus(object sender, RoutedEventArgs e)
+        private void TitleBox_LostFocus(object sender, RoutedEventArgs e)
         {
             titleBox.Focusable = false;
             // 完成问题修改
-            fatherNode.textNode.endCondition.Question = titleBox.Text;
+            FatherTextNode.endCondition.Question = titleBox.Text;
             titleBox.SelectionStart = 0;
             // 还要通知窗口改变相应的标签页
-            ControlTreeHelper.FindParentOfType<MainWindow>(fatherNode).ReLoadTab(fatherNode.textNode);
+            ControlTreeHelper.FindParentOfType<MainWindow>(FatherNode).ReLoadTab(FatherTextNode);
         }
 
         //虽然0个引用，但这是双击两个小节点启动调整后继功能
-        private void yesnoNode_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void YesnoNode_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             NodeBase node = sender as NodeBase;
-            FlowChartContainer parent = ControlTreeHelper.FindParentOfType<FlowChartContainer>(node.fatherNode);
+            FlowChartContainer parent = ControlTreeHelper.FindParentOfType<FlowChartContainer>(node.FatherNode);
             if (parent.IsWaiting)
             { return; }
             //进入选择模式
@@ -73,9 +73,9 @@ namespace MultiBranchTexter.Controls
         /// </summary>
         public new void SetFather(NodeButton father)
         {
-            this.fatherNode = father;
-            yesNode.fatherNode = father;
-            noNode.fatherNode = father;
+            this.FatherNode = father;
+            yesNode.FatherNode = father;
+            noNode.FatherNode = father;
         }
     }
 }

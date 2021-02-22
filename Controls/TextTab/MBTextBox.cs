@@ -15,6 +15,7 @@ namespace MultiBranchTexter.Controls
     /// <summary>
     /// 由于自定义了里面的scrollviewer，必须自己实现相关功能的TextBox
     /// </summary>
+    [Obsolete]
     public class MBTextBox:TextBox
     {
         //自己的滚轮容器

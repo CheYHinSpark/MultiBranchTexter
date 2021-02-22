@@ -35,7 +35,7 @@ namespace MultiBranchTexter.Controls
         {
             InitializeComponent();
             textNode = newNode;
-            fatherNode = this;
+            FatherNode = this;
         }
 
         #region 事件
@@ -51,7 +51,8 @@ namespace MultiBranchTexter.Controls
             //设置显示顺序为2，以显示在connectingline上面
             Panel.SetZIndex(this, 2);
             UpdateLayout();
-            UpdatePostLines();
+            Debug.WriteLine("节点成功生成" + textNode.Name);
+            DrawPostLines(ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this));
         }
 
         #region 移动事件
@@ -100,20 +101,20 @@ namespace MultiBranchTexter.Controls
 
 
         //点击gotobtn，跳转到相应的标签页
-        private void gotoBtn_Click(object sender, RoutedEventArgs e)
+        private void GotoBtn_Click(object sender, RoutedEventArgs e)
         {
             //通知窗体切换页面，打开相应的标签页
             (Application.Current.MainWindow as MainWindow).OpenMBTabItem(textNode);
         }
 
         //双击标题，可以改标题
-        private void titleBox_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void TitleBox_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             titleBox.Focusable = true;
         }
 
         //标题失去焦点，恢复为不可聚焦并完成标题修改
-        private void titleBox_LostFocus(object sender, RoutedEventArgs e)
+        private void TitleBox_LostFocus(object sender, RoutedEventArgs e)
         {
             titleBox.Focusable = false;
             titleBox.SelectionStart = 0;
@@ -148,7 +149,7 @@ namespace MultiBranchTexter.Controls
             if (e.OriginalSource is Border)
             {
                 //这样，就表示点击到了主题border上
-                if ((e.OriginalSource as Border).Name == "bgBorder" && textNode.endCondition == null)
+                if ((e.OriginalSource as Border).Name == "bgBorder" && textNode.endCondition is SingleEndCondition)
                 {
                     FlowChartContainer parent = ControlTreeHelper.FindParentOfType<FlowChartContainer>(this);
                     if (parent.IsWaiting)
@@ -178,8 +179,10 @@ namespace MultiBranchTexter.Controls
         {
             string header = (string)(sender as MenuItem).Header;
             if ((header == "单一后继" && textNode.endCondition == null)
-                || (header == "判断后继" && textNode.endCondition is YesNoCondition)
-                || (header == "多选后继" && textNode.endCondition is MultiAnswerCondition))
+                || (header == "判断后继" 
+                && textNode.endCondition is UniversalEndCondition && !(textNode.endCondition as UniversalEndCondition).IsExpression)
+                || (header == "多选后继" 
+                && textNode.endCondition is UniversalEndCondition && (textNode.endCondition as UniversalEndCondition).IsExpression))
             { return; }
             MessageBoxResult warnResult = MessageBox.Show
                 (
@@ -193,19 +196,19 @@ namespace MultiBranchTexter.Controls
             UnLinkAllPost();//清除后继
             if (header == "单一后继")
             {
-                textNode.endCondition = null;
+                textNode.endCondition = new SingleEndCondition();
                 endContainer.Child = null;
             }
             else if (header == "判断后继")
             {
-                textNode.endCondition = new YesNoCondition();
+                textNode.endCondition = new UniversalEndCondition(false);
                 NodeEndYesNo newNode = new NodeEndYesNo();
                 newNode.SetFather(this);
                 endContainer.Child = newNode;
             }
             else
             {
-                textNode.endCondition = new MultiAnswerCondition();
+                textNode.endCondition = new UniversalEndCondition(true);
                 NodeEndMA newNode = new NodeEndMA();
                 newNode.SetFather(this);
                 endContainer.Child = newNode;
@@ -228,13 +231,13 @@ namespace MultiBranchTexter.Controls
             post.preNodes.Add(pre);
             TextNode.Link(pre.textNode, post.textNode);
         }
-        public static void Link(NodeButton pre, NodeButton post,bool yesno)
-        {
-            //添加
-            pre.postNodes.Add(post);
-            post.preNodes.Add(pre);
-            TextNode.Link(pre.textNode, post.textNode, yesno);
-        }
+        //public static void Link(NodeButton pre, NodeButton post,bool yesno)
+        //{
+        //    //添加
+        //    pre.postNodes.Add(post);
+        //    post.preNodes.Add(pre);
+        //    TextNode.Link(pre.textNode, post.textNode, yesno);
+        //}
         public static void Link(NodeButton pre, NodeButton post,string answer)
         {
             //添加
@@ -249,13 +252,13 @@ namespace MultiBranchTexter.Controls
             post.preNodes.Remove(pre);
             TextNode.UnLink(pre.textNode, post.textNode);
         }
-        public static void UnLink(NodeButton pre, NodeButton post,bool yesno)
-        {
-            //移除
-            pre.postNodes.Remove(post);
-            post.preNodes.Remove(pre);
-            TextNode.UnLink(pre.textNode, post.textNode, yesno);
-        }
+        //public static void UnLink(NodeButton pre, NodeButton post,bool yesno)
+        //{
+        //    //移除
+        //    pre.postNodes.Remove(post);
+        //    post.preNodes.Remove(pre);
+        //    TextNode.UnLink(pre.textNode, post.textNode, yesno);
+        //}
         public static void UnLink(NodeButton pre, NodeButton post,string answer)
         {
             //移除
@@ -269,38 +272,46 @@ namespace MultiBranchTexter.Controls
         /// </summary>
         public static void Link(NodeBase pre, NodeButton post)
         {
-            if (pre.fatherNode.textNode.endCondition == null)
-            { NodeButton.Link(pre.fatherNode, post); }
-            else if (pre.fatherNode.textNode.endCondition is YesNoCondition)
+            if (pre.FatherTextNode.endCondition is UniversalEndCondition)
             {
-                if (pre.Name == "yesNode")
-                { NodeButton.Link(pre.fatherNode, post, true); }
+                UniversalEndCondition uec = pre.FatherTextNode.endCondition as UniversalEndCondition;
+                if (uec.IsExpression)
+                {
+                    NodeButton.Link(pre.FatherNode, post, (pre as NodeEndMAAnswer).Answer);
+                }
                 else
-                { NodeButton.Link(pre.fatherNode, post, false); }
+                {
+                    if (pre.Name == "yesNode")
+                    { NodeButton.Link(pre.FatherNode,post,"yes"); }
+                    if (pre.Name == "noNode")
+                    { NodeButton.Link(pre.FatherNode,post,"no"); }
+                }
             }
-            else if (pre.fatherNode.textNode.endCondition is MultiAnswerCondition)
-            {
-                NodeButton.Link(pre.fatherNode, post, (pre as NodeEndMAAnswer).Answer);
-            }
+            else
+            { NodeButton.Link(pre.FatherNode, post); }
         }
         /// <summary>
         /// 已经有相当信息的unLink，能根据信息自动选择断开方式
         /// </summary>
         public static void UnLink(NodeBase pre, NodeButton post)
         {
-            if (pre.fatherNode.textNode.endCondition == null)
-            { NodeButton.UnLink(pre.fatherNode, post); }
-            else if (pre.fatherNode.textNode.endCondition is YesNoCondition)
+            if (pre.FatherTextNode.endCondition is UniversalEndCondition)
             {
-                if (pre.Name == "yesNode")
-                { NodeButton.UnLink(pre.fatherNode, post, true); }
+                UniversalEndCondition uec = pre.FatherTextNode.endCondition as UniversalEndCondition;
+                if (uec.IsExpression)
+                {
+                    NodeButton.UnLink(pre.FatherNode, post, (pre as NodeEndMAAnswer).Answer);
+                }
                 else
-                { NodeButton.UnLink(pre.fatherNode, post, false); }
+                {
+                    if (pre.Name == "yesNode")
+                    { NodeButton.UnLink(pre.FatherNode, post, "yes"); }
+                    if (pre.Name == "noNode")
+                    { NodeButton.UnLink(pre.FatherNode, post, "no"); }
+                }
             }
-            else if (pre.fatherNode.textNode.endCondition is MultiAnswerCondition)
-            {
-                NodeButton.UnLink(pre.fatherNode, post, (pre as NodeEndMAAnswer).Answer);
-            }
+            else
+            { NodeButton.UnLink(pre.FatherNode, post); }
         }
         #endregion
 
@@ -318,22 +329,26 @@ namespace MultiBranchTexter.Controls
         /// </summary>
         public void ShowEndCondition()
         {
-            fatherNode = this;
-            if (textNode.endCondition == null)//表示是无选项的
+            FatherNode = this;
+            if (textNode.endCondition is SingleEndCondition)//表示是无选项的
             {
                 //把可能存在的东西删掉
                 if (endContainer != null)
                 { endContainer.Child = null; }
             }
-            else if (textNode.endCondition is YesNoCondition)
+            else if (textNode.endCondition is UniversalEndCondition)
             {
-                endNode = new NodeEndYesNo(textNode.endCondition as YesNoCondition);
-                (endNode as NodeEndYesNo).SetFather(this);
-            }
-            else if (textNode.endCondition is MultiAnswerCondition)
-            {
-                endNode = new NodeEndMA(textNode.endCondition as MultiAnswerCondition);
-                (endNode as NodeEndMA).SetFather(this);
+                UniversalEndCondition uec = textNode.endCondition as UniversalEndCondition;
+                if (!uec.IsExpression)
+                {
+                    endNode = new NodeEndYesNo(uec);
+                    (endNode as NodeEndYesNo).SetFather(this);
+                }
+                else
+                {
+                    endNode = new NodeEndMA(uec);
+                    (endNode as NodeEndMA).SetFather(this);
+                }
             }
         }
 
@@ -341,65 +356,49 @@ namespace MultiBranchTexter.Controls
         /// <summary>
         /// 根据textNode的连接情况在自己和后续节点间生成连线
         /// </summary>
-        public void AddPostLines(Panel container)
+        public void DrawPostLines(Panel container)
         {
-            if (textNode.endCondition == null)//表示是无选项的
+            if (textNode.endCondition is SingleEndCondition)//表示是无选项的
             {
                 if (postNodes.Count == 0)//可能没有
                 { return; }
-                ConnectingLine line = new ConnectingLine
-                {
-                    BeginNode = this,
-                    EndNode = postNodes[0]
-                };
-                postLines.Add(line);
-                postNodes[0].preLines.Add(line);
+                ConnectingLine line = new ConnectingLine(this, postNodes[0]);
                 container.Children.Add(line);
             }
-            else if (textNode.endCondition is YesNoCondition)
+            else if (textNode.endCondition is UniversalEndCondition)
             {
-                NodeEndYesNo tempNode = endNode as NodeEndYesNo;
-                foreach (NodeButton nodeButton in postNodes)
+                UniversalEndCondition uec = textNode.endCondition as UniversalEndCondition;
+                if (!uec.IsExpression)
                 {
-                    if ((textNode.endCondition as YesNoCondition).YesNode == nodeButton.textNode)
+                    NodeEndYesNo tempNode = endNode as NodeEndYesNo;
+                    foreach (NodeButton nodeButton in postNodes)
                     {
-                        ConnectingLine line = new ConnectingLine
+                        if (uec.Answers["yes"] == nodeButton.textNode.Name)
                         {
-                            BeginNode = tempNode.yesNode,
-                            EndNode = nodeButton
-                        };
-                        nodeButton.preLines.Add(line);
-                        postLines.Add(line);
-                        container.Children.Add(line);
-                    }
-                    if ((textNode.endCondition as YesNoCondition).NoNode == nodeButton.textNode)
-                    {
-                        ConnectingLine line = new ConnectingLine
+                            ConnectingLine line = new ConnectingLine(tempNode.yesNode, nodeButton);
+                            container.Children.Add(line);
+                        }
+                        if (uec.Answers["no"] == nodeButton.textNode.Name)
                         {
-                            BeginNode = tempNode.noNode,
-                            EndNode = nodeButton
-                        };
-                        nodeButton.preLines.Add(line);
-                        postLines.Add(line);
-                        container.Children.Add(line);
+                            ConnectingLine line = new ConnectingLine(tempNode.noNode, nodeButton);
+                            container.Children.Add(line);
+                        }
                     }
                 }
-            }
-            else if (textNode.endCondition is MultiAnswerCondition)
-            {
-                NodeEndMA tempNode = endNode as NodeEndMA;
-                int i = 0;
-                foreach (UserControl control in tempNode.answerContainer.Children)
+                else
                 {
-                    ConnectingLine line = new ConnectingLine
+                    NodeEndMA tempNode = endNode as NodeEndMA;
+                    for (int i = 0; i < postNodes.Count; i++)
                     {
-                        BeginNode = control as NodeBase,
-                        EndNode = postNodes[i]
-                    };
-                    postNodes[i].preLines.Add(line);
-                    postLines.Add(line);
-                    container.Children.Add(line);
-                    i++;
+                        foreach (UserControl control in tempNode.answerContainer.Children)
+                        {
+                            if (uec.Answers[(control as NodeEndMAAnswer).Answer] == postNodes[i].textNode.Name)
+                            {
+                                ConnectingLine line = new ConnectingLine(control as NodeBase, postNodes[i]);
+                                container.Children.Add(line);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -517,7 +516,7 @@ namespace MultiBranchTexter.Controls
         /// <summary>
         /// 输入一条前驱连接线，返回其应有的偏移量
         /// </summary>
-        public Vector GetPreLineEnd(ConnectingLine line)
+        public Vector GetPreLineEndOffset(ConnectingLine line)
         {
             Vector point = new Vector(50, 25);
             if (preLines.Count == 1)

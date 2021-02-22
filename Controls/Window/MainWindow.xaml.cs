@@ -29,16 +29,22 @@ namespace MultiBranchTexter
         //打开标签页
         public void OpenMBTabItem(TextNode node)
         { _viewModel.OpenMBTabItem(node); }
+        public void OpenMBTabItem(string nodeName)
+        { _viewModel.OpenMBTabItem(flowChart.GetNodeByName(nodeName)); }
 
-        /// <summary>
-        /// 返回首页，并且跳到对应节点位置
-        /// </summary>
-        public void BackToFront(TextNode node)
+    /// <summary>
+    /// 返回首页，并且跳到对应节点位置
+    /// </summary>
+    public void BackToFront(TextNode node)
         {
             _viewModel.IsFlowChartShowing = true;
             flowChart.ScrollToNode(node);
         }
-
+        public void BackToFront(string nodeName)
+        {
+            _viewModel.IsFlowChartShowing = true;
+            flowChart.ScrollToNode(flowChart.GetNodeByName(nodeName));
+        }
         /// <summary>
         /// 重置某个标签页的页尾
         /// </summary>

@@ -83,7 +83,7 @@ namespace MultiBranchTexter.Controls
         /// <summary>
         /// 父级TabControl尺寸发生变化
         /// </summary>
-        private void parent_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void Parent_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             //调整自身大小
             //保持约定宽度item的临界个数
@@ -123,14 +123,14 @@ namespace MultiBranchTexter.Controls
         /// </summary>
         private void Load()
         {
-            //测试用
-            return;
-            //测试用
+            //TODO:测试用，后续删掉这里
+            /*return*/;
+            //TODO:测试用，后续删掉这里
 
 
 
             //注册父级TabControl尺寸发生变化事件
-            parent.SizeChanged += parent_SizeChanged;
+            parent.SizeChanged += Parent_SizeChanged;
             ObservableCollection<MBTabItem> parentItems = (parent.ItemsSource as ObservableCollection<MBTabItem>);
 
             //自适应
@@ -188,7 +188,7 @@ namespace MultiBranchTexter.Controls
             ObservableCollection<MBTabItem> parentItems = (parent.ItemsSource as ObservableCollection<MBTabItem>);
             parentItems.Remove(this);
             //移除事件
-            parent.SizeChanged -= parent_SizeChanged;
+            parent.SizeChanged -= Parent_SizeChanged;
 
             //调整剩余项大小
             //保持约定宽度item的临界个数
@@ -236,9 +236,6 @@ namespace MultiBranchTexter.Controls
 
             if (fragmentContainer.Children.Count == 0)//至少要有一个
             { fragmentContainer.Children.Add(new TextFragmentPresenter()); }
-
-            //TODO 载入后继信息
-
         }
 
 

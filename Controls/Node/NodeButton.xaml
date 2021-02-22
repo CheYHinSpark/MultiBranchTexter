@@ -41,12 +41,12 @@
                         <TextBox x:Name="titleBox" Margin="2" Grid.Row="0"
                                  Focusable="False" Background="Transparent"
                                  ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"
-                                 PreviewMouseDoubleClick="titleBox_PreviewMouseDoubleClick"
-                                 LostFocus="titleBox_LostFocus"/>
+                                 PreviewMouseDoubleClick="TitleBox_PreviewMouseDoubleClick"
+                                 LostFocus="TitleBox_LostFocus"/>
                         <Button x:Name="gotoBtn" Grid.Row="1"
                                 Margin="8,-2,8,-4" Tag="f"
                                 Template="{DynamicResource generalButtonTemplate}" 
-                                Click="gotoBtn_Click"
+                                Click="GotoBtn_Click"
                                 Content="M0,0 0,10 8,5Z"/>
                     </Grid>
                 </Border>

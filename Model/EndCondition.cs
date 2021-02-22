@@ -19,8 +19,18 @@ namespace MultiBranchTexter.Model
 
     public class UniversalEndCondition : EndCondition
     {
-        public bool IsExpression;
+        private readonly bool isExpression;
+        public bool IsExpression { get { return isExpression; } }//如果这个是false，则是yesno
         public Dictionary<string, string> Answers = new Dictionary<string, string>();
+        public UniversalEndCondition(bool isexpression) 
+        { 
+            isExpression = isexpression;
+            if (!isexpression)
+            {
+                Answers.Add("yes","");
+                Answers.Add("no","");
+            }
+        }
     }
 
     [Obsolete]

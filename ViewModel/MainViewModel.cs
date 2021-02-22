@@ -350,6 +350,8 @@ namespace MultiBranchTexter.ViewModel
         //打开标签页
         public void OpenMBTabItem(TextNode node)
         {
+            if (node == null)
+            { return; }
             //遍历已有的标签页看看是否已经存在同标签
             for (int i = 0; i < WorkTabs.Count; i++)
             {

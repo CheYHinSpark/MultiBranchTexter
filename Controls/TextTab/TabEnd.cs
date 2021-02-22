@@ -23,9 +23,9 @@ namespace MultiBranchTexter.Controls
         //控件
         private TextBlock questionTxt;
         private Grid container;
+        private Button backBtn;
         //信息
         private TextNode textNode;
-        public TextNode nextNode;
        
         public TabEnd()
         {
@@ -40,7 +40,16 @@ namespace MultiBranchTexter.Controls
         {
             questionTxt = GetTemplateChild("questionTxt") as TextBlock;
             container = GetTemplateChild("container") as Grid;
+            backBtn = GetTemplateChild("backBtn") as Button;
+
+            backBtn.Click += BackBtn_Click;
+
             LoadTabEnd();
+        }
+
+        private void BackBtn_Click(object sender, RoutedEventArgs e)
+        {
+            (Application.Current.MainWindow as MainWindow).BackToFront(textNode);
         }
 
         /// <summary>
@@ -51,46 +60,33 @@ namespace MultiBranchTexter.Controls
             questionTxt.Text = "查看后继节点";
             container.Children.Clear();
             container.RowDefinitions.Clear();//清理container
-            //开始根据后继类型
-            if (textNode.endCondition == null)
+            //开始根据后继类型添加东西
+            if (textNode.endCondition is SingleEndCondition)
             { 
                 //表示是单一后继或者无后继
-                if (textNode.PostNodes.Count > 0)
+                if ((textNode.endCondition as SingleEndCondition).NextNodeName == "")
                 {
                     RowDefinition row = new RowDefinition { Height = new GridLength(20) };
                     container.RowDefinitions.Add(row);
-                    TabEndItem tei = new TabEndItem(textNode, "", textNode.PostNodes[0]);
+                    TabEndItem tei = new TabEndItem("", (textNode.endCondition as SingleEndCondition).NextNodeName);
                     tei.SetValue(Grid.RowProperty, 0);
                     container.Children.Add(tei);
                 }
             }
-            else if (textNode.endCondition is YesNoCondition)
+            else if (textNode.endCondition is UniversalEndCondition)
             {
-                questionTxt.Text += "：" + (textNode.endCondition as YesNoCondition).Question;
-                TextNode yes = (textNode.endCondition as YesNoCondition).YesNode;
-                TextNode no = (textNode.endCondition as YesNoCondition).NoNode;
-                RowDefinition row1 = new RowDefinition { Height = new GridLength(20) };
-                container.RowDefinitions.Add(row1);
-                TabEndItem ytei = new TabEndItem(textNode, "是", yes);
-                ytei.SetValue(Grid.RowProperty, 0);
-                container.Children.Add(ytei);
-                RowDefinition row2 = new RowDefinition { Height = new GridLength(20) };
-                container.RowDefinitions.Add(row2);
-                TabEndItem ntei = new TabEndItem(textNode, "否", no);
-                ntei.SetValue(Grid.RowProperty, 1);
-                container.Children.Add(ntei);
-            }
-            else
-            {
-                questionTxt.Text += "：" + (textNode.endCondition as MultiAnswerCondition).Question;
-                List<AnswerToNode> atns = (textNode.endCondition as MultiAnswerCondition).AnswerToNodes;
-                for (int i =0;i<atns.Count;i++)
+
+                UniversalEndCondition uec = textNode.endCondition as UniversalEndCondition;
+                questionTxt.Text += "：" + uec.Question;
+                int i = 0;
+                foreach (string answer in uec.Answers.Keys)
                 {
                     RowDefinition row = new RowDefinition { Height = new GridLength(20) };
                     container.RowDefinitions.Add(row);
-                    TabEndItem tei = new TabEndItem(textNode, atns[i].Answer, atns[i].PostNode);
-                    tei.SetValue(Grid.RowProperty, i);
+                    TabEndItem tei = new TabEndItem(answer, uec.Answers[answer]);
+                    tei.SetValue(Grid.RowProperty, i);//设置行
                     container.Children.Add(tei);
+                    i++;
                 }
             }
             container.UpdateLayout();
@@ -108,6 +104,5 @@ namespace MultiBranchTexter.Controls
         {
             textNode = node;
         }
-
     }
 }
