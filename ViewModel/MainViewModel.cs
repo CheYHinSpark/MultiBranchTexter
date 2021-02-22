@@ -298,13 +298,11 @@ namespace MultiBranchTexter.ViewModel
 
         public MainViewModel()
         {
-            IsWorkGridVisible = Visibility.Visible;//测试中，正式要改成hidden
+            IsWorkGridVisible = Visibility.Hidden;
             FileName = "";
             TextFontSize = 14;
-            IsFlowChartShowing = false;
-            IsWorkTabShowing = true; 
-            //IsFlowChartShowing = true;
-            //IsWorkTabShowing = false;
+            IsFlowChartShowing = true;
+            IsWorkTabShowing = false;
             CanHideWorkTab = true;
             CanHideFlowChart = false;
             WorkTabs = new ObservableCollection<MBTabItem>();
@@ -321,19 +319,6 @@ namespace MultiBranchTexter.ViewModel
                     IsFlowChartShowing = true;
                     IsWorkTabShowing = false;
                 }
-                //foreach (MBTabItem item in e.OldItems)
-                //{
-                //    //Removed items
-                //    //item.PropertyChanged -= EntityViewModelPropertyChanged;
-                //}
-            }
-            else if (e.Action == NotifyCollectionChangedAction.Add)
-            {
-                //foreach (MBTabItem item in e.NewItems)
-                //{
-                //    //Added items
-                //    //item.PropertyChanged += EntityViewModelPropertyChanged;
-                //}
             }
             else if (e.Action == NotifyCollectionChangedAction.Reset)
             {

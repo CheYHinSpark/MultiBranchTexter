@@ -64,7 +64,7 @@ namespace MultiBranchTexter.Controls
             if (textNode.endCondition is SingleEndCondition)
             { 
                 //表示是单一后继或者无后继
-                if ((textNode.endCondition as SingleEndCondition).NextNodeName == "")
+                if ((textNode.endCondition as SingleEndCondition).NextNodeName != "")
                 {
                     RowDefinition row = new RowDefinition { Height = new GridLength(20) };
                     container.RowDefinitions.Add(row);
@@ -94,7 +94,6 @@ namespace MultiBranchTexter.Controls
             ControlTreeHelper
                 .FindParentOfType<ScrollViewer>(container)
                 .MaxHeight = Math.Min(120, container.ActualHeight);
-
         }
 
         /// <summary>

@@ -15,19 +15,6 @@ namespace MultiBranchTexter.Controls
     /// </summary>
     public partial class MBTabItem : TabItem
     {
-        //测试用
-        public MBTabItem()
-        {
-            TextNode node = new TextNode();
-            InitializeComponent();
-            textNode = node;
-            Header = node.Name;
-            tabEnd.SetTabEnd(node);
-            _viewModel = DataContext as TabItemViewModel;
-            // _viewModel.NodeText = node.Text;
-            LoadNode(node);
-            _viewModel.IsModified = "";
-        }
         public MBTabItem(TextNode node)
         {
             InitializeComponent();
@@ -35,7 +22,6 @@ namespace MultiBranchTexter.Controls
             Header = node.Name;
             tabEnd.SetTabEnd(node);
             _viewModel = DataContext as TabItemViewModel;
-            // _viewModel.NodeText = node.Text;
             LoadNode(node);
             _viewModel.IsModified = "";
         }
@@ -53,6 +39,7 @@ namespace MultiBranchTexter.Controls
         private readonly double conventionWidth = 120;
 
         private readonly TabItemViewModel _viewModel;
+        public TabItemViewModel ViewModel { get { return _viewModel; } }
         #endregion
 
         #region 事件
@@ -101,19 +88,13 @@ namespace MultiBranchTexter.Controls
             }
         }
 
-        /// <summary>
-        /// 按键
-        /// </summary>
-        private void TabItem_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            //if (Keyboard.Modifiers == ModifierKeys.Control)
-            //{
-            //    if (e.Key == Key.S)//保存
-            //    {
-            //        //textNode.Text = textBox.Text;
-            //    }
-            //}
+            e.Handled = true;// <--必须有
+            (fragmentContainer.Children[^1] as TextFragmentPresenter).GetFocus();
+            (fragmentContainer.Children[^1] as TextFragmentPresenter).SelecteLast();
         }
+
         #endregion
 
         #region 方法
@@ -123,12 +104,6 @@ namespace MultiBranchTexter.Controls
         /// </summary>
         private void Load()
         {
-            //TODO:测试用，后续删掉这里
-            /*return*/;
-            //TODO:测试用，后续删掉这里
-
-
-
             //注册父级TabControl尺寸发生变化事件
             parent.SizeChanged += Parent_SizeChanged;
             ObservableCollection<MBTabItem> parentItems = (parent.ItemsSource as ObservableCollection<MBTabItem>);
@@ -210,17 +185,14 @@ namespace MultiBranchTexter.Controls
 
         public void Save()
         {
-            //TODO:新的保存
-            SaveNode();
-            ////textNode.Text = _viewModel.NodeText;
+            List<TextFragment> newFragments = new List<TextFragment>();
+            for (int i = 0; i < fragmentContainer.Children.Count; i++)
+            {
+                newFragments.Add((fragmentContainer.Children[i] as TextFragmentPresenter).Fragment);
+            }
+            textNode.Fragments.Clear();
+            textNode.Fragments = newFragments;
             _viewModel.IsModified = "";
-        }
-        #endregion
-
-        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            e.Handled = true;// <--必须有
-            (fragmentContainer.Children[^1] as TextFragmentPresenter).GetFocus();
         }
 
         /// <summary>
@@ -232,25 +204,11 @@ namespace MultiBranchTexter.Controls
             fragmentContainer.Children.Clear();
 
             for (int i = 0; i < textNode.Fragments.Count; i++)
-            { fragmentContainer.Children.Add(new TextFragmentPresenter(textNode.Fragments[i])); }
+            { fragmentContainer.Children.Add(new TextFragmentPresenter(textNode.Fragments[i], this)); }
 
             if (fragmentContainer.Children.Count == 0)//至少要有一个
-            { fragmentContainer.Children.Add(new TextFragmentPresenter()); }
+            { fragmentContainer.Children.Add(new TextFragmentPresenter(this)); }
         }
-
-
-        /// <summary>
-        /// 保存节点
-        /// </summary>
-        public void SaveNode()
-        {
-            List<TextFragment> newFragments = new List<TextFragment>();
-            for (int i = 0; i < fragmentContainer.Children.Count; i++)
-            {
-                newFragments.Add((fragmentContainer.Children[i] as TextFragmentPresenter).Fragment);
-            }
-            textNode.Fragments.Clear();
-            textNode.Fragments = newFragments;
-        }
+        #endregion
     }
 }

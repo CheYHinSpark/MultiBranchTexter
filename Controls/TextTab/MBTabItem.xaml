@@ -6,7 +6,6 @@
          xmlns:c="clr-namespace:MultiBranchTexter.Controls"
          Loaded="TabItem_Loaded"
          MinHeight="24" Padding="0"
-         KeyDown="TabItem_KeyDown"
          Template="{StaticResource MBTabItemTemplate}">
     <TabItem.DataContext>
         <vm:TabItemViewModel/>
@@ -16,19 +15,11 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <!--<c:MBTextBox x:Name="textBox" Text="{Binding NodeText,UpdateSourceTrigger=PropertyChanged}"
-                     FontSize="{Binding DataContext.TextFontSize, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"
-                     VerticalScrollBarVisibility="Auto"
-                     AcceptsTab="True" AcceptsReturn="True" TextWrapping="Wrap" 
-                     Template="{DynamicResource textBoxTemplate}"
-                     Foreground="{DynamicResource Text.Foreground.BaseBrush}"
-                     CaretBrush="{DynamicResource ThemeBrush}"
-                     Background="{DynamicResource MainBrush}"/>-->
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <Grid>
+            <Grid Background="{DynamicResource MainBrush}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*" MinHeight="200"/>
+                    <RowDefinition Height="*" MinHeight="160"/>
                 </Grid.RowDefinitions>
                 <StackPanel x:Name="fragmentContainer" Grid.Row="0" Orientation="Vertical"/>
                 <Border Grid.Row="1" Background="Transparent" 

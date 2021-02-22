@@ -32,10 +32,10 @@ namespace MultiBranchTexter
         public void OpenMBTabItem(string nodeName)
         { _viewModel.OpenMBTabItem(flowChart.GetNodeByName(nodeName)); }
 
-    /// <summary>
-    /// 返回首页，并且跳到对应节点位置
-    /// </summary>
-    public void BackToFront(TextNode node)
+        /// <summary>
+        /// 返回首页，并且跳到对应节点位置
+        /// </summary>
+        public void BackToFront(TextNode node)
         {
             _viewModel.IsFlowChartShowing = true;
             flowChart.ScrollToNode(node);

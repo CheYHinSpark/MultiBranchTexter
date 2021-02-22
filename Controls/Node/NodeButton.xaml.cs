@@ -178,7 +178,7 @@ namespace MultiBranchTexter.Controls
         private void ChangeEnd_Click(object sender, RoutedEventArgs e)
         {
             string header = (string)(sender as MenuItem).Header;
-            if ((header == "单一后继" && textNode.endCondition == null)
+            if ((header == "单一后继" && textNode.endCondition is SingleEndCondition)
                 || (header == "判断后继" 
                 && textNode.endCondition is UniversalEndCondition && !(textNode.endCondition as UniversalEndCondition).IsExpression)
                 || (header == "多选后继" 
@@ -231,13 +231,7 @@ namespace MultiBranchTexter.Controls
             post.preNodes.Add(pre);
             TextNode.Link(pre.textNode, post.textNode);
         }
-        //public static void Link(NodeButton pre, NodeButton post,bool yesno)
-        //{
-        //    //添加
-        //    pre.postNodes.Add(post);
-        //    post.preNodes.Add(pre);
-        //    TextNode.Link(pre.textNode, post.textNode, yesno);
-        //}
+
         public static void Link(NodeButton pre, NodeButton post,string answer)
         {
             //添加
@@ -252,13 +246,7 @@ namespace MultiBranchTexter.Controls
             post.preNodes.Remove(pre);
             TextNode.UnLink(pre.textNode, post.textNode);
         }
-        //public static void UnLink(NodeButton pre, NodeButton post,bool yesno)
-        //{
-        //    //移除
-        //    pre.postNodes.Remove(post);
-        //    post.preNodes.Remove(pre);
-        //    TextNode.UnLink(pre.textNode, post.textNode, yesno);
-        //}
+      
         public static void UnLink(NodeButton pre, NodeButton post,string answer)
         {
             //移除

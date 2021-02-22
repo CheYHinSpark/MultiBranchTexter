@@ -14,8 +14,7 @@
                  Template="{StaticResource contentTextBoxTemplate}"
                  Style="{StaticResource fragmentPresenterTextBoxStyle}"
                  LostFocus="Fragment_LostFocus"
-                 PreviewKeyDown="Content_KeyDown"
-                 TextChanged="Content_TextChanged"/>
+                 PreviewKeyDown="Content_KeyDown"/>
         <CheckBox x:Name="showHideOpBtn" Template="{StaticResource fragmentOperationCheckBoxTemplate}"
                   Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top"
                   Margin="0,-10,0,0" Click="ShowHideOpBtn_Click" Visibility="Hidden"/>

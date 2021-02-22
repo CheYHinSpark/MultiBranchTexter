@@ -337,7 +337,6 @@ namespace MultiBranchTexter.Controls
             for (int i = 0; i < textNodes.Count; i++)
             {
                 nodeButtons[i].ShowEndCondition();
-                nodeButtons[i].DrawPostLines(container);
             }
             Debug.WriteLine("节点图创建完成");
             IsModified = "*";
@@ -418,7 +417,6 @@ namespace MultiBranchTexter.Controls
             for (int i = 0; i < textNodes.Count; i++)
             {
                 nodeButtons[i].ShowEndCondition();
-                //nodeButtons[i].DrawPostLines(container);
             }
             Debug.WriteLine("节点图创建完成");
         }

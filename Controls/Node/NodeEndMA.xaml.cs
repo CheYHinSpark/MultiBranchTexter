@@ -73,6 +73,8 @@ namespace MultiBranchTexter.Controls
             NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(newAnswer, "")
             { FatherNode = this.FatherNode };
             answerContainer.Children.Add(nodeEnd);
+            // 还要通知窗口改变相应的标签页
+            ControlTreeHelper.FindParentOfType<MainWindow>(FatherNode).ReLoadTab(FatherTextNode);
         }
         #endregion
 

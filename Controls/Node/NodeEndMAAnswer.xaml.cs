@@ -123,6 +123,8 @@ namespace MultiBranchTexter.Controls
             {
                 (FatherTextNode.endCondition as UniversalEndCondition).Answers.Remove(answer);
             }
+            //通知标签页改变
+            ControlTreeHelper.FindParentOfType<MainWindow>(FatherNode).ReLoadTab(FatherTextNode);
             //移除自身
             ControlTreeHelper.FindParentOfType<StackPanel>(this).Children.Remove(this);
         }
