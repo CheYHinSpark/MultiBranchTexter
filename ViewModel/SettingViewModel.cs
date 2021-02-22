@@ -69,8 +69,21 @@ namespace MultiBranchTexter.ViewModel
             }
         }
 
+        private bool? _allowDoubleEnter;
 
-
+        public bool? AllowDoubleEnter
+        {
+            get { return _allowDoubleEnter; }
+            set
+            {
+                _allowDoubleEnter = value;
+                if (value == true)
+                { (Application.Current.MainWindow as MainWindow).AllowDoubleEnter = true; }
+                else
+                { (Application.Current.MainWindow as MainWindow).AllowDoubleEnter = false; }
+                RaisePropertyChanged("AllowDoubleEnter");
+            }
+        }
 
         public SettingViewModel()
         {
@@ -78,6 +91,7 @@ namespace MultiBranchTexter.ViewModel
             ColorR = 238;
             ColorG = 170;
             ColorB = 22;
+            AllowDoubleEnter = false;
         }
 
         public void ChangeColor()

@@ -14,7 +14,18 @@ namespace MultiBranchTexter.Controls
     /// </summary>
     public partial class TextFragmentPresenter : UserControl
     {
-        private MBTabItem ownerTab;
+        public static DependencyProperty AllowDoubleEnterProperty =
+          DependencyProperty.Register("AllowDoubleEnter", typeof(bool),
+              typeof(TextFragmentPresenter), new PropertyMetadata(false));
+
+        public bool AllowDoubleEnter
+        {
+            get { return (bool)GetValue(AllowDoubleEnterProperty); }
+            set { SetValue(AllowDoubleEnterProperty, value); }
+        }
+
+
+        private readonly MBTabItem ownerTab;
         private StackPanel parentPanel;
         private readonly TextFragment fragment;
         public TextFragment Fragment 
@@ -81,7 +92,7 @@ namespace MultiBranchTexter.Controls
                 {
                     From = 2,
                     To = opContainer.ActualHeight,
-                    Duration = new Duration(new TimeSpan(0, 0, 0, 0, 300)),
+                    Duration = new Duration(new TimeSpan(0, 0, 0, 0, 200)),
                     FillBehavior = FillBehavior.Stop
                 };
                 sb.Children.Add(da);
@@ -97,7 +108,7 @@ namespace MultiBranchTexter.Controls
                 {
                     From = opContainer.ActualHeight,
                     To = 2,
-                    Duration = new Duration(new TimeSpan(0, 0, 0, 0, 300)),
+                    Duration = new Duration(new TimeSpan(0, 0, 0, 0, 200)),
                     FillBehavior = FillBehavior.Stop
                 };
                 sb.Children.Add(da);
@@ -132,22 +143,25 @@ namespace MultiBranchTexter.Controls
             else
             { return; }
 
-            try
+            if (!AllowDoubleEnter)
             {
-                //如果检测到两个换行符，则会分割文段
-                if (contentContainer.Text[i - 1] == '\n' && contentContainer.Text[i - 3] == '\n')
+                try
                 {
-                    string oldF = contentContainer.Text.Substring(0, i - 4);
-                    string newF = contentContainer.Text[(i)..];
-                    TextFragmentPresenter tfp = new TextFragmentPresenter(new TextFragment(newF), ownerTab);
-                    parentPanel.Children.Insert(parentPanel.Children.IndexOf(this) + 1, tfp);
-                    parentPanel.UpdateLayout();// <--必须有
-                    tfp.GetFocus();
-                    tfp.contentContainer.Select(0, 0);
-                    contentContainer.Text = oldF;
+                    //如果检测到两个换行符，则会分割文段
+                    if (contentContainer.Text[i - 1] == '\n' && contentContainer.Text[i - 3] == '\n')
+                    {
+                        string oldF = contentContainer.Text.Substring(0, i - 4);
+                        string newF = contentContainer.Text[(i)..];
+                        TextFragmentPresenter tfp = new TextFragmentPresenter(new TextFragment(newF), ownerTab);
+                        parentPanel.Children.Insert(parentPanel.Children.IndexOf(this) + 1, tfp);
+                        parentPanel.UpdateLayout();// <--必须有
+                        tfp.GetFocus();
+                        tfp.contentContainer.Select(0, 0);
+                        contentContainer.Text = oldF;
+                    }
                 }
+                catch { }
             }
-            catch { }
         }
 
         private void Operation_TextChanged(object sender, TextChangedEventArgs e)

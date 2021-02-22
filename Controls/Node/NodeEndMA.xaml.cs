@@ -82,7 +82,7 @@ namespace MultiBranchTexter.Controls
         /// <summary>
         /// 设置真正的father
         /// </summary>
-        public new void SetFather(NodeButton father)
+        public void SetFather(NodeButton father)
         {
             this.FatherNode = father;
             foreach (UserControl control in answerContainer.Children)

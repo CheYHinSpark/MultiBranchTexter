@@ -719,9 +719,16 @@
                 <Setter Property="Background" Value="#5064FFBE" TargetName="BD"/>
                 <Setter Property="BorderBrush" Value="#AA64FFBE" TargetName="BD"/>
             </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsFocused" Value="False"/>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="#AA64FFBE" TargetName="BD"/>
+            </MultiTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    <!--textBox的Style-->
+    <!--文本编辑textBox的Style-->
     <Style x:Key="fragmentPresenterTextBoxStyle" TargetType="{x:Type TextBox}">
         <Setter Property="AcceptsReturn" Value="True"/>
         <Setter Property="AcceptsTab" Value="True"/>
@@ -729,5 +736,10 @@
         <Setter Property="FontSize" Value="{Binding DataContext.TextFontSize, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"/>
         <Setter Property="Foreground" Value="{DynamicResource Text.Foreground.BaseBrush}"/>
         <Setter Property="CaretBrush" Value="{DynamicResource ThemeBrush}"/>
+    </Style>
+    
+    <!--文本片段器的style-->
+    <Style TargetType="{x:Type c:TextFragmentPresenter}">
+        <Setter Property="AllowDoubleEnter" Value="{Binding AllowDoubleEnter, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"/>
     </Style>
 </ResourceDictionary>

@@ -71,7 +71,7 @@ namespace MultiBranchTexter.Controls
         /// <summary>
         /// 设置真正的Node
         /// </summary>
-        public new void SetFather(NodeButton father)
+        public void SetFather(NodeButton father)
         {
             this.FatherNode = father;
             yesNode.FatherNode = father;
