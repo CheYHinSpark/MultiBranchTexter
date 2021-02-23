@@ -190,9 +190,13 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <!--标题栏-->
-                <TextBlock x:Name="WindowTitleTbl" Grid.Row="0" Text="" 
-                           VerticalAlignment="Center" 
-                           Margin="10,0,0,0" Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
+                    <ContentControl Width="24" Content="{DynamicResource iconImg}"/>
+                    <TextBlock x:Name="WindowTitleTbl" Grid.Row="0" Text="" 
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+                </StackPanel>
+          
                 <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
                     <Button x:Name="SettingButton" Style="{DynamicResource ThemeBtnStyle}"
                             Foreground="{DynamicResource Foreground.ThemeBrush}"
