@@ -5,12 +5,20 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\Images\icon.ico</ApplicationIcon>
+    <PackageIcon>icon.png</PackageIcon>
+    <Company>GlumickStudio</Company>
+    <Authors>GlumickStudio</Authors>
+    <Description>为了满足多分支的游戏剧情等的写作需要而开发的多分支文本编辑器。</Description>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="KTDU\**" />
     <EmbeddedResource Remove="KTDU\**" />
     <None Remove="KTDU\**" />
+    <None Include="Resources\Images\icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
     <Page Remove="KTDU\**" />
   </ItemGroup>
 
