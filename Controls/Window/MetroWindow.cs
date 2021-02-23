@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using MultiBranchTexter.ViewModel;
 
 namespace MultiBranchTexter
 {
@@ -35,6 +36,10 @@ namespace MultiBranchTexter
         private CheckBox MaxButton;
         private TextBlock WindowTitleTbl;
 
+        //设置
+        public SettingViewModel _settings;
+        public SettingViewModel Settings { get { return _settings; } }
+
         public MetroWindow()
         {
             this.Loaded += MetroWindow_Loaded;
@@ -47,6 +52,8 @@ namespace MultiBranchTexter
             // 查找窗体模板
             if (App.Current.Resources["MetroWindowTemplate"] is ControlTemplate mWTemplate)
             {
+                _settings = mWTemplate.FindName("svm", this) as SettingViewModel;
+
                 MaxButton = mWTemplate.FindName("MaxWinButton", this) as CheckBox;
 
                 MaxButton.Click += MaxButton_Click;
@@ -72,6 +79,7 @@ namespace MultiBranchTexter
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
+            _settings.WriteIni();
             if ((Application.Current.MainWindow as MainWindow).GetFCC().IsModified == "*")
             {
                 MessageBoxResult warnResult = MessageBox.Show

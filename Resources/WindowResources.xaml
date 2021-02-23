@@ -227,9 +227,9 @@
                     <ContentPresenter x:Name="CP" Opacity="0"/>
                 </AdornerDecorator>
                 <!--设置栏-->
-                <Grid x:Name="SettingPanel" Grid.Row="1" Height="0" Opacity="0">
+                <Grid x:Name="SettingPanel" Grid.Row="1" Height="0" Opacity="0" Background="#80808080">
                     <Grid.DataContext>
-                        <vm:SettingViewModel/>
+                        <vm:SettingViewModel x:Name="svm"/>
                     </Grid.DataContext>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -265,6 +265,7 @@
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation Duration="0:0:0.3" To="200"
+                                             Timeline.DesiredFrameRate="60"
                                              Storyboard.TargetProperty="(Grid.Height)"
                                              Storyboard.TargetName="SettingPanel"/>
                         </Storyboard>
@@ -274,6 +275,7 @@
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation Duration="0:0:0.3" To="0"
+                                             Timeline.DesiredFrameRate="60"
                                              Storyboard.TargetProperty="(Grid.Height)"
                                              Storyboard.TargetName="SettingPanel"/>
                         </Storyboard>

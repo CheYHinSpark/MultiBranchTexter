@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Media;
+using MultiBranchTexter.Model;
 
 namespace MultiBranchTexter.ViewModel
 {
@@ -87,11 +88,10 @@ namespace MultiBranchTexter.ViewModel
 
         public SettingViewModel()
         {
-            IsDarkMode = false;
+            ReadIni();
             ColorR = 238;
             ColorG = 170;
             ColorB = 22;
-            AllowDoubleEnter = false;
         }
 
         public void ChangeColor()
@@ -100,6 +100,22 @@ namespace MultiBranchTexter.ViewModel
             Application.Current.Resources.MergedDictionaries[0]["Theme"] = newColor;
             Application.Current.Resources.MergedDictionaries[0]["ThemeBrush"] = new SolidColorBrush(newColor);
             IsDarkMode = IsDarkMode;// <--这是为了解决某些东西不会刷新
+        }
+
+        public void ReadIni()
+        {
+            IniFile iniFile = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "Settings.ini");
+            IsDarkMode = iniFile.GetBool("Settings", "IsDarkMode", false);
+            AllowDoubleEnter = iniFile.GetBool("Settings", "AllowDoubleEnter", false);
+            Debug.WriteLine("成功读取配置");
+        }
+
+        public void WriteIni()
+        {
+            IniFile iniFile = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "Settings.ini");
+            iniFile.WriteBool("Settings", "IsDarkMode", IsDarkMode == true);
+            iniFile.WriteBool("Settings", "AllowDoubleEnter", AllowDoubleEnter == true);
+            Debug.WriteLine("成功保存配置");
         }
     }
 }
