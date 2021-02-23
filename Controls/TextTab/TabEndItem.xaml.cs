@@ -19,8 +19,7 @@ namespace MultiBranchTexter.Controls
     /// </summary>
     public partial class TabEndItem : UserControl
     {
-        private TextNode textNode;
-        public TextNode nextNode;
+        public string nextNodeName;
 
         public TabEndItem()
         {
@@ -30,31 +29,22 @@ namespace MultiBranchTexter.Controls
         /// <summary>
         /// 新建TabEndItem
         /// </summary>
-        /// <param name="newNode"></param>
         /// <param name="answer"></param>
         /// <param name="postNode"></param>
-        public TabEndItem(TextNode newNode, string answer, TextNode postNode)
+        public TabEndItem(string answer, string postName)
         {
             InitializeComponent();
-            textNode = newNode;
             answerTxt.Text = answer;
-            nextNode = postNode;
-            if (postNode != null)//有可能为null
-            { postNameTxt.Text = postNode.Name; }
+            nextNodeName = postName;
+            if (postName != "")//有可能为null
+            { postNameTxt.Text = postName; }
         }
 
-        private void nextBtn_Click(object sender, RoutedEventArgs e)
+        private void NextBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (nextNode == null)
+            if (nextNodeName == "")
             { return; }
-            (Application.Current.MainWindow as MainWindow).OpenMBTabItem(nextNode);
-        }
-
-        private void changeBtn_Click(object sender, RoutedEventArgs e)
-        {
-            ControlTreeHelper
-                .FindParentOfType<MainWindow>(this)
-                .BackToFront(textNode);
+            (Application.Current.MainWindow as MainWindow).OpenMBTabItem(nextNodeName);
         }
     }
 }

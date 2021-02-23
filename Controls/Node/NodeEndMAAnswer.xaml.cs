@@ -21,25 +21,31 @@ namespace MultiBranchTexter.Controls
     {
         private Button maCloseBtn;
         private TextBox answerTxt;
-        private readonly AnswerToNode answerToNode = new AnswerToNode();
+        private string answer = "";
+        private readonly string nextNodeName = "";
+        //private readonly AnswerToNode answerToNode = new AnswerToNode();
         /// <summary>
-        /// 获取或者设置回答文本
+        /// 获取当前的回答文本
         /// </summary>
         public string Answer
-        {
-            get
-            { return answerTxt.Text; }
-            set
-            { answerTxt.Text = value; }
+        { 
+            get 
+            {
+                if (answerTxt == null)
+                { return answer; }
+                return answerTxt.Text; 
+            }
         }
+
         public NodeEndMAAnswer()
         {
             InitializeComponent();
         }
-        public NodeEndMAAnswer(AnswerToNode atn)
+        public NodeEndMAAnswer(string newAnswer, string postNodeName)
         {
             InitializeComponent();
-            answerToNode = atn;
+            answer = newAnswer;
+            nextNodeName = postNodeName;
         }
         #region 事件
         //加载完成
@@ -52,9 +58,10 @@ namespace MultiBranchTexter.Controls
             answerTxt.LostFocus += AnswerTxt_LostFocus;
             MouseDoubleClick += NodeEndMAAnswer_MouseDoubleClick;
 
-            answerTxt.Text = answerToNode.Answer;
+            answerTxt.Text = answer;
         }
 
+        //双击，准备调整后继节点
         private void NodeEndMAAnswer_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (e.OriginalSource is Border)
@@ -71,16 +78,29 @@ namespace MultiBranchTexter.Controls
         //answerTXT完成修改时，检查是否出现重复
         private void AnswerTxt_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (ControlTreeHelper.FindParentOfType<NodeEndMA>(this).CheckRepeatedAnswer(Answer))
+            if (answerTxt.Text == answer)//这说明没有修改
+            { return; }
+            if (answerTxt.Text == "")//禁止为空
+            {
+                answerTxt.Text = answer;
+                MessageBox.Show("回答不能为空，已还原");
+                return;
+            }
+            //取得节点的后继条件
+            EndCondition ec = FatherTextNode.endCondition;
+            if (ec.Answers.ContainsKey(Answer))
             { 
-                answerTxt.Text = answerToNode.Answer;
+                answerTxt.Text = answer;
                 MessageBox.Show("回答出现重复，已还原");
             }
             else
             {
-                answerToNode.Answer = answerTxt.Text;
+                ec.Answers.Remove(answer);
+                //没有重复，完成修改
+                answer = answerTxt.Text;
+                ec.Answers.Add(answer, nextNodeName);
                 //通知标签页改变
-                ControlTreeHelper.FindParentOfType<MainWindow>(fatherNode).ReLoadTab(fatherNode.textNode);
+                ControlTreeHelper.FindParentOfType<MainWindow>(FatherNode).ReLoadTab(FatherTextNode);
             }
             answerTxt.SelectionStart = 0;
         }
@@ -88,15 +108,15 @@ namespace MultiBranchTexter.Controls
         private void MaCloseBtn_Click(object sender, RoutedEventArgs e)
         {
             //如果FCC处于等待选择新的后继节点状态，需要取消
-            FlowChartContainer fcc = ControlTreeHelper.FindParentOfType<FlowChartContainer>(fatherNode);
+            FlowChartContainer fcc = ControlTreeHelper.FindParentOfType<FlowChartContainer>(FatherNode);
             fcc.PostNodeChoosed(null);
             //断开连接
             ConnectingLine line = null;
-            for (int i = 0;i < fatherNode.postLines.Count;i++)
+            for (int i = 0;i < FatherNode.postLines.Count;i++)
             {
-                if (fatherNode.postLines[i].BeginNode == this)
+                if (FatherNode.postLines[i].BeginNode == this)
                 {
-                    line = fatherNode.postLines[i];
+                    line = FatherNode.postLines[i];
                 }
             }
             //可能没有连线
@@ -105,6 +125,12 @@ namespace MultiBranchTexter.Controls
                 NodeButton.UnLink(this, line.EndNode);
                 line.Delete();
             }
+            else//如果没有连线，也要删除相应的key
+            {
+                FatherTextNode.endCondition.Answers.Remove(answer);
+            }
+            //通知标签页改变
+            ControlTreeHelper.FindParentOfType<MainWindow>(FatherNode).ReLoadTab(FatherTextNode);
             //移除自身
             ControlTreeHelper.FindParentOfType<StackPanel>(this).Children.Remove(this);
         }

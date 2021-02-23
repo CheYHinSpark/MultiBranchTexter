@@ -10,6 +10,9 @@
     <Compile Update="Controls\ConnectingLine.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controls\TextTab\TextFragmentPresenter.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Controls\TextTab\MBTabItem.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -40,6 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Controls\ConnectingLine.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\TextTab\TextFragmentPresenter.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Controls\TextTab\MBTabItem.xaml">

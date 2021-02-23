@@ -23,13 +23,13 @@ namespace MultiBranchTexter.Controls
         {
             InitializeComponent();
         }
-        public NodeEndMA(MultiAnswerCondition mac)
+        public NodeEndMA(EndCondition maEnd)
         {
             InitializeComponent();
-            titleBox.Text = mac.Question;
-            foreach (AnswerToNode atn in mac.AnswerToNodes)
+            titleBox.Text = maEnd.Question;
+            foreach (string answer in maEnd.Answers.Keys)
             {
-                NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(atn);
+                NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(answer, maEnd.Answers[answer]);
                 answerContainer.Children.Add(nodeEnd);
             }
         }
@@ -43,49 +43,38 @@ namespace MultiBranchTexter.Controls
         }
 
         //双击标题，可以改标题
-        private void titleBox_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void TitleBox_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             titleBox.Focusable = true;
         }
 
         //标题失去焦点，恢复为不可聚焦并完成标题修改
-        private void titleBox_LostFocus(object sender, RoutedEventArgs e)
+        private void TitleBox_LostFocus(object sender, RoutedEventArgs e)
         {
             titleBox.Focusable = false;
             // 完成问题修改
-            fatherNode.textNode.endCondition.Question = titleBox.Text;
+            FatherTextNode.endCondition.Question = titleBox.Text;
             titleBox.SelectionStart = 0;
             // 还要通知窗口改变相应的标签页
-            ControlTreeHelper.FindParentOfType<MainWindow>(fatherNode).ReLoadTab(fatherNode.textNode);
+            ControlTreeHelper.FindParentOfType<MainWindow>(FatherNode).ReLoadTab(FatherTextNode);
         }
 
         //点击添加按钮
-        private void addBtn_Click(object sender, RoutedEventArgs e)
+        private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
-            AnswerToNode atn = new AnswerToNode();
-            List<AnswerToNode> atns = (fatherNode.textNode.endCondition as MultiAnswerCondition).AnswerToNodes;
-            //创造一个不重名的
+            Dictionary<string,string> atns = FatherTextNode.endCondition.Answers;
+            //创造一个不重名的回答
             string newAnswer = "新回答";
             int i = 1;
-            bool repeated = true;
-            while (repeated)
-            {
-                repeated = false;
-                for (int j = 0; j < atns.Count; j++)
-                {
-                    if (atns[j].Answer == newAnswer + i.ToString())
-                    {
-                        repeated = true;
-                        i++;
-                        break;
-                    }
-                }
-            }
-            atn.Answer = newAnswer + i.ToString();
-            atns.Add(atn);
-            NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(atn);
-            nodeEnd.fatherNode = fatherNode;
+            while (atns.ContainsKey(newAnswer + i.ToString()))
+            { i++; }
+            newAnswer += i.ToString();
+            atns.Add(newAnswer,"");
+            NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(newAnswer, "")
+            { FatherNode = this.FatherNode };
             answerContainer.Children.Add(nodeEnd);
+            // 还要通知窗口改变相应的标签页
+            ControlTreeHelper.FindParentOfType<MainWindow>(FatherNode).ReLoadTab(FatherTextNode);
         }
         #endregion
 
@@ -93,27 +82,13 @@ namespace MultiBranchTexter.Controls
         /// <summary>
         /// 设置真正的father
         /// </summary>
-        public new void SetFather(NodeButton father)
+        public void SetFather(NodeButton father)
         {
-            this.fatherNode = father;
+            this.FatherNode = father;
             foreach (UserControl control in answerContainer.Children)
             {
-                (control as NodeEndMAAnswer).fatherNode = father;
+                (control as NodeEndMAAnswer).FatherNode = father;
             }
-        }
-
-        /// <summary>
-        /// 输入一个回答，检查回答是否有重复，即数量在2即以上
-        /// </summary>
-        public bool CheckRepeatedAnswer(string newAnswer)
-        {
-            int n = 0;
-            foreach (UserControl control in answerContainer.Children)
-            {
-                if ((control as NodeEndMAAnswer).Answer == newAnswer)
-                { n++; }
-            }
-            return n > 1;
         }
         #endregion
     }

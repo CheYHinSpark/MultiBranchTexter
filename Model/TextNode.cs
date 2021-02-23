@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -14,120 +15,60 @@ namespace MultiBranchTexter.Model
         // 文件名
         public string Name = "";
         // 文字内容
-        public string Text = "";
+        //public string Text { get; set; }
         // 后继条件
         public EndCondition endCondition;
         // 前节点
         //[JsonIgnore]
-        private List<TextNode> preNodes = new List<TextNode>();
+        private readonly List<TextNode> preNodes = new List<TextNode>();
         // 后节点
         //[JsonIgnore]
-        public List<TextNode> PostNodes { get; private set; } = new List<TextNode>();
+        //public List<TextNode> PostNodes { get; private set; } = new List<TextNode>();
 
+        //文字内容
         public List<TextFragment> Fragments = new List<TextFragment>();
         
-        public TextNode() { }
+        public TextNode() 
+        {
+            endCondition = new EndCondition();
+        }
         
         public TextNode(string name, string text)
         {
             Name = name;
-            Text = text;
+            Fragments.Add(new TextFragment(text));
+            endCondition = new EndCondition();
         }
 
         #region 添加与删除前后节点
         #region 静态方法
-        public static void Link(TextNode pre, TextNode post)
-        {
-            //pre清除所有post
-            pre.ClearAllPostNode();
-            pre.AddPostNode(post);
-            post.AddPreNode(pre);
-        }
-        public static void Link(TextNode pre, TextNode post, bool yesNo)
-        {
-            if (!(pre.endCondition is YesNoCondition))
-            {
-                //删除
-                pre.ClearAllPostNode();
-                pre.endCondition = new YesNoCondition();
-            }
-            pre.AddPostNode(post);
-            post.AddPreNode(pre);
-            //修改后继条件
-            if (yesNo)
-            { (pre.endCondition as YesNoCondition).YesNode = post; }
-            else
-            { (pre.endCondition as YesNoCondition).NoNode = post; }
-        }
+     
+        /// <summary>
+        /// 连接，注意不能在对键值的遍历中搞这个
+        /// /// </summary>
         public static void Link(TextNode pre, TextNode post, string answer)
         {
-            if (!(pre.endCondition is MultiAnswerCondition))
-            {
-                //删除
-                pre.ClearAllPostNode();
-                pre.endCondition = new MultiAnswerCondition();
-            }
-            pre.AddPostNode(post);
             post.AddPreNode(pre);
-            //修改后继条件
-            bool hasAnswer = false;
-            foreach (AnswerToNode atn in (pre.endCondition as MultiAnswerCondition).AnswerToNodes)
+
+            if (pre.endCondition.Answers.ContainsKey(answer))
             {
-                if (atn.Answer == answer)
-                {
-                    atn.PostNode = post;
-                    hasAnswer = true;
-                    break;
-                }
+                pre.endCondition.Answers[answer] = post.Name;
             }
-            if (!hasAnswer)
-            {
-                (pre.endCondition as MultiAnswerCondition).AnswerToNodes
-                    .Add(new AnswerToNode
-                    {
-                        Answer = answer,
-                        PostNode = post
-                    });
-            }
+            else
+            { pre.endCondition.Answers.Add(answer, post.Name); }
         }
 
-        public static void UnLink(TextNode pre, TextNode post)
-        {
-            pre.DeletePostNode(post);
-            post.DeletePreNode(pre);
-        }
-        
-        public static void UnLink(TextNode pre, TextNode post, bool yesNo)
-        {
-            pre.DeletePostNode(post);
-            post.DeletePreNode(pre);
-            //修改后继条件
-            if (pre.endCondition is YesNoCondition)
-            {
-                if (yesNo)
-                { (pre.endCondition as YesNoCondition).YesNode = null; }
-                else
-                { (pre.endCondition as YesNoCondition).NoNode = null; }
-            }
-        }
-
+        /// <summary>
+        /// 断开，注意不能在对键值的遍历中搞这个
+        /// </summary>
         public static void UnLink(TextNode pre, TextNode post, string answer)
         {
-            pre.DeletePostNode(post);
             post.DeletePreNode(pre);
-            //修改后继条件
-            if (pre.endCondition is MultiAnswerCondition)
+
+            if (pre.endCondition.Answers.ContainsKey(answer))
             {
-                AnswerToNode needRemove = null;
-                foreach (AnswerToNode atn in (pre.endCondition as MultiAnswerCondition).AnswerToNodes)
-                {
-                    if (atn.Answer == answer)
-                    {
-                        needRemove = atn;
-                        break;
-                    }
-                }
-                (pre.endCondition as MultiAnswerCondition).AnswerToNodes.Remove(needRemove);
+                if (pre.endCondition.Answers[answer] == post.Name)
+                { pre.endCondition.Answers.Remove(answer); }
             }
         }
         #endregion
@@ -137,48 +78,20 @@ namespace MultiBranchTexter.Model
             //TODO 判断是否已经存在
             preNodes.Add(node);
         }
-        public void AddPostNode(TextNode node)
-        {
-            //TODO 判断是否已经存在
-            PostNodes.Add(node);
-        }
+
         public void DeletePreNode(TextNode node)
         {
             //TODO 判断是否已经存在
             preNodes.Remove(node);
         }
-        public void DeletePostNode(TextNode node)
-        {
-            //TODO 判断是否已经存在
-            PostNodes.Remove(node);
-        }
-        public void ClearAllPostNode()
-        {
-            PostNodes.Clear();
-        }
         #endregion
 
-        /// <summary>
-        /// 得到postNodes在参数List中的指标，目前是根据内存地址判断
-        /// </summary>
-        public List<int> GetPostNodeIndex(List<TextNode> textNodes)
-        {
-            List<int> vs = new List<int>();
-            for (int i = 0; i < textNodes.Count; i++)
-            {
-                if (PostNodes.Contains(textNodes[i]))
-                {
-                    vs.Add(i);
-                }
-            }
-            return vs;
-        }
-
+        [Obsolete]
         public int GetPostNodeIndex(List<TextNodeWithLeftTop> textNodes)
         {
             for (int i = 0; i < textNodes.Count; i++)
             {
-                if (PostNodes.Contains(textNodes[i].Node))
+                if (endCondition.Answers.ContainsValue(textNodes[i].Node.Name))
                 { return i; }
             }
             return -1;//可能没有后继了
@@ -207,8 +120,6 @@ namespace MultiBranchTexter.Model
         public TextNode Node;
         public double Left;
         public double Top;
-        public TextNodeWithLeftTop()
-        { }
         public TextNodeWithLeftTop(TextNode node, double left, double top)
         {
             Node = node;

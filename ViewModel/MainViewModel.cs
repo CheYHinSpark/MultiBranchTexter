@@ -319,19 +319,6 @@ namespace MultiBranchTexter.ViewModel
                     IsFlowChartShowing = true;
                     IsWorkTabShowing = false;
                 }
-                //foreach (MBTabItem item in e.OldItems)
-                //{
-                //    //Removed items
-                //    //item.PropertyChanged -= EntityViewModelPropertyChanged;
-                //}
-            }
-            else if (e.Action == NotifyCollectionChangedAction.Add)
-            {
-                //foreach (MBTabItem item in e.NewItems)
-                //{
-                //    //Added items
-                //    //item.PropertyChanged += EntityViewModelPropertyChanged;
-                //}
             }
             else if (e.Action == NotifyCollectionChangedAction.Reset)
             {
@@ -348,6 +335,8 @@ namespace MultiBranchTexter.ViewModel
         //打开标签页
         public void OpenMBTabItem(TextNode node)
         {
+            if (node == null)
+            { return; }
             //遍历已有的标签页看看是否已经存在同标签
             for (int i = 0; i < WorkTabs.Count; i++)
             {

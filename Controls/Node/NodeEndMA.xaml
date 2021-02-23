@@ -18,12 +18,12 @@
                 <TextBox x:Name="titleBox" Margin="1"
                          Focusable="False" Background="Transparent"
                          ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"
-                         PreviewMouseDoubleClick="titleBox_PreviewMouseDoubleClick"
-                         LostFocus="titleBox_LostFocus"/>
+                         PreviewMouseDoubleClick="TitleBox_PreviewMouseDoubleClick"
+                         LostFocus="TitleBox_LostFocus"/>
             </Grid>
         </Border>
         <StackPanel x:Name="answerContainer" Orientation="Vertical" Grid.Row="1"/>
-        <Button x:Name="addBtn" Grid.Row="2" Width="40" Click="addBtn_Click"
+        <Button x:Name="addBtn" Grid.Row="2" Width="40" Click="AddBtn_Click"
                 Template="{DynamicResource addAnswerButtonTemplate}"/>
     </Grid>
 </c:NodeBase>

@@ -1,6 +1,7 @@
 ﻿using MultiBranchTexter.Controls;
 using MultiBranchTexter.Model;
 using MultiBranchTexter.ViewModel;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
@@ -14,7 +15,6 @@ namespace MultiBranchTexter.Controls
     /// </summary>
     public partial class MBTabItem : TabItem
     {
-      
         public MBTabItem(TextNode node)
         {
             InitializeComponent();
@@ -22,7 +22,7 @@ namespace MultiBranchTexter.Controls
             Header = node.Name;
             tabEnd.SetTabEnd(node);
             _viewModel = DataContext as TabItemViewModel;
-            _viewModel.NodeText = node.Text;
+            LoadNode(node);
             _viewModel.IsModified = "";
         }
 
@@ -39,6 +39,7 @@ namespace MultiBranchTexter.Controls
         private readonly double conventionWidth = 120;
 
         private readonly TabItemViewModel _viewModel;
+        public TabItemViewModel ViewModel { get { return _viewModel; } }
         #endregion
 
         #region 事件
@@ -69,7 +70,7 @@ namespace MultiBranchTexter.Controls
         /// <summary>
         /// 父级TabControl尺寸发生变化
         /// </summary>
-        private void parent_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void Parent_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             //调整自身大小
             //保持约定宽度item的临界个数
@@ -87,19 +88,13 @@ namespace MultiBranchTexter.Controls
             }
         }
 
-        /// <summary>
-        /// 按键
-        /// </summary>
-        private void TabItem_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (Keyboard.Modifiers == ModifierKeys.Control)
-            {
-                if (e.Key == Key.S)//保存
-                {
-                    textNode.Text = textBox.Text;
-                }
-            }
+            e.Handled = true;// <--必须有
+            (fragmentContainer.Children[^1] as TextFragmentPresenter).GetFocus();
+            (fragmentContainer.Children[^1] as TextFragmentPresenter).SelecteLast();
         }
+
         #endregion
 
         #region 方法
@@ -110,7 +105,7 @@ namespace MultiBranchTexter.Controls
         private void Load()
         {
             //注册父级TabControl尺寸发生变化事件
-            parent.SizeChanged += parent_SizeChanged;
+            parent.SizeChanged += Parent_SizeChanged;
             ObservableCollection<MBTabItem> parentItems = (parent.ItemsSource as ObservableCollection<MBTabItem>);
 
             //自适应
@@ -168,7 +163,7 @@ namespace MultiBranchTexter.Controls
             ObservableCollection<MBTabItem> parentItems = (parent.ItemsSource as ObservableCollection<MBTabItem>);
             parentItems.Remove(this);
             //移除事件
-            parent.SizeChanged -= parent_SizeChanged;
+            parent.SizeChanged -= Parent_SizeChanged;
 
             //调整剩余项大小
             //保持约定宽度item的临界个数
@@ -190,8 +185,29 @@ namespace MultiBranchTexter.Controls
 
         public void Save()
         {
-            textNode.Text = _viewModel.NodeText;
+            List<TextFragment> newFragments = new List<TextFragment>();
+            for (int i = 0; i < fragmentContainer.Children.Count; i++)
+            {
+                newFragments.Add((fragmentContainer.Children[i] as TextFragmentPresenter).Fragment);
+            }
+            textNode.Fragments.Clear();
+            textNode.Fragments = newFragments;
             _viewModel.IsModified = "";
+        }
+
+        /// <summary>
+        /// 载入节点，根据其内容和后继生成相应的东西
+        /// </summary>
+        public void LoadNode(TextNode node)
+        {
+            textNode = node;
+            fragmentContainer.Children.Clear();
+
+            for (int i = 0; i < textNode.Fragments.Count; i++)
+            { fragmentContainer.Children.Add(new TextFragmentPresenter(textNode.Fragments[i], this)); }
+
+            if (fragmentContainer.Children.Count == 0)//至少要有一个
+            { fragmentContainer.Children.Add(new TextFragmentPresenter(this)); }
         }
         #endregion
     }

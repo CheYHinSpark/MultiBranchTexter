@@ -245,47 +245,39 @@ namespace MultiBranchTexter.Controls
             }
             for (int i = 0; i < textNodes.Count; i++)
             {
-                if (textNodes[i].endCondition == null)
+                EndCondition ec = textNodes[i].endCondition;
+
+                Dictionary<string, int> waitToLink = new Dictionary<string, int>();
+
+                foreach (string answer in ec.Answers.Keys)
                 {
-                    List<int> postIndex = textNodes[i].GetPostNodeIndex(textNodes);
-                    //为矩阵赋值，如果i有j作为后继，则ij位置为真
-                    for (int j = 0; j < postIndex.Count; j++)
+                    if (ec.Answers[answer] == "")
+                    { continue; }//直接跳过空的
+
+                    bool found = false;
+                    for (int k = 0; k < num; k++)
                     {
-                        mat[i, postIndex[j]] = true;
-                        //为nodeButton添加post
-                        NodeButton.Link(nodeButtons[i], nodeButtons[postIndex[j]]);
-                    }
-                }
-                else if (textNodes[i].endCondition is YesNoCondition)
-                {
-                    YesNoCondition ync = textNodes[i].endCondition as YesNoCondition;
-                    for (int j = 0; j < textNodes.Count; j++)
-                    {
-                        if (ync.YesNode == textNodes[j])
+                        if (ec.Answers[answer] == textNodes[k].Name)
                         {
-                            mat[i, j] = true;
-                            NodeButton.Link(nodeButtons[i],nodeButtons[j], true);
-                        }
-                        else if (ync.NoNode == textNodes[j])
-                        {
-                            mat[i, j] = true;
-                            NodeButton.Link(nodeButtons[i], nodeButtons[j], false);
+                            found = true;
+                            //准备为nodeButton添加post
+                            waitToLink.Add(answer, k);
+
+                            break;
                         }
                     }
+                    if (!found)
+                    { waitToLink.Add(answer, -1); }
                 }
-                else if (textNodes[i].endCondition is MultiAnswerCondition)
+
+                foreach (string answer in waitToLink.Keys)
                 {
-                    MultiAnswerCondition mac = textNodes[i].endCondition as MultiAnswerCondition;
-                    for (int j =0;j < mac.AnswerToNodes.Count;j++)
+                    if (waitToLink[answer] == -1)
+                    { ec.Answers[answer] = ""; }
+                    else
                     {
-                        for (int k = 0; k < textNodes.Count; k++)
-                        {
-                            if (mac.AnswerToNodes[j].PostNode == textNodes[k])
-                            {
-                                mat[i, k] = true;
-                                NodeButton.Link(nodeButtons[i], nodeButtons[k], mac.AnswerToNodes[j].Answer);
-                            }
-                        }
+                        mat[i, waitToLink[answer]] = true;
+                        NodeButton.Link(nodeButtons[i], nodeButtons[waitToLink[answer]], answer);
                     }
                 }
             }
@@ -341,7 +333,6 @@ namespace MultiBranchTexter.Controls
             for (int i = 0; i < textNodes.Count; i++)
             {
                 nodeButtons[i].ShowEndCondition();
-                nodeButtons[i].AddPostLines(container);
             }
             Debug.WriteLine("节点图创建完成");
             IsModified = "*";
@@ -364,35 +355,37 @@ namespace MultiBranchTexter.Controls
             Debug.WriteLine("节点创建完成");
             for (int i = 0; i < textNodes.Count; i++)
             {
-                if (textNodes[i].Node.endCondition == null)
+                EndCondition ec = textNodes[i].Node.endCondition;
+
+                Dictionary<string, int> waitToLink = new Dictionary<string, int>();
+
+                foreach (string answer in ec.Answers.Keys)
                 {
-                    int postIndex = textNodes[i].Node.GetPostNodeIndex(textNodes);
-                    //为nodeButton添加post
-                    if (postIndex >= 0)
-                        NodeButton.Link(nodeButtons[i], nodeButtons[postIndex]);
-                }
-                else if (textNodes[i].Node.endCondition is YesNoCondition)
-                {
-                    YesNoCondition ync = textNodes[i].Node.endCondition as YesNoCondition;
-                    for (int j = 0; j < textNodes.Count; j++)
+                    if (ec.Answers[answer] == "")
+                    { continue; }//直接跳过空的
+
+                    bool found = false;
+                    for (int k = 0; k < textNodes.Count; k++)
                     {
-                        if (ync.YesNode == textNodes[j].Node)
-                        { NodeButton.Link(nodeButtons[i], nodeButtons[j], true); }
-                        else if (ync.NoNode == textNodes[j].Node)
-                        { NodeButton.Link(nodeButtons[i], nodeButtons[j], false); }
-                    }
-                }
-                else if (textNodes[i].Node.endCondition is MultiAnswerCondition)
-                {
-                    MultiAnswerCondition mac = textNodes[i].Node.endCondition as MultiAnswerCondition;
-                    for (int j = 0; j < mac.AnswerToNodes.Count; j++)
-                    {
-                        for (int k = 0; k < textNodes.Count; k++)
+                        if (ec.Answers[answer] == textNodes[k].Node.Name)
                         {
-                            if (mac.AnswerToNodes[j].PostNode == textNodes[k].Node)
-                            { NodeButton.Link(nodeButtons[i], nodeButtons[k], mac.AnswerToNodes[j].Answer); }
+                            found = true;
+                            //准备为nodeButton添加post
+                            waitToLink.Add(answer, k);
+
+                            break;
                         }
                     }
+                    if (!found)
+                    { waitToLink.Add(answer, -1); }
+                }
+
+                foreach (string answer in waitToLink.Keys)
+                {
+                    if (waitToLink[answer] == -1)
+                    { ec.Answers[answer] = ""; }
+                    else
+                    { NodeButton.Link(nodeButtons[i], nodeButtons[waitToLink[answer]], answer); }
                 }
             }
             Debug.WriteLine("节点链接完成");
@@ -409,7 +402,6 @@ namespace MultiBranchTexter.Controls
             for (int i = 0; i < textNodes.Count; i++)
             {
                 nodeButtons[i].ShowEndCondition();
-                nodeButtons[i].AddPostLines(container);
             }
             Debug.WriteLine("节点图创建完成");
         }
@@ -427,20 +419,20 @@ namespace MultiBranchTexter.Controls
 
         public void AddNodeButton(NodeBase preNode,NodeButton postNode, double xPos, double yPos)
         {
-            NodeButton nodeButton = new NodeButton(new TextNode(GetNewName(), ""));
-            nodeButton.SetParent(container);
-            nodeButton.fatherNode = nodeButton;
+            NodeButton newNodeButton = new NodeButton(new TextNode(GetNewName(), ""));
+            newNodeButton.SetParent(container);
+            newNodeButton.FatherNode = newNodeButton;
             //连接三个点
-            NodeButton.Link(preNode, nodeButton);
-            NodeButton.Link(nodeButton, postNode);
-            container.Children.Add(nodeButton);
-            Canvas.SetLeft(nodeButton, xPos);
-            Canvas.SetTop(nodeButton, yPos);
+            NodeButton.Link(preNode, newNodeButton);
+            NodeButton.Link(newNodeButton, postNode);
+            container.Children.Add(newNodeButton);
+            Canvas.SetLeft(newNodeButton, xPos);
+            Canvas.SetTop(newNodeButton, yPos);
             container.UpdateLayout();
-            nodeButton.Move(-nodeButton.ActualWidth / 2, -nodeButton.ActualHeight / 2);
-            //画两条线
-            preNode.DrawPostLine(container, nodeButton);
-            nodeButton.DrawPostLine(container, postNode);
+            newNodeButton.Move(-newNodeButton.ActualWidth / 2, -newNodeButton.ActualHeight / 2);
+            //画新线
+            container.Children.Add(new ConnectingLine(preNode, newNodeButton));
+            //newNodeButton到post不用画，因为创建newNodebutton时会自动画，否则会出现两条
 
             IsModified = "*";
         }
@@ -615,6 +607,21 @@ namespace MultiBranchTexter.Controls
         {
             SearchNode(node);
         }
+
+        public TextNode GetNodeByName(string name)
+        {
+            foreach (UserControl control in container.Children)
+            {
+                if (control is NodeButton)
+                {
+                    if ((control as NodeButton).textNode.Name==name)
+                    {
+                        return (control as NodeButton).textNode;
+                    }
+                }
+            }
+            return null;
+        }
         #endregion
 
         #region 节点选择功能与选择新后继节点功能
@@ -667,7 +674,7 @@ namespace MultiBranchTexter.Controls
                     (control as NodeButton).UpperBd.Visibility = Visibility.Visible;
                 }
             }
-            waiter.fatherNode.UpperBd.Visibility = Visibility.Hidden;
+            waiter.FatherNode.UpperBd.Visibility = Visibility.Hidden;
         }
         /// <summary>
         /// 新的后继节点选择完成了，传入null表示取消选择
@@ -689,7 +696,7 @@ namespace MultiBranchTexter.Controls
             }
             //首先断开waitNode原有的连线
             ConnectingLine cline = null;//找到原本的连线
-            foreach (ConnectingLine line in waitingNode.fatherNode.postLines)
+            foreach (ConnectingLine line in waitingNode.FatherNode.postLines)
             {
                 if (line.BeginNode == waitingNode)
                 { cline = line; }
@@ -697,7 +704,7 @@ namespace MultiBranchTexter.Controls
             if (cline != null)//不一定有这条原本连线
             {
                 NodeButton.UnLink(waitingNode, cline.EndNode);
-                waitingNode.fatherNode.postLines.Remove(cline);
+                waitingNode.FatherNode.postLines.Remove(cline);
                 cline.EndNode.preLines.Remove(cline);
                 container.Children.Remove(cline);
             }
@@ -706,7 +713,7 @@ namespace MultiBranchTexter.Controls
             ConnectingLine cl = new ConnectingLine(waitingNode, post);
             container.Children.Add(cl);
             //修改标签页
-            (Application.Current.MainWindow as MainWindow).ReLoadTab(waitingNode.fatherNode.textNode);
+            (Application.Current.MainWindow as MainWindow).ReLoadTab(waitingNode.FatherTextNode);
             waitingNode = null;
         }
         #endregion

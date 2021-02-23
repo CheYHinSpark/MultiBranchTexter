@@ -21,16 +21,16 @@
                 <TextBox x:Name="titleBox" Margin="1"
                          Focusable="False" Background="Transparent"
                          ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"
-                         PreviewMouseDoubleClick="titleBox_PreviewMouseDoubleClick"
-                         LostFocus="titleBox_LostFocus"/>
+                         PreviewMouseDoubleClick="TitleBox_PreviewMouseDoubleClick"
+                         LostFocus="TitleBox_LostFocus"/>
             </Grid>
         </Border>
         <c:NodeBase x:Name="yesNode" Template="{DynamicResource yesnoAnswerTemplate}" 
                     Grid.Row="1" Grid.Column="0"
-                    MouseDoubleClick="yesnoNode_MouseDoubleClick"/>
+                    MouseDoubleClick="YesnoNode_MouseDoubleClick"/>
         <c:NodeBase x:Name="noNode" Template="{DynamicResource yesnoAnswerTemplate}"
                     Grid.Row="1" Grid.Column="1"
-                    MouseDoubleClick="yesnoNode_MouseDoubleClick"/>
+                    MouseDoubleClick="YesnoNode_MouseDoubleClick"/>
     </Grid>
 
 </c:NodeBase>

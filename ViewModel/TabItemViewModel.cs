@@ -14,19 +14,7 @@ namespace MultiBranchTexter.ViewModel
         public string IsModified
         {
             get { return _isModified; }
-            set { _isModified = value;RaisePropertyChanged("IsModified"); }
-        }
-
-        private string _nodeText;
-        public string NodeText
-        {
-            get { return _nodeText; }
-            set 
-            {
-                _nodeText = value;
-                IsModified = "*";
-                RaisePropertyChanged("NodeText");
-            }
+            set { _isModified = value; RaisePropertyChanged("IsModified"); }
         }
 
         public TabItemViewModel()

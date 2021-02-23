@@ -4,6 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\Images\icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +12,13 @@
     <EmbeddedResource Remove="KTDU\**" />
     <None Remove="KTDU\**" />
     <Page Remove="KTDU\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Images\darkIcon.png" />
+    <None Remove="Resources\Images\icon.ico" />
+    <None Remove="Resources\Images\icon.png" />
+    <None Remove="Resources\Images\lightIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +34,21 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Images\darkIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\lightIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

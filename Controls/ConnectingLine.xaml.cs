@@ -14,10 +14,7 @@ namespace MultiBranchTexter.Controls
     /// </summary>
     public partial class ConnectingLine : UserControl
     {
-        public ConnectingLine()
-        {
-            InitializeComponent();
-        }
+        private readonly bool isBeginMA = false;//起始节点是否是一个多问题节点
 
         /// <summary>
         /// 前后lines添加，并且会刷新线条
@@ -27,9 +24,10 @@ namespace MultiBranchTexter.Controls
             InitializeComponent();
             BeginNode = begin;
             EndNode = end;
-            begin.fatherNode.postLines.Add(this);
+            begin.FatherNode.postLines.Add(this);
             end.preLines.Add(this);
-            begin.fatherNode.UpdatePostLines();
+            begin.FatherNode.UpdatePostLines();
+            isBeginMA = begin.FatherTextNode.endCondition.EndType == EndType.MultiAnswers;
             end.UpdatePreLines();
         }
 
@@ -72,7 +70,7 @@ namespace MultiBranchTexter.Controls
 
         #region 右键菜单操作
         //删除线条
-        private void deleteLine_Click(object sender, RoutedEventArgs e)
+        private void DeleteLine_Click(object sender, RoutedEventArgs e)
         {
             //断开起始点和终止点
             NodeButton.UnLink(BeginNode, EndNode);
@@ -80,7 +78,7 @@ namespace MultiBranchTexter.Controls
             Delete();
         }
         //添加节点
-        private void addNode_Click(object sender, RoutedEventArgs e)
+        private void AddNode_Click(object sender, RoutedEventArgs e)
         {
             //断开起始点和终止点
             NodeButton.UnLink(BeginNode, EndNode);
@@ -105,8 +103,8 @@ namespace MultiBranchTexter.Controls
             { return; }
             //获取起始点
             Point beginPt = BeginNode.GetCanvasOffset() + new Vector(BeginNode.ActualWidth / 2.0, BeginNode.ActualHeight / 2.0);
-            Point endPt = EndNode.GetCanvasOffset() + EndNode.GetPreLineEnd(this);
-            if (BeginNode.fatherNode.textNode.endCondition is MultiAnswerCondition)
+            Point endPt = EndNode.GetCanvasOffset() + EndNode.GetPreLineEndOffset(this);
+            if (isBeginMA)
             {
                 //如果前驱是个多选模式节点，则特别处理
                 //取得偏移点
@@ -155,8 +153,8 @@ namespace MultiBranchTexter.Controls
                     + c2Pt.ToString() + " L" + endPt.ToString());
             }
             //更新tooltip
-            Path.ToolTip = "从" + BeginNode.fatherNode.textNode.Name + "\n到" + EndNode.textNode.Name;
-            //如果后继在上面，调整颜色
+            Path.ToolTip = "从" + BeginNode.FatherTextNode.Name + "\n到" + EndNode.textNode.Name;
+            //如果后继在上方，调整颜色
             if (beginPt.Y > endPt.Y)
             { Path.Tag = "1"; }
             else { Path.Tag = "0"; }
@@ -167,12 +165,13 @@ namespace MultiBranchTexter.Controls
         /// </summary>
         public void Delete()
         {
-            BeginNode.fatherNode.postLines.Remove(this);
+            BeginNode.FatherNode.postLines.Remove(this);
             EndNode.preLines.Remove(this);
-            BeginNode.fatherNode.UpdatePostLines();
+            BeginNode.FatherNode.UpdatePostLines();
             EndNode.UpdatePreLines();
             ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).IsModified = "*";
             ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this).Children.Remove(this);
+            Debug.WriteLine("成功删除连线");
         }
         #endregion
     }

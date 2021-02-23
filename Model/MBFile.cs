@@ -92,17 +92,17 @@ namespace MultiBranchTexter.Model
                     if (vs[1] == "yn")//是否判断
                     {
                         string[] vs1 = vs[3].Split(",");
-                        YesNoCondition condition = new YesNoCondition
+                        EndCondition condition = new EndCondition(EndType.YesNo)
                         { Question = vs[2] };
                         result[int.Parse(vs[0])].Node.endCondition = condition;
                         if (int.TryParse(vs1[0], out int i))
-                        { TextNode.Link(result[int.Parse(vs[0])].Node, result[i].Node, true); }
+                        { TextNode.Link(result[int.Parse(vs[0])].Node, result[i].Node, "yes"); }
                         if (int.TryParse(vs1[1], out int j))
-                        { TextNode.Link(result[int.Parse(vs[0])].Node, result[j].Node, false); }
+                        { TextNode.Link(result[int.Parse(vs[0])].Node, result[j].Node, "no"); }
                     }
                     else if (vs[1] == "ma")//多选
                     {
-                        MultiAnswerCondition condition = new MultiAnswerCondition
+                        EndCondition condition = new EndCondition(EndType.MultiAnswers)
                         { Question = vs[2] };
                         result[int.Parse(vs[0])].Node.endCondition = condition;
                         for (int i = 3; i < vs.Length; i++)
@@ -112,9 +112,10 @@ namespace MultiBranchTexter.Model
                             { TextNode.Link(result[int.Parse(vs[0])].Node, result[j].Node, vs1[0]); }
                         }
                     }
-                    else//普通连接
+                    else//单一后继连接
                     {
-                        TextNode.Link(result[int.Parse(vs[0])].Node,result[int.Parse(vs[1])].Node);
+                        if (int.TryParse(vs[1], out int i))
+                        { TextNode.Link(result[int.Parse(vs[0])].Node, result[i].Node,""); }
                     }
                 }
                 catch
@@ -159,7 +160,7 @@ namespace MultiBranchTexter.Model
             fs.SetLength(0);
             StreamWriter writer = new StreamWriter(fs, Encoding.Default);
             writer.WriteLine("[Nodes]");
-            for (int i = 0;i < nodes.Count;i++)
+            for (int i = 0; i < nodes.Count; i++)
             {
                 writer.WriteLine(nodes[i].Node.Name + ","
                     + nodes[i].Left.ToString() + ","
@@ -167,7 +168,7 @@ namespace MultiBranchTexter.Model
                 FileStream nodeFs = new FileStream(dir + "\\" + nodes[i].Node.Name,
                     FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 StreamWriter nodeWriter = new StreamWriter(nodeFs, Encoding.Default);
-                nodeWriter.Write(nodes[i].Node.Text);
+                nodeWriter.Write(nodes[i].Node.Fragments[0].Content);
                 nodeFs.Flush();
                 nodeWriter.Close();
                 nodeFs.Close();
@@ -175,42 +176,40 @@ namespace MultiBranchTexter.Model
             writer.WriteLine("[Connections]");
             for (int i = 0; i < nodes.Count; i++)
             {
-                if (nodes[i].Node.endCondition == null)
+                if (nodes[i].Node.endCondition.EndType == EndType.Single)
                 {
-                    for (int j = 0; j < nodes.Count;j++)
+                    for (int j = 0; j < nodes.Count; j++)
                     {
-                        if (nodes[i].Node.PostNodes.Contains(nodes[j].Node))
+                        if (nodes[i].Node.endCondition.Answers[""] == nodes[j].Node.Name)
                         {
                             writer.WriteLine(i.ToString() + "-" + j.ToString());
                             break;
                         }
                     }
                 }
-                else if (nodes[i].Node.endCondition is YesNoCondition)
+                else if (nodes[i].Node.endCondition.EndType == EndType.YesNo)
                 {
-                    YesNoCondition ync = nodes[i].Node.endCondition as YesNoCondition;
-                    string vs = i.ToString() + "-yn-" + ync.Question + "-";
+                    string vs = i.ToString() + "-yn-" + nodes[i].Node.endCondition.Question + "-";
                     string yes = "";
                     string no = "";
                     for (int j = 0; j < nodes.Count; j++)
                     {
-                        if (ync.YesNode == nodes[j].Node)
+                        if (nodes[i].Node.endCondition.Answers["yes"] == nodes[j].Node.Name)
                         { yes = j.ToString(); }
-                        if (ync.NoNode == nodes[j].Node)
+                        if (nodes[i].Node.endCondition.Answers["no"] == nodes[j].Node.Name)
                         { no = j.ToString(); }
                     }
                     writer.WriteLine(vs + yes + "," + no);
                 }
-                else if (nodes[i].Node.endCondition is MultiAnswerCondition)
+                else
                 {
-                    MultiAnswerCondition mac = nodes[i].Node.endCondition as MultiAnswerCondition;
-                    string vs = i.ToString() + "-ma-" + mac.Question;
-                    foreach (AnswerToNode atn in mac.AnswerToNodes)
+                    string vs = i.ToString() + "-ma-" + nodes[i].Node.endCondition.Question;
+                    foreach (string answer in nodes[i].Node.endCondition.Answers.Keys)
                     {
-                        string an = "-" + atn.Answer + ",";
+                        string an = "-" + answer + ",";
                         for (int j = 0; j < nodes.Count; j++)
                         {
-                            if (atn.PostNode == nodes[j].Node)
+                            if (nodes[i].Node.endCondition.Answers[answer] == nodes[j].Node.Name)
                             {
                                 an += j.ToString();
                                 break;

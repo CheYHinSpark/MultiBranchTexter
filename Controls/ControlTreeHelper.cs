@@ -23,7 +23,7 @@ namespace MultiBranchTexter.Controls
                 throw new Exception("无法找到目标类型为" + typeof(T).ToString() + "的父控件");
             if (dObj.GetType() == typeof(T))
             {
-                Debug.WriteLine("找到目标控件" + typeof(T).ToString());
+                //Debug.WriteLine("找到目标控件" + typeof(T).ToString());//这句出现得太多了。。。
                 return (T)dObj; 
             }
             else

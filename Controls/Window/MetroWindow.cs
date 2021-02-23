@@ -19,6 +19,16 @@ namespace MultiBranchTexter
             get { return (bool)GetValue(ShowSettingsProperty); }
             set { SetValue(ShowSettingsProperty, value); }
         }
+
+        public static DependencyProperty AllowDoubleEnterProperty =
+          DependencyProperty.Register("AllowDoubleEnter", typeof(bool),
+              typeof(MetroWindow), new PropertyMetadata(false));
+
+        public bool AllowDoubleEnter
+        {
+            get { return (bool)GetValue(AllowDoubleEnterProperty); }
+            set { SetValue(AllowDoubleEnterProperty, value); }
+        }
         #endregion
 
         //标题栏

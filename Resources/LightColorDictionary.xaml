@@ -10,4 +10,6 @@
     <SolidColorBrush x:Key="BaseBrush" Color="#DDDDDD"/>
     <SolidColorBrush x:Key="NodeBgBrush" Color="AliceBlue"/>
     <SolidColorBrush x:Key="NodeBgHBrush" Color="#FFC9EAFF"/>
+
+    <Image x:Key="iconImg" Source="pack://application:,,,/Resources/Images/lightIcon.png" Stretch="Fill"/>
 </ResourceDictionary>

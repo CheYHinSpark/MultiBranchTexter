@@ -190,9 +190,13 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <!--标题栏-->
-                <TextBlock x:Name="WindowTitleTbl" Grid.Row="0" Text="" 
-                           VerticalAlignment="Center" 
-                           Margin="10,0,0,0" Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
+                    <ContentControl Width="24" Content="{DynamicResource iconImg}"/>
+                    <TextBlock x:Name="WindowTitleTbl" Grid.Row="0" Text="" 
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+                </StackPanel>
+          
                 <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
                     <Button x:Name="SettingButton" Style="{DynamicResource ThemeBtnStyle}"
                             Foreground="{DynamicResource Foreground.ThemeBrush}"
@@ -232,9 +236,12 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Vertical" Grid.Column="0" Margin="6">
-                        <CheckBox x:Name="darkModeBtn" Content="深色模式"
+                        <CheckBox Content="深色模式"
                                   IsChecked="{Binding IsDarkMode}"
                                   Template="{StaticResource settingCheckBox}"/>
+                        <CheckBox Content="连续回车切割片段"
+                                  IsChecked="{Binding AllowDoubleEnter}"
+                                  Template="{StaticResource settingCheckBox}"/>                    
                         <Slider x:Name="colorR" Style="{StaticResource colorSliderStyle}"
                                 Foreground="#FFFF0000" Value="{Binding ColorR}"/>
                         <Slider x:Name="colorG" Style="{StaticResource colorSliderStyle}" 

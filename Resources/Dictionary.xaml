@@ -615,16 +615,18 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="40"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <CheckBox x:Name="showHideBtn" IsChecked="False"
                       Template="{DynamicResource upDownCheckBoxTemplate}"
                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <TextBlock x:Name="questionTxt" Grid.Column="1" Margin="8,0,0,0"
+            <Button x:Name="backBtn" Grid.Column="1" Content="返回" Width="40"/>
+            <TextBlock x:Name="questionTxt" Grid.Column="2" Margin="8,0,0,0"
                        Foreground="{DynamicResource Foreground.ThemeBrush}"
                        VerticalAlignment="Center"/>
-            <ScrollViewer x:Name="sv" Grid.Row="1" Height="0" Grid.ColumnSpan="3"
+            <ScrollViewer x:Name="sv" Grid.Row="1" Height="0" Grid.ColumnSpan="4"
                           Background="{DynamicResource BaseBrush}"
                           FocusVisualStyle="{x:Null}"
                           HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
@@ -656,4 +658,88 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+    
+    <!--文本片段显示控件的operation控制checkbox-->
+    <ControlTemplate x:Key="fragmentOperationCheckBoxTemplate" TargetType="{x:Type CheckBox}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Path x:Name="upPath"  Grid.Row="0" ToolTip="隐藏备注"
+                  Fill="{DynamicResource ThemeBrush}" Data="M0,10 20,10 10,0Z"/>
+            <Path x:Name="downPath"  Grid.Row="1" ToolTip="添加备注"
+                  Fill="{DynamicResource ThemeBrush}" Data="M0,0 20,0 10,10Z"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="False">
+                <Setter Property="Visibility" Value="Hidden" TargetName="upPath"/>
+                <Setter Property="Visibility" Value="Visible" TargetName="downPath"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Visibility" Value="Hidden" TargetName="downPath"/>
+                <Setter Property="Visibility" Value="Visible" TargetName="upPath"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True" SourceName="upPath">
+                <Setter Property="Opacity" Value="0.7" TargetName="upPath"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True" SourceName="downPath">
+                <Setter Property="Opacity" Value="0.7" TargetName="downPath"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!--operationTextBox的模板-->
+    <ControlTemplate x:Key="operationTextBoxTemplate" TargetType="{x:Type TextBox}">
+        <Border x:Name="BD" Background="#60808080" Margin="20,0,120,0"
+                BorderThickness="1" BorderBrush="#8024DD24">
+            <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Text" Value=""/>
+                    <Condition Property="Height" Value="2"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="Transparent" TargetName="BD"/>
+            </MultiTrigger>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="BorderBrush" Value="#FF24DD24" TargetName="BD"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <!--片段内容的模板-->
+    <ControlTemplate x:Key="contentTextBoxTemplate" TargetType="{x:Type TextBox}">
+        <Border x:Name="BD" Background="Transparent"
+                BorderThickness="0,2,0,2" BorderBrush="Transparent">
+            <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="Background" Value="#5064FFBE" TargetName="BD"/>
+                <Setter Property="BorderBrush" Value="#AA64FFBE" TargetName="BD"/>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsFocused" Value="False"/>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="BorderBrush" Value="#AA64FFBE" TargetName="BD"/>
+            </MultiTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <!--文本编辑textBox的Style-->
+    <Style x:Key="fragmentPresenterTextBoxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="AcceptsReturn" Value="True"/>
+        <Setter Property="AcceptsTab" Value="True"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="FontSize" Value="{Binding DataContext.TextFontSize, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Text.Foreground.BaseBrush}"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource ThemeBrush}"/>
+    </Style>
+    
+    <!--文本片段器的style-->
+    <Style TargetType="{x:Type c:TextFragmentPresenter}">
+        <Setter Property="AllowDoubleEnter" Value="{Binding AllowDoubleEnter, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"/>
+    </Style>
 </ResourceDictionary>
