@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using MultiBranchTexter.Model;
 
@@ -89,13 +90,23 @@ namespace MultiBranchTexter.ViewModel
         public SettingViewModel()
         {
             ReadIni();
-            ColorR = 238;
-            ColorG = 170;
-            ColorB = 22;
         }
 
-        public void ChangeColor()
+        public ICommand ToDefaultCommand => new RelayCommand((t) =>
         {
+            IsDarkMode = false;
+            AllowDoubleEnter = false;
+            _colorR = 238;
+            _colorG = 170;
+            ColorB = 22;
+            WriteIni();
+        });
+
+        private void ChangeColor()
+        {
+            _colorR = Math.Max(0, Math.Min(255, _colorR));
+            _colorG = Math.Max(0, Math.Min(255, _colorG));
+            _colorB = Math.Max(0, Math.Min(255, _colorB));
             Color newColor = Color.FromRgb((byte)ColorR, (byte)ColorG, (byte)ColorB);
             Application.Current.Resources.MergedDictionaries[0]["Theme"] = newColor;
             Application.Current.Resources.MergedDictionaries[0]["ThemeBrush"] = new SolidColorBrush(newColor);
@@ -107,6 +118,9 @@ namespace MultiBranchTexter.ViewModel
             IniFile iniFile = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "Settings.ini");
             IsDarkMode = iniFile.GetBool("Settings", "IsDarkMode", false);
             AllowDoubleEnter = iniFile.GetBool("Settings", "AllowDoubleEnter", false);
+            _colorR = iniFile.GetInt("Color", "Red", 238);
+            _colorG = iniFile.GetInt("Color", "Green", 170);
+            ColorB = iniFile.GetInt("Color", "Blue", 22);
             Debug.WriteLine("成功读取配置");
         }
 
@@ -115,6 +129,9 @@ namespace MultiBranchTexter.ViewModel
             IniFile iniFile = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "Settings.ini");
             iniFile.WriteBool("Settings", "IsDarkMode", IsDarkMode == true);
             iniFile.WriteBool("Settings", "AllowDoubleEnter", AllowDoubleEnter == true);
+            iniFile.WriteInt("Color", "Red", (int)_colorR);
+            iniFile.WriteInt("Color", "Green", (int)_colorG);
+            iniFile.WriteInt("Color", "Blue", (int)_colorB);
             Debug.WriteLine("成功保存配置");
         }
     }

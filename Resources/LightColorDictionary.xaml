@@ -7,6 +7,7 @@
     <SolidColorBrush x:Key="Highlight.BaseBrush" Color="{DynamicResource Theme}"/>
     <!--工作界面背景颜色-->
     <SolidColorBrush x:Key="MainBrush" Color="#EEEEEE"/>
+    <Color x:Key="Base">#DDDDDD</Color>
     <SolidColorBrush x:Key="BaseBrush" Color="#DDDDDD"/>
     <SolidColorBrush x:Key="NodeBgBrush" Color="AliceBlue"/>
     <SolidColorBrush x:Key="NodeBgHBrush" Color="#FFC9EAFF"/>

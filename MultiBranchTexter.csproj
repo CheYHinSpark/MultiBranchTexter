@@ -15,18 +15,7 @@
     <Compile Remove="KTDU\**" />
     <EmbeddedResource Remove="KTDU\**" />
     <None Remove="KTDU\**" />
-    <None Include="Resources\Images\icon.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
     <Page Remove="KTDU\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Resources\Images\darkIcon.png" />
-    <None Remove="Resources\Images\icon.ico" />
-    <None Remove="Resources\Images\icon.png" />
-    <None Remove="Resources\Images\lightIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,13 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="KTDU\KTDU.Parser\KTDU.Parser.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="Resources\DarkColorDictionary.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
 
   <ItemGroup>

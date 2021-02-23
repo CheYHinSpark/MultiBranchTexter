@@ -112,10 +112,14 @@
             </Border>
             <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
                        Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
-            <Button x:Name="outPutBtn" Width="28"
-                    ToolTip="导出"
-                    Style="{DynamicResource generalButtonStyle}"
-                    Content="M0,0 6,6 L0,12 M8,0 14,6 L8,12"/>
+            <Menu Background="Transparent" Height="28">
+                <MenuItem Header="M0,0 6,6 L0,12 M8,0 14,6 L8,12"
+                          ToolTip="导出">
+                    <MenuItem Header="导出为txt"/>
+                    <MenuItem Header="导出为docx"/>
+                    <MenuItem Header="导出为latex"/>
+                </MenuItem>
+            </Menu>
         </StackPanel>
         <!--没有加载文件时的提示文本-->
         <StackPanel Grid.Row="1" Orientation="Vertical" 

@@ -44,7 +44,11 @@ namespace MultiBranchTexter.Model
                     StreamWriter sw = new StreamWriter(new FileStream("Settings.ini", FileMode.Create));
                     sw.Write("[Settings]\n" +
                         "IsDarkMode=false\n" +
-                        "AllowDoubleEnter=false");
+                        "AllowDoubleEnter=false\n" +
+                        "[Color]\n" +
+                        "Red=238\n" +
+                        "Green=170\n" +
+                        "Blue=22");
                     sw.Flush();
                     sw.Close();
                 }

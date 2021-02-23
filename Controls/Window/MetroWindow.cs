@@ -60,7 +60,7 @@ namespace MultiBranchTexter
                 (mWTemplate.FindName("SettingButton", this) as Button).Click += SettingBtn_Click;
                 (mWTemplate.FindName("CloseWinButton", this) as Button).Click += CloseButton_Click;
                 (mWTemplate.FindName("MinWinButton", this) as Button).Click += MinButton_Click;
-                (mWTemplate.FindName("UpperBd", this) as Border).MouseDown += UpperBd_MouseDown; 
+                (mWTemplate.FindName("UpperBd", this) as Border).MouseDown += UpperBd_MouseDown;
 
                 WindowTitleTbl = mWTemplate.FindName("WindowTitleTbl", this) as TextBlock;
                 WindowTitleTbl.Text = Title;
@@ -70,6 +70,7 @@ namespace MultiBranchTexter
         private void UpperBd_MouseDown(object sender, MouseButtonEventArgs e)
         {
             ShowSettings = false;
+            _settings.WriteIni();
         }
 
         private void SettingBtn_Click(object sender, RoutedEventArgs e)

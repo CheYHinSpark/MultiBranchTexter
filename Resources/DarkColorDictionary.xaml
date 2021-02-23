@@ -7,9 +7,10 @@
     <SolidColorBrush x:Key="Highlight.BaseBrush" Color="#666666"/>
     <!--工作界面背景颜色-->
     <SolidColorBrush x:Key="MainBrush" Color="#111111"/>
+    <Color x:Key="Base">#222222</Color>
     <SolidColorBrush x:Key="BaseBrush" Color="#222222"/>
-    <SolidColorBrush x:Key="NodeBgBrush" Color="#FF241848"/>
-    <SolidColorBrush x:Key="NodeBgHBrush" Color="#FF423B64"/>
+    <SolidColorBrush x:Key="NodeBgBrush" Color="#FF182748"/>
+    <SolidColorBrush x:Key="NodeBgHBrush" Color="#FF2C4781"/>
 
     <Image x:Key="iconImg" Source="pack://application:,,,/Resources/Images/darkIcon.png" Stretch="Fill"/>
 </ResourceDictionary>
