@@ -201,20 +201,13 @@ namespace MultiBranchTexter
                 {
                     (Application.Current.MainWindow as MainWindow)
                         .ViewModel.SaveFile((Application.Current.MainWindow as MainWindow).GetFCC());
-                    WindowStyle = WindowStyle.SingleBorderWindow;
                     Close();
                 }
                 else if (warnResult == MessageBoxResult.No)
-                {
-                    WindowStyle = WindowStyle.SingleBorderWindow;
-                    Close();
-                }
+                { Close(); }
             }
             else
-            {
-                WindowStyle = WindowStyle.SingleBorderWindow;
-                Close();
-            }
+            { Close(); }
         }
 
         private void MaxButton_Click(object sender, RoutedEventArgs e)

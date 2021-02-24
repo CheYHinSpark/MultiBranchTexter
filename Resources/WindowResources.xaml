@@ -186,7 +186,6 @@
                 <RowDefinition Height="24"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="12"/>
             </Grid.RowDefinitions>
             <!--标题栏-->
             <StackPanel Orientation="Horizontal" Grid.Row="0" 
