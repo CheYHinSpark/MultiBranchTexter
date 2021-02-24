@@ -96,7 +96,7 @@ namespace MultiBranchTexter.Controls
                     x = p.X - _clickPoint.X;
                     y = p.Y - _clickPoint.Y;
 
-                    for (int i =0;i<_viewModel.SelectedNodes.Count;i++)
+                    for (int i = 0; i < _viewModel.SelectedNodes.Count; i++)
                     {
                         _viewModel.SelectedNodes[i].Move(x / container.ScaleRatio, y / container.ScaleRatio);
                     }
@@ -202,8 +202,10 @@ namespace MultiBranchTexter.Controls
             container.Children.Clear();
             IsModified = "";
             _viewModel.SelectedNodes.Clear();// <--必须
-            MBFileReader reader = new MBFileReader(mbtxtPath);
-            DrawFlowChart(reader.Read());
+            var nodes = MetadataFile.ReadNodes(mbtxtPath);
+            DrawFlowChart(nodes);
+            //MBFileReader reader = new MBFileReader(mbtxtPath);
+            //DrawFlowChart(reader.Read());
         }
 
         #region 流程图绘制方法
@@ -218,7 +220,7 @@ namespace MultiBranchTexter.Controls
 
             int num = textNodes.Count;
             if (num == 0)
-            { 
+            {
                 Debug.WriteLine("创建了空节点图");
                 return;
             }
@@ -421,7 +423,7 @@ namespace MultiBranchTexter.Controls
             ReDrawFlowChart(textNodes);
         }
 
-        public void AddNodeButton(NodeBase preNode,NodeButton postNode, double xPos, double yPos)
+        public void AddNodeButton(NodeBase preNode, NodeButton postNode, double xPos, double yPos)
         {
             NodeButton newNodeButton = new NodeButton(new TextNode(GetNewName(), ""));
             newNodeButton.SetParent(container);
@@ -520,7 +522,7 @@ namespace MultiBranchTexter.Controls
         #endregion
 
         #region 节点搜索功能
-        
+
 
         /// <summary>
         /// 根据信息搜索目标节点
@@ -538,7 +540,7 @@ namespace MultiBranchTexter.Controls
                     { _viewModel.SearchedNodes.Add((control as NodeButton)); }
                 }
             }
-            for (int i =0;i < _viewModel.SearchedNodes.Count;i++)
+            for (int i = 0; i < _viewModel.SearchedNodes.Count; i++)
             {
                 _viewModel.SearchedNodes[i].NodeState = NodeState.Searched;
             }
@@ -582,7 +584,7 @@ namespace MultiBranchTexter.Controls
         public void SearchNext(string info)
         {
             if (_viewModel.SearchedNodes.Count == 0)
-            { 
+            {
                 SearchNode(info);
                 return;
             }
@@ -618,7 +620,7 @@ namespace MultiBranchTexter.Controls
             {
                 if (control is NodeButton)
                 {
-                    if ((control as NodeButton).textNode.Name==name)
+                    if ((control as NodeButton).textNode.Name == name)
                     {
                         return (control as NodeButton).textNode;
                     }
@@ -639,7 +641,7 @@ namespace MultiBranchTexter.Controls
         public void NewSelection(ObservableCollection<NodeButton> nodes)
         {
             _viewModel.ClearSelection();
-            for (int i =0; i < nodes.Count;i++)
+            for (int i = 0; i < nodes.Count; i++)
             {
                 nodes[i].NodeState = NodeState.Selected;
             }

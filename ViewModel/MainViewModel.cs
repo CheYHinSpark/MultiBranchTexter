@@ -29,12 +29,12 @@ namespace MultiBranchTexter.ViewModel
         public bool? IsFlowChartShowing
         {
             get { return _isFlowChartShowing; }
-            set 
-            { 
+            set
+            {
                 _isFlowChartShowing = value;
                 if (value == true)
-                { 
-                    FlowChartWidth = "*"; 
+                {
+                    FlowChartWidth = "*";
                     CanHideWorkTab = true;
                 }
                 else
@@ -43,17 +43,18 @@ namespace MultiBranchTexter.ViewModel
                     CanHideWorkTab = false;
                     CanHideFlowChart = true;
                 }
-                RaisePropertyChanged("IsFlowChartShowing"); }
+                RaisePropertyChanged("IsFlowChartShowing");
+            }
         }
         private bool? _isWorkTabShowing;
         public bool? IsWorkTabShowing
         {
             get { return _isWorkTabShowing; }
-            set 
+            set
             {
                 _isWorkTabShowing = value;
                 if (value == true)
-                { 
+                {
                     WorkTabWidth = "*";
                     CanHideFlowChart = true;
                 }
@@ -99,7 +100,7 @@ namespace MultiBranchTexter.ViewModel
         public string FileName
         {
             get { return _fileName; }
-            set 
+            set
             {
                 _fileName = value;
                 if (value != "")
@@ -179,21 +180,16 @@ namespace MultiBranchTexter.ViewModel
                 Debug.WriteLine("开始新建文件");
                 // 文件夹对话框
                 Microsoft.Win32.SaveFileDialog dialog =
-                    new Microsoft.Win32.SaveFileDialog
-                    {
-                        RestoreDirectory = true,
-                        Filter = "多分支导航文件|*.mbtxt"
-                    };
+                     new Microsoft.Win32.SaveFileDialog
+                     {
+                         RestoreDirectory = true,
+                         Filter = "多分支导航文件|*.meta.json"
+                     };
                 if (Directory.Exists(_fileDirPath))
                 { dialog.InitialDirectory = _fileDirPath; }
                 if (dialog.ShowDialog() == true)
                 {
-                    Stream myStream;
-                    if ((myStream = dialog.OpenFile()) != null)
-                    {
-                        myStream.Write(new byte[] { 0 }, 0, 0);
-                        myStream.Close();
-                    }
+                    CreateFile(dialog.FileName);
                     OpenFile(dialog.FileName);
                 }
             }
@@ -230,7 +226,7 @@ namespace MultiBranchTexter.ViewModel
                     new Microsoft.Win32.OpenFileDialog
                     {
                         RestoreDirectory = true,
-                        Filter = "多分支导航文件|*.mbtxt"
+                        Filter = "多分支导航文件|*.meta.json"
                     };
                 if (Directory.Exists(_fileDirPath))
                 { dialog.InitialDirectory = _fileDirPath; }
@@ -242,15 +238,6 @@ namespace MultiBranchTexter.ViewModel
             catch { }
         });
 
-        #region 保存命令
-        //序列化到单个JSON，仅供测试
-        public ICommand SaveJsonCommand => new RelayCommand(container =>
-          {
-              FlowChartContainer flowChart = container as FlowChartContainer;
-              var n = flowChart.GetTextNodeList();
-              TextNode.SerializeToFile(n, "test.json");
-          });
-
         //保存单个节点命令，但是在worktab没有打开时将执行savefile
         public ICommand SaveNodeCommand => new RelayCommand((container) =>
         {
@@ -259,7 +246,7 @@ namespace MultiBranchTexter.ViewModel
                 if (IsWorkGridVisible == Visibility.Hidden)
                 { return; }
                 if (IsWorkTabShowing == true && WorkTabs.Count > 0)
-                { 
+                {
                     Debug.WriteLine("开始保存单个节点");
                     WorkTabs[SelectedIndex].Save();
                 }
@@ -274,7 +261,7 @@ namespace MultiBranchTexter.ViewModel
         {
             if (IsWorkGridVisible == Visibility.Hidden)
             { return; }
-            SaveFile(container as FlowChartContainer); 
+            SaveFile(container as FlowChartContainer);
         });
 
         //整个文件另存为
@@ -289,7 +276,7 @@ namespace MultiBranchTexter.ViewModel
                     new Microsoft.Win32.SaveFileDialog
                     {
                         RestoreDirectory = true,
-                        Filter = "多分支导航文件|*.mbtxt"
+                        Filter = "多分支导航文件|*.meta.json"
                     };
 
                 if (Directory.Exists(_fileDirPath))
@@ -306,8 +293,6 @@ namespace MultiBranchTexter.ViewModel
         #endregion
 
         #region 导出命令
-
-        #endregion
 
         #endregion
 
@@ -392,7 +377,7 @@ namespace MultiBranchTexter.ViewModel
                 {
                     MBTabItem theItem = item;
                     theItem.Close();
-                    return; 
+                    return;
                 }
             }
         }
@@ -412,7 +397,7 @@ namespace MultiBranchTexter.ViewModel
                         new Microsoft.Win32.SaveFileDialog
                         {
                             RestoreDirectory = true,
-                            Filter = "多分支导航文件|*.mbtxt"
+                            Filter = "多分支导航文件|*.meta.json"
                         };
 
                     if (Directory.Exists(_fileDirPath))
@@ -423,8 +408,9 @@ namespace MultiBranchTexter.ViewModel
                     }
                 }
                 //保存文件
-                MBFileWriter writer = new MBFileWriter(_fileName);
-                writer.Write(flowChart.GetTextNodeWithLeftTopList());
+                MetadataFile.WriteNodes(_fileName, flowChart.GetTextNodeWithLeftTopList());
+                //MBFileWriter writer = new MBFileWriter(_fileName);
+                //writer.Write(flowChart.GetTextNodeWithLeftTopList());
                 flowChart.IsModified = "";
                 Debug.WriteLine("文件保存成功");
             }
@@ -441,6 +427,16 @@ namespace MultiBranchTexter.ViewModel
             //打开新文件
             (Application.Current.MainWindow as MainWindow).GetFCC().Load(path);
             IsWorkGridVisible = Visibility.Visible;
+        }
+
+        public void CreateFile(string path)
+        {
+            FileName = path;
+
+            var node = new TextNode();
+            node.Name = "new-node-0";
+            var n = new TextNodeWithLeftTop(node, 100, 100);
+            MetadataFile.WriteNodes(path, new List<TextNodeWithLeftTop> { n });
         }
         #endregion
     }

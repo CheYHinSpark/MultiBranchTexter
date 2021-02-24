@@ -46,7 +46,7 @@
                       M1,12 0,12 0,4 2,2 6,2 8,4 13,4 L13,6"/>
             <Button ToolTip="保存文件" Width="28"
                     Style="{DynamicResource generalButtonStyle}"
-                    Command="{Binding SaveJsonCommand}"
+                    Command="{Binding SaveFileCommand}"
                     CommandParameter="{Binding ElementName=flowChart}"
                     Content="M0,14 0,0 3,0 3,5 8,5 8,0 9,0 12,3 12,14 Z
                       M4,0 6,0 L6,4"/>

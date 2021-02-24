@@ -11,23 +11,22 @@ namespace MultiBranchTexter.Model
     {
         public string Question;
 
-        private readonly EndType _endType;
-        public EndType EndType { get { return _endType; } }
+        public EndType EndType;
 
         public Dictionary<string, string> Answers = new Dictionary<string, string>();
 
         public EndCondition()
-        { 
-            _endType = EndType.Single;
+        {
+            EndType = EndType.Single;
             Answers.Add("", "");
         }
 
         public EndCondition(EndType endType)
         {
-            _endType = endType;
-            if (_endType == EndType.Single)
+            EndType = endType;
+            if (EndType == EndType.Single)
             { Answers.Add("", ""); }
-            else if (_endType == EndType.YesNo)
+            else if (EndType == EndType.YesNo)
             {
                 Answers.Add("yes", "");
                 Answers.Add("no", "");
