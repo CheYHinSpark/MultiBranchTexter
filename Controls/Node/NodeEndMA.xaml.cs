@@ -69,7 +69,9 @@ namespace MultiBranchTexter.Controls
             while (atns.ContainsKey(newAnswer + i.ToString()))
             { i++; }
             newAnswer += i.ToString();
+            //添加键
             atns.Add(newAnswer,"");
+            FatherNode.answerToNodes.Add(newAnswer, null);
             NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(newAnswer, "")
             { FatherNode = this.FatherNode };
             answerContainer.Children.Add(nodeEnd);

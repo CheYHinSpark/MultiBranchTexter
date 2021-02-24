@@ -23,7 +23,7 @@ namespace MultiBranchTexter.Controls
         private TextBox answerTxt;
         private string answer = "";
         private readonly string nextNodeName = "";
-        //private readonly AnswerToNode answerToNode = new AnswerToNode();
+
         /// <summary>
         /// 获取当前的回答文本
         /// </summary>
@@ -95,10 +95,11 @@ namespace MultiBranchTexter.Controls
             }
             else
             {
-                ec.Answers.Remove(answer);
+                FatherNode.ChangeAnswer(answer, answerTxt.Text);
+                //ec.Answers.Remove(answer);
                 //没有重复，完成修改
                 answer = answerTxt.Text;
-                ec.Answers.Add(answer, nextNodeName);
+                //ec.Answers.Add(answer, nextNodeName);
                 //通知标签页改变
                 ControlTreeHelper.FindParentOfType<MainWindow>(FatherNode).ReLoadTab(FatherTextNode);
             }
@@ -125,10 +126,9 @@ namespace MultiBranchTexter.Controls
                 NodeButton.UnLink(this, line.EndNode);
                 line.Delete();
             }
-            else//如果没有连线，也要删除相应的key
-            {
-                FatherTextNode.endCondition.Answers.Remove(answer);
-            }
+            //如果没有连线，也要删除相应的key
+            FatherNode.answerToNodes.Remove(answer);
+            FatherTextNode.endCondition.Answers.Remove(answer);
             //通知标签页改变
             ControlTreeHelper.FindParentOfType<MainWindow>(FatherNode).ReLoadTab(FatherTextNode);
             //移除自身

@@ -204,8 +204,6 @@ namespace MultiBranchTexter.Controls
             _viewModel.SelectedNodes.Clear();// <--必须
             var nodes = MetadataFile.ReadNodes(mbtxtPath);
             DrawFlowChart(nodes);
-            //MBFileReader reader = new MBFileReader(mbtxtPath);
-            //DrawFlowChart(reader.Read());
         }
 
         #region 流程图绘制方法
@@ -336,10 +334,10 @@ namespace MultiBranchTexter.Controls
             }
             //添加线
             //连线现在放到别的地方，即nodebutton的loaded里面执行
-            for (int i = 0; i < textNodes.Count; i++)
-            {
-                nodeButtons[i].ShowEndCondition();
-            }
+            //for (int i = 0; i < textNodes.Count; i++)
+            //{
+            //    nodeButtons[i].ShowEndCondition();
+            //}
             Debug.WriteLine("节点图创建完成");
             IsModified = "*";
         }
@@ -405,10 +403,10 @@ namespace MultiBranchTexter.Controls
             Debug.WriteLine("节点绘制完成");
             //添加线
             //连线现在放到别的地方，即nodebutton的loaded里面执行
-            for (int i = 0; i < textNodes.Count; i++)
-            {
-                nodeButtons[i].ShowEndCondition();
-            }
+            //for (int i = 0; i < textNodes.Count; i++)
+            //{
+            //    nodeButtons[i].ShowEndCondition();
+            //}
             Debug.WriteLine("节点图创建完成");
         }
 
@@ -425,7 +423,7 @@ namespace MultiBranchTexter.Controls
 
         public void AddNodeButton(NodeBase preNode, NodeButton postNode, double xPos, double yPos)
         {
-            NodeButton newNodeButton = new NodeButton(new TextNode(GetNewName(), ""));
+            NodeButton newNodeButton = new NodeButton(new TextNode(GetNewName()));
             newNodeButton.SetParent(container);
             newNodeButton.FatherNode = newNodeButton;
             //连接三个点
@@ -496,7 +494,7 @@ namespace MultiBranchTexter.Controls
                 repeated = false;
                 for (int j = 0; j < tns.Count; j++)
                 {
-                    if (tns[j].Name == newName + i.ToString() + ".txt")
+                    if (tns[j].Name == newName + i.ToString())
                     {
                         repeated = true;
                         i++;
@@ -504,7 +502,7 @@ namespace MultiBranchTexter.Controls
                     }
                 }
             }
-            return newName + i.ToString() + ".txt";
+            return newName + i.ToString();
         }
 
         public bool CheckRepeat(string newName)

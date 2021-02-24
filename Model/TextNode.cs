@@ -33,10 +33,10 @@ namespace MultiBranchTexter.Model
             endCondition = new EndCondition();
         }
         
-        public TextNode(string name, string text)
+        public TextNode(string name)
         {
             Name = name;
-            Fragments.Add(new TextFragment(text));
+            Fragments.Add(new TextFragment());
             endCondition = new EndCondition();
         }
 

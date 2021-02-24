@@ -18,7 +18,6 @@ namespace MultiBranchTexter.Model
         public EndCondition()
         {
             EndType = EndType.Single;
-            Answers.Add("", "");
         }
 
         public EndCondition(EndType endType)

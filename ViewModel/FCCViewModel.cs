@@ -45,7 +45,7 @@ namespace MultiBranchTexter.ViewModel
         {
             FlowChartContainer fcc = (Application.Current.MainWindow as MainWindow).GetFCC();
             Point point = Mouse.GetPosition(fcc.container);
-            NodeButton newNode = new NodeButton(new TextNode(fcc.GetNewName(), ""));
+            NodeButton newNode = new NodeButton(new TextNode(fcc.GetNewName()));
             newNode.SetParent(fcc.container);
             fcc.container.Children.Add(newNode);
             Canvas.SetLeft(newNode, Math.Max(0, point.X - 50));
