@@ -181,102 +181,88 @@
 
     <!--窗体控件模板-->
     <ControlTemplate x:Key="MetroWindowTemplate" TargetType="{x:Type local:MetroWindow}">
-        <Border Background="Transparent">
-            <Grid x:Name="LayoutRoot" Background="{DynamicResource ThemeBrush}"
-                  RenderTransformOrigin="0.5,0.5">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="24"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <!--标题栏-->
-                <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
-                    <ContentControl Width="24" Content="{DynamicResource iconImg}"/>
-                    <TextBlock x:Name="WindowTitleTbl" Grid.Row="0" Text="" 
-                               VerticalAlignment="Center"
-                               Foreground="{DynamicResource Foreground.ThemeBrush}"/>
-                </StackPanel>
-          
-                <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
-                    <Button x:Name="SettingButton" Style="{DynamicResource ThemeBtnStyle}"
-                            Foreground="{DynamicResource Foreground.ThemeBrush}"
-                            ToolTip="设置">
-                        <Path Stroke="{DynamicResource Foreground.ThemeBrush}" 
-                              StrokeThickness="1" HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              Data="M10,0 11,2 13,3 15,1 17,3 15,5 16,7 18,8 
-                              18,10 16,11 15,13 17,15 15,17 13,15 11,16 10,18
-                              8,18 7,16 5,15 3,17 1,15 3,13 2,11 0,10
-                              0,8 2,7 3,5 1,3 3,1 5,3 7,2 8,0 Z
-                              M9,6 11,7 12,9 11,11 9,12 7,11 6,9 7,7Z"/>
-                    </Button>
-                    <Button x:Name="MinWinButton" ToolTip="最小化"
-                            Style="{DynamicResource ThemeBtnStyle}">
-                        <Path Stroke="{DynamicResource Foreground.ThemeBrush}" 
-                              StrokeThickness="2" Data="M8,12 L22,12"/>
-                    </Button>
-                    <CheckBox x:Name="MaxWinButton" Style="{DynamicResource WinMaxBtnStyle}"/>
-                    <Button x:Name="CloseWinButton" ToolTip="关闭"
-                            Style="{DynamicResource ThemeBtnStyle}">
-                        <Path Stroke="{DynamicResource Foreground.ThemeBrush}" 
-                              StrokeThickness="2" Data="M9,6 L21,18 M9,18 L21,6"/>
-                    </Button>
-                </StackPanel>
-                <!--内容部分-->
-                <AdornerDecorator Grid.Row="2">
-                    <ContentPresenter x:Name="CP" Opacity="0"/>
-                </AdornerDecorator>
-                <!--设置栏-->
-                <Grid x:Name="SettingPanel" Grid.Row="1" Height="0" Opacity="0" Background="#80808080">
-                    <Grid.DataContext>
-                        <vm:SettingViewModel x:Name="svm"/>
-                    </Grid.DataContext>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Vertical" Grid.Column="0" Margin="6">
-                        <CheckBox Content="深色模式"
-                                  IsChecked="{Binding IsDarkMode}"
-                                  Template="{StaticResource settingCheckBox}"/>
-                        <CheckBox Content="连续回车切割片段"
-                                  IsChecked="{Binding AllowDoubleEnter}"
-                                  Template="{StaticResource settingCheckBox}"/>
-                        <StackPanel Orientation="Vertical" Margin="2"
-                                    Background="{DynamicResource BaseBrush}">
-                            <TextBlock Text="颜色设置" Margin="4,4,0,0" Foreground="{DynamicResource Foreground.BaseBrush}"/>
-                            <Slider x:Name="colorR" Style="{StaticResource colorSliderStyle}"
-                                    Foreground="#FFFF0000" Value="{Binding ColorR}"/>
-                            <Slider x:Name="colorG" Style="{StaticResource colorSliderStyle}" 
-                                    Foreground="#FF00FF00" Value="{Binding ColorG}"/>
-                            <Slider x:Name="colorB" Style="{StaticResource colorSliderStyle}" 
-                                    Foreground="#FF0000FF" Value="{Binding ColorB}"/>
-                        </StackPanel>
-                        <Button Content="还原默认" Command="{Binding ToDefaultCommand}"
-                                Template="{StaticResource textButtonTemplate}"
-                                Height="24" Margin="2"
-                                HorizontalAlignment="Left"
-                                />
+        <Grid x:Name="LayoutRoot" Background="{DynamicResource ThemeBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="12"/>
+            </Grid.RowDefinitions>
+            <!--标题栏-->
+            <StackPanel Orientation="Horizontal" Grid.Row="0" 
+                        HorizontalAlignment="Left">
+                <ContentControl Width="24" Content="{DynamicResource iconImg}"/>
+                <TextBlock x:Name="WindowTitleTbl" Grid.Row="0" Text="" 
+                           VerticalAlignment="Center"
+                           Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
+                <Button x:Name="SettingButton" Width="30" Content="设置"
+                        Template="{StaticResource textButtonTemplate}"/>
+                <Button x:Name="MinWinButton" ToolTip="最小化"
+                        Style="{DynamicResource ThemeBtnStyle}">
+                    <Path Stroke="{DynamicResource Foreground.ThemeBrush}" 
+                          StrokeThickness="2" Data="M8,12 L22,12"/>
+                </Button>
+                <CheckBox x:Name="MaxWinButton" Style="{DynamicResource WinMaxBtnStyle}"/>
+                <Button x:Name="CloseWinButton" ToolTip="关闭"
+                        Style="{DynamicResource ThemeBtnStyle}">
+                    <Path Stroke="{DynamicResource Foreground.ThemeBrush}" 
+                          StrokeThickness="2" Data="M9,6 L21,18 M9,18 L21,6"/>
+                </Button>
+            </StackPanel>
+            <!--内容部分-->
+            <AdornerDecorator Grid.Row="2">
+                <ContentPresenter x:Name="CP" Opacity="0"/>
+            </AdornerDecorator>
+            <!--设置栏-->
+            <Grid x:Name="SettingPanel" Grid.Row="1" Height="0" Opacity="0" Background="#80808080">
+                <Grid.DataContext>
+                    <vm:SettingViewModel x:Name="svm"/>
+                </Grid.DataContext>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Vertical" Grid.Column="0" Margin="6">
+                    <CheckBox Content="深色模式"
+                              IsChecked="{Binding IsDarkMode}"
+                              Template="{StaticResource settingCheckBox}"/>
+                    <CheckBox Content="连续回车切割片段"
+                              IsChecked="{Binding AllowDoubleEnter}"
+                              Template="{StaticResource settingCheckBox}"/>
+                    <StackPanel Orientation="Vertical" Margin="2"
+                                Background="{DynamicResource BaseBrush}">
+                        <TextBlock Text="颜色设置" Margin="4,4,0,0" 
+                                   Foreground="{DynamicResource Foreground.BaseBrush}"/>
+                        <Slider x:Name="colorR" Style="{StaticResource colorSliderStyle}"
+                                Foreground="#FFFF0000" Value="{Binding ColorR}"/>
+                        <Slider x:Name="colorG" Style="{StaticResource colorSliderStyle}" 
+                                Foreground="#FF00FF00" Value="{Binding ColorG}"/>
+                        <Slider x:Name="colorB" Style="{StaticResource colorSliderStyle}" 
+                                Foreground="#FF0000FF" Value="{Binding ColorB}"/>
                     </StackPanel>
-                    <StackPanel Orientation="Vertical" Grid.Column="1" Margin="6">
-                        <Button Content="查看说明" Command="{Binding OpenIntroCommand}"
-                                Template="{StaticResource textButtonTemplate}"
-                                Height="24" Margin="2"
-                                HorizontalAlignment="Left" />
-                        <Button Content="访问项目主页" Command="{Binding OpenMainWebCommand}"
-                                Template="{StaticResource textButtonTemplate}"
-                                Height="24" Margin="2"
-                                HorizontalAlignment="Left" />
-                    </StackPanel>
-                </Grid>
-                <Border x:Name="UpperBd" Grid.Row="2" IsHitTestVisible="False"
-                        Background="Transparent"/>
+                    <Button Content="还原默认" Command="{Binding ToDefaultCommand}"
+                            Template="{StaticResource textButtonTemplate}"
+                            Height="24" Margin="2"
+                            HorizontalAlignment="Left"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Grid.Column="1" Margin="6">
+                    <Button Content="查看说明" Command="{Binding OpenIntroCommand}"
+                            Template="{StaticResource textButtonTemplate}"
+                            Height="24" Margin="2"
+                            HorizontalAlignment="Left" />
+                    <Button Content="访问项目主页" Command="{Binding OpenMainWebCommand}"
+                            Template="{StaticResource textButtonTemplate}"
+                            Height="24" Margin="2"
+                            HorizontalAlignment="Left" />
+                </StackPanel>
             </Grid>
-        </Border>
+            <Border x:Name="UpperBd" Grid.Row="2" IsHitTestVisible="False"
+                    Background="Transparent"/>
+        </Grid>
         <ControlTemplate.Triggers>
-            <Trigger Property="WindowState" Value="Maximized">
-                <Setter Property="Margin" Value="6" TargetName="LayoutRoot"/>
-            </Trigger>
             <Trigger Property="ShowSettings" Value="True">
                 <Setter Property="Background" Value="#80808080" TargetName="UpperBd"/>
                 <Setter Property="IsHitTestVisible" Value="True" TargetName="UpperBd"/>
@@ -338,17 +324,32 @@
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="MinHeight" Value="300"/>
         <Setter Property="MinWidth" Value="400"/>
+        <Setter Property="Background" Value="Red"/>
         <Setter Property="Template" Value="{StaticResource MetroWindowTemplate}"/>
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
                 <!--允许调整窗口大小-->
-                <WindowChrome GlassFrameThickness="0" 
+                <WindowChrome GlassFrameThickness="0"
                               CornerRadius="0" 
                               CaptionHeight="0"
                               UseAeroCaptionButtons="False"
                               ResizeBorderThickness="4" />
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="WindowState" Value="Maximized">
+                <Setter Property="WindowChrome.WindowChrome">
+                    <Setter.Value>
+                        <!--允许调整窗口大小-->
+                        <WindowChrome GlassFrameThickness="-1"
+                                      CornerRadius="0" 
+                                      CaptionHeight="0"
+                                      UseAeroCaptionButtons="False"
+                                      ResizeBorderThickness="0" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 </ResourceDictionary>
