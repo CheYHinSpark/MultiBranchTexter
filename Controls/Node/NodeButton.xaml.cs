@@ -184,15 +184,23 @@ namespace MultiBranchTexter.Controls
                 || (header == "判断后继" && textNode.endCondition.EndType == EndType.YesNo)
                 || (header == "多选后继" && textNode.endCondition.EndType == EndType.MultiAnswers))
             { return; }
-            MessageBoxResult warnResult = MessageBox.Show
-                (
-                Application.Current.MainWindow,
-                "确定要变更后继条件吗？\n这将同时断开节点的所有后继连接线以及与所有后继节点的连接。\n此操作不可撤销！",
-                "警告",
-                MessageBoxButton.YesNo
-                );
-            if (warnResult == MessageBoxResult.No)
-            { return; }
+            bool needWarn = true;
+            if (textNode.endCondition.EndType == EndType.Single)
+            { needWarn = answerToNodes[""] != null; }
+            else if (textNode.endCondition.EndType == EndType.YesNo)
+            { needWarn = answerToNodes["yes"] != null || answerToNodes["no"] != null; }
+            if (needWarn)
+            {
+                MessageBoxResult warnResult = MessageBox.Show
+                    (
+                    Application.Current.MainWindow,
+                    "确定要变更后继条件吗？\n这将同时断开节点的所有后继连接线以及与所有后继节点的连接。\n此操作不可撤销！",
+                    "警告",
+                    MessageBoxButton.YesNo
+                    );
+                if (warnResult == MessageBoxResult.No)
+                { return; }
+            }
             UnLinkAllPost();//清除后继
             if (header == "单一后继")
             { textNode.endCondition = new EndCondition(EndType.Single); }
@@ -493,6 +501,9 @@ namespace MultiBranchTexter.Controls
             return point;
         }
 
+        /// <summary>
+        /// 替换多选的键名
+        /// </summary>
         public void ChangeAnswer(string oldKey, string newKey)
         {
             answerToNodes.Add(newKey, answerToNodes[oldKey]);

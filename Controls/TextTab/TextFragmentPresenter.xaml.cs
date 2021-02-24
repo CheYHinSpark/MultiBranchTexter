@@ -65,7 +65,7 @@ namespace MultiBranchTexter.Controls
             parentPanel = ControlTreeHelper.FindParentOfType<StackPanel>(this);
             contentContainer.Text = fragment.Content;
             for (int i = 0; i < fragment.Operations.Count; i++)
-            { opContainer.Text += fragment.Operations[i] + "\n"; }
+            { opContainer.Text += fragment.Operations[i] + "\r\n"; }
 
             opContainer.TextChanged += Operation_TextChanged;
             contentContainer.TextChanged += Content_TextChanged;
@@ -241,21 +241,18 @@ namespace MultiBranchTexter.Controls
         //对operation做行计算，并消除空行
         private int GetOperationLineCount()
         {
-            int linecount = opContainer.LineCount;
-            bool b = true;
-            while (b)
+            int linecount = 0;
+            string newtext = "";
+            for (int i = 0; i < opContainer.LineCount;i++)
             {
-                opContainer.Text = opContainer.Text.Replace("\n\r\n", "\n");//去掉空行
-                if (linecount == opContainer.LineCount)
-                { b = false; }
-                else
-                { linecount = opContainer.LineCount; }
+                string temp = opContainer.GetLineText(i).Replace("\r", "").Replace("\n", "");
+                if (temp.Replace(" ","") != "")
+                {
+                    linecount++;
+                    newtext += temp + "\r\n";
+                }
             }
-
-            if (opContainer.GetLineText(linecount - 1) == "")
-            {
-                linecount--;
-            }
+            opContainer.Text = newtext;
             return linecount;
         }
 
