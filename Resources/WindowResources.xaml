@@ -258,6 +258,16 @@
                                 HorizontalAlignment="Left"
                                 />
                     </StackPanel>
+                    <StackPanel Orientation="Vertical" Grid.Column="1" Margin="6">
+                        <Button Content="查看说明" Command="{Binding OpenIntroCommand}"
+                                Template="{StaticResource textButtonTemplate}"
+                                Height="24" Margin="2"
+                                HorizontalAlignment="Left" />
+                        <Button Content="访问项目主页" Command="{Binding OpenMainWebCommand}"
+                                Template="{StaticResource textButtonTemplate}"
+                                Height="24" Margin="2"
+                                HorizontalAlignment="Left" />
+                    </StackPanel>
                 </Grid>
                 <Border x:Name="UpperBd" Grid.Row="2" IsHitTestVisible="False"
                         Background="Transparent"/>
@@ -273,9 +283,16 @@
                 <Trigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard>
-                            <DoubleAnimation Duration="0:0:0.3" To="200"
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.Height)"
+                                                           Timeline.DesiredFrameRate="60"
+                                                           Storyboard.TargetName="SettingPanel"
+                                                           FillBehavior="HoldEnd">
+                                <SplineDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="200" KeySpline="0.4,1,0.4,1"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimation Duration="0:0:0.3" To="1"
                                              Timeline.DesiredFrameRate="60"
-                                             Storyboard.TargetProperty="(Grid.Height)"
+                                             Storyboard.TargetProperty="Opacity"
                                              Storyboard.TargetName="SettingPanel"/>
                         </Storyboard>
                     </BeginStoryboard>
@@ -283,9 +300,16 @@
                 <Trigger.ExitActions>
                     <BeginStoryboard>
                         <Storyboard>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.Height)"
+                                                           Timeline.DesiredFrameRate="60"
+                                                           Storyboard.TargetName="SettingPanel"
+                                                           FillBehavior="HoldEnd">
+                                <SplineDoubleKeyFrame KeyTime="0:0:0" Value="200"/>
+                                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0" KeySpline="0.4,1,0.4,1"/>
+                            </DoubleAnimationUsingKeyFrames>
                             <DoubleAnimation Duration="0:0:0.3" To="0"
                                              Timeline.DesiredFrameRate="60"
-                                             Storyboard.TargetProperty="(Grid.Height)"
+                                             Storyboard.TargetProperty="Opacity"
                                              Storyboard.TargetName="SettingPanel"/>
                         </Storyboard>
                     </BeginStoryboard>
@@ -303,10 +327,6 @@
                             <SplineDoubleKeyFrame KeyTime="0:0:0" Value="60"/>
                             <SplineDoubleKeyFrame KeyTime="0:0:1" Value="0" KeySpline="0.4,1,0.4,1"/>
                         </DoubleAnimationUsingKeyFrames>
-                        <DoubleAnimation Duration="0:0:0" To="1" BeginTime="0:0:1.2"
-                                         FillBehavior="HoldEnd"
-                                         Storyboard.TargetProperty="Opacity"
-                                         Storyboard.TargetName="SettingPanel"/>
                     </Storyboard>
                 </BeginStoryboard>
             </EventTrigger>

@@ -23,7 +23,8 @@
                 </Grid.RowDefinitions>
                 <StackPanel x:Name="fragmentContainer" Grid.Row="0" Orientation="Vertical"/>
                 <Border Grid.Row="1" Background="Transparent" 
-                        MouseLeftButtonDown="Border_MouseLeftButtonDown"/>
+                        MouseLeftButtonDown="Border_MouseLeftButtonDown" 
+                        Cursor="IBeam"/>
             </Grid>
         </ScrollViewer>
         <!--下方信息栏-->

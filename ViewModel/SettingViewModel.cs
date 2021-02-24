@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using Microsoft.Win32;
 using MultiBranchTexter.Model;
 
 namespace MultiBranchTexter.ViewModel
@@ -92,6 +93,7 @@ namespace MultiBranchTexter.ViewModel
             ReadIni();
         }
 
+        // 还原默认设置命令
         public ICommand ToDefaultCommand => new RelayCommand((t) =>
         {
             IsDarkMode = false;
@@ -100,6 +102,26 @@ namespace MultiBranchTexter.ViewModel
             _colorG = 170;
             ColorB = 22;
             WriteIni();
+        });
+
+        // 打开项目主页命令
+        public ICommand OpenMainWebCommand => new RelayCommand((t) =>
+        {
+            try
+            {
+                Process.Start("explorer.exe", "https://github.com/CheYHinSpark/MultiBranchTexter");
+            }
+            catch { }
+        });
+
+        // 打开项目说明命令
+        public ICommand OpenIntroCommand => new RelayCommand((t) =>
+        {
+            try
+            {
+                Process.Start("explorer.exe", AppDomain.CurrentDomain.BaseDirectory + "README.md");
+            }
+            catch { }
         });
 
         private void ChangeColor()

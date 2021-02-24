@@ -19,10 +19,10 @@
         </Grid.RowDefinitions>
         <ScrollViewer x:Name="scrollViewer" Background="{DynamicResource MainBrush}"
                       FocusVisualStyle="{x:Null}"
-                      PreviewMouseDown="scrollViewer_PreviewMouseDown"
-                      PreviewMouseUp="scrollViewer_PreviewMouseUp"
-                      PreviewMouseWheel="scrollViewer_PreviewMouseWheel"
-                      MouseMove="scrollViewer_MouseMove"
+                      PreviewMouseDown="ScrollViewer_PreviewMouseDown"
+                      PreviewMouseUp="ScrollViewer_PreviewMouseUp"
+                      PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"
+                      MouseMove="ScrollViewer_MouseMove"
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Auto">
             <c:AutoSizeCanvas x:Name="container"

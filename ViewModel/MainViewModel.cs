@@ -143,10 +143,14 @@ namespace MultiBranchTexter.ViewModel
         #endregion
 
         #region 命令
+
+        #region 字体命令
         public ICommand FontSizeUpCommand => new RelayCommand((t) =>
         { TextFontSize++; });
         public ICommand FontSizeDownCommand => new RelayCommand((t) =>
         { TextFontSize--; });
+        #endregion
+
         //新建文件命令
         public ICommand NewFileCommand => new RelayCommand((container) =>
         {
@@ -238,6 +242,7 @@ namespace MultiBranchTexter.ViewModel
             catch { }
         });
 
+        #region 保存命令
         //序列化到单个JSON，仅供测试
         public ICommand SaveJsonCommand => new RelayCommand(container =>
           {
@@ -263,12 +268,16 @@ namespace MultiBranchTexter.ViewModel
             }
             catch { }
         });
+
+        //保存整个文件
         public ICommand SaveFileCommand => new RelayCommand((container) =>
         {
             if (IsWorkGridVisible == Visibility.Hidden)
             { return; }
             SaveFile(container as FlowChartContainer); 
         });
+
+        //整个文件另存为
         public ICommand SaveAsFileCommand => new RelayCommand((container) =>
         {
             try
@@ -294,6 +303,12 @@ namespace MultiBranchTexter.ViewModel
             }
             catch { }
         });
+        #endregion
+
+        #region 导出命令
+
+        #endregion
+
         #endregion
 
         public MainViewModel()

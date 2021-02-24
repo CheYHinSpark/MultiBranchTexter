@@ -59,7 +59,7 @@ namespace MultiBranchTexter.Controls
         }
 
         //滚轮事件
-        private void scrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        private void ScrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
         {
             // 按住Ctrl，开始放大缩小
             if (Keyboard.Modifiers == ModifierKeys.Control)
@@ -71,7 +71,7 @@ namespace MultiBranchTexter.Controls
         }
 
         //鼠标移动
-        private void scrollViewer_MouseMove(object sender, MouseEventArgs e)
+        private void ScrollViewer_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.OriginalSource is Grid)
             {
@@ -115,7 +115,7 @@ namespace MultiBranchTexter.Controls
         }
 
         //点击scrollViewer
-        private void scrollViewer_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void ScrollViewer_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             //表示点击到了空白部分
             if (e.OriginalSource is Grid)
@@ -147,6 +147,9 @@ namespace MultiBranchTexter.Controls
                 {
                     //取消选择
                     _viewModel.ClearSelection();
+                    //如果没有打开搜索框，取消搜索
+                    if (_viewModel.SearchBoxVisibility == Visibility.Hidden)
+                    { _viewModel.ClearSearch(); }
                     stateHint.Text = "";
                     //准备拖拽
                     this.Cursor = Cursors.Hand;
@@ -154,7 +157,7 @@ namespace MultiBranchTexter.Controls
             }
         }
 
-        private void scrollViewer_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        private void ScrollViewer_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             this.Cursor = Cursors.Arrow;
             //如果是完成多选
@@ -197,6 +200,7 @@ namespace MultiBranchTexter.Controls
         public void Load(string mbtxtPath)
         {
             container.Children.Clear();
+            IsModified = "";
             _viewModel.SelectedNodes.Clear();// <--必须
             MBFileReader reader = new MBFileReader(mbtxtPath);
             DrawFlowChart(reader.Read());
