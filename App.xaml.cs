@@ -1,8 +1,5 @@
-﻿using Microsoft.Win32;
-using MultiBranchTexter.ViewModel;
-using System;
+﻿using MultiBranchTexter.ViewModel;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows;
 
 namespace MultiBranchTexter

@@ -11,6 +11,10 @@
     <Description>为了满足多分支的游戏剧情等的写作需要而开发的多分支文本编辑器。</Description>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>5</WarningLevel>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="KTDU\**" />
     <EmbeddedResource Remove="KTDU\**" />
@@ -20,6 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Octokit" Version="0.50.0" />
   </ItemGroup>
 
   <ItemGroup>

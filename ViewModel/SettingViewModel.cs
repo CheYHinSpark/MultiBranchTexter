@@ -86,6 +86,7 @@ namespace MultiBranchTexter.ViewModel
             ReadIni();
         }
 
+        #region 命令
         // 还原默认设置命令
         public ICommand ToDefaultCommand => new RelayCommand((t) =>
         {
@@ -116,6 +117,16 @@ namespace MultiBranchTexter.ViewModel
             }
             catch { }
         });
+
+        // 打开项目说明命令
+        public ICommand CheckUpdateCommand => new RelayCommand((t) =>
+        { CheckUpdate(); });
+        #endregion
+
+        public async void CheckUpdate()
+        {
+            await UpdateChecker.CheckGitHubNewerVersion();
+        }
 
         private void ChangeColor()
         {
