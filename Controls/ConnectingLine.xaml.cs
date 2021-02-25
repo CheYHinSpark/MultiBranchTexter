@@ -1,4 +1,5 @@
 ﻿using MultiBranchTexter.Model;
+using MultiBranchTexter.ViewModel;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -83,8 +84,9 @@ namespace MultiBranchTexter.Controls
             //断开起始点和终止点
             NodeButton.UnLink(BeginNode, EndNode);
             //加入新节点，相关的link和画线都在fcc里完成
-            ControlTreeHelper
-                .FindParentOfType<FlowChartContainer>(this)
+            ViewModelFactory.FCC
+            //ControlTreeHelper
+            //    .FindParentOfType<FlowChartContainer>(this)
                 .AddNodeButton(BeginNode, EndNode, mousePt.X, mousePt.Y);
             //删去本线条
             Delete();
@@ -169,7 +171,7 @@ namespace MultiBranchTexter.Controls
             EndNode.preLines.Remove(this);
             BeginNode.FatherNode.UpdatePostLines();
             EndNode.UpdatePreLines();
-            ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).IsModified = "*";
+            ViewModelFactory.Main.IsModified = "*";
             ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this).Children.Remove(this);
             Debug.WriteLine("成功删除连线");
         }

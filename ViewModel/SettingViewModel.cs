@@ -78,14 +78,7 @@ namespace MultiBranchTexter.ViewModel
         {
             get { return _allowDoubleEnter; }
             set
-            {
-                _allowDoubleEnter = value;
-                if (value == true)
-                { (Application.Current.MainWindow as MainWindow).AllowDoubleEnter = true; }
-                else
-                { (Application.Current.MainWindow as MainWindow).AllowDoubleEnter = false; }
-                RaisePropertyChanged("AllowDoubleEnter");
-            }
+            { _allowDoubleEnter = value; RaisePropertyChanged("AllowDoubleEnter"); }
         }
 
         public SettingViewModel()

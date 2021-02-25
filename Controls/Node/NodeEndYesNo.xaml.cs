@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MultiBranchTexter.Model;
+using MultiBranchTexter.ViewModel;
 
 namespace MultiBranchTexter.Controls
 {
@@ -53,7 +54,7 @@ namespace MultiBranchTexter.Controls
             FatherTextNode.endCondition.Question = titleBox.Text;
             titleBox.SelectionStart = 0;
             // 还要通知窗口改变相应的标签页
-            ControlTreeHelper.FindParentOfType<MainWindow>(FatherNode).ReLoadTab(FatherTextNode);
+            ViewModelFactory.Main.ReLoadTab(FatherTextNode);
         }
 
         //虽然0个引用，但这是双击两个小节点启动调整后继功能

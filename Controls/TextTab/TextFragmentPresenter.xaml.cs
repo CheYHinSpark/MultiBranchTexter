@@ -1,4 +1,5 @@
 ﻿using MultiBranchTexter.Model;
+using MultiBranchTexter.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,17 +15,6 @@ namespace MultiBranchTexter.Controls
     /// </summary>
     public partial class TextFragmentPresenter : UserControl
     {
-        public static DependencyProperty AllowDoubleEnterProperty =
-          DependencyProperty.Register("AllowDoubleEnter", typeof(bool),
-              typeof(TextFragmentPresenter), new PropertyMetadata(false));
-
-        public bool AllowDoubleEnter
-        {
-            get { return (bool)GetValue(AllowDoubleEnterProperty); }
-            set { SetValue(AllowDoubleEnterProperty, value); }
-        }
-
-
         private readonly MBTabItem ownerTab;
         private StackPanel parentPanel;
         private readonly TextFragment fragment;
@@ -143,7 +133,7 @@ namespace MultiBranchTexter.Controls
             else
             { return; }
 
-            if (!AllowDoubleEnter)
+            if (!(ViewModelFactory.Settings.AllowDoubleEnter == true))
             {
                 try
                 {
@@ -273,7 +263,7 @@ namespace MultiBranchTexter.Controls
         private void RaiseChange()
         {
             ownerTab.ViewModel.IsModified = "*";
-            (Application.Current.MainWindow as MainWindow).GetFCC().IsModified = "*";
+            ViewModelFactory.Main.IsModified = "*";
         }
         #endregion
     }

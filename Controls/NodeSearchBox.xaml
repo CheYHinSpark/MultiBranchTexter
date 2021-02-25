@@ -17,12 +17,12 @@
         <TextBlock Text="搜索标题" Foreground="White" Margin="4" VerticalAlignment="Center"/>
         <Button x:Name="closeBtn" Grid.Column="1" Margin="4" 
                 Template="{DynamicResource searchBoxBtnTemp}"
-                Click="closeBtn_Click"/>
+                Click="CloseBtn_Click"/>
         <TextBox x:Name="findBox" Grid.Row="1" Grid.Column="0" Margin="3"
                  Background="{DynamicResource BaseBrush}"
-                 TextChanged="findBox_TextChanged"/>
+                 TextChanged="FindBox_TextChanged"/>
         <Button x:Name="nextBtn" Grid.Row="1" Grid.Column="1" Margin="4" 
                 Template="{DynamicResource searchBoxBtnTemp}"
-                Click="nextBtn_Click"/>
+                Click="NextBtn_Click"/>
     </Grid>
 </UserControl>

@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MultiBranchTexter.Model;
+using MultiBranchTexter.ViewModel;
 
 namespace MultiBranchTexter.Controls
 {
@@ -29,7 +30,7 @@ namespace MultiBranchTexter.Controls
             titleBox.Text = maEnd.Question;
             foreach (string answer in maEnd.Answers.Keys)
             {
-                NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(answer, maEnd.Answers[answer]);
+                NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(answer);
                 answerContainer.Children.Add(nodeEnd);
             }
         }
@@ -56,7 +57,7 @@ namespace MultiBranchTexter.Controls
             FatherTextNode.endCondition.Question = titleBox.Text;
             titleBox.SelectionStart = 0;
             // 还要通知窗口改变相应的标签页
-            ControlTreeHelper.FindParentOfType<MainWindow>(FatherNode).ReLoadTab(FatherTextNode);
+            ViewModelFactory.Main.ReLoadTab(FatherTextNode);
         }
 
         //点击添加按钮
@@ -72,11 +73,11 @@ namespace MultiBranchTexter.Controls
             //添加键
             atns.Add(newAnswer,"");
             FatherNode.answerToNodes.Add(newAnswer, null);
-            NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(newAnswer, "")
+            NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(newAnswer)
             { FatherNode = this.FatherNode };
             answerContainer.Children.Add(nodeEnd);
             // 还要通知窗口改变相应的标签页
-            ControlTreeHelper.FindParentOfType<MainWindow>(FatherNode).ReLoadTab(FatherTextNode);
+            ViewModelFactory.Main.ReLoadTab(FatherTextNode);
         }
         #endregion
 

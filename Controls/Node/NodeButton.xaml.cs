@@ -1,4 +1,5 @@
 ﻿using MultiBranchTexter.Model;
+using MultiBranchTexter.ViewModel;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -23,7 +24,6 @@ namespace MultiBranchTexter.Controls
         //public List<NodeButton> postNodes = new List<NodeButton>();
         public Dictionary<string, NodeButton> answerToNodes = new Dictionary<string, NodeButton>();
         //public List<NodeButton> postNodes { get; set; }
-        public List<NodeButton> preNodes = new List<NodeButton>();
 
         public List<ConnectingLine> postLines = new List<ConnectingLine>();
         public List<ConnectingLine> preLines = new List<ConnectingLine>();
@@ -47,6 +47,8 @@ namespace MultiBranchTexter.Controls
             UpperBd = GetTemplateChild("UpperBd") as Border;
             endContainer = GetTemplateChild("endContainer") as Border;
             endContainer.Child = endNode;
+            //这个地方可能会出bug，不用管重新编译吧
+
             titleBox = GetTemplateChild("titleBox") as TextBox;
             //显示标题
             titleBox.Text = textNode.Name;
@@ -58,7 +60,7 @@ namespace MultiBranchTexter.Controls
         }
 
         #region 移动事件
-        private void nodeButton_MouseMove(object sender, MouseEventArgs e)
+        private void NodeButton_MouseMove(object sender, MouseEventArgs e)
         {
             if (isMoving)
             {
@@ -74,25 +76,24 @@ namespace MultiBranchTexter.Controls
             }
         }
 
-        private void nodeButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void NodeButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             NodeState = NodeState.Selected;
             if (e.OriginalSource is Border)
             {
                 SwitchMoving();
                 //通知flowchart改变selectedNodes
-                FlowChartContainer container = ControlTreeHelper.FindParentOfType<FlowChartContainer>(parent);
-                container.NewSelection(this);
+                ViewModelFactory.FCC.NewSelection(this);
             }
             oldPoint = e.GetPosition(parent);
         }
 
-        private void nodeButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void NodeButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             SwitchMoving();
         }
 
-        private void nodeButton_MouseWheel(object sender, MouseWheelEventArgs e)
+        private void NodeButton_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (isMoving)
             {
@@ -106,7 +107,7 @@ namespace MultiBranchTexter.Controls
         private void GotoBtn_Click(object sender, RoutedEventArgs e)
         {
             //通知窗体切换页面，打开相应的标签页
-            (Application.Current.MainWindow as MainWindow).OpenMBTabItem(textNode);
+            ViewModelFactory.Main.OpenMBTabItem(textNode);
         }
 
         //双击标题，可以改标题
@@ -123,7 +124,7 @@ namespace MultiBranchTexter.Controls
             // 检查重复
             if (titleBox.Text != textNode.Name)
             {
-                if (ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).CheckRepeat(titleBox.Text))
+                if (ViewModelFactory.FCC.CheckRepeat(titleBox.Text))
                 {
                     titleBox.Text = textNode.Name;
                     MessageBox.Show("节点名称重复，已还原");
@@ -133,7 +134,7 @@ namespace MultiBranchTexter.Controls
                     //没有重复，完成修改
                     textNode.Name = titleBox.Text;
                     //通知窗体改变相应的标签页
-                    (Application.Current.MainWindow as MainWindow).ReLoadTab(textNode);
+                    ViewModelFactory.Main.ReLoadTab(textNode);
                 }
             }
         }
@@ -211,8 +212,8 @@ namespace MultiBranchTexter.Controls
             ShowEndCondition();
             endContainer.Child = endNode;
             //通知窗体把对应的标签改了
-            (Application.Current.MainWindow as MainWindow).GetFCC().IsModified = "*";
-            (Application.Current.MainWindow as MainWindow).ReLoadTab(textNode);
+            ViewModelFactory.Main.IsModified = "*";
+            ViewModelFactory.Main.ReLoadTab(textNode);
         }
         #endregion
 
@@ -232,7 +233,6 @@ namespace MultiBranchTexter.Controls
             else
             { pre.answerToNodes.Add(answer, post); }
             //pre.postNodes.Add(post);
-            post.preNodes.Add(pre);
             TextNode.Link(pre.textNode, post.textNode, answer);
         }
 
@@ -245,7 +245,6 @@ namespace MultiBranchTexter.Controls
             if (pre.answerToNodes.ContainsKey(answer))
             { pre.answerToNodes[answer] = null; }
             //pre.postNodes.Remove(post);
-            post.preNodes.Remove(pre);
             TextNode.UnLink(pre.textNode, post.textNode, answer);
         }
 
@@ -451,7 +450,7 @@ namespace MultiBranchTexter.Controls
             { line.Update(); }
             foreach (ConnectingLine line in postLines)
             { line.Update(); }
-            (Application.Current.MainWindow as MainWindow).GetFCC().IsModified = "*";
+            ViewModelFactory.Main.IsModified = "*";
         }
         #endregion
 
@@ -468,8 +467,8 @@ namespace MultiBranchTexter.Controls
             }
             UnLinkAllPost();//清除所有后继
             //通知窗体把对应的标签删掉
-            (Application.Current.MainWindow as MainWindow).DeleteTab(textNode);
-            (Application.Current.MainWindow as MainWindow).GetFCC().IsModified = "*";
+            ViewModelFactory.Main.DeleteTab(textNode);
+            ViewModelFactory.Main.IsModified = "*";
             //删掉自己
             ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this).Children.Remove(this);
         }

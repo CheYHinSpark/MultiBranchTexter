@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MultiBranchTexter.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -18,33 +19,26 @@ namespace MultiBranchTexter.Controls
     /// </summary>
     public partial class NodeSearchBox : UserControl
     {
-        private FlowChartContainer container;
-
         public NodeSearchBox()
         {
             InitializeComponent();
         }
 
-        private void findBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void FindBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             //通知流程图容器搜索节点
-            container.SearchNode(findBox.Text);
+            ViewModelFactory.FCC.SearchNode(findBox.Text);
         }
 
-        public void SetFlowChartContainer(FlowChartContainer newFCC)
-        {
-            container = newFCC;
-        }
-
-        private void closeBtn_Click(object sender, RoutedEventArgs e)
+        private void CloseBtn_Click(object sender, RoutedEventArgs e)
         {
             this.Visibility = Visibility.Hidden;
-            container.ClearSearch();
+            ViewModelFactory.FCC.ClearSearch();
         }
 
-        private void nextBtn_Click(object sender, RoutedEventArgs e)
+        private void NextBtn_Click(object sender, RoutedEventArgs e)
         {
-            container.SearchNext(findBox.Text);
+            ViewModelFactory.FCC.SearchNext(findBox.Text);
         }
     }
 }

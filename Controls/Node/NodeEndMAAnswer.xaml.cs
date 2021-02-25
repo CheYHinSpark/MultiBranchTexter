@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MultiBranchTexter.Model;
+using MultiBranchTexter.ViewModel;
 
 namespace MultiBranchTexter.Controls
 {
@@ -22,7 +23,6 @@ namespace MultiBranchTexter.Controls
         private Button maCloseBtn;
         private TextBox answerTxt;
         private string answer = "";
-        private readonly string nextNodeName = "";
 
         /// <summary>
         /// 获取当前的回答文本
@@ -41,11 +41,10 @@ namespace MultiBranchTexter.Controls
         {
             InitializeComponent();
         }
-        public NodeEndMAAnswer(string newAnswer, string postNodeName)
+        public NodeEndMAAnswer(string newAnswer)
         {
             InitializeComponent();
             answer = newAnswer;
-            nextNodeName = postNodeName;
         }
         #region 事件
         //加载完成
@@ -96,12 +95,10 @@ namespace MultiBranchTexter.Controls
             else
             {
                 FatherNode.ChangeAnswer(answer, answerTxt.Text);
-                //ec.Answers.Remove(answer);
                 //没有重复，完成修改
                 answer = answerTxt.Text;
-                //ec.Answers.Add(answer, nextNodeName);
                 //通知标签页改变
-                ControlTreeHelper.FindParentOfType<MainWindow>(FatherNode).ReLoadTab(FatherTextNode);
+                ViewModelFactory.Main.ReLoadTab(FatherTextNode);
             }
             answerTxt.SelectionStart = 0;
         }
@@ -130,7 +127,7 @@ namespace MultiBranchTexter.Controls
             FatherNode.answerToNodes.Remove(answer);
             FatherTextNode.endCondition.Answers.Remove(answer);
             //通知标签页改变
-            ControlTreeHelper.FindParentOfType<MainWindow>(FatherNode).ReLoadTab(FatherTextNode);
+            ViewModelFactory.Main.ReLoadTab(FatherTextNode);
             //移除自身
             ControlTreeHelper.FindParentOfType<StackPanel>(this).Children.Remove(this);
         }

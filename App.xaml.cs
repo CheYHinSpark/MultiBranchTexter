@@ -1,4 +1,9 @@
-﻿using System.Windows;
+﻿using Microsoft.Win32;
+using MultiBranchTexter.ViewModel;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows;
 
 namespace MultiBranchTexter
 {
@@ -9,9 +14,10 @@ namespace MultiBranchTexter
     {
         public App()
         {
+            // 创建ViewModel全局映射
+            Application.Current.Properties.Add("ViewModelMap",new Dictionary<string, object>());
             Startup += App_Startup;
         }
-
 
         void App_Startup(object sender, StartupEventArgs e)
         {
@@ -19,7 +25,7 @@ namespace MultiBranchTexter
             this.MainWindow = window;
             if (e.Args.Length > 0)
             {
-                window.ViewModel.OpenFile(e.Args[0]);
+                ViewModelFactory.Main.OpenFile(e.Args[0]);
             }
             window.Show();
         }

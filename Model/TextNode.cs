@@ -14,16 +14,9 @@ namespace MultiBranchTexter.Model
     {
         // 文件名
         public string Name = "";
-        // 文字内容
-        //public string Text { get; set; }
+
         // 后继条件
         public EndCondition endCondition;
-        // 前节点
-        //[JsonIgnore]
-        private readonly List<TextNode> preNodes = new List<TextNode>();
-        // 后节点
-        //[JsonIgnore]
-        //public List<TextNode> PostNodes { get; private set; } = new List<TextNode>();
 
         //文字内容
         public List<TextFragment> Fragments = new List<TextFragment>();
@@ -40,16 +33,13 @@ namespace MultiBranchTexter.Model
             endCondition = new EndCondition();
         }
 
-        #region 添加与删除前后节点
-        #region 静态方法
+        #region 添加与删除前后节点 静态方法
      
         /// <summary>
         /// 连接，注意不能在对键值的遍历中搞这个
         /// /// </summary>
         public static void Link(TextNode pre, TextNode post, string answer)
         {
-            post.AddPreNode(pre);
-
             if (pre.endCondition.Answers.ContainsKey(answer))
             {
                 pre.endCondition.Answers[answer] = post.Name;
@@ -63,26 +53,11 @@ namespace MultiBranchTexter.Model
         /// </summary>
         public static void UnLink(TextNode pre, TextNode post, string answer)
         {
-            post.DeletePreNode(pre);
-
             if (pre.endCondition.Answers.ContainsKey(answer))
             {
                 if (pre.endCondition.Answers[answer] == post.Name)
                 { pre.endCondition.Answers.Remove(answer); }
             }
-        }
-        #endregion
-
-        public void AddPreNode(TextNode node)
-        {
-            //TODO 判断是否已经存在
-            preNodes.Add(node);
-        }
-
-        public void DeletePreNode(TextNode node)
-        {
-            //TODO 判断是否已经存在
-            preNodes.Remove(node);
         }
         #endregion
 

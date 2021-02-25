@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using MultiBranchTexter.ViewModel;
 
 namespace MultiBranchTexter.Model
 {
@@ -26,6 +27,7 @@ namespace MultiBranchTexter.Model
                 else
                 {
                     Debug.WriteLine($"未找到节点{n.Name}坐标");
+                    ViewModelFactory.Main.IsModified = "*";//这时相当于已经有修改了
                     return new TextNodeWithLeftTop(n, 0, 0);
                 }
             }).ToList();

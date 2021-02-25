@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MultiBranchTexter.Model;
+using MultiBranchTexter.ViewModel;
 
 namespace MultiBranchTexter.Controls
 {
@@ -33,9 +34,7 @@ namespace MultiBranchTexter.Controls
             Loaded += TabEnd_Loaded;
         }
 
-        /// <summary>
-        /// Load
-        /// </summary>
+        #region 事件
         private void TabEnd_Loaded(object sender, RoutedEventArgs e)
         {
             questionTxt = GetTemplateChild("questionTxt") as TextBlock;
@@ -49,12 +48,14 @@ namespace MultiBranchTexter.Controls
 
         private void BackBtn_Click(object sender, RoutedEventArgs e)
         {
-            (Application.Current.MainWindow as MainWindow).BackToFront(textNode);
+            ViewModelFactory.Main.IsFlowChartShowing = true;
+            ViewModelFactory.FCC.LocateToNode(textNode);
         }
+        #endregion
 
-        /// <summary>
-        /// 重新装载tabend
-        /// </summary>
+
+        #region 方法
+        /// <summary> 重新装载tabend </summary>
         public void LoadTabEnd()
         { 
             questionTxt.Text = "查看后继节点";
@@ -79,12 +80,11 @@ namespace MultiBranchTexter.Controls
                 .MaxHeight = Math.Min(120, container.ActualHeight);
         }
 
-        /// <summary>
-        /// 设置节点
-        /// </summary>
+        /// <summary> 设置节点 </summary>
         public void SetTabEnd(TextNode node)
         {
             textNode = node;
         }
+        #endregion
     }
 }

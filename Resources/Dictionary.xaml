@@ -230,8 +230,6 @@
     </Style>
 
 
-
-
     <!--ScrollBar-->
     <Style x:Key="ScrollBarLineButton" TargetType="{x:Type RepeatButton}">
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -296,7 +294,7 @@
     </Style>
 
     <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
-        <Grid Background="LightGray">
+        <Grid Background="{StaticResource MiddleBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="12" />
                 <RowDefinition Height="*" />
@@ -329,7 +327,7 @@
     </ControlTemplate>
 
     <ControlTemplate x:Key="HorizontalScrollBar" TargetType="{x:Type ScrollBar}">
-        <Grid Background="LightGray">
+        <Grid Background="{StaticResource MiddleBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="12" />
                 <ColumnDefinition Width="*" />
@@ -802,10 +800,5 @@
         <Setter Property="FontSize" Value="{Binding DataContext.TextFontSize, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"/>
         <Setter Property="Foreground" Value="{DynamicResource Text.Foreground.BaseBrush}"/>
         <Setter Property="CaretBrush" Value="{DynamicResource ThemeBrush}"/>
-    </Style>
-    
-    <!--文本片段器的style-->
-    <Style TargetType="{x:Type c:TextFragmentPresenter}">
-        <Setter Property="AllowDoubleEnter" Value="{Binding AllowDoubleEnter, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"/>
     </Style>
 </ResourceDictionary>

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -26,8 +28,10 @@ namespace MultiBranchTexter.Controls
             set { SetValue(ScaleRatioProperty, value); }
         }
 
+
         public bool IsResizing = false;
         private Size oldSize;
+
 
         protected override Size MeasureOverride(Size constraint)
         {

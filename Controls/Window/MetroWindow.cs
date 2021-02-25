@@ -22,16 +22,6 @@ namespace MultiBranchTexter
             get { return (bool)GetValue(ShowSettingsProperty); }
             set { SetValue(ShowSettingsProperty, value); }
         }
-
-        public static DependencyProperty AllowDoubleEnterProperty =
-          DependencyProperty.Register("AllowDoubleEnter", typeof(bool),
-              typeof(MetroWindow), new PropertyMetadata(false));
-
-        public bool AllowDoubleEnter
-        {
-            get { return (bool)GetValue(AllowDoubleEnterProperty); }
-            set { SetValue(AllowDoubleEnterProperty, value); }
-        }
         #endregion
 
         #region 我也不懂这一坨东西是什么，但是它可以起到不遮盖任务栏的作用
@@ -146,7 +136,6 @@ namespace MultiBranchTexter
 
         //设置
         public SettingViewModel _settings;
-        public SettingViewModel Settings { get { return _settings; } }
 
         public MetroWindow()
         {
@@ -160,6 +149,7 @@ namespace MultiBranchTexter
             if (App.Current.Resources["MetroWindowTemplate"] is ControlTemplate mWTemplate)
             {
                 _settings = mWTemplate.FindName("svm", this) as SettingViewModel;
+                ViewModelFactory.SetViewModel(typeof(SettingViewModel), _settings);
 
                 MaxButton = mWTemplate.FindName("MaxWinButton", this) as CheckBox;
 
@@ -188,7 +178,7 @@ namespace MultiBranchTexter
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             _settings.WriteIni();
-            if ((Application.Current.MainWindow as MainWindow).GetFCC().IsModified == "*")
+            if (ViewModelFactory.Main.IsModified == "*")
             {
                 MessageBoxResult warnResult = MessageBox.Show
                     (
@@ -199,8 +189,7 @@ namespace MultiBranchTexter
                     );
                 if (warnResult == MessageBoxResult.Yes)
                 {
-                    (Application.Current.MainWindow as MainWindow)
-                        .ViewModel.SaveFile((Application.Current.MainWindow as MainWindow).GetFCC());
+                    ViewModelFactory.Main.SaveFile();
                     Close();
                 }
                 else if (warnResult == MessageBoxResult.No)

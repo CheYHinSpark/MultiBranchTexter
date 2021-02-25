@@ -15,10 +15,10 @@
                 <Border x:Name="bgBorder" Padding="10,4,10,4" Grid.Row="0"
                         Background="{DynamicResource NodeBgBrush}" 
                         BorderBrush="{DynamicResource ThemeBrush}"
-                        MouseLeftButtonDown="nodeButton_MouseLeftButtonDown"
-                        MouseMove="nodeButton_MouseMove"
-                        MouseLeftButtonUp="nodeButton_MouseLeftButtonUp"
-                        MouseWheel="nodeButton_MouseWheel"
+                        MouseLeftButtonDown="NodeButton_MouseLeftButtonDown"
+                        MouseMove="NodeButton_MouseMove"
+                        MouseLeftButtonUp="NodeButton_MouseLeftButtonUp"
+                        MouseWheel="NodeButton_MouseWheel"
                         BorderThickness="1" CornerRadius="4">
                     <Border.ContextMenu>
                         <ContextMenu>

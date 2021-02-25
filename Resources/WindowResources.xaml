@@ -228,7 +228,7 @@
                     <CheckBox Content="深色模式"
                               IsChecked="{Binding IsDarkMode}"
                               Template="{StaticResource settingCheckBox}"/>
-                    <CheckBox Content="连续回车切割片段"
+                    <CheckBox Content="连续回车不切割片段"
                               IsChecked="{Binding AllowDoubleEnter}"
                               Template="{StaticResource settingCheckBox}"/>
                     <StackPanel Orientation="Vertical" Margin="2"

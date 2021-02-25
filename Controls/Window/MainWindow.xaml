@@ -106,7 +106,7 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <TextBlock Text="{Binding IsModified, ElementName=flowChart}" Grid.Column="1" 
+                    <TextBlock Text="{Binding IsModified}" Grid.Column="1" 
                                Foreground="{DynamicResource Foreground.BaseBrush}"/>
                 </Grid>
             </Border>
@@ -130,7 +130,7 @@
                        Foreground="{DynamicResource Foreground.BaseBrush}" FontSize="24"/>
         </StackPanel>
         <!--正式的两个工作控件-->
-        <Grid Grid.Row="1" Visibility="{Binding IsWorkGridVisible}">
+        <Grid Grid.Row="1" IsEnabled="{Binding IsWorkGridVisible}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding FlowChartWidth}"/>
                 <ColumnDefinition Width="{Binding WorkTabWidth}"/>
@@ -139,6 +139,59 @@
             <TabControl x:Name="workTabControl" Grid.Column="1" Padding="0" 
                         ItemsSource="{Binding WorkTabs, Mode=TwoWay}"
                         SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"/>
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                    <Setter Property="Opacity" Value="0"/>
+                    <Setter Property="IsHitTestVisible" Value="False"/>
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="0.6" ScaleY="0.6"/>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsEnabled" Value="True">
+                            <Setter Property="IsHitTestVisible" Value="True"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames Duration="0:0:0.4"
+                                                                       Storyboard.TargetProperty="(Grid.RenderTransform).(ScaleTransform.ScaleX)">
+                                            <SplineDoubleKeyFrame KeyTime="0:0:0" Value="0.6"/>
+                                            <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="1" KeySpline="0.6,1,0.6,1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames Duration="0:0:0.4"
+                                                                       Storyboard.TargetProperty="(Grid.RenderTransform).(ScaleTransform.ScaleY)">
+                                            <SplineDoubleKeyFrame KeyTime="0:0:0" Value="0.6"/>
+                                            <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="1" KeySpline="0.6,1,0.6,1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <DoubleAnimation Duration="0:0:0.5" From="0" To="1"
+                                                         Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames Duration="0:0:0.4"
+                                                                       Storyboard.TargetProperty="(Grid.RenderTransform).(ScaleTransform.ScaleX)">
+                                            <SplineDoubleKeyFrame KeyTime="0:0:0" Value="1"/>
+                                            <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="0.6" KeySpline="0.6,1,0.6,1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames Duration="0:0:0.4"
+                                                                       Storyboard.TargetProperty="(Grid.RenderTransform).(ScaleTransform.ScaleY)">
+                                            <SplineDoubleKeyFrame KeyTime="0:0:0" Value="1"/>
+                                            <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="0.6" KeySpline="0.6,1,0.6,1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <DoubleAnimation Duration="0:0:0.5" From="1" To="0"
+                                                         Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
         </Grid>
     </Grid>
 

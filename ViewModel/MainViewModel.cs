@@ -19,8 +19,8 @@ namespace MultiBranchTexter.ViewModel
     public class MainViewModel : ViewModelBase
     {
         #region 左右显示相关
-        private Visibility _isWorkGridVisible;
-        public Visibility IsWorkGridVisible
+        private bool _isWorkGridVisible;
+        public bool IsWorkGridVisible
         {
             get { return _isWorkGridVisible; }
             set { _isWorkGridVisible = value; RaisePropertyChanged("IsWorkGridVisible"); }
@@ -109,6 +109,13 @@ namespace MultiBranchTexter.ViewModel
             }
         }
         private string _fileDirPath;
+
+        private string _isModified;
+        public string IsModified
+        {
+            get { return _isModified; }
+            set { _isModified = value; RaisePropertyChanged("IsModified"); }
+        }
         #endregion
 
         #region workTab相关
@@ -159,7 +166,7 @@ namespace MultiBranchTexter.ViewModel
             {
                 FlowChartContainer flowChart = container as FlowChartContainer;
                 // 检查是否需要保存现有文件
-                if (flowChart.IsModified == "*")
+                if (IsModified == "*")
                 {
                     MessageBoxResult warnResult = MessageBox.Show
                     (
@@ -170,7 +177,7 @@ namespace MultiBranchTexter.ViewModel
                     );
                     if (warnResult == MessageBoxResult.Yes)
                     {
-                        SaveFile(flowChart);
+                        SaveFile();
                     }
                     else if (warnResult == MessageBoxResult.Cancel)
                     {
@@ -202,7 +209,7 @@ namespace MultiBranchTexter.ViewModel
             {
                 FlowChartContainer flowChart = container as FlowChartContainer;
                 // 检查是否需要保存现有文件
-                if (flowChart.IsModified == "*")
+                if (IsModified == "*")
                 {
                     MessageBoxResult warnResult = MessageBox.Show
                     (
@@ -213,7 +220,7 @@ namespace MultiBranchTexter.ViewModel
                     );
                     if (warnResult == MessageBoxResult.Yes)
                     {
-                        SaveFile(flowChart);
+                        SaveFile();
                     }
                     else if (warnResult == MessageBoxResult.Cancel)
                     {
@@ -243,7 +250,7 @@ namespace MultiBranchTexter.ViewModel
         {
             try
             {
-                if (IsWorkGridVisible == Visibility.Hidden)
+                if (!IsWorkGridVisible)
                 { return; }
                 if (IsWorkTabShowing == true && WorkTabs.Count > 0)
                 {
@@ -251,7 +258,7 @@ namespace MultiBranchTexter.ViewModel
                     WorkTabs[SelectedIndex].Save();
                 }
                 else
-                { SaveFile(container as FlowChartContainer); }
+                { SaveFile(); }
             }
             catch { }
         });
@@ -259,9 +266,9 @@ namespace MultiBranchTexter.ViewModel
         //保存整个文件
         public ICommand SaveFileCommand => new RelayCommand((container) =>
         {
-            if (IsWorkGridVisible == Visibility.Hidden)
+            if (!IsWorkGridVisible)
             { return; }
-            SaveFile(container as FlowChartContainer);
+            SaveFile();
         });
 
         //整个文件另存为
@@ -269,7 +276,7 @@ namespace MultiBranchTexter.ViewModel
         {
             try
             {
-                if (IsWorkGridVisible == Visibility.Hidden)
+                if (!IsWorkGridVisible)
                 { return; }
                 Debug.WriteLine("开始另存为文件");
                 Microsoft.Win32.SaveFileDialog dialog =
@@ -286,7 +293,7 @@ namespace MultiBranchTexter.ViewModel
                     FileName = dialog.FileName;
                 }
                 //保存文件
-                SaveFile(container as FlowChartContainer);
+                SaveFile();
             }
             catch { }
         });
@@ -298,7 +305,7 @@ namespace MultiBranchTexter.ViewModel
 
         public MainViewModel()
         {
-            IsWorkGridVisible = Visibility.Hidden;
+            IsWorkGridVisible = false;
             FileName = "";
             TextFontSize = 14;
             IsFlowChartShowing = true;
@@ -382,7 +389,7 @@ namespace MultiBranchTexter.ViewModel
             }
         }
 
-        public void SaveFile(FlowChartContainer flowChart)
+        public void SaveFile()
         {
             try
             {
@@ -408,25 +415,33 @@ namespace MultiBranchTexter.ViewModel
                     }
                 }
                 //保存文件
-                MetadataFile.WriteNodes(_fileName, flowChart.GetTextNodeWithLeftTopList());
-                //MBFileWriter writer = new MBFileWriter(_fileName);
-                //writer.Write(flowChart.GetTextNodeWithLeftTopList());
-                flowChart.IsModified = "";
-                Debug.WriteLine("文件保存成功");
+                MetadataFile.WriteNodes(_fileName, ViewModelFactory.FCC.GetTextNodeWithLeftTopList());
+                IsModified = "";
+                Debug.WriteLine("文件" + _fileName + "保存成功");
             }
             catch { }
         }
 
-        public void OpenFile(string path)
+        /// <summary> 打开文件 </summary>
+        public async void OpenFile(string path)
         {
             if (!File.Exists(path))
             { return; }
-            FileName = path;
+
+            //如果此时东西开着
+            if (IsWorkGridVisible)
+            {
+                IsWorkGridVisible = false;
+                await Task.Delay(400);//等待动画放完
+            }
+
             //关闭原有标签页
             WorkTabs.Clear();
+            //新的文件名
+            FileName = path;
             //打开新文件
-            (Application.Current.MainWindow as MainWindow).GetFCC().Load(path);
-            IsWorkGridVisible = Visibility.Visible;
+            ViewModelFactory.FCC.Load(path);
+            IsWorkGridVisible = true;
         }
 
         public void CreateFile(string path)

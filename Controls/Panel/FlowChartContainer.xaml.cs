@@ -23,41 +23,24 @@ namespace MultiBranchTexter.Controls
     /// </summary>
     public partial class FlowChartContainer : UserControl
     {
-        public static DependencyProperty IsModifiedProperty =
-           DependencyProperty.Register("IsModified", //属性名称
-               typeof(string), //属性类型
-               typeof(FlowChartContainer), //该属性所有者，即将该属性注册到那个类上
-               new PropertyMetadata("")//属性默认值
-               );
-
-        public string IsModified
-        {
-            get { return (string)GetValue(IsModifiedProperty); }
-            set { SetValue(IsModifiedProperty, value); }
-        }
-
         //与拖拽、移动有关的变量
         private Point _clickPoint;
         //等待选择后继节点的node
         private NodeBase waitingNode;
         public bool IsWaiting { get { return waitingNode != null; } }
-        //搜索相关的变量
-        private int searchedIndex = -1;
 
-        public FCCViewModel _viewModel;
+        private readonly FCCViewModel _viewModel;
 
         public FlowChartContainer()
         {
             InitializeComponent();
+            ViewModelFactory.SetViewModel(typeof(FCCViewModel), this.DataContext as FCCViewModel);
             _viewModel = DataContext as FCCViewModel;
+            _viewModel.Container = container;
+            _viewModel.ScrollViewer = scrollViewer;
         }
 
         #region 事件
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            searchBox.SetFlowChartContainer(this);
-        }
-
         //滚轮事件
         private void ScrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
         {
@@ -103,7 +86,7 @@ namespace MultiBranchTexter.Controls
 
                     _clickPoint = e.GetPosition((ScrollViewer)sender);
 
-                    IsModified = "*";
+                    ViewModelFactory.Main.IsModified = "*";
                 }
                 else { this.Cursor = Cursors.Arrow; }
             }
@@ -187,484 +170,13 @@ namespace MultiBranchTexter.Controls
                     }
                 }
                 selectBorder.Visibility = Visibility.Hidden;
-                NewSelection(newSelect);
+                ViewModelFactory.FCC.NewSelection(newSelect);
             }
-        }
-        #endregion
-
-
-        #region 方法
-        /// <summary>
-        /// 输入文件路径加载之
-        /// </summary>
-        public void Load(string mbtxtPath)
-        {
-            container.Children.Clear();
-            IsModified = "";
-            _viewModel.SelectedNodes.Clear();// <--必须
-            var nodes = MetadataFile.ReadNodes(mbtxtPath);
-            DrawFlowChart(nodes);
-        }
-
-        #region 流程图绘制方法
-        /// <summary>
-        ///  根据List<TextNode>建立树状图
-        /// 不处理循坏连接的情况，有向无环图排序
-        /// </summary>
-        private void ReDrawFlowChart(List<TextNode> textNodes)
-        {
-            //nodeButtons总表
-            List<NodeButton> nodeButtons = new List<NodeButton>();
-
-            int num = textNodes.Count;
-            if (num == 0)
-            {
-                Debug.WriteLine("创建了空节点图");
-                return;
-            }
-            //node所在组数，实际是画图后的行数
-            int[] groupIndexOfBtns = new int[num];
-            //二维List，对NodeButton分组
-            List<List<NodeButton>> groupedNodes = new List<List<NodeButton>>();
-            //是否完成数组
-            bool[] hasDone = new bool[num];
-            //已完成的node指标
-            List<int> hasDoneIndex = new List<int>();
-            //初始化矩阵
-            bool[,] mat = new bool[num, num];
-            //初始化
-            for (int i = 0; i < num; i++)
-            {
-                //初始化button
-                nodeButtons.Add(new NodeButton(textNodes[i]));
-                //初始化矩阵
-                for (int j = 0; j < num; j++)
-                {
-                    mat[i, j] = false;
-                }
-                //一开始都未完成
-                hasDone[i] = false;
-                //初始化组数
-                groupIndexOfBtns[i] = 0;
-            }
-            for (int i = 0; i < textNodes.Count; i++)
-            {
-                EndCondition ec = textNodes[i].endCondition;
-
-                Dictionary<string, int> waitToLink = new Dictionary<string, int>();
-
-                foreach (string answer in ec.Answers.Keys)
-                {
-                    if (ec.Answers[answer] == "")
-                    { continue; }//直接跳过空的
-
-                    bool found = false;
-                    for (int k = 0; k < num; k++)
-                    {
-                        if (ec.Answers[answer] == textNodes[k].Name)
-                        {
-                            found = true;
-                            //准备为nodeButton添加post
-                            waitToLink.Add(answer, k);
-
-                            break;
-                        }
-                    }
-                    if (!found)
-                    { waitToLink.Add(answer, -1); }
-                }
-
-                foreach (string answer in waitToLink.Keys)
-                {
-                    if (waitToLink[answer] == -1)
-                    { ec.Answers[answer] = ""; }
-                    else
-                    {
-                        mat[i, waitToLink[answer]] = true;
-                        NodeButton.Link(nodeButtons[i], nodeButtons[waitToLink[answer]], answer);
-                    }
-                }
-            }
-            while (hasDoneIndex.Count < num)
-            {
-                //搜寻尚未完成的node中无前驱者
-                List<NodeButton> noPreNodes = new List<NodeButton>();
-                for (int j = 0; j < num; j++)
-                {
-                    //已经做了，跳过
-                    if (hasDoneIndex.Contains(j))
-                    { continue; }
-                    bool shouldAdd = true;
-                    for (int i = 0; i < num; i++)
-                    {
-                        //找到一个前驱，跳过
-                        if (mat[i, j])
-                        {
-                            shouldAdd = false;
-                            break;
-                        }
-                    }
-                    if (!shouldAdd)
-                    { continue; }
-                    //未找到前驱
-                    noPreNodes.Add(nodeButtons[j]);
-                    hasDoneIndex.Add(j);
-                }
-                //添加
-                groupedNodes.Add(noPreNodes);
-                //处理身后事
-                for (int i = 0; i < hasDoneIndex.Count; i++)
-                {
-                    for (int j = 0; j < num; j++)
-                    {
-                        mat[hasDoneIndex[i], j] = false;
-                    }
-                }
-            }
-            //根据分组开始放置NodeButton
-            for (int i = 0; i < groupedNodes.Count; i++)
-            {
-                for (int j = 0; j < groupedNodes[i].Count; j++)
-                {
-                    Canvas.SetLeft(groupedNodes[i][j], 60 + 160 * j);
-                    Canvas.SetTop(groupedNodes[i][j], 80 + 240 * i);
-                    container.Children.Add(groupedNodes[i][j]);
-                    groupedNodes[i][j].SetParent(container);
-                }
-            }
-            //添加线
-            //连线现在放到别的地方，即nodebutton的loaded里面执行
-            //for (int i = 0; i < textNodes.Count; i++)
-            //{
-            //    nodeButtons[i].ShowEndCondition();
-            //}
-            Debug.WriteLine("节点图创建完成");
-            IsModified = "*";
-        }
-
-        /// <summary>
-        /// 根据List<TextNodeWithLeftTop>建立树状图，这个就简单许多
-        /// </summary>
-        private void DrawFlowChart(List<TextNodeWithLeftTop> textNodes)
-        {
-            Debug.WriteLine("开始绘制节点图");
-            //nodeButtons总表
-            List<NodeButton> nodeButtons = new List<NodeButton>();
-
-            for (int i = 0; i < textNodes.Count; i++)
-            {
-                //初始化button
-                nodeButtons.Add(new NodeButton(textNodes[i].Node));
-            }
-            Debug.WriteLine("节点创建完成");
-            for (int i = 0; i < textNodes.Count; i++)
-            {
-                EndCondition ec = textNodes[i].Node.endCondition;
-
-                Dictionary<string, int> waitToLink = new Dictionary<string, int>();
-
-                foreach (string answer in ec.Answers.Keys)
-                {
-                    if (ec.Answers[answer] == "")
-                    { continue; }//直接跳过空的
-
-                    bool found = false;
-                    for (int k = 0; k < textNodes.Count; k++)
-                    {
-                        if (ec.Answers[answer] == textNodes[k].Node.Name)
-                        {
-                            found = true;
-                            //准备为nodeButton添加post
-                            waitToLink.Add(answer, k);
-
-                            break;
-                        }
-                    }
-                    if (!found)
-                    { waitToLink.Add(answer, -1); }
-                }
-
-                foreach (string answer in waitToLink.Keys)
-                {
-                    if (waitToLink[answer] == -1)
-                    { ec.Answers[answer] = ""; }
-                    else
-                    { NodeButton.Link(nodeButtons[i], nodeButtons[waitToLink[answer]], answer); }
-                }
-            }
-            Debug.WriteLine("节点链接完成");
-            for (int i = 0; i < textNodes.Count; i++)
-            {
-                Canvas.SetLeft(nodeButtons[i], Math.Max(0, textNodes[i].Left));
-                Canvas.SetTop(nodeButtons[i], Math.Max(0, textNodes[i].Top));
-                container.Children.Add(nodeButtons[i]);
-                nodeButtons[i].SetParent(container);
-            }
-            Debug.WriteLine("节点绘制完成");
-            //添加线
-            //连线现在放到别的地方，即nodebutton的loaded里面执行
-            //for (int i = 0; i < textNodes.Count; i++)
-            //{
-            //    nodeButtons[i].ShowEndCondition();
-            //}
-            Debug.WriteLine("节点图创建完成");
-        }
-
-        /// <summary>
-        /// 重新绘制流程图
-        /// </summary>
-        /// <param name="newNode"></param>
-        public void ReDrawFlowChart()
-        {
-            List<TextNode> textNodes = GetTextNodeList();
-            container.Children.Clear();
-            ReDrawFlowChart(textNodes);
-        }
-
-        public void AddNodeButton(NodeBase preNode, NodeButton postNode, double xPos, double yPos)
-        {
-            NodeButton newNodeButton = new NodeButton(new TextNode(GetNewName()));
-            newNodeButton.SetParent(container);
-            newNodeButton.FatherNode = newNodeButton;
-            //连接三个点
-            NodeButton.Link(preNode, newNodeButton);
-            NodeButton.Link(newNodeButton, postNode);
-            container.Children.Add(newNodeButton);
-            Canvas.SetLeft(newNodeButton, xPos);
-            Canvas.SetTop(newNodeButton, yPos);
-            container.UpdateLayout();
-            newNodeButton.Move(-newNodeButton.ActualWidth / 2, -newNodeButton.ActualHeight / 2);
-            //画新线
-            container.Children.Add(new ConnectingLine(preNode, newNodeButton));
-            //newNodeButton到post不用画，因为创建newNodebutton时会自动画，否则会出现两条
-
-            IsModified = "*";
-        }
-        #endregion
-
-        #region 节点累计、获取List、获取新节点名字
-
-        public List<TextNodeWithLeftTop> GetTextNodeWithLeftTopList()
-        {
-            Debug.WriteLine("开始尝试取得节点与坐标信息");
-            List<TextNodeWithLeftTop> textNodes = new List<TextNodeWithLeftTop>();
-            foreach (UserControl control in container.Children)
-            {
-                if (control is NodeButton)
-                {
-                    textNodes.Add(new TextNodeWithLeftTop(
-                        (control as NodeButton).textNode,
-                        Canvas.GetLeft(control),
-                        Canvas.GetTop(control)));//注意left和top都不受scale影响
-                }
-            }
-            Debug.WriteLine("成功取得节点与坐标信息");
-            return textNodes;
-        }
-
-        /// <summary>
-        /// 获得textNode列表
-        /// </summary>
-        public List<TextNode> GetTextNodeList()
-        {
-            List<TextNode> textNodes = new List<TextNode>();
-            foreach (UserControl control in container.Children)
-            {
-                if (control is NodeButton)
-                {
-                    textNodes.Add((control as NodeButton).textNode);
-                }
-            }
-            return textNodes;
-        }
-
-        /// <summary>
-        /// 获得一个新名字
-        /// </summary>
-        /// <returns></returns>
-        public string GetNewName()
-        {
-            List<TextNode> tns = GetTextNodeList();
-            //创造一个不重名的
-            string newName = "new-node-";
-            int i = 1;
-            bool repeated = true;
-            while (repeated)
-            {
-                repeated = false;
-                for (int j = 0; j < tns.Count; j++)
-                {
-                    if (tns[j].Name == newName + i.ToString())
-                    {
-                        repeated = true;
-                        i++;
-                        break;
-                    }
-                }
-            }
-            return newName + i.ToString();
-        }
-
-        public bool CheckRepeat(string newName)
-        {
-            List<TextNode> tns = GetTextNodeList();
-            for (int j = 0; j < tns.Count; j++)
-            {
-                if (tns[j].Name == newName)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        #endregion
-
-        #region 节点搜索功能
-
-
-        /// <summary>
-        /// 根据信息搜索目标节点
-        /// </summary>
-        public void SearchNode(string info)
-        {
-            _viewModel.ClearSearch();
-            if (info == "")
-            { return; }
-            foreach (UserControl control in container.Children)
-            {
-                if (control is NodeButton)
-                {
-                    if ((control as NodeButton).BeSearch(info))
-                    { _viewModel.SearchedNodes.Add((control as NodeButton)); }
-                }
-            }
-            for (int i = 0; i < _viewModel.SearchedNodes.Count; i++)
-            {
-                _viewModel.SearchedNodes[i].NodeState = NodeState.Searched;
-            }
-            //如果不为空，跳转到第一个查到的node
-            if (_viewModel.SearchedNodes.Count > 0)
-            {
-                searchedIndex = 0;
-                ScrollToNode(_viewModel.SearchedNodes[0]);
-            }
-        }
-
-        public void ClearSearch()
-        { _viewModel.ClearSearch(); }
-
-        /// <summary>
-        /// 根据节点找到
-        /// </summary>
-        public void SearchNode(TextNode node)
-        {
-            _viewModel.ClearSearch();
-            foreach (UserControl control in container.Children)
-            {
-                if (control is NodeButton)
-                {
-                    NodeButton nb = control as NodeButton;
-                    if (nb.textNode == node)
-                    {
-                        _viewModel.SearchedNodes.Add(nb);
-                        nb.NodeState = NodeState.Searched;
-                        searchedIndex = 0;
-                        ScrollToNode(nb);
-                        return;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// 搜索到的下一个
-        /// </summary>
-        public void SearchNext(string info)
-        {
-            if (_viewModel.SearchedNodes.Count == 0)
-            {
-                SearchNode(info);
-                return;
-            }
-            searchedIndex++;
-            if (searchedIndex >= _viewModel.SearchedNodes.Count)
-            { searchedIndex = 0; }
-            ScrollToNode(_viewModel.SearchedNodes[searchedIndex]);
-        }
-
-        /// <summary>
-        /// 滚动到目标节点
-        /// </summary>
-        private void ScrollToNode(NodeButton node)
-        {
-            double x, y;
-            x = Canvas.GetLeft(node) + node.ActualWidth / 2;
-            y = Canvas.GetTop(node) + node.ActualHeight / 2;
-            scrollViewer.ScrollToHorizontalOffset(x * container.ScaleRatio - scrollViewer.ActualWidth / 2);
-            scrollViewer.ScrollToVerticalOffset(y * container.ScaleRatio - scrollViewer.ActualHeight / 2);
-        }
-
-        /// <summary>
-        /// 滚动到目标节点
-        /// </summary>
-        public void ScrollToNode(TextNode node)
-        {
-            SearchNode(node);
-        }
-
-        public TextNode GetNodeByName(string name)
-        {
-            foreach (UserControl control in container.Children)
-            {
-                if (control is NodeButton)
-                {
-                    if ((control as NodeButton).textNode.Name == name)
-                    {
-                        return (control as NodeButton).textNode;
-                    }
-                }
-            }
-            return null;
         }
         #endregion
 
         #region 节点选择功能与选择新后继节点功能
-        public void NewSelection(NodeButton node)
-        {
-            _viewModel.ClearSelection();
-            stateHint.Text = "选中节点";
-            _viewModel.SelectedNodes.Add(node);
-            _viewModel.SelectedNodes[0].NodeState = NodeState.Selected;
-        }
-        public void NewSelection(ObservableCollection<NodeButton> nodes)
-        {
-            _viewModel.ClearSelection();
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                nodes[i].NodeState = NodeState.Selected;
-            }
-            _viewModel.SelectedNodes = nodes;
-            stateHint.Text = "选中节点";
-        }
-
-        public void AddSelection(NodeButton node)
-        {
-            node.NodeState = NodeState.Selected;
-            _viewModel.SelectedNodes.Add(node);
-        }
-
-        public void AddSelection(List<NodeButton> nodes)
-        {
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                nodes[i].NodeState = NodeState.Selected;
-                _viewModel.SelectedNodes.Add(nodes[i]);
-            }
-        }
-
-        /// <summary>
-        /// 进入等待点击以选择一个新的后继节点的状态
-        /// </summary>
+        /// <summary> 进入等待点击以选择一个新的后继节点的状态 </summary>
         public void WaitClick(NodeBase waiter)
         {
             waitingNode = waiter;
@@ -680,9 +192,8 @@ namespace MultiBranchTexter.Controls
             }
             waiter.FatherNode.UpperBd.Visibility = Visibility.Hidden;
         }
-        /// <summary>
-        /// 新的后继节点选择完成了，传入null表示取消选择
-        /// </summary>
+
+        /// <summary> 新的后继节点选择完成了，传入null表示取消选择 </summary>
         public void PostNodeChoosed(NodeButton post)
         {
             stateHint.Text = "";
@@ -717,11 +228,9 @@ namespace MultiBranchTexter.Controls
             ConnectingLine cl = new ConnectingLine(waitingNode, post);
             container.Children.Add(cl);
             //修改标签页
-            (Application.Current.MainWindow as MainWindow).ReLoadTab(waitingNode.FatherTextNode);
+            ViewModelFactory.Main.ReLoadTab(waitingNode.FatherTextNode);
             waitingNode = null;
         }
-        #endregion
-
         #endregion
     }
 }
