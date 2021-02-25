@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -118,14 +119,27 @@ namespace MultiBranchTexter.ViewModel
             catch { }
         });
 
-        // 打开项目说明命令
-        public ICommand CheckUpdateCommand => new RelayCommand((t) =>
-        { CheckUpdate(); });
+        // 检查更新命令
+        public ICommand CheckUpdateCommand => new RelayCommand(async (t) =>
+        {
+            if (await UpdateChecker.CheckGitHubNewerVersion())
+            { Process.Start("explorer.exe", "https://github.com/CheYHinSpark/MultiBranchTexter/releases"); }
+            else
+            { MessageBox.Show("当前已是最新版本"); }
+        });
         #endregion
 
         public async void CheckUpdate()
         {
-            await UpdateChecker.CheckGitHubNewerVersion();
+            if (await UpdateChecker.CheckGitHubNewerVersion())
+            {
+                MessageBoxResult result = MessageBox
+                    .Show("检测到新版本，是否前往更新？",
+                    "检查更新", 
+                    MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                { Process.Start("explorer.exe", "https://github.com/CheYHinSpark/MultiBranchTexter/releases"); }
+            }
         }
 
         private void ChangeColor()

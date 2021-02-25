@@ -25,6 +25,7 @@ namespace MultiBranchTexter
                 ViewModelFactory.Main.OpenFile(e.Args[0]);
             }
             window.Show();
+            ViewModelFactory.Settings.CheckUpdate();
         }
     }
 }
