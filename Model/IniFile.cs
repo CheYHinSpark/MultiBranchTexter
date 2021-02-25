@@ -45,6 +45,7 @@ namespace MultiBranchTexter.Model
                     sw.Write("[Settings]\n" +
                         "IsDarkMode=false\n" +
                         "AllowDoubleEnter=false\n" +
+                        "CountOpChar=false\n" +
                         "[Color]\n" +
                         "Red=238\n" +
                         "Green=170\n" +

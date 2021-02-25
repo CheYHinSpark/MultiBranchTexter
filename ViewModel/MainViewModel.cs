@@ -452,6 +452,12 @@ namespace MultiBranchTexter.ViewModel
             var n = new TextNodeWithLeftTop(node, 100, 100);
             MetadataFile.WriteNodes(path, new List<TextNodeWithLeftTop> { n });
         }
+
+        public void ReCountCharForAll()
+        {
+            foreach (MBTabItem tab in _workTabs)
+            { tab.CountChar(true); }
+        }
         #endregion
     }
 }

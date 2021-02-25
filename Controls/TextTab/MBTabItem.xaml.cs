@@ -1,9 +1,11 @@
 ﻿using MultiBranchTexter.Controls;
 using MultiBranchTexter.Model;
 using MultiBranchTexter.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -208,6 +210,26 @@ namespace MultiBranchTexter.Controls
 
             if (fragmentContainer.Children.Count == 0)//至少要有一个
             { fragmentContainer.Children.Add(new TextFragmentPresenter(this)); }
+            CountChar(true);
+        }
+
+        /// <summary> 统计字数，参数表示是否需要完全重新统计 </summary>
+        public async void CountChar(bool totalReCount)
+        {
+            await Task.Delay(10);// <--不然有许多bug
+            Dispatcher.Invoke(new Action(
+                delegate
+                {
+                    int c = 0, w = 0;
+                    foreach (TextFragmentPresenter tfp in fragmentContainer.Children)
+                    {
+                        tfp.ShouldRecount |= totalReCount;
+                        w += tfp.CharWordCount.Item1;
+                        c += tfp.CharWordCount.Item2;
+                    }
+                    _viewModel.CharCount = c;
+                    _viewModel.WordCount = w;
+                }));
         }
         #endregion
     }

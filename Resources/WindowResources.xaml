@@ -231,6 +231,9 @@
                     <CheckBox Content="连续回车不切割片段"
                               IsChecked="{Binding AllowDoubleEnter}"
                               Template="{StaticResource settingCheckBox}"/>
+                    <CheckBox Content="统计注释字数"
+                              IsChecked="{Binding CountOpChar}"
+                              Template="{StaticResource settingCheckBox}"/>
                     <StackPanel Orientation="Vertical" Margin="2"
                                 Background="{DynamicResource BaseBrush}">
                         <TextBlock Text="颜色设置" Margin="4,4,0,0" 

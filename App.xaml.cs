@@ -16,7 +16,7 @@ namespace MultiBranchTexter
             Startup += App_Startup;
         }
 
-        void App_Startup(object sender, StartupEventArgs e)
+        async void App_Startup(object sender, StartupEventArgs e)
         {
             MainWindow window = new MainWindow();
             this.MainWindow = window;
@@ -25,6 +25,7 @@ namespace MultiBranchTexter
                 ViewModelFactory.Main.OpenFile(e.Args[0]);
             }
             window.Show();
+            await System.Threading.Tasks.Task.Delay(1000);// 这是为了让动画流畅走完
             ViewModelFactory.Settings.CheckUpdate();
         }
     }

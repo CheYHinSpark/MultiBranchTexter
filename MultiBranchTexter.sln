@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiBranchTexter", "MultiBranchTexter.csproj", "{D46E5AA7-61A3-4072-AB7B-DCF77A595193}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KTDU.Parser", "KTDU\KTDU.Parser\KTDU.Parser.csproj", "{D5942F6A-315F-4EE3-985E-9C94E2AAD0C2}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{D46E5AA7-61A3-4072-AB7B-DCF77A595193}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D46E5AA7-61A3-4072-AB7B-DCF77A595193}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D46E5AA7-61A3-4072-AB7B-DCF77A595193}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D5942F6A-315F-4EE3-985E-9C94E2AAD0C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D5942F6A-315F-4EE3-985E-9C94E2AAD0C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D5942F6A-315F-4EE3-985E-9C94E2AAD0C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D5942F6A-315F-4EE3-985E-9C94E2AAD0C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

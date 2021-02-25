@@ -13,9 +13,10 @@ namespace MultiBranchTexter.ViewModel
 {
     public class SettingViewModel : ViewModelBase
     {
-        private bool? _isDarkMode;
+        #region 勾选
+        private bool _isDarkMode;
 
-        public bool? IsDarkMode
+        public bool IsDarkMode
         {
             get { return _isDarkMode; }
             set
@@ -34,6 +35,30 @@ namespace MultiBranchTexter.ViewModel
             }
         }
 
+        private bool _allowDoubleEnter;
+
+        public bool AllowDoubleEnter
+        {
+            get { return _allowDoubleEnter; }
+            set
+            { _allowDoubleEnter = value; RaisePropertyChanged("AllowDoubleEnter"); }
+        }
+
+        private bool _countOpChar;
+
+        public bool CountOpChar
+        {
+            get { return _countOpChar; }
+            set
+            {
+                _countOpChar = value;
+                ViewModelFactory.Main.ReCountCharForAll();
+                RaisePropertyChanged("CountOpChar");
+            }
+        }
+        #endregion
+
+        #region 颜色
         private double _colorR;
 
         public double ColorR
@@ -72,15 +97,8 @@ namespace MultiBranchTexter.ViewModel
                 RaisePropertyChanged("ColorB");
             }
         }
+        #endregion
 
-        private bool? _allowDoubleEnter;
-
-        public bool? AllowDoubleEnter
-        {
-            get { return _allowDoubleEnter; }
-            set
-            { _allowDoubleEnter = value; RaisePropertyChanged("AllowDoubleEnter"); }
-        }
 
         public SettingViewModel()
         {
@@ -93,6 +111,7 @@ namespace MultiBranchTexter.ViewModel
         {
             IsDarkMode = false;
             AllowDoubleEnter = false;
+            CountOpChar = false;
             _colorR = 238;
             _colorG = 170;
             ColorB = 22;
@@ -158,6 +177,7 @@ namespace MultiBranchTexter.ViewModel
             IniFile iniFile = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "Settings.ini");
             IsDarkMode = iniFile.GetBool("Settings", "IsDarkMode", false);
             AllowDoubleEnter = iniFile.GetBool("Settings", "AllowDoubleEnter", false);
+            CountOpChar = iniFile.GetBool("Settings", "CountOpChar", false);
             _colorR = iniFile.GetInt("Color", "Red", 238);
             _colorG = iniFile.GetInt("Color", "Green", 170);
             ColorB = iniFile.GetInt("Color", "Blue", 22);
@@ -169,6 +189,7 @@ namespace MultiBranchTexter.ViewModel
             IniFile iniFile = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "Settings.ini");
             iniFile.WriteBool("Settings", "IsDarkMode", IsDarkMode == true);
             iniFile.WriteBool("Settings", "AllowDoubleEnter", AllowDoubleEnter == true);
+            iniFile.WriteBool("Settings", "CountOpChar", CountOpChar == true);
             iniFile.WriteInt("Color", "Red", (int)_colorR);
             iniFile.WriteInt("Color", "Green", (int)_colorG);
             iniFile.WriteInt("Color", "Blue", (int)_colorB);

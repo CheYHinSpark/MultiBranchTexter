@@ -29,10 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="KTDU\KTDU.Parser\KTDU.Parser.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="README.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -10,7 +10,7 @@
     <Color x:Key="Theme">#EEAA16</Color>
     
     <!--不变颜色刷-->
-    <SolidColorBrush x:Key="MiddleBrush" Color="#808080"/><!--中间灰色-->
+    <SolidColorBrush x:Key="MiddleBrush" Color="#80808080"/><!--中间灰色-->
     <SolidColorBrush x:Key="ThemeBrush" Color="#FFEEAA16"/>
     <SolidColorBrush x:Key="Highlight.ThemeBrush" Color="#80FFFFFF"/>
     <SolidColorBrush x:Key="RedBrush" Color="#FFD44C45"/>
@@ -540,7 +540,7 @@
     <ControlTemplate x:Key="TabItemCloseBtnTemplate" TargetType="{x:Type Button}">
         <Border x:Name="BD" Width="16" Height="16" CornerRadius="8"
                 Background="Transparent">
-            <Path x:Name="CP" Stroke="{DynamicResource BaseBrush}" StrokeThickness="1" Data="M4,4 L12,12 M4,12 L12,4"/>
+            <Path x:Name="CP" Stroke="{DynamicResource Text.Foreground.BaseBrush}" StrokeThickness="1" Data="M4,4 L12,12 M4,12 L12,4"/>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -551,7 +551,7 @@
                     <Condition Property="Uid" Value="1"/>
                     <Condition Property="IsMouseOver" Value="False"/>
                 </MultiTrigger.Conditions>
-                <Setter Property="Stroke" Value="{DynamicResource Text.Foreground.BaseBrush}" TargetName="CP"/>
+                <Setter Property="Stroke" Value="{DynamicResource BaseBrush}" TargetName="CP"/>
             </MultiTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -564,7 +564,6 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
                 <ContentPresenter x:Name="CP" Grid.Column="0" 
                                   ContentSource="Header" Margin="2"
@@ -572,10 +571,10 @@
                                   HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                 <TextBlock x:Name="TB" Grid.Column="1" Text="{Binding IsModified}" 
                            Foreground="{DynamicResource Foreground.BaseBrush}" />
-                <Button Grid.Column="2" Name="CloseBtn" 
-                        Width="16" Height="16" x:Uid="0"
+                <Button Grid.ColumnSpan="2" Name="CloseBtn" 
+                        Width="16" Height="16" x:Uid="0" Margin="2"
                         Template="{DynamicResource TabItemCloseBtnTemplate}"
-                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        HorizontalAlignment="Right" VerticalAlignment="Center"/>
             </Grid>
         </Border>
         <ControlTemplate.Triggers>
@@ -676,21 +675,29 @@
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <CheckBox x:Name="showHideBtn" IsChecked="False"
-                      Template="{DynamicResource upDownCheckBoxTemplate}"
-                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Button x:Name="backBtn" Grid.Column="1" Content="返回节点图" 
-                    Template="{StaticResource textButtonTemplate}"/>
-            <TextBlock x:Name="questionTxt" Grid.Column="2" Margin="8,0,0,0"
-                       Foreground="{DynamicResource Foreground.ThemeBrush}"
-                       VerticalAlignment="Center"/>
-            <ScrollViewer x:Name="sv" Grid.Row="1" Height="0" Grid.ColumnSpan="4"
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Left" VerticalAlignment="Center">
+                <CheckBox x:Name="showHideBtn" IsChecked="False" Width="20" ToolTip="查看后继节点"
+                          Template="{DynamicResource upDownCheckBoxTemplate}"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button x:Name="backBtn" Content="返回节点图" 
+                        Template="{StaticResource textButtonTemplate}"/>
+                <TextBlock x:Name="questionTxt" Margin="8,0,0,0"
+                           Foreground="{DynamicResource Foreground.ThemeBrush}"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Right" VerticalAlignment="Center">
+                <TextBlock Text="词数：" Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+                <TextBlock Text="{Binding Path=Text, ElementName=copyWordCount}" 
+                           Margin="0,0,8,0"
+                           Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+                <TextBlock Text="字数：" Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+                <TextBlock Text="{Binding Path=Text, ElementName=copyCharCount}" 
+                           Margin="0,0,8,0"
+                           Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+            </StackPanel>
+            <ScrollViewer x:Name="sv" Grid.Row="1" Height="0"
                           Background="{DynamicResource BaseBrush}"
                           FocusVisualStyle="{x:Null}"
                           HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">

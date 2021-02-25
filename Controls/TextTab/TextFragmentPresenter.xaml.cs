@@ -3,6 +3,7 @@ using MultiBranchTexter.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -29,6 +30,87 @@ namespace MultiBranchTexter.Controls
 
         public int OperationCount { get { return GetOperationLineCount(); } }
         public string ContentText { get { return contentContainer.Text; } }
+
+        public bool ShouldRecount = true;
+
+        private Tuple<int, int> charWordCount;
+        public Tuple<int, int> CharWordCount
+        {
+            get
+            {
+                if (ShouldRecount)
+                {
+                    int charCount = 0;
+                    int wordCount = 0;
+                    bool isInLetterWords = false;//表示是否正在字母文字的单词中
+                    foreach (char ch in contentContainer.Text)
+                    {
+                        if (char.IsWhiteSpace(ch))
+                        { isInLetterWords = false; continue; }
+                        charCount++;
+
+                        //如果这是一个字母
+                        if ((ch >= 'a' && ch <= 'z')||(ch >= 'A' && ch<='Z')//基本英文字母
+                            ||(ch >= 0100 && ch <= 017F)|| (ch >= 0180 && ch <= 024F)//拉丁文扩展
+                            )
+                        { 
+                            if (!isInLetterWords)
+                            { 
+                                isInLetterWords = true;
+                                wordCount++;
+                            }
+                            continue;
+                        }
+                        else if (isInLetterWords)
+                        { isInLetterWords = false; }
+
+                        //如果是汉字
+                        if ((0x4e00 <= ch && ch <= 0x9fff)
+                            || (0x3400 <= ch && ch <= 0x4dff)
+                            || (0x20000 <= ch && ch <= 0x2a6df)
+                            || (0xf900 <= ch && ch <= 0xfaff)
+                            || (0x2f800 <= ch && ch <= 0x2fa1f))
+                        { wordCount++; }
+                    }
+                    if (ViewModelFactory.Settings.CountOpChar)
+                    {
+                        isInLetterWords = false;
+                        foreach (char ch in opContainer.Text)
+                        {
+                            if (char.IsWhiteSpace(ch))
+                            { isInLetterWords = false; continue; }
+                            charCount++;
+
+                            //如果这是一个字母
+                            if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')//基本英文字母
+                                || (ch >= 0100 && ch <= 017F) || (ch >= 0180 && ch <= 024F)//拉丁文扩展
+                                )
+                            {
+                                if (!isInLetterWords)
+                                {
+                                    isInLetterWords = true;
+                                    wordCount++;
+                                }
+                                continue;
+                            }
+                            else if (isInLetterWords)
+                            { isInLetterWords = false; }
+
+                            //如果是汉字
+                            if ((0x4e00 <= ch && ch <= 0x9fff)
+                                || (0x3400 <= ch && ch <= 0x4dff)
+                                || (0x20000 <= ch && ch <= 0x2a6df)
+                                || (0xf900 <= ch && ch <= 0xfaff)
+                                || (0x2f800 <= ch && ch <= 0x2fa1f))
+                            { wordCount++; }
+                        }
+                    }
+                    ShouldRecount = false;
+                    charWordCount = new Tuple<int, int>(charCount, wordCount);
+                }
+                return charWordCount;
+            }
+        }
 
 
         #region 构造方法
@@ -169,8 +251,8 @@ namespace MultiBranchTexter.Controls
                 if (i > 0)
                 {
                     (parentPanel.Children[i - 1] as TextFragmentPresenter).AppendContent(ContentText);
-                    RaiseChange();
                     parentPanel.Children.Remove(this);
+                    RaiseChange();
                 }
             }
             //如果在末尾按下删除，且下一片段没有operation，则合并本段与下一段
@@ -197,6 +279,7 @@ namespace MultiBranchTexter.Controls
                 tfp.GetFocus();
                 tfp.contentContainer.Select(0, 0);
                 contentContainer.Text = oldF;
+                RaiseChange();
             }
         }
         #endregion
@@ -262,9 +345,12 @@ namespace MultiBranchTexter.Controls
         //向上级通知改变
         private void RaiseChange()
         {
+            ShouldRecount = true;
+            ownerTab.CountChar(false);
             ownerTab.ViewModel.IsModified = "*";
             ViewModelFactory.Main.IsModified = "*";
         }
+
         #endregion
     }
 }
