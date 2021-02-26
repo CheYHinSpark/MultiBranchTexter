@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using MultiBranchTexter.ViewModel;
+using System.Windows;
 
 namespace MultiBranchTexter.Model
 {
@@ -37,16 +38,19 @@ namespace MultiBranchTexter.Model
         public static List<TextNodeWithLeftTop> ReadNodes(string metaUrl)
         {
             var meta = JsonConvert.DeserializeObject<MetadataFile>(File.ReadAllText(metaUrl)) ?? new MetadataFile();
-            if (string.IsNullOrWhiteSpace(meta.nodeFilePath))
+            if (!File.Exists(meta.nodeFilePath))
             {
+                //如果记载的没有找到，查找本地
                 string tryUrl = new Regex(@"\.mbjson$").Replace(metaUrl, ".json");
                 if (!File.Exists(tryUrl))
                 {
+                    MessageBox.Show("无法找到对应的json文件！\n" +
+                        "请用文本文档打开该mbjson文件编辑末尾的\"nodeFilePath\"项。");
+                    ViewModelFactory.Main.IsWorkGridVisible = false;
                     throw new FormatException("未找到对应脚本文件");
                 }
                 meta.nodeFilePath = tryUrl;
             }
-
             var list = JsonConvert.DeserializeObject<List<TextNode>>(File.ReadAllText(meta.nodeFilePath));
             return meta.SetNodeCoordinate(list);
         }

@@ -279,9 +279,18 @@ namespace MultiBranchTexter.ViewModel
         {
             _container.Children.Clear();
             SelectedNodes.Clear();// <--必须
-            var nodes = MetadataFile.ReadNodes(mbtxtPath);
-            _container.Dispatcher.Invoke(new Action(
-                delegate { DrawFlowChart(nodes); }));
+            try
+            {
+                var nodes = MetadataFile.ReadNodes(mbtxtPath);
+                _container.Dispatcher.Invoke(new Action(
+                    delegate { DrawFlowChart(nodes); }));
+            }
+            catch 
+            {
+#if DEBUG
+                throw new FormatException("未找到对应脚本文件");
+#endif
+            }
         }
 
         #region 流程图绘制方法

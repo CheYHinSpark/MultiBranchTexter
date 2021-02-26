@@ -14,8 +14,8 @@
     <SolidColorBrush x:Key="ThemeBrush" Color="#FFEEAA16"/>
     <SolidColorBrush x:Key="Highlight.ThemeBrush" Color="#80FFFFFF"/>
     <SolidColorBrush x:Key="RedBrush" Color="#FFD44C45"/>
-    <SolidColorBrush x:Key="Fragment.BorderBrush" Color="#BB64FFBE"/>
-    <SolidColorBrush x:Key="Fragment.Background" Color="#4464FFBE"/>
+    <SolidColorBrush x:Key="Fragment.BorderBrush" Color="#9064FFBE"/>
+    <SolidColorBrush x:Key="Fragment.Background" Color="#3264FFBE"/>
 
 
     <!--转换器-->
