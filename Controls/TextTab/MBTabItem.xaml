@@ -9,13 +9,16 @@
     <TabItem.DataContext>
         <vm:TabItemViewModel/>
     </TabItem.DataContext>
-    <Grid>
+    <Grid Background="{DynamicResource MainBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <Grid Background="{DynamicResource MainBrush}">
+            <ScrollViewer.RenderTransform>
+                <TranslateTransform/>
+            </ScrollViewer.RenderTransform>
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*" MinHeight="160"/>
@@ -25,6 +28,20 @@
                         MouseLeftButtonDown="Border_MouseLeftButtonDown" 
                         Cursor="IBeam"/>
             </Grid>
+            <ScrollViewer.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Duration="0:0:0.3" From="0" To="1"
+                                             Storyboard.TargetProperty="Opacity"/>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(ScrollViewer.RenderTransform).(TranslateTransform.X)">
+                                <SplineDoubleKeyFrame KeyTime="0:0:0" Value="60"/>
+                                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0" KeySpline="0.4,1,0.4,1"/>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </ScrollViewer.Triggers>
         </ScrollViewer>
         <!--下方信息栏-->
         <c:TabEnd x:Name="tabEnd" Grid.Row="1" HorizontalAlignment="Stretch"/>

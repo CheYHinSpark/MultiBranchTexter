@@ -11,7 +11,7 @@
         <KeyBinding Gesture="Delete" Command="{Binding DeleteCommand}"/>
         <KeyBinding Gesture="Ctrl+F" Command="{Binding StartSearchCommand}"/>
     </UserControl.InputBindings>
-    <Grid>
+    <Grid Background="{DynamicResource ThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
@@ -76,15 +76,27 @@
                       IsHitTestVisible="False" Visibility="Hidden"/>
         <!--下方信息栏-->
         <StackPanel Orientation="Horizontal" 
-                    Grid.Row="1" 
-                    Background="{DynamicResource ThemeBrush}">
-            <TextBlock x:Name="stateHint" Width="Auto"
-                       MinWidth="80" Foreground="{DynamicResource Foreground.ThemeBrush}"
-                       VerticalAlignment="Center"/>
+                    Grid.Row="1" >
+            <c:HintTextBlock Width="Auto" Margin="8,0,0,0"
+                             IsAwake="{Binding IsHintEnabled}" Text="{Binding HintText}"
+                             MinWidth="80" Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" 
+                    VerticalAlignment="Stretch" HorizontalAlignment="Right">
+            <Button Content="重新排列" Template="{StaticResource textButtonTemplate}"
+                    Command="{Binding ReArrangeCommand}"/>
             <Rectangle Width="1" Fill="{DynamicResource Foreground.ThemeBrush}" Margin="4,0,4,0"/>
             <TextBlock Text="{Binding ScaleRatio, Converter={StaticResource numToPerCvt}, ElementName=container}" 
                        Width="Auto" Foreground="{DynamicResource Foreground.ThemeBrush}"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center"
+                       Margin="4,0,4,0"/>
+            <Rectangle Width="1" Fill="{DynamicResource Foreground.ThemeBrush}" Margin="4,0,4,0"/>
+            <TextBlock Text="节点数：" Margin="8,0,0,0"
+                       VerticalAlignment="Center"
+                       Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+            <TextBlock Text="{Binding NodeCount}" Margin="0,0,8,0"
+                       VerticalAlignment="Center"
+                       Foreground="{DynamicResource Foreground.ThemeBrush}"/>
         </StackPanel>
     </Grid>
 </UserControl>

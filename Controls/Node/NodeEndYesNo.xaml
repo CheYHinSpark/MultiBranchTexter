@@ -20,7 +20,6 @@
                            VerticalAlignment="Bottom" Fill="Gray" Height="2"/>
                 <TextBox x:Name="titleBox" Margin="1"
                          Focusable="False" Background="Transparent"
-                         ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"
                          PreviewMouseDoubleClick="TitleBox_PreviewMouseDoubleClick"
                          LostFocus="TitleBox_LostFocus"/>
             </Grid>

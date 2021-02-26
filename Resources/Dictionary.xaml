@@ -281,11 +281,14 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Border Background="{DynamicResource ThemeBrush}">
-                        <Rectangle x:Name="thumbBd" Margin="1" Fill="Transparent"/>
+                        <Rectangle x:Name="thumbBd" Margin="1" Fill="Transparent" Opacity="0.6"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Fill" Value="{DynamicResource Highlight.ThemeBrush}" TargetName="thumbBd"/>
+                        </Trigger>
+                        <Trigger Property="IsDragging" Value="True">
+                            <Setter Property="Opacity" Value="1" TargetName="thumbBd"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -633,8 +636,8 @@
 
     <!--textBox的模板-->
     <ControlTemplate x:Key="textBoxTemplate" TargetType="{x:Type TextBox}">
-        <Border x:Name="BD" Background="{TemplateBinding Background}" 
-                BorderThickness="2" BorderBrush="Transparent">
+        <Border x:Name="BD" Background="{TemplateBinding Background}" Padding="1"
+                BorderThickness="1" BorderBrush="Transparent">
             <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
         </Border>
         <ControlTemplate.Triggers>
@@ -647,7 +650,13 @@
     <Style TargetType="{x:Type TextBox}">
         <Setter Property="Template" Value="{DynamicResource textBoxTemplate}"/>
         <Setter Property="Foreground" Value="{DynamicResource Text.Foreground.BaseBrush}"/>
+        <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Self}}"/>
         <Setter Property="CaretBrush" Value="{DynamicResource ThemeBrush}"/>
+        <Style.Triggers>
+            <Trigger Property="Text" Value="">
+                <Setter Property="ToolTip" Value="{x:Null}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
     
     <!--控制下面东西升降的按钮的template-->
@@ -688,11 +697,15 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Right" VerticalAlignment="Center">
-                <TextBlock Text="词数：" Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+                <TextBlock Text="词数："
+                           Margin="8,0,0,0"
+                           Foreground="{DynamicResource Foreground.ThemeBrush}"/>
                 <TextBlock Text="{Binding Path=Text, ElementName=copyWordCount}" 
                            Margin="0,0,8,0"
                            Foreground="{DynamicResource Foreground.ThemeBrush}"/>
-                <TextBlock Text="字数：" Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+                <TextBlock Text="字数：" 
+                           Margin="8,0,0,0"
+                           Foreground="{DynamicResource Foreground.ThemeBrush}"/>
                 <TextBlock Text="{Binding Path=Text, ElementName=copyCharCount}" 
                            Margin="0,0,8,0"
                            Foreground="{DynamicResource Foreground.ThemeBrush}"/>

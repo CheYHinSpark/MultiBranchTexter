@@ -1,4 +1,5 @@
 ﻿using MultiBranchTexter.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 
@@ -26,7 +27,12 @@ namespace MultiBranchTexter
             }
             window.Show();
             await System.Threading.Tasks.Task.Delay(1000);// 这是为了让动画流畅走完
-            ViewModelFactory.Settings.CheckUpdate();
+            Dispatcher.Invoke(new Action(
+                delegate
+                {
+                    ViewModelFactory.Settings.CheckUpdate();
+                }));
+            
         }
     }
 }

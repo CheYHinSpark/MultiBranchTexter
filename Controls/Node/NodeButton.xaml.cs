@@ -21,9 +21,7 @@ namespace MultiBranchTexter.Controls
         private AutoSizeCanvas parent;
 
         public TextNode textNode;
-        //public List<NodeButton> postNodes = new List<NodeButton>();
         public Dictionary<string, NodeButton> answerToNodes = new Dictionary<string, NodeButton>();
-        //public List<NodeButton> postNodes { get; set; }
 
         public List<ConnectingLine> postLines = new List<ConnectingLine>();
         public List<ConnectingLine> preLines = new List<ConnectingLine>();
@@ -59,7 +57,7 @@ namespace MultiBranchTexter.Controls
             DrawPostLines(ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this));
         }
 
-        #region 移动事件
+        #region 移动与选中事件
         private void NodeButton_MouseMove(object sender, MouseEventArgs e)
         {
             if (isMoving)
@@ -143,7 +141,7 @@ namespace MultiBranchTexter.Controls
         private void UpperBd_MouseDown(object sender, MouseButtonEventArgs e)
         {
             //通知流程图容器自己被选中
-            ControlTreeHelper.FindParentOfType<FlowChartContainer>(this).PostNodeChoosed(this);
+            ViewModelFactory.FCC.PostNodeChoosed(this);
         }
 
         //虽然0次引用，但是这是有用的，这是单一后继节点模式下重新选择后继节点功能
@@ -154,11 +152,10 @@ namespace MultiBranchTexter.Controls
                 //这样，就表示点击到了主题border上
                 if ((e.OriginalSource as Border).Name == "bgBorder" && textNode.endCondition.EndType == EndType.Single)
                 {
-                    FlowChartContainer parent = ControlTreeHelper.FindParentOfType<FlowChartContainer>(this);
-                    if (parent.IsWaiting)
+                    if (ViewModelFactory.FCC.IsWaiting)
                     { return; }
                     //进入选择模式
-                    parent.WaitClick(this);
+                    ViewModelFactory.FCC.WaitClick(this);
                 }
             }
         }
@@ -176,6 +173,7 @@ namespace MultiBranchTexter.Controls
             if (warnResult == MessageBoxResult.No)
             { return; }
             Delete();
+            ViewModelFactory.FCC.NodeCount = ViewModelFactory.FCC.GetNodeCount();
         }
 
         private void ChangeEnd_Click(object sender, RoutedEventArgs e)
@@ -232,7 +230,6 @@ namespace MultiBranchTexter.Controls
             { pre.answerToNodes[answer] = post; }
             else
             { pre.answerToNodes.Add(answer, post); }
-            //pre.postNodes.Add(post);
             TextNode.Link(pre.textNode, post.textNode, answer);
         }
 
@@ -244,7 +241,6 @@ namespace MultiBranchTexter.Controls
             //移除
             if (pre.answerToNodes.ContainsKey(answer))
             { pre.answerToNodes[answer] = null; }
-            //pre.postNodes.Remove(post);
             TextNode.UnLink(pre.textNode, post.textNode, answer);
         }
 
@@ -303,7 +299,7 @@ namespace MultiBranchTexter.Controls
         /// <summary>
         /// 显示后继条件框框
         /// </summary>
-        public void ShowEndCondition()
+        private void ShowEndCondition()
         {
             FatherNode = this;
             answerToNodes.Clear();
@@ -322,9 +318,10 @@ namespace MultiBranchTexter.Controls
                     break;
                 case EndType.MultiAnswers:
                     endNode = new NodeEndMA(textNode.endCondition);
-                    (endNode as NodeEndMA).SetFather(this);
+                    (endNode as NodeEndMA).SetFather(this);//在这个里面会新建answerToNode键值
                     break;
             }
+            UpdateLayout();
         }
 
 
@@ -358,7 +355,6 @@ namespace MultiBranchTexter.Controls
 
                 case EndType.MultiAnswers:
                     NodeEndMA tempNode = endNode as NodeEndMA;
-
                     foreach (UserControl control in tempNode.answerContainer.Children)
                     {
                         string answer = (control as NodeEndMAAnswer).Answer;

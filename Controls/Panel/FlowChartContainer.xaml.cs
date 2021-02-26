@@ -25,10 +25,7 @@ namespace MultiBranchTexter.Controls
     {
         //与拖拽、移动有关的变量
         private Point _clickPoint;
-        //等待选择后继节点的node
-        private NodeBase waitingNode;
-        public bool IsWaiting { get { return waitingNode != null; } }
-
+       
         private readonly FCCViewModel _viewModel;
 
         public FlowChartContainer()
@@ -108,9 +105,9 @@ namespace MultiBranchTexter.Controls
                 //右键点击，取消选择后继
                 if (e.RightButton == MouseButtonState.Pressed)
                 {
-                    if (IsWaiting)
+                    if (_viewModel.IsWaiting)
                     {
-                        PostNodeChoosed(null);
+                        _viewModel.PostNodeChoosed(null);
                     }
                     return;
                 }
@@ -133,7 +130,6 @@ namespace MultiBranchTexter.Controls
                     //如果没有打开搜索框，取消搜索
                     if (_viewModel.SearchBoxVisibility == Visibility.Hidden)
                     { _viewModel.ClearSearch(); }
-                    stateHint.Text = "";
                     //准备拖拽
                     this.Cursor = Cursors.Hand;
                 }
@@ -155,7 +151,7 @@ namespace MultiBranchTexter.Controls
                 Point lt = point + selectBorder.GetLeftTop();
                 Point rb = point + selectBorder.GetRightBottom();
                 _viewModel.ClearSelection();
-                ObservableCollection<NodeButton> newSelect = new ObservableCollection<NodeButton>();
+                List<NodeButton> newSelect = new List<NodeButton>();
                 foreach (UserControl control in container.Children)
                 {
                     if (control is NodeButton)
@@ -172,64 +168,6 @@ namespace MultiBranchTexter.Controls
                 selectBorder.Visibility = Visibility.Hidden;
                 ViewModelFactory.FCC.NewSelection(newSelect);
             }
-        }
-        #endregion
-
-        #region 节点选择功能与选择新后继节点功能
-        /// <summary> 进入等待点击以选择一个新的后继节点的状态 </summary>
-        public void WaitClick(NodeBase waiter)
-        {
-            waitingNode = waiter;
-            stateHint.Text = "选择一个后继节点";
-            //开启等待点击
-            foreach (UserControl control in container.Children)
-            {
-                if (control is NodeButton)
-                {
-                    //开启nodebutton的上层border，等待点击其中一个
-                    (control as NodeButton).UpperBd.Visibility = Visibility.Visible;
-                }
-            }
-            waiter.FatherNode.UpperBd.Visibility = Visibility.Hidden;
-        }
-
-        /// <summary> 新的后继节点选择完成了，传入null表示取消选择 </summary>
-        public void PostNodeChoosed(NodeButton post)
-        {
-            stateHint.Text = "";
-            foreach (UserControl control in container.Children)
-            {
-                if (control is NodeButton)
-                {
-                    (control as NodeButton).UpperBd.Visibility = Visibility.Hidden;
-                }
-            }
-            if (post == null)//没有选择
-            {
-                waitingNode = null;
-                return;
-            }
-            //首先断开waitNode原有的连线
-            ConnectingLine cline = null;//找到原本的连线
-            foreach (ConnectingLine line in waitingNode.FatherNode.postLines)
-            {
-                if (line.BeginNode == waitingNode)
-                { cline = line; }
-            }
-            if (cline != null)//不一定有这条原本连线
-            {
-                NodeButton.UnLink(waitingNode, cline.EndNode);
-                waitingNode.FatherNode.postLines.Remove(cline);
-                cline.EndNode.preLines.Remove(cline);
-                container.Children.Remove(cline);
-            }
-            //在waitNode和Post之间连线
-            NodeButton.Link(waitingNode, post);
-            ConnectingLine cl = new ConnectingLine(waitingNode, post);
-            container.Children.Add(cl);
-            //修改标签页
-            ViewModelFactory.Main.ReLoadTab(waitingNode.FatherTextNode);
-            waitingNode = null;
         }
         #endregion
     }

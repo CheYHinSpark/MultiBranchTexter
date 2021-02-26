@@ -61,11 +61,10 @@ namespace MultiBranchTexter.Controls
         private void YesnoNode_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             NodeBase node = sender as NodeBase;
-            FlowChartContainer parent = ControlTreeHelper.FindParentOfType<FlowChartContainer>(node.FatherNode);
-            if (parent.IsWaiting)
+            if (ViewModelFactory.FCC.IsWaiting)
             { return; }
             //进入选择模式
-            parent.WaitClick(node);
+            ViewModelFactory.FCC.WaitClick(node);
         }
         #endregion
 

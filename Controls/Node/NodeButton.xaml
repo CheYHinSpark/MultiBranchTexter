@@ -12,7 +12,7 @@
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Border x:Name="bgBorder" Padding="10,4,10,4" Grid.Row="0"
+                <Border x:Name="bgBorder" Grid.Row="0"
                         Background="{DynamicResource NodeBgBrush}" 
                         BorderBrush="{DynamicResource ThemeBrush}"
                         MouseLeftButtonDown="NodeButton_MouseLeftButtonDown"
@@ -30,17 +30,16 @@
                             </MenuItem>
                         </ContextMenu>
                     </Border.ContextMenu>
-                    <Grid>
+                    <Grid Width="80" Height="40">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="18"/>
+                            <RowDefinition Height="16"/>
                         </Grid.RowDefinitions>
                         <Rectangle Grid.Row="0"
-                                   Margin="2"
+                                   Margin="1"
                                    VerticalAlignment="Bottom" Fill="Gray" Height="2"/>
-                        <TextBox x:Name="titleBox" Margin="2" Grid.Row="0"
+                        <TextBox x:Name="titleBox" Margin="1" Grid.Row="0"
                                  Focusable="False" Background="Transparent"
-                                 ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"
                                  PreviewMouseDoubleClick="TitleBox_PreviewMouseDoubleClick"
                                  LostFocus="TitleBox_LostFocus"/>
                         <Button x:Name="gotoBtn" Grid.Row="1"
@@ -67,23 +66,37 @@
                 </Trigger>
                 <Trigger Property="NodeState" Value="Selected">
                     <Setter Property="BorderBrush" Value="Red" TargetName="bgBorder"/>
+                    <Setter Property="BorderThickness" Value="2" TargetName="bgBorder"/>
                     <Setter Property="Effect" TargetName="bgBorder">
                         <Setter.Value>
                             <DropShadowEffect ShadowDepth="0"
                                               Color="Red"
                                               Opacity="1"
-                                              BlurRadius="6"/>
+                                              BlurRadius="10"/>
                         </Setter.Value>
                     </Setter>
                 </Trigger>
                 <Trigger Property="NodeState" Value="Searched">
                     <Setter Property="BorderBrush" Value="Orange" TargetName="bgBorder"/>
+                    <Setter Property="BorderThickness" Value="2" TargetName="bgBorder"/>
                     <Setter Property="Effect" TargetName="bgBorder">
                         <Setter.Value>
                             <DropShadowEffect ShadowDepth="0"
-                                              Color="Orange"
+                                              Color="{DynamicResource Theme}"
                                               Opacity="1"
-                                              BlurRadius="6"/>
+                                              BlurRadius="10"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="NodeState" Value="TopSearched">
+                    <Setter Property="BorderBrush" Value="Blue" TargetName="bgBorder"/>
+                    <Setter Property="BorderThickness" Value="2" TargetName="bgBorder"/>
+                    <Setter Property="Effect" TargetName="bgBorder">
+                        <Setter.Value>
+                            <DropShadowEffect ShadowDepth="0"
+                                              Color="{DynamicResource Theme}"
+                                              Opacity="1"
+                                              BlurRadius="10"/>
                         </Setter.Value>
                     </Setter>
                 </Trigger>

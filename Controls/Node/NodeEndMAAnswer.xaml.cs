@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using MultiBranchTexter.Model;
 using MultiBranchTexter.ViewModel;
 
@@ -66,11 +57,10 @@ namespace MultiBranchTexter.Controls
             if (e.OriginalSource is Border)
             {
                 //这样，就表示点击到了主题border上
-                FlowChartContainer parent = ControlTreeHelper.FindParentOfType<FlowChartContainer>(this);
-                if (parent.IsWaiting)
+                if (ViewModelFactory.FCC.IsWaiting)
                 { return; }
                 //进入选择模式
-                parent.WaitClick(this);
+                ViewModelFactory.FCC.WaitClick(this);
             }
         }
 
@@ -106,8 +96,7 @@ namespace MultiBranchTexter.Controls
         private void MaCloseBtn_Click(object sender, RoutedEventArgs e)
         {
             //如果FCC处于等待选择新的后继节点状态，需要取消
-            FlowChartContainer fcc = ControlTreeHelper.FindParentOfType<FlowChartContainer>(FatherNode);
-            fcc.PostNodeChoosed(null);
+            ViewModelFactory.FCC.PostNodeChoosed(null);
             //断开连接
             ConnectingLine line = null;
             for (int i = 0;i < FatherNode.postLines.Count;i++)

@@ -9,9 +9,10 @@ namespace MultiBranchTexter.Model
     /// </summary>
     public enum NodeState
     {
-        Normal,
-        Searched,
-        Selected
+        Normal = 0,
+        Selected = 1,
+        Searched = 2,
+        TopSearched = 3
     }
 
     /// <summary>
@@ -19,8 +20,8 @@ namespace MultiBranchTexter.Model
     /// </summary>
     public enum EndType
     {
-        Single,
-        YesNo,
-        MultiAnswers
+        Single = 0,
+        YesNo = 1,
+        MultiAnswers = 2
     }
 }

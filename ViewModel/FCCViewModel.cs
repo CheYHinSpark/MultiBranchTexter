@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -14,8 +16,27 @@ namespace MultiBranchTexter.ViewModel
     public class FCCViewModel : ViewModelBase
     {
         #region 字段
+
+        #region 节点搜索、选择、节点累计
         //搜索相关的变量
-        private int searchedIndex = -1;
+        private int _searchedIndex;
+        public int SearchedIndex 
+        {
+            get { return _searchedIndex; }
+            set 
+            {
+                try
+                { SearchedNodes[_searchedIndex].NodeState = NodeState.Searched; }
+                catch { }
+
+                _searchedIndex = value;
+
+                try
+                { SearchedNodes[_searchedIndex].NodeState = NodeState.TopSearched; }
+                catch { }
+                RaisePropertyChanged("SearchedIndex");
+            }
+        }
 
         private Visibility _searchBoxVisibility;
         public Visibility SearchBoxVisibility
@@ -39,7 +60,41 @@ namespace MultiBranchTexter.ViewModel
             { _searchedNodes = value; RaisePropertyChanged("SearchedNodes"); }
         }
 
-        #region 虽然这样做不太符合mvvm的理念，但我不想再搞了
+        private int _nodeCount;
+        public int NodeCount
+        {
+            get { return _nodeCount; }
+            set { _nodeCount = value;RaisePropertyChanged("NodeCount"); }
+        }
+        #endregion
+
+        #region 提示文本
+        private bool _isHintEnabled;
+        public bool IsHintEnabled
+        {
+            get { return _isHintEnabled; }
+            set
+            { _isHintEnabled = value; RaisePropertyChanged("IsHintEnabled"); }
+        }
+
+        private string _hintText;
+        public string HintText
+        {
+            get { return _hintText; }
+            set
+            { _hintText = value; RaisePropertyChanged("HintText"); }
+        }
+
+        private Task _hintTask;
+        #endregion
+
+        #region 等待选择后继节点
+        private NodeBase waitingNode;
+
+        public bool IsWaiting { get { return waitingNode != null; } }
+        #endregion
+
+        #region 容器，虽然这样做不太符合mvvm的理念，但我不想再搞了
         private ScrollViewer _scrollViewer;
         public ScrollViewer ScrollViewer
         { set { _scrollViewer = value; } }
@@ -47,6 +102,7 @@ namespace MultiBranchTexter.ViewModel
         public AutoSizeCanvas Container
         { set { _container = value; } }
         #endregion
+
         #endregion
 
         #region 命令
@@ -60,6 +116,7 @@ namespace MultiBranchTexter.ViewModel
             Canvas.SetTop(newNode, Math.Max(0, point.Y - 25));
             Debug.WriteLine("新建节点成功");
             ViewModelFactory.Main.IsModified = "*";
+            NodeCount = GetNodeCount();
         });
 
         public ICommand UniteXCommand => new RelayCommand((sender) =>
@@ -162,10 +219,28 @@ namespace MultiBranchTexter.ViewModel
             SelectedNodes.Clear();
             Debug.WriteLine("删除了" + n.ToString() + "个节点");
             ViewModelFactory.Main.IsModified = "*";
+            NodeCount = GetNodeCount();
         });
 
         public ICommand StartSearchCommand => new RelayCommand((t) =>
         { SearchBoxVisibility = Visibility.Visible; });
+
+        /// <summary> 重新绘制流程图 </summary>
+        public ICommand ReArrangeCommand => new RelayCommand((t) =>
+        {
+            MessageBoxResult warnResult = MessageBox.Show
+                            (
+                            Application.Current.MainWindow,
+                            "你即将重新排列所有节点！\n这可能造成短暂的混乱，并且此操作不可撤销！",
+                            "警告",
+                            MessageBoxButton.YesNo
+                            );
+            if (warnResult == MessageBoxResult.No)
+            { return; }
+            List<TextNode> textNodes = GetTextNodeList();
+            _container.Children.Clear();
+            ReDrawFlowChart(textNodes);
+        });
         #endregion
 
         public FCCViewModel()
@@ -175,14 +250,26 @@ namespace MultiBranchTexter.ViewModel
             SelectedNodes.CollectionChanged += SelectedNodes_CollectionChanged;
             SearchedNodes = new ObservableCollection<NodeButton>();
             SearchedNodes.CollectionChanged += SearchedNodes_CollectionChanged;
+            NodeCount = 0;
+            IsHintEnabled = false;
+            HintText = "";
+            SearchedIndex = -1;
         }
 
         #region 事件
         private void SearchedNodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        { RaisePropertyChanged("SearchedNodes"); }
+        {
+            if (SearchedNodes.Count > 0)
+            { RaiseHint("共搜索到" + SearchedNodes.Count.ToString() + "个节点"); }
+            RaisePropertyChanged("SearchedNodes");
+        }
 
         private void SelectedNodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        { RaisePropertyChanged("SelectedNodes"); }
+        {
+            if (SelectedNodes.Count > 0)
+            { RaiseHint("共选中" + SelectedNodes.Count.ToString() + "个节点"); }
+            RaisePropertyChanged("SelectedNodes");
+        }
         #endregion
 
         #region 方法
@@ -194,7 +281,8 @@ namespace MultiBranchTexter.ViewModel
             ViewModelFactory.Main.IsModified = "";
             SelectedNodes.Clear();// <--必须
             var nodes = MetadataFile.ReadNodes(mbtxtPath);
-            DrawFlowChart(nodes);
+            _container.Dispatcher.Invoke(new Action(
+                delegate { DrawFlowChart(nodes); }));
         }
 
         #region 流程图绘制方法
@@ -204,6 +292,8 @@ namespace MultiBranchTexter.ViewModel
         /// </summary>
         private void ReDrawFlowChart(List<TextNode> textNodes)
         {
+            waitingNode = null;
+
             //nodeButtons总表
             List<NodeButton> nodeButtons = new List<NodeButton>();
 
@@ -322,7 +412,8 @@ namespace MultiBranchTexter.ViewModel
             //添加线
             //连线现在放到别的地方，即nodebutton的loaded里面执行
             Debug.WriteLine("节点图创建完成");
-            ViewModelFactory.Main.IsModified = "*";
+            RaiseHint("节点图创建完成");
+            NodeCount = GetNodeCount();
         }
 
         /// <summary>
@@ -330,6 +421,7 @@ namespace MultiBranchTexter.ViewModel
         /// </summary>
         private void DrawFlowChart(List<TextNodeWithLeftTop> textNodes)
         {
+            waitingNode = null;
             Debug.WriteLine("开始绘制节点图");
             //nodeButtons总表
             List<NodeButton> nodeButtons = new List<NodeButton>();
@@ -387,14 +479,8 @@ namespace MultiBranchTexter.ViewModel
             //添加线
             //连线现在放到别的地方，即nodebutton的loaded里面执行
             Debug.WriteLine("节点图创建完成");
-        }
-
-        /// <summary> 重新绘制流程图 </summary>
-        public void ReDrawFlowChart()
-        {
-            List<TextNode> textNodes = GetTextNodeList();
-            _container.Children.Clear();
-            ReDrawFlowChart(textNodes);
+            RaiseHint("节点图创建完成");
+            NodeCount = GetNodeCount();
         }
         #endregion
 
@@ -429,15 +515,14 @@ namespace MultiBranchTexter.ViewModel
             SelectedNodes.Add(node);
             SelectedNodes[0].NodeState = NodeState.Selected;
         }
-        public void NewSelection(ObservableCollection<NodeButton> nodes)
+        public void NewSelection(List<NodeButton> nodes)
         {
             ClearSelection();
             for (int i = 0; i < nodes.Count; i++)
             {
                 nodes[i].NodeState = NodeState.Selected;
+                SelectedNodes.Add(nodes[i]);
             }
-            SelectedNodes = nodes;
-            //stateHint.Text = "选中节点";
         }
 
         public void AddSelection(NodeButton node)
@@ -457,6 +542,18 @@ namespace MultiBranchTexter.ViewModel
         #endregion
 
         #region 节点累计、获取List、新节点名字与重复检查
+        /// <summary> 获得节点数 </summary>
+        public int GetNodeCount()
+        {
+            int i = 0;
+            foreach (UserControl control in _container.Children)
+            {
+                if (control is NodeButton)
+                { i++; }
+            }
+            return i;
+        }
+
         /// <summary> 获得带有左上角位置信息的节点表 </summary>
         public List<TextNodeWithLeftTop> GetTextNodeWithLeftTopList()
         {
@@ -558,6 +655,7 @@ namespace MultiBranchTexter.ViewModel
             //newNodeButton到post不用画，因为创建newNodebutton时会自动画，否则会出现两条
 
             ViewModelFactory.Main.IsModified = "*";
+            NodeCount = GetNodeCount();
         }
         #endregion
 
@@ -583,7 +681,7 @@ namespace MultiBranchTexter.ViewModel
             //如果不为空，跳转到第一个查到的node
             if (SearchedNodes.Count > 0)
             {
-                searchedIndex = 0;
+                SearchedIndex = 0;
                 ScrollToNode(SearchedNodes[0]);
             }
         }
@@ -596,10 +694,10 @@ namespace MultiBranchTexter.ViewModel
                 SearchNode(info);
                 return;
             }
-            searchedIndex++;
-            if (searchedIndex >= SearchedNodes.Count)
-            { searchedIndex = 0; }
-            ScrollToNode(SearchedNodes[searchedIndex]);
+            SearchedIndex++;
+            if (SearchedIndex >= SearchedNodes.Count)
+            { SearchedIndex = 0; }
+            ScrollToNode(SearchedNodes[SearchedIndex]);
         }
 
         /// <summary> 滚动到目标节点 </summary>
@@ -626,7 +724,7 @@ namespace MultiBranchTexter.ViewModel
                     {
                         SearchedNodes.Add(nb);
                         nb.NodeState = NodeState.Searched;
-                        searchedIndex = 0;
+                        SearchedIndex = 0;
                         ScrollToNode(nb);
                         return;
                     }
@@ -634,6 +732,82 @@ namespace MultiBranchTexter.ViewModel
             }
         }
         #endregion
+
+        #region 节点选择功能与选择新后继节点功能
+        /// <summary> 进入等待点击以选择一个新的后继节点的状态 </summary>
+        public void WaitClick(NodeBase waiter)
+        {
+            waitingNode = waiter;
+            RaiseHint("请选择一个后继节点");
+            //开启等待点击
+            foreach (UserControl control in _container.Children)
+            {
+                if (control is NodeButton)
+                {
+                    //开启nodebutton的上层border，等待点击其中一个
+                    (control as NodeButton).UpperBd.Visibility = Visibility.Visible;
+                }
+            }
+            waiter.FatherNode.UpperBd.Visibility = Visibility.Hidden;
+        }
+
+        /// <summary> 新的后继节点选择完成了，传入null表示取消选择 </summary>
+        public void PostNodeChoosed(NodeButton post)
+        {
+            foreach (UserControl control in _container.Children)
+            {
+                if (control is NodeButton)
+                {
+                    (control as NodeButton).UpperBd.Visibility = Visibility.Hidden;
+                }
+            }
+            if (post == null)//没有选择
+            {
+                waitingNode = null;
+                RaiseHint("取消选择");
+                return;
+            }
+            //首先断开waitNode原有的连线
+            ConnectingLine cline = null;//找到原本的连线
+            foreach (ConnectingLine line in waitingNode.FatherNode.postLines)
+            {
+                if (line.BeginNode == waitingNode)
+                { cline = line; }
+            }
+            if (cline != null)//不一定有这条原本连线
+            {
+                NodeButton.UnLink(waitingNode, cline.EndNode);
+                waitingNode.FatherNode.postLines.Remove(cline);
+                cline.EndNode.preLines.Remove(cline);
+                _container.Children.Remove(cline);
+            }
+            //在waitNode和Post之间连线
+            NodeButton.Link(waitingNode, post);
+            ConnectingLine cl = new ConnectingLine(waitingNode, post);
+            _container.Children.Add(cl);
+            //修改标签页
+            ViewModelFactory.Main.ReLoadTab(waitingNode.FatherTextNode);
+            RaiseHint("完成后继节点选择");
+            waitingNode = null;
+        }
+        #endregion
+
+        /// <summary> 启动提示文本 </summary>
+        public async void RaiseHint(string newHint)
+        {
+            if (_hintTask != null && !_hintTask.IsCompleted)
+            { IsHintEnabled = false; }
+            HintText = newHint;
+            IsHintEnabled = true;
+
+            _hintTask = Task.Delay(4000);
+            int i = _hintTask.Id;
+
+            await _hintTask;
+
+            if (i == _hintTask.Id)
+            { IsHintEnabled = false; }
+        }
 
         #endregion
     }
