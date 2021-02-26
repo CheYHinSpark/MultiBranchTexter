@@ -190,7 +190,7 @@ namespace MultiBranchTexter.ViewModel
                      new Microsoft.Win32.SaveFileDialog
                      {
                          RestoreDirectory = true,
-                         Filter = "多分支导航文件|*.meta.json"
+                         Filter = "多分支导航文件|*.mbjson"
                      };
                 if (Directory.Exists(_fileDirPath))
                 { dialog.InitialDirectory = _fileDirPath; }
@@ -233,7 +233,7 @@ namespace MultiBranchTexter.ViewModel
                     new Microsoft.Win32.OpenFileDialog
                     {
                         RestoreDirectory = true,
-                        Filter = "多分支导航文件|*.meta.json"
+                        Filter = "多分支导航文件|*.mbjson"
                     };
                 if (Directory.Exists(_fileDirPath))
                 { dialog.InitialDirectory = _fileDirPath; }
@@ -283,7 +283,7 @@ namespace MultiBranchTexter.ViewModel
                     new Microsoft.Win32.SaveFileDialog
                     {
                         RestoreDirectory = true,
-                        Filter = "多分支导航文件|*.meta.json"
+                        Filter = "多分支导航文件|*.mbjson"
                     };
 
                 if (Directory.Exists(_fileDirPath))
@@ -406,7 +406,7 @@ namespace MultiBranchTexter.ViewModel
                         new Microsoft.Win32.SaveFileDialog
                         {
                             RestoreDirectory = true,
-                            Filter = "多分支导航文件|*.meta.json"
+                            Filter = "多分支导航文件|*.mbjson"
                         };
 
                     if (Directory.Exists(_fileDirPath))
@@ -445,6 +445,7 @@ namespace MultiBranchTexter.ViewModel
             FileName = path;
             //打开新文件
             IsWorkGridVisible = true;
+            IsModified = "";
             ViewModelFactory.FCC.Load(path);
         }
 

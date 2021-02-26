@@ -278,7 +278,6 @@ namespace MultiBranchTexter.ViewModel
         public void Load(string mbtxtPath)
         {
             _container.Children.Clear();
-            ViewModelFactory.Main.IsModified = "";
             SelectedNodes.Clear();// <--必须
             var nodes = MetadataFile.ReadNodes(mbtxtPath);
             _container.Dispatcher.Invoke(new Action(

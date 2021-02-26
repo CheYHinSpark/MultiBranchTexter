@@ -10,6 +10,8 @@
     <Authors>GlumickStudio</Authors>
     <Description>为了满足多分支的游戏剧情等的写作需要而开发的多分支文本编辑器。</Description>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <SignAssembly>false</SignAssembly>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -35,9 +37,9 @@
     <Resource Include="Resources\Images\darkIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Images\icon.ico">
+    <Content Include="Resources\Images\icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    </Content>
     <Resource Include="Resources\Images\icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

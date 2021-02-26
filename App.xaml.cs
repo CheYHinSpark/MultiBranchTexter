@@ -1,6 +1,9 @@
-﻿using MultiBranchTexter.ViewModel;
+﻿using MultiBranchTexter.Model;
+using MultiBranchTexter.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 using System.Windows;
 
 namespace MultiBranchTexter
@@ -13,7 +16,7 @@ namespace MultiBranchTexter
         public App()
         {
             // 创建ViewModel全局映射
-            Application.Current.Properties.Add("ViewModelMap",new Dictionary<string, object>());
+            Current.Properties.Add("ViewModelMap",new Dictionary<string, object>());
             Startup += App_Startup;
         }
 
@@ -26,13 +29,45 @@ namespace MultiBranchTexter
                 ViewModelFactory.Main.OpenFile(e.Args[0]);
             }
             window.Show();
+            //注册文件关联
+            Dispatcher.Invoke(new Action(
+                delegate
+                {
+                    if (FileTypeRegister.FileTypeRegistered(".mbjson") == true)
+                    {
+                        return;
+                    }
+                    try
+                    {
+                        string culInfo = Thread.CurrentThread.CurrentCulture.TextInfo.CultureName;
+                        int i = culInfo.IndexOf('-');
+                        if (i >= 0)
+                        {
+                            culInfo = culInfo[0..i];
+                            Debug.WriteLine(culInfo);
+                        }
+
+                        FileTypeRegInfo fileTypeRegInfo = new FileTypeRegInfo(".mbjson")
+                        {
+                            Description = "MBJSON " + culInfo == "zh" ? "文件" : "File",
+                            ExePath = Process.GetCurrentProcess().MainModule.FileName,
+                            ExtendName = ".mbjson",
+                            IconPath = AppDomain.CurrentDomain.BaseDirectory + "Resources\\Images\\icon.ico"
+                        };
+                        FileTypeRegister.RegisterFileType(fileTypeRegInfo);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("初次启动，需要修改注册表，\n请重新以管理员身份启动一次程序。");
+                    }
+                }));
             await System.Threading.Tasks.Task.Delay(1000);// 这是为了让动画流畅走完
+            //检查更新
             Dispatcher.Invoke(new Action(
                 delegate
                 {
                     ViewModelFactory.Settings.CheckUpdate();
                 }));
-            
         }
     }
 }

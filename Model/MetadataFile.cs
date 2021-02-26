@@ -39,7 +39,7 @@ namespace MultiBranchTexter.Model
             var meta = JsonConvert.DeserializeObject<MetadataFile>(File.ReadAllText(metaUrl)) ?? new MetadataFile();
             if (string.IsNullOrWhiteSpace(meta.nodeFilePath))
             {
-                string tryUrl = new Regex(@"\.meta\.json$").Replace(metaUrl, ".json");
+                string tryUrl = new Regex(@"\.mbjson$").Replace(metaUrl, ".json");
                 if (!File.Exists(tryUrl))
                 {
                     throw new FormatException("未找到对应脚本文件");
@@ -53,7 +53,7 @@ namespace MultiBranchTexter.Model
 
         public static void WriteNodes(string metaUrl, List<TextNodeWithLeftTop> nodes)
         {
-            var nodeUrl = new Regex(@"\.meta\.json$", RegexOptions.IgnoreCase).Replace(metaUrl, ".json");
+            var nodeUrl = new Regex(@"\.mbjson$", RegexOptions.IgnoreCase).Replace(metaUrl, ".json");
             if (nodeUrl.ToLowerInvariant() == metaUrl.ToLowerInvariant())
             {
                 nodeUrl = new Regex(@"\.json$", RegexOptions.IgnoreCase).Replace(nodeUrl, ".node.json");
