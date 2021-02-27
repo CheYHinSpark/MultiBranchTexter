@@ -456,7 +456,8 @@ namespace MultiBranchTexter.ViewModel
                     }
                 }
                 //保存文件
-                MetadataFile.WriteNodes(_fileName, ViewModelFactory.FCC.GetTextNodeWithLeftTopList());
+                MetadataFile.WriteTextNodes(_fileName, ViewModelFactory.FCC.GetTextNodeWithLeftTopList());
+                //MetadataFile.WriteNodes(_fileName, ViewModelFactory.FCC.GetTextNodeWithLeftTopList());
                 IsModified = false;
                 Debug.WriteLine("文件 " + _fileName + " 保存成功");
                 RaiseHint("文件 " + _fileName[(_fileName.LastIndexOf('\\') + 1)..] + " 保存成功");
@@ -493,7 +494,8 @@ namespace MultiBranchTexter.ViewModel
 
             var node = new TextNode { Name = "new-node-0" };
             var n = new TextNodeWithLeftTop(node, 100, 100);
-            MetadataFile.WriteNodes(path, new List<TextNodeWithLeftTop> { n });
+            MetadataFile.WriteTextNodes(path, new List<TextNodeWithLeftTop> { n });
+            //MetadataFile.WriteNodes(path, new List<TextNodeWithLeftTop> { n });
         }
 
         public void ReCountCharForAll()

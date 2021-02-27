@@ -46,7 +46,7 @@ namespace MultiBranchTexter.Controls
         {
             titleBox.Focusable = false;
             // 完成问题修改
-            FatherTextNode.endCondition.Question = titleBox.Text;
+            FatherTextNode.EndCondition.Question = titleBox.Text;
             titleBox.SelectionStart = 0;
             // 还要通知窗口改变相应的标签页
             ViewModelFactory.Main.ReLoadTab(FatherTextNode);
@@ -56,7 +56,7 @@ namespace MultiBranchTexter.Controls
         //点击添加按钮
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
-            Dictionary<string,string> atns = FatherTextNode.endCondition.Answers;
+            Dictionary<string,string> atns = FatherTextNode.EndCondition.Answers;
             //创造一个不重名的回答
             string newAnswer = "新回答";
             int i = 1;

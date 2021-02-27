@@ -28,7 +28,6 @@ namespace MultiBranchTexter.Controls
             }
         }
 
-        public int OperationCount { get { return GetOperationLineCount(); } }
         public string ContentText { get { return contentContainer.Text; } }
 
         public bool ShouldRecount = true;
@@ -75,7 +74,7 @@ namespace MultiBranchTexter.Controls
                     if (ViewModelFactory.Settings.CountOpChar)
                     {
                         isInLetterWords = false;
-                        foreach (char ch in opContainer.Text)
+                        foreach (char ch in commentContainer.Text)
                         {
                             if (char.IsWhiteSpace(ch))
                             { isInLetterWords = false; continue; }
@@ -136,14 +135,10 @@ namespace MultiBranchTexter.Controls
         {
             parentPanel = ControlTreeHelper.FindParentOfType<StackPanel>(this);
             contentContainer.Text = fragment.Content;
-            string opText = "";
-            for (int i = 0; i < fragment.Operations.Count; i++)
-            { opText += fragment.Operations[i] + "\r\n"; }
-            if (opText != "")
-            { opText = opText[..^2]; }
-            opContainer.Text = opText;
+        
+            commentContainer.Text = fragment.Comment;
 
-            opContainer.TextChanged += Operation_TextChanged;
+            commentContainer.TextChanged += Operation_TextChanged;
             contentContainer.TextChanged += Content_TextChanged;
         }
 
@@ -161,20 +156,20 @@ namespace MultiBranchTexter.Controls
         {
             if (showHideOpBtn.IsChecked == true)
             {
-                opContainer.Height = double.NaN;
-                opContainer.UpdateLayout();// <--必须，否则没有动画效果
+                commentContainer.Height = double.NaN;
+                commentContainer.UpdateLayout();// <--必须，否则没有动画效果
                 Storyboard sb = new Storyboard();
                 DoubleAnimation da = new DoubleAnimation()
                 {
                     From = 2,
-                    To = opContainer.ActualHeight,
+                    To = commentContainer.ActualHeight,
                     Duration = new Duration(new TimeSpan(0, 0, 0, 0, 200)),
                     FillBehavior = FillBehavior.Stop
                 };
                 sb.Children.Add(da);
-                Storyboard.SetTarget(da, opContainer);
+                Storyboard.SetTarget(da, commentContainer);
                 Storyboard.SetTargetProperty(da, new PropertyPath("Height"));
-                sb.Completed += delegate { opContainer.Height = double.NaN; };
+                sb.Completed += delegate { commentContainer.Height = double.NaN; };
                 sb.Begin();
             }
             else
@@ -182,15 +177,15 @@ namespace MultiBranchTexter.Controls
                 Storyboard sb = new Storyboard();
                 DoubleAnimation da = new DoubleAnimation()
                 {
-                    From = opContainer.ActualHeight,
+                    From = commentContainer.ActualHeight,
                     To = 2,
                     Duration = new Duration(new TimeSpan(0, 0, 0, 0, 200)),
                     FillBehavior = FillBehavior.Stop
                 };
                 sb.Children.Add(da);
-                Storyboard.SetTarget(da, opContainer);
+                Storyboard.SetTarget(da, commentContainer);
                 Storyboard.SetTargetProperty(da, new PropertyPath("Height"));
-                sb.Completed += delegate { opContainer.Height = 2; };
+                sb.Completed += delegate { commentContainer.Height = 2; };
                 sb.Begin();
             }
         }
@@ -251,7 +246,8 @@ namespace MultiBranchTexter.Controls
             if (e.Key == Key.Back 
                 && contentContainer.SelectionStart == 0
                 && contentContainer.SelectionLength == 0 
-                && OperationCount == 0)
+                && commentContainer.Text == "")
+                //&& OperationCount == 0)
             {
                 e.Handled = true;// <--否则会多退格
                 int i = parentPanel.Children.IndexOf(this);
@@ -269,7 +265,8 @@ namespace MultiBranchTexter.Controls
             {
                 e.Handled = true;// <--否则会多退格
                 int i = parentPanel.Children.IndexOf(this);
-                if (i < parentPanel.Children.Count - 1 && (parentPanel.Children[i + 1] as TextFragmentPresenter).OperationCount == 0)
+                if (i < parentPanel.Children.Count - 1 && (parentPanel.Children[i + 1] as TextFragmentPresenter).commentContainer.Text == "")
+                //if (i < parentPanel.Children.Count - 1 && (parentPanel.Children[i + 1] as TextFragmentPresenter).OperationCount == 0)
                 {
                     AppendContent((parentPanel.Children[i + 1] as TextFragmentPresenter).ContentText);
                     parentPanel.Children.RemoveAt(i + 1);
@@ -325,9 +322,9 @@ namespace MultiBranchTexter.Controls
         {
             int linecount = 0;
             string newtext = "";
-            for (int i = 0; i < opContainer.LineCount;i++)
+            for (int i = 0; i < commentContainer.LineCount;i++)
             {
-                string temp = opContainer.GetLineText(i).Replace("\r", "").Replace("\n", "");
+                string temp = commentContainer.GetLineText(i).Replace("\r", "").Replace("\n", "");
                 if (temp.Replace(" ","") != "")
                 {
                     linecount++;
@@ -336,21 +333,22 @@ namespace MultiBranchTexter.Controls
             }
             if (linecount > 0)//去掉最后的换行
             { newtext = newtext[..^2]; }
-            opContainer.Text = newtext;
+            commentContainer.Text = newtext;
             return linecount;
         }
 
         private void SaveFragment()
         {
-            GetOperationLineCount();
+            //GetOperationLineCount();
             fragment.Content = contentContainer.Text;
-            fragment.Operations = new List<string>();
-            for (int i = 0; i < opContainer.LineCount; i++)
-            {
-                string str = opContainer.GetLineText(i).Replace("\r", "").Replace("\n","");
-                if (str != "")
-                { fragment.Operations.Add(str); }
-            }
+            fragment.Comment = commentContainer.Text;
+            //fragment.Operations = new List<string>();
+            //for (int i = 0; i < commentContainer.LineCount; i++)
+            //{
+            //    string str = commentContainer.GetLineText(i).Replace("\r", "").Replace("\n","");
+            //    if (str != "")
+            //    { fragment.Operations.Add(str); }
+            //}
         }
 
         //向上级通知改变

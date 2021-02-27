@@ -6,7 +6,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="opContainer" Grid.Row="0" Height="2"
+        <TextBox x:Name="commentContainer" Grid.Row="0" Height="2"
                  Template="{StaticResource operationTextBoxTemplate}"
                  Style="{StaticResource fragmentPresenterTextBoxStyle}"
                  Foreground="#FF57A64A"

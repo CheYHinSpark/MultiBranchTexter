@@ -28,7 +28,7 @@ namespace MultiBranchTexter.Controls
             begin.FatherNode.postLines.Add(this);
             end.preLines.Add(this);
             begin.FatherNode.UpdatePostLines();
-            isBeginMA = begin.FatherTextNode.endCondition.EndType == EndType.MultiAnswers;
+            isBeginMA = begin.FatherTextNode.EndCondition.EndType == EndType.MultiAnswers;
             end.UpdatePreLines();
         }
 
@@ -151,7 +151,7 @@ namespace MultiBranchTexter.Controls
                     + c2Pt.ToString() + " L" + endPt.ToString());
             }
             //更新tooltip
-            Path.ToolTip = "从" + BeginNode.FatherTextNode.Name + "\n到" + EndNode.textNode.Name;
+            Path.ToolTip = "从 " + BeginNode.FatherTextNode.Name + "\n到 " + EndNode.textNode.Name;
             //如果后继在上方，调整颜色
             if (beginPt.Y > endPt.Y)
             { Path.Tag = "1"; }

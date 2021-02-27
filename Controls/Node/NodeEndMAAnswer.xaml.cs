@@ -76,7 +76,7 @@ namespace MultiBranchTexter.Controls
                 return;
             }
             //取得节点的后继条件
-            EndCondition ec = FatherTextNode.endCondition;
+            EndCondition ec = FatherTextNode.EndCondition;
             if (ec.Answers.ContainsKey(Answer))
             { 
                 answerTxt.Text = answer;
@@ -115,7 +115,7 @@ namespace MultiBranchTexter.Controls
             }
             //如果没有连线，也要删除相应的key
             FatherNode.answerToNodes.Remove(answer);
-            FatherTextNode.endCondition.Answers.Remove(answer);
+            FatherTextNode.EndCondition.Answers.Remove(answer);
             //通知标签页改变
             ViewModelFactory.Main.ReLoadTab(FatherTextNode);
             //移除自身
