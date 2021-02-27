@@ -84,10 +84,7 @@ namespace MultiBranchTexter.Controls
             //断开起始点和终止点
             NodeButton.UnLink(BeginNode, EndNode);
             //加入新节点，相关的link和画线都在fcc里完成
-            ViewModelFactory.FCC
-            //ControlTreeHelper
-            //    .FindParentOfType<FlowChartContainer>(this)
-                .AddNodeButton(BeginNode, EndNode, mousePt.X, mousePt.Y);
+            ViewModelFactory.FCC.AddNodeButton(BeginNode, EndNode, mousePt.X, mousePt.Y);
             //删去本线条
             Delete();
         }
@@ -110,7 +107,7 @@ namespace MultiBranchTexter.Controls
             {
                 //如果前驱是个多选模式节点，则特别处理
                 //取得偏移点
-                Point beginOffsetPt = new Point(beginPt.X + 60 + 10 * (BeginNode as NodeEndMAAnswer).GetIndex(), beginPt.Y);
+                Point beginOffsetPt = new Point(beginPt.X + BeginNode.ActualWidth / 2.0 + 10 + 10 * (BeginNode as NodeEndMAAnswer).GetIndex(), beginPt.Y);
                 Point c1Pt, c2Pt;
                 double xt = endPt.X - beginOffsetPt.X;
                 double yt = endPt.Y - beginOffsetPt.Y;
@@ -119,7 +116,6 @@ namespace MultiBranchTexter.Controls
                     //这表示横向差距较大
                     c1Pt = new Point(beginOffsetPt.X, beginOffsetPt.Y * 0.5 + endPt.Y * 0.5);
                     c2Pt = new Point(endPt.X, beginOffsetPt.Y * 0.5 + endPt.Y * 0.5);
-
                 }
                 else//这表示横向差距不够大
                 {

@@ -91,6 +91,7 @@ namespace MultiBranchTexter.Controls
                 ViewModelFactory.Main.ReLoadTab(FatherTextNode);
             }
             answerTxt.SelectionStart = 0;
+            FatherNode.UpdateLines();
         }
 
         private void MaCloseBtn_Click(object sender, RoutedEventArgs e)

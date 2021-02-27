@@ -30,7 +30,7 @@ namespace MultiBranchTexter
             }
             window.Show();
             //注册文件关联
-            Dispatcher.Invoke(new Action(
+            await Dispatcher.BeginInvoke(new Action(
                 delegate
                 {
                     if (FileTypeRegister.FileTypeRegistered(".mbjson") == true)
@@ -58,12 +58,14 @@ namespace MultiBranchTexter
                     }
                     catch
                     {
+#if !DEBUG
                         MessageBox.Show("初次启动，需要修改注册表，\n请重新以管理员身份启动一次程序。");
+#endif
                     }
                 }));
             await System.Threading.Tasks.Task.Delay(1000);// 这是为了让动画流畅走完
             //检查更新
-            Dispatcher.Invoke(new Action(
+            await Dispatcher.BeginInvoke(new Action(
                 delegate
                 {
                     ViewModelFactory.Settings.CheckUpdate();

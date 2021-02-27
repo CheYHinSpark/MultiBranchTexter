@@ -13,14 +13,14 @@
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="MainBorder" Property="Background" Value="{DynamicResource Highlight.ThemeBrush}"/>
+                <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource Highlight.ThemeBrush}"/>
             </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
                     <Condition Property="IsMouseOver" Value="True"/>
                     <Condition Property="Name" Value="closeBtn"/>
                 </MultiTrigger.Conditions>
-                <Setter TargetName="MainBorder" Property="Background" Value="{DynamicResource RedBrush}"/>
+                <Setter TargetName="MainBorder" Property="Background" Value="{StaticResource RedBrush}"/>
             </MultiTrigger>
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="Opacity" Value="0.8"/>
@@ -69,19 +69,20 @@
     <ControlTemplate x:Key="multiAnswerTemplate" TargetType="{x:Type c:NodeBase}">
         <Grid Height="24">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="16"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="maCloseBtn" Grid.Column="0" Width="0" Height="18">
+            <Button x:Name="maCloseBtn" Grid.Column="0" Width="0" Height="18"
+                    HorizontalAlignment="Right">
                 <Button.Template>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Border x:Name="maBd" CornerRadius="6,0,0,6" Background="{DynamicResource ThemeBrush}">
-                            <Path x:Name="CP" Stroke="White" 
+                            <Path x:Name="CP" Stroke="{DynamicResource Foreground.ThemeBrush}" 
                                   StrokeThickness="1" Data="M5,5 L13,13 M5,13 L13,5"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource RedBrush}" TargetName="maBd"/>
+                                <Setter Property="Background" Value="{StaticResource RedBrush}" TargetName="maBd"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

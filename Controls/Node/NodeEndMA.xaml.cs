@@ -50,6 +50,7 @@ namespace MultiBranchTexter.Controls
             titleBox.SelectionStart = 0;
             // 还要通知窗口改变相应的标签页
             ViewModelFactory.Main.ReLoadTab(FatherTextNode);
+            FatherNode.UpdateLines();
         }
 
         //点击添加按钮

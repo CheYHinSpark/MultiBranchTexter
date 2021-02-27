@@ -14,17 +14,24 @@ namespace MultiBranchTexter.Controls
     /// </summary>
     public partial class NodeButton : NodeBase
     {
-        public Border UpperBd;
-        private TextBox titleBox;
-        private Border endContainer;
         private NodeBase endNode;//这个只是挂在屁股下面的那个容器里的东西
-        private AutoSizeCanvas parent;
 
         public TextNode textNode;
         public Dictionary<string, NodeButton> answerToNodes = new Dictionary<string, NodeButton>();
 
         public List<ConnectingLine> postLines = new List<ConnectingLine>();
         public List<ConnectingLine> preLines = new List<ConnectingLine>();
+
+        private NodeState _nodeState;
+        public NodeState NodeState
+        {
+            get { return _nodeState; }
+            set 
+            {
+                _nodeState = value;
+                bgBorder.Tag = value.ToString();//使用tag来控制其样式
+            }
+        }
 
         // 移动相关
         private Point oldPoint = new Point();
@@ -40,21 +47,16 @@ namespace MultiBranchTexter.Controls
         }
         #region 事件
         //加载完成
-        private void NodeBase_Loaded(object sender, RoutedEventArgs e)
+        private async void NodeBase_Loaded(object sender, RoutedEventArgs e)
         {
-            UpperBd = GetTemplateChild("UpperBd") as Border;
-            endContainer = GetTemplateChild("endContainer") as Border;
             endContainer.Child = endNode;
-            //这个地方可能会出bug，不用管重新编译吧
-
-            titleBox = GetTemplateChild("titleBox") as TextBox;
             //显示标题
             titleBox.Text = textNode.Name;
-            //设置显示顺序为2，以显示在connectingline上面
+
             Panel.SetZIndex(this, 2);
-            UpdateLayout();
             Debug.WriteLine("节点成功生成" + textNode.Name);
-            DrawPostLines(ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this));
+            await Task.Delay(10);//这是为了能让线条的位置正确
+            DrawPostLines(ViewModelFactory.FCC.Container);
         }
 
         #region 移动与选中事件
@@ -68,9 +70,9 @@ namespace MultiBranchTexter.Controls
                     return;
                 }
                 //移动自身位置
-                Move(e.GetPosition(parent).X - oldPoint.X,
-                    e.GetPosition(parent).Y - oldPoint.Y);
-                oldPoint = e.GetPosition(parent);
+                Move(e.GetPosition(ViewModelFactory.FCC.Container).X - oldPoint.X,
+                    e.GetPosition(ViewModelFactory.FCC.Container).Y - oldPoint.Y);
+                oldPoint = e.GetPosition(ViewModelFactory.FCC.Container);
             }
         }
 
@@ -83,7 +85,7 @@ namespace MultiBranchTexter.Controls
                 //通知flowchart改变selectedNodes
                 ViewModelFactory.FCC.NewSelection(this);
             }
-            oldPoint = e.GetPosition(parent);
+            oldPoint = e.GetPosition(ViewModelFactory.FCC.Container);
         }
 
         private void NodeButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -135,6 +137,7 @@ namespace MultiBranchTexter.Controls
                     ViewModelFactory.Main.ReLoadTab(textNode);
                 }
             }
+            UpdateLines();
         }
 
         //上层bd被点击，这是在重新选择后继节点时可以被选中
@@ -289,14 +292,6 @@ namespace MultiBranchTexter.Controls
 
         #region 绘制与布局
         /// <summary>
-        /// 设置父控件
-        /// </summary>
-        public void SetParent(AutoSizeCanvas canvas)
-        {
-            parent = canvas;
-        }
-
-        /// <summary>
         /// 显示后继条件框框
         /// </summary>
         private void ShowEndCondition()
@@ -367,9 +362,14 @@ namespace MultiBranchTexter.Controls
             }
         }
 
-        /// <summary>
-        /// 刷新前驱线
-        /// </summary>
+        /// <summary> 刷新连线 </summary>
+        public void UpdateLines()
+        {
+            UpdatePostLines();
+            UpdatePreLines();
+        }
+
+        /// <summary> 刷新前驱线 </summary>
         public void UpdatePreLines()
         {
             for (int i = 0; i < preLines.Count; i++)
@@ -378,9 +378,7 @@ namespace MultiBranchTexter.Controls
             }
         }
 
-        /// <summary>
-        /// 刷新后继线
-        /// </summary>
+        /// <summary> 刷新后继线 </summary>
         public void UpdatePostLines()
         {
             for (int i = 0; i < postLines.Count; i++)
@@ -405,9 +403,7 @@ namespace MultiBranchTexter.Controls
         /// 获得中心坐标，不受放缩影响
         /// </summary>
         public Vector GetCenter()
-        {
-            return new Vector(Canvas.GetLeft(this) + 50, Canvas.GetTop(this) + 25);
-        }
+        { return new Vector(Canvas.GetLeft(this) + this.ActualHeight / 2.0, Canvas.GetTop(this) + 25); }
         #endregion
 
         #region 移动
@@ -421,12 +417,12 @@ namespace MultiBranchTexter.Controls
             if (isMoving)
             {
                 Panel.SetZIndex(this, 2);
-                parent.IsResizing = false;
+                ViewModelFactory.FCC.Container.IsResizing = false;
                 isMoving = false;
                 return;
             }
             Panel.SetZIndex(this, 3);
-            parent.IsResizing = true;
+            ViewModelFactory.FCC.Container.IsResizing = true;
             isMoving = true;
         }
         /// <summary>
@@ -466,7 +462,7 @@ namespace MultiBranchTexter.Controls
             ViewModelFactory.Main.DeleteTab(textNode);
             ViewModelFactory.Main.IsModified = "*";
             //删掉自己
-            ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this).Children.Remove(this);
+            ViewModelFactory.FCC.Container.Children.Remove(this);
         }
 
         /// <summary>
@@ -482,18 +478,12 @@ namespace MultiBranchTexter.Controls
         /// </summary>
         public Vector GetPreLineEndOffset(ConnectingLine line)
         {
-            Vector point = new Vector(50, 25);
-            if (preLines.Count == 1)
-            { return point; }
-            for (int i = 0;i < preLines.Count; i++)
+            for (int i = 0; i < preLines.Count; i++)
             {
                 if (preLines[i] == line)
-                {
-                    point.X += -30 + 60.0 * i / (preLines.Count - 1);
-                    return point;
-                }
+                { return new Vector(this.ActualHeight + UpperBd.ActualWidth * ((i + 1.0) / (preLines.Count + 1.0) - 0.5), 25); }
             }
-            return point;
+            return new Vector(this.ActualWidth / 2.0, 25);
         }
 
         /// <summary>

@@ -136,8 +136,12 @@ namespace MultiBranchTexter.Controls
         {
             parentPanel = ControlTreeHelper.FindParentOfType<StackPanel>(this);
             contentContainer.Text = fragment.Content;
+            string opText = "";
             for (int i = 0; i < fragment.Operations.Count; i++)
-            { opContainer.Text += fragment.Operations[i] + "\r\n"; }
+            { opText += fragment.Operations[i] + "\r\n"; }
+            if (opText != "")
+            { opText = opText[..^2]; }
+            opContainer.Text = opText;
 
             opContainer.TextChanged += Operation_TextChanged;
             contentContainer.TextChanged += Content_TextChanged;
@@ -244,7 +248,10 @@ namespace MultiBranchTexter.Controls
         private void Content_KeyDown(object sender, KeyEventArgs e)
         {
             //如果在开头按下退格，且本片段没有operation，则合并本段与上段
-            if (e.Key == Key.Back && contentContainer.SelectionStart == 0 && OperationCount == 0)
+            if (e.Key == Key.Back 
+                && contentContainer.SelectionStart == 0
+                && contentContainer.SelectionLength == 0 
+                && OperationCount == 0)
             {
                 e.Handled = true;// <--否则会多退格
                 int i = parentPanel.Children.IndexOf(this);
@@ -256,7 +263,9 @@ namespace MultiBranchTexter.Controls
                 }
             }
             //如果在末尾按下删除，且下一片段没有operation，则合并本段与下一段
-            if (e.Key == Key.Delete && contentContainer.SelectionStart == contentContainer.Text.Length)
+            if (e.Key == Key.Delete 
+                && contentContainer.SelectionStart == contentContainer.Text.Length
+                && contentContainer.SelectionLength == 0)
             {
                 e.Handled = true;// <--否则会多退格
                 int i = parentPanel.Children.IndexOf(this);
@@ -325,6 +334,8 @@ namespace MultiBranchTexter.Controls
                     newtext += temp + "\r\n";
                 }
             }
+            if (linecount > 0)//去掉最后的换行
+            { newtext = newtext[..^2]; }
             opContainer.Text = newtext;
             return linecount;
         }
@@ -336,7 +347,7 @@ namespace MultiBranchTexter.Controls
             fragment.Operations = new List<string>();
             for (int i = 0; i < opContainer.LineCount; i++)
             {
-                string str = opContainer.GetLineText(i);
+                string str = opContainer.GetLineText(i).Replace("\r", "").Replace("\n","");
                 if (str != "")
                 { fragment.Operations.Add(str); }
             }

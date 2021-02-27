@@ -421,7 +421,7 @@ namespace MultiBranchTexter.ViewModel
                 IsModified = "";
                 Debug.WriteLine("文件" + _fileName + "保存成功");
                 ViewModelFactory.FCC.RaiseHint("文件"
-                    + _fileName.Substring(_fileName.LastIndexOf('\\') + 1) + "保存成功");
+                    + _fileName[(_fileName.LastIndexOf('\\') + 1)..] + "保存成功");
             }
             catch { }
         }

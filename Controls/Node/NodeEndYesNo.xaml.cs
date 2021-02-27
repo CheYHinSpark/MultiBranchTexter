@@ -55,6 +55,7 @@ namespace MultiBranchTexter.Controls
             titleBox.SelectionStart = 0;
             // 还要通知窗口改变相应的标签页
             ViewModelFactory.Main.ReLoadTab(FatherTextNode);
+            FatherNode.UpdateLines();
         }
 
         //虽然0个引用，但这是双击两个小节点启动调整后继功能

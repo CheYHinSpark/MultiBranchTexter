@@ -20,23 +20,9 @@ namespace MultiBranchTexter.Controls
         /// </summary>
         public TextNode FatherTextNode { get { return FatherNode.textNode; } }
 
-        //注册依赖属性，节点状态，有常规、选中、被搜索到
-        public static readonly DependencyProperty NodeStateProperty =
-            DependencyProperty.Register("NodeState",
-                typeof(NodeState),
-                typeof(NodeBase),
-                new PropertyMetadata(NodeState.Normal));
-
-        public NodeState NodeState
-        {
-            get { return (NodeState)GetValue(NodeStateProperty); }
-            set { SetValue(NodeStateProperty, value); }
-        }
-
         /// <summary>
         /// 获得左上角坐标
         /// </summary>
-        /// <returns></returns>
         public Point GetCanvasOffset()
         {
             return TransformToAncestor(FatherNode).Transform(new Point(0,0))

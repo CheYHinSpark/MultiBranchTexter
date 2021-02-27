@@ -32,20 +32,20 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
                     Grid.Row="0">
             <Button ToolTip="新建文件" Width="28"
-                    Style="{DynamicResource generalButtonStyle}"
+                    Template="{StaticResource generalButtonTemplate}"
                     Command="{Binding NewFileCommand}"
                     CommandParameter="{Binding ElementName=flowChart}"
                     Content="M0,9 L6,9 M3,6 3,12
                       M2,5 2,0 9,0 12,3 12,14 2,14 L2,13
                       M9,0 9,3 L12,3"/>
             <Button ToolTip="打开文件" Width="28"
-                    Style="{DynamicResource generalButtonStyle}"
+                    Template="{StaticResource generalButtonTemplate}"
                     Command="{Binding OpenFileCommand}"
                     CommandParameter="{Binding ElementName=flowChart}"
                     Content="M1,12 13,12 16,6 4,6 Z
                       M1,12 0,12 0,4 2,2 6,2 8,4 13,4 L13,6"/>
             <Button ToolTip="保存文件" Width="28"
-                    Style="{DynamicResource generalButtonStyle}"
+                    Template="{StaticResource generalButtonTemplate}"
                     Command="{Binding SaveFileCommand}"
                     CommandParameter="{Binding ElementName=flowChart}"
                     Content="M0,14 0,0 3,0 3,5 8,5 8,0 9,0 12,3 12,14 Z
@@ -53,7 +53,7 @@
             <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
                        Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
             <CheckBox ToolTip="节点图" Width="28" Tag="r"
-                      Style="{DynamicResource generalCheckBoxStyle}" 
+                      Template="{StaticResource generalCheckTemplate}"  
                       IsChecked="{Binding IsFlowChartShowing}" 
                       IsEnabled="{Binding CanHideFlowChart}"
                       Content="M0,0 0,3 6,3 6,0 Z
@@ -61,7 +61,7 @@
                       M1,11 1,14 7,14 7,11 Z
                       M8,0 8,3 14,3 14,0 Z"/>
             <CheckBox ToolTip="文本页" Width="28" Tag="l"
-                      Style="{DynamicResource generalCheckBoxStyle}"
+                      Template="{StaticResource generalCheckTemplate}" 
                       IsChecked="{Binding IsWorkTabShowing}" 
                       IsEnabled="{Binding CanHideWorkTab}"
                       Content="M0,0 L14,0
@@ -70,7 +70,7 @@
                        Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
             <Button ToolTip="字体缩小" Width="28"
                     Command="{Binding FontSizeDownCommand}"
-                    Style="{DynamicResource generalButtonStyle}"
+                    Template="{StaticResource generalButtonTemplate}"
                     Content="M0,16 5,4 L10,16 M2,11 L8,11
                       M12,16 14,11.2 16,16
                       M10,4 16,4"/>
@@ -78,7 +78,7 @@
                        TextAlignment="Center" Foreground="{DynamicResource Foreground.BaseBrush}"/>
             <Button ToolTip="字体放大" Width="28"
                     Command="{Binding FontSizeUpCommand}"
-                    Style="{DynamicResource generalButtonStyle}"
+                    Template="{StaticResource generalButtonTemplate}"
                     Content="M6,16 11,4 L16,16 M8,11 L14,11
                       M0,16 2,11.2 4,16
                       M0,4 6,4 M3,1 3,7"/>
