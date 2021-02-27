@@ -132,10 +132,6 @@ namespace MultiBranchTexter
 
         //标题栏
         private CheckBox MaxButton;
-        private TextBlock WindowTitleTbl;
-
-        //设置
-        public SettingViewModel _settings;
 
         public MetroWindow()
         {
@@ -148,8 +144,8 @@ namespace MultiBranchTexter
             // 查找窗体模板
             if (App.Current.Resources["MetroWindowTemplate"] is ControlTemplate mWTemplate)
             {
-                _settings = mWTemplate.FindName("svm", this) as SettingViewModel;
-                ViewModelFactory.SetViewModel(typeof(SettingViewModel), _settings);
+                ViewModelFactory.SetViewModel(typeof(SettingViewModel), 
+                    mWTemplate.FindName("svm", this) as SettingViewModel);
 
                 MaxButton = mWTemplate.FindName("MaxWinButton", this) as CheckBox;
 
@@ -159,15 +155,14 @@ namespace MultiBranchTexter
                 (mWTemplate.FindName("MinWinButton", this) as Button).Click += MinButton_Click;
                 (mWTemplate.FindName("UpperBd", this) as Border).MouseDown += UpperBd_MouseDown;
 
-                WindowTitleTbl = mWTemplate.FindName("WindowTitleTbl", this) as TextBlock;
-                WindowTitleTbl.Text = Title;
+                (mWTemplate.FindName("WindowTitleTbl", this) as TextBlock).Text = Title;
             }
         }
 
         private void UpperBd_MouseDown(object sender, MouseButtonEventArgs e)
         {
             ShowSettings = false;
-            _settings.WriteIni();
+            ViewModelFactory.Settings.WriteIni();
         }
 
         private void SettingBtn_Click(object sender, RoutedEventArgs e)
@@ -177,7 +172,7 @@ namespace MultiBranchTexter
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            _settings.WriteIni();
+            ViewModelFactory.Settings.WriteIni();
             if (ViewModelFactory.Main.IsModified)
             {
                 MessageBoxResult warnResult = MessageBox.Show
@@ -222,5 +217,6 @@ namespace MultiBranchTexter
             DragMove();
             base.OnMouseLeftButtonDown(e);
         }
+
     }
 }

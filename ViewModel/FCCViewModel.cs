@@ -227,9 +227,9 @@ namespace MultiBranchTexter.ViewModel
                             );
             if (warnResult == MessageBoxResult.No)
             { return; }
-            List<TextNode> textNodes = GetTextNodeList();
-            _container.Children.Clear();
-            ReDrawFlowChart(textNodes);
+            //List<TextNode> textNodes = GetTextNodeList();
+            //_container.Children.Clear();
+            ReDrawFlowChart();
         });
         #endregion
 
@@ -283,8 +283,163 @@ namespace MultiBranchTexter.ViewModel
 
         #region 流程图绘制方法
         /// <summary>
-        /// 根据List<TextNode>重新建立树状图
-        /// 不处理循坏连接的情况，有向无环图排序
+        /// 重新建立树状图
+        /// 不能处理循坏连接的情况
+        /// 有向无环图排序
+        /// </summary>
+        private async void ReDrawFlowChart()
+        {
+            waitingNode = null;
+
+            //nodeButtons总表
+            List<NodeButton> nodeButtons = new List<NodeButton>();
+            List<TextNode> textNodes = new List<TextNode>();
+            foreach (UserControl control in _container.Children)
+            {
+                if (control is NodeButton)
+                {
+                    textNodes.Add((control as NodeButton).textNode);
+                    nodeButtons.Add((control as NodeButton));
+                }
+            }
+
+            int num = textNodes.Count;
+            if (num == 0)
+            {
+                Debug.WriteLine("创建了空节点图");
+                return;
+            }
+            //node所在组数，实际是画图后的行数
+            int[] groupIndexOfBtns = new int[num];
+            //二维List，对NodeButton分组
+            List<List<NodeButton>> groupedNodes = new List<List<NodeButton>>();
+            //是否完成数组
+            bool[] hasDone = new bool[num];
+            //已完成的node指标
+            List<int> hasDoneIndex = new List<int>();
+            //初始化矩阵
+            bool[,] mat = new bool[num, num];
+            //初始化
+            await _container.Dispatcher.BeginInvoke(new Action(
+                delegate
+                {
+                    for (int i = 0; i < num; i++)
+                    {
+                        //初始化矩阵
+                        for (int j = 0; j < num; j++)
+                        { mat[i, j] = false; }
+                        //一开始都未完成
+                        hasDone[i] = false;
+                        //初始化组数
+                        groupIndexOfBtns[i] = 0;
+                    }
+                }));
+            await _container.Dispatcher.BeginInvoke(new Action(
+                delegate
+                {
+                    for (int i = 0; i < textNodes.Count; i++)
+                    {
+                        EndCondition ec = textNodes[i].endCondition;
+
+                        Dictionary<string, int> waitToLink = new Dictionary<string, int>();
+
+                        foreach (string answer in ec.Answers.Keys)
+                        {
+                            if (ec.Answers[answer] == "")
+                            { continue; }//直接跳过空的
+
+                            bool found = false;
+                            for (int k = 0; k < num; k++)
+                            {
+                                if (ec.Answers[answer] == textNodes[k].Name)
+                                {
+                                    found = true;
+                                    //准备为nodeButton添加post
+                                    waitToLink.Add(answer, k);
+
+                                    break;
+                                }
+                            }
+                            if (!found)
+                            { waitToLink.Add(answer, -1); }
+                        }
+
+                        foreach (string answer in waitToLink.Keys)
+                        {
+                            if (waitToLink[answer] == -1)
+                            { ec.Answers[answer] = ""; }
+                            else
+                            { mat[i, waitToLink[answer]] = true; }
+                        }
+                    }
+                }));
+            await _container.Dispatcher.BeginInvoke(new Action(
+                delegate
+                {
+                    while (hasDoneIndex.Count < num)
+                    {
+                        //搜寻尚未完成的node中无前驱者
+                        List<NodeButton> noPreNodes = new List<NodeButton>();
+                        for (int j = 0; j < num; j++)
+                        {
+                            //已经做了，跳过
+                            if (hasDoneIndex.Contains(j))
+                            { continue; }
+                            bool shouldAdd = true;
+                            for (int i = 0; i < num; i++)
+                            {
+                                //找到一个前驱，跳过
+                                if (mat[i, j])
+                                {
+                                    shouldAdd = false;
+                                    break;
+                                }
+                            }
+                            if (!shouldAdd)
+                            { continue; }
+                            //未找到前驱
+                            noPreNodes.Add(nodeButtons[j]);
+                            hasDoneIndex.Add(j);
+                        }
+                        //添加
+                        groupedNodes.Add(noPreNodes);
+                        //处理身后事
+                        for (int i = 0; i < hasDoneIndex.Count; i++)
+                        {
+                            for (int j = 0; j < num; j++)
+                            { mat[hasDoneIndex[i], j] = false; }
+                        }
+                    }
+                }));
+            //根据分组开始放置NodeButton
+            await _container.Dispatcher.BeginInvoke(new Action(
+                delegate
+                {
+                    for (int i = 0; i < groupedNodes.Count; i++)
+                    {
+                        for (int j = 0; j < groupedNodes[i].Count; j++)
+                        {
+                            Canvas.SetLeft(groupedNodes[i][j], 60 + 160 * j);
+                            Canvas.SetTop(groupedNodes[i][j], 80 + 240 * i);
+                        }
+                    }
+                }));
+            //更新线
+            await _container.Dispatcher.BeginInvoke(new Action(
+               delegate
+               {
+                   for (int i = 0; i < nodeButtons.Count; i++)
+                   { nodeButtons[i].UpdateLines(); }
+               }));
+            Debug.WriteLine("节点图重绘完成");
+            ViewModelFactory.Main.RaiseHint("节点图重绘完成");
+            NodeCount = num;
+        }
+
+        /// <summary>
+        /// 重新建立树状图
+        /// 不能处理循坏连接的情况
+        /// 有向无环图排序
         /// </summary>
         private async void ReDrawFlowChart(List<TextNode> textNodes)
         {
@@ -370,42 +525,42 @@ namespace MultiBranchTexter.ViewModel
                 }));
             await _container.Dispatcher.BeginInvoke(new Action(
                 delegate
-              {
-                  while (hasDoneIndex.Count < num)
-                  {
-                      //搜寻尚未完成的node中无前驱者
-                      List<NodeButton> noPreNodes = new List<NodeButton>();
-                      for (int j = 0; j < num; j++)
-                      {
-                          //已经做了，跳过
-                          if (hasDoneIndex.Contains(j))
-                          { continue; }
-                          bool shouldAdd = true;
-                          for (int i = 0; i < num; i++)
-                          {
-                              //找到一个前驱，跳过
-                              if (mat[i, j])
-                              {
-                                  shouldAdd = false;
-                                  break;
-                              }
-                          }
-                          if (!shouldAdd)
-                          { continue; }
-                          //未找到前驱
-                          noPreNodes.Add(nodeButtons[j]);
-                          hasDoneIndex.Add(j);
-                      }
-                      //添加
-                      groupedNodes.Add(noPreNodes);
-                      //处理身后事
-                      for (int i = 0; i < hasDoneIndex.Count; i++)
-                      {
-                          for (int j = 0; j < num; j++)
-                          { mat[hasDoneIndex[i], j] = false; }
-                      }
-                  }
-              }));
+                {
+                    while (hasDoneIndex.Count < num)
+                    {
+                        //搜寻尚未完成的node中无前驱者
+                        List<NodeButton> noPreNodes = new List<NodeButton>();
+                        for (int j = 0; j < num; j++)
+                        {
+                            //已经做了，跳过
+                            if (hasDoneIndex.Contains(j))
+                            { continue; }
+                            bool shouldAdd = true;
+                            for (int i = 0; i < num; i++)
+                            {
+                                //找到一个前驱，跳过
+                                if (mat[i, j])
+                                {
+                                    shouldAdd = false;
+                                    break;
+                                }
+                            }
+                            if (!shouldAdd)
+                            { continue; }
+                            //未找到前驱
+                            noPreNodes.Add(nodeButtons[j]);
+                            hasDoneIndex.Add(j);
+                        }
+                        //添加
+                        groupedNodes.Add(noPreNodes);
+                        //处理身后事
+                        for (int i = 0; i < hasDoneIndex.Count; i++)
+                        {
+                            for (int j = 0; j < num; j++)
+                            { mat[hasDoneIndex[i], j] = false; }
+                        }
+                    }
+                }));
             //根据分组开始放置NodeButton
             await _container.Dispatcher.BeginInvoke(new Action(
                 delegate
@@ -422,9 +577,9 @@ namespace MultiBranchTexter.ViewModel
                 }));
             //添加线
             //连线现在放到别的地方，即nodebutton的loaded里面执行
-            Debug.WriteLine("节点图创建完成");
-            ViewModelFactory.Main.RaiseHint("节点图创建完成");
-            NodeCount = GetNodeCount();
+            Debug.WriteLine("节点图重绘完成");
+            ViewModelFactory.Main.RaiseHint("节点图重绘完成");
+            NodeCount = num;
         }
 
         /// <summary>
