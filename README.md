@@ -7,8 +7,6 @@
 [获取最新版本](https://github.com/CheYHinSpark/MultiBranchTexter/releases)
 
 ## TODO 
-- 修复各种BUG，比如片段中的删除会出问题
-- 跨片段撤销功能
 - 导出为TXT，整体导出，单独导出
 - 导出为docx
 - 导出为latex文件，添加超链接，之后可以通过latex编译为pdf，或者可以[在线编译为PDF并下载](https://online.latexstudio.net/)（需要注册）

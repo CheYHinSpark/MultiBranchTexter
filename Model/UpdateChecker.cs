@@ -1,11 +1,9 @@
 ﻿using Octokit;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using Application = System.Windows.Application;
+using MultiBranchTexter.ViewModel;
 
 namespace MultiBranchTexter.Model
 {
@@ -29,6 +27,7 @@ namespace MultiBranchTexter.Model
 
                 //Compare the Versions
                 //Source: https://stackoverflow.com/questions/7568147/compare-version-numbers-without-using-split-function
+                ViewModelFactory.Settings.NewVersionInfo = latestGitHubVersion.ToString();
                 int versionComparison = localVersion.CompareTo(latestGitHubVersion);
                 return versionComparison != 0;
             }

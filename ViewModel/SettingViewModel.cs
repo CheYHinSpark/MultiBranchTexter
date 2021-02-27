@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using Microsoft.Win32;
 using MultiBranchTexter.Model;
 
 namespace MultiBranchTexter.ViewModel
 {
     public class SettingViewModel : ViewModelBase
     {
+        #region 设置
+
         #region 勾选
         private bool _isDarkMode;
 
@@ -99,10 +97,34 @@ namespace MultiBranchTexter.ViewModel
         }
         #endregion
 
+        #endregion
+
+        #region 版本信息
+        private string _versionInfo;
+        public string VersionInfo
+        {
+            get { return _versionInfo; }
+            set
+            { _versionInfo = value; RaisePropertyChanged("VersionInfo"); }
+        }
+
+        private string _newVersionInfo;
+        public string NewVersionInfo
+        {
+            get { return _newVersionInfo; }
+            set
+            { _newVersionInfo = value; RaisePropertyChanged("NewVersionInfo"); }
+        }
+        #endregion
 
         public SettingViewModel()
         {
             ReadIni();
+            Version tempV = Application.ResourceAssembly.GetName().Version;
+            //只要前三位
+            VersionInfo = "当前版本  "
+                + tempV.Major.ToString() + "." + tempV.Minor.ToString() + "." + tempV.Build.ToString();
+            NewVersionInfo = "";
         }
 
         #region 命令
@@ -142,7 +164,7 @@ namespace MultiBranchTexter.ViewModel
         public ICommand CheckUpdateCommand => new RelayCommand(async (t) =>
         {
             if (await UpdateChecker.CheckGitHubNewerVersion())
-            { Process.Start("explorer.exe", "https://github.com/CheYHinSpark/MultiBranchTexter/releases"); }
+            { DemandUpdate(); }
             else
             { MessageBox.Show("当前已是最新版本"); }
         });
@@ -151,14 +173,19 @@ namespace MultiBranchTexter.ViewModel
         public async void CheckUpdate()
         {
             if (await UpdateChecker.CheckGitHubNewerVersion())
-            {
-                MessageBoxResult result = MessageBox
-                    .Show("检测到新版本，是否前往更新？",
-                    "检查更新", 
-                    MessageBoxButton.YesNo);
-                if (result == MessageBoxResult.Yes)
-                { Process.Start("explorer.exe", "https://github.com/CheYHinSpark/MultiBranchTexter/releases"); }
-            }
+            { DemandUpdate(); }
+        }
+
+        public void DemandUpdate()
+        {
+            MessageBoxResult result = MessageBox
+                  .Show("检测到新版本  " + NewVersionInfo
+                  + "\n" + VersionInfo
+                  + "\n是否前往更新？",
+                  "检查更新",
+                  MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+            { Process.Start("explorer.exe", "https://github.com/CheYHinSpark/MultiBranchTexter/releases"); }
         }
 
         private void ChangeColor()

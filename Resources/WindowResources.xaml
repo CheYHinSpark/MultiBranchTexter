@@ -262,10 +262,15 @@
                             Template="{StaticResource textButtonTemplate}"
                             Height="24" Margin="2"
                             HorizontalAlignment="Left" />
-                    <Button Content="检查更新" Command="{Binding CheckUpdateCommand}"
+                    <Grid>
+                        <Button Content="检查更新" Command="{Binding CheckUpdateCommand}"
                             Template="{StaticResource textButtonTemplate}"
                             Height="24" Margin="2"
                             HorizontalAlignment="Left" />
+                        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center"
+                                   Text="{Binding VersionInfo}"
+                                   Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+                    </Grid>
                 </StackPanel>
             </Grid>
             <Border x:Name="UpperBd" Grid.Row="2" IsHitTestVisible="False"
