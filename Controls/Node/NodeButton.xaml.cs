@@ -481,7 +481,7 @@ namespace MultiBranchTexter.Controls
             for (int i = 0; i < preLines.Count; i++)
             {
                 if (preLines[i] == line)
-                { return new Vector(this.ActualHeight + UpperBd.ActualWidth * ((i + 1.0) / (preLines.Count + 1.0) - 0.5), 25); }
+                { return new Vector(this.ActualWidth / 2.0 + UpperBd.ActualWidth * ((i + 1.0) / (preLines.Count + 1.0) - 0.5), 25); }
             }
             return new Vector(this.ActualWidth / 2.0, 25);
         }

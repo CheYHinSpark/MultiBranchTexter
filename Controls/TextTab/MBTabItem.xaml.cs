@@ -65,9 +65,7 @@ namespace MultiBranchTexter.Controls
         /// 关闭按钮
         /// </summary>
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
+        { Close(false); }
 
         /// <summary>
         /// 父级TabControl尺寸发生变化
@@ -139,15 +137,14 @@ namespace MultiBranchTexter.Controls
             tabEnd.LoadTabEnd();
         }
 
-        /// <summary>
-        /// 关闭自身
-        /// </summary>
-        public void Close()
+        /// <summary> 关闭自身 </summary>
+        /// <param name="force"> 是否强制关闭 </param>
+        public void Close(bool force)
         {
             if (parent == null)
             { return; }
             //检查保存
-            if (_viewModel.IsModified == "*")
+            if (_viewModel.IsModified == "*" && !force)
             {
                 MessageBoxResult result = MessageBox.Show(
                     Application.Current.MainWindow,

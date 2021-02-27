@@ -424,7 +424,7 @@ namespace MultiBranchTexter.ViewModel
                 if (item.textNode == node)
                 {
                     MBTabItem theItem = item;
-                    theItem.Close();
+                    theItem.Close(true);
                     return;
                 }
             }

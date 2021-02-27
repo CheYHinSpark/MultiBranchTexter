@@ -797,14 +797,11 @@ namespace MultiBranchTexter.ViewModel
             if (cline != null)//不一定有这条原本连线
             {
                 NodeButton.UnLink(waitingNode, cline.EndNode);
-                waitingNode.FatherNode.postLines.Remove(cline);
-                cline.EndNode.preLines.Remove(cline);
-                _container.Children.Remove(cline);
+                cline.Delete();
             }
             //在waitNode和Post之间连线
             NodeButton.Link(waitingNode, post);
-            ConnectingLine cl = new ConnectingLine(waitingNode, post);
-            _container.Children.Add(cl);
+            _container.Children.Add(new ConnectingLine(waitingNode, post));
             //修改标签页
             ViewModelFactory.Main.ReLoadTab(waitingNode.FatherTextNode);
             ViewModelFactory.Main.RaiseHint("完成后继节点选择");
