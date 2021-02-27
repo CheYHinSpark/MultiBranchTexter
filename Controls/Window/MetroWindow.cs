@@ -178,7 +178,7 @@ namespace MultiBranchTexter
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             _settings.WriteIni();
-            if (ViewModelFactory.Main.IsModified == "*")
+            if (ViewModelFactory.Main.IsModified)
             {
                 MessageBoxResult warnResult = MessageBox.Show
                     (

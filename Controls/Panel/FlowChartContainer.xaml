@@ -75,13 +75,7 @@
                       VerticalAlignment="Top" HorizontalAlignment="Left"
                       IsHitTestVisible="False" Visibility="Hidden"/>
         <!--下方信息栏-->
-        <StackPanel Orientation="Horizontal" 
-                    Grid.Row="1" >
-            <c:HintTextBlock Width="Auto" Margin="8,0,0,0"
-                             IsAwake="{Binding IsHintEnabled}" Text="{Binding HintText}"
-                             MinWidth="80" Foreground="{DynamicResource Foreground.ThemeBrush}"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" 
+          <StackPanel Orientation="Horizontal" Grid.Row="1" 
                     VerticalAlignment="Stretch" HorizontalAlignment="Right">
             <Button Content="重新排列" Template="{StaticResource textButtonTemplate}"
                     Command="{Binding ReArrangeCommand}"/>

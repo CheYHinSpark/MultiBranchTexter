@@ -28,7 +28,7 @@ namespace MultiBranchTexter.Model
                 else
                 {
                     Debug.WriteLine($"未找到节点{n.Name}坐标");
-                    ViewModelFactory.Main.IsModified = "*";//这时相当于已经有修改了
+                    ViewModelFactory.Main.IsModified = true;//这时相当于已经有修改了
                     return new TextNodeWithLeftTop(n, 0, 0);
                 }
             }).ToList();

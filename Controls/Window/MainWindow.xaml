@@ -85,30 +85,11 @@
             <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
                        Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
             <Border Margin="6,1,6,1" BorderThickness="1,0,0,1" 
-                    Width="400" BorderBrush="{DynamicResource ThemeBrush}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock TextAlignment="Left" Margin="4,0,0,0" 
-                               Text="{Binding FileName}" Grid.Column="0"
-                               Foreground="{DynamicResource Foreground.BaseBrush}" 
-                               VerticalAlignment="Center">
-                        <TextBlock.Style>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Self}}"/>
-                                <Style.Triggers>
-                                    <Trigger Property="Text" Value="">
-                                        <Setter Property="ToolTip" Value="{x:Null}"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
-                    <TextBlock Text="{Binding IsModified}" Grid.Column="1" 
-                               Foreground="{DynamicResource Foreground.BaseBrush}"/>
-                </Grid>
+                    MinWidth="400" BorderBrush="{DynamicResource ThemeBrush}">
+                <c:HintTextBlock Width="Auto" Margin="8,0,0,0"
+                                 IsAwake="{Binding IsHintAwake}"
+                                 InText="{Binding InText}"
+                                 OutText="{Binding OutText}"/>
             </Border>
             <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
                        Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />

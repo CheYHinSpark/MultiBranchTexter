@@ -76,16 +76,6 @@ namespace MultiBranchTexter.ViewModel
             set
             { _isHintEnabled = value; RaisePropertyChanged("IsHintEnabled"); }
         }
-
-        private string _hintText;
-        public string HintText
-        {
-            get { return _hintText; }
-            set
-            { _hintText = value; RaisePropertyChanged("HintText"); }
-        }
-
-        private Task _hintTask;
         #endregion
 
         #region 等待选择后继节点
@@ -117,7 +107,7 @@ namespace MultiBranchTexter.ViewModel
             Canvas.SetLeft(newNode, Math.Max(0, point.X - 50));
             Canvas.SetTop(newNode, Math.Max(0, point.Y - 25));
             Debug.WriteLine("新建节点成功");
-            ViewModelFactory.Main.IsModified = "*";
+            ViewModelFactory.Main.IsModified = true;
             NodeCount = GetNodeCount();
         });
 
@@ -155,7 +145,7 @@ namespace MultiBranchTexter.ViewModel
                 Canvas.SetLeft(SelectedNodes[i], nX);
                 SelectedNodes[i].UpdateLines();
             }
-            ViewModelFactory.Main.IsModified = "*";
+            ViewModelFactory.Main.IsModified = true;
         });
 
         public ICommand UniteYCommand => new RelayCommand((sender) =>
@@ -192,7 +182,7 @@ namespace MultiBranchTexter.ViewModel
                 Canvas.SetTop(SelectedNodes[i], nY);
                 SelectedNodes[i].UpdateLines();
             }
-            ViewModelFactory.Main.IsModified = "*";
+            ViewModelFactory.Main.IsModified = true;
         });
 
         public ICommand DeleteCommand => new RelayCommand((sender) =>
@@ -218,7 +208,7 @@ namespace MultiBranchTexter.ViewModel
             }
             SelectedNodes.Clear();
             Debug.WriteLine("删除了" + n.ToString() + "个节点");
-            ViewModelFactory.Main.IsModified = "*";
+            ViewModelFactory.Main.IsModified = true;
             NodeCount = GetNodeCount();
         });
 
@@ -251,8 +241,6 @@ namespace MultiBranchTexter.ViewModel
             SearchedNodes = new ObservableCollection<NodeButton>();
             SearchedNodes.CollectionChanged += SearchedNodes_CollectionChanged;
             NodeCount = 0;
-            IsHintEnabled = false;
-            HintText = "";
             SearchedIndex = -1;
         }
 
@@ -260,14 +248,14 @@ namespace MultiBranchTexter.ViewModel
         private void SearchedNodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (SearchedNodes.Count > 0)
-            { RaiseHint("共搜索到" + SearchedNodes.Count.ToString() + "个节点"); }
+            { ViewModelFactory.Main.RaiseHint("搜索到" + SearchedNodes.Count.ToString() + "个节点"); }
             RaisePropertyChanged("SearchedNodes");
         }
 
         private void SelectedNodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (SelectedNodes.Count > 0)
-            { RaiseHint("共选中" + SelectedNodes.Count.ToString() + "个节点"); }
+            { ViewModelFactory.Main.RaiseHint("选中" + SelectedNodes.Count.ToString() + "个节点"); }
             RaisePropertyChanged("SelectedNodes");
         }
         #endregion
@@ -435,7 +423,7 @@ namespace MultiBranchTexter.ViewModel
             //添加线
             //连线现在放到别的地方，即nodebutton的loaded里面执行
             Debug.WriteLine("节点图创建完成");
-            RaiseHint("节点图创建完成");
+            ViewModelFactory.Main.RaiseHint("节点图创建完成");
             NodeCount = GetNodeCount();
         }
 
@@ -512,7 +500,7 @@ namespace MultiBranchTexter.ViewModel
             //添加线
             //连线现在放到别的地方，即nodebutton的loaded里面执行
             Debug.WriteLine("节点图创建完成");
-            RaiseHint("节点图创建完成");
+            ViewModelFactory.Main.RaiseHint("节点图创建完成");
             NodeCount = textNodes.Count;
         }
         #endregion
@@ -686,7 +674,7 @@ namespace MultiBranchTexter.ViewModel
             _container.Children.Add(new ConnectingLine(preNode, newNodeButton));
             //newNodeButton到post不用画，因为创建newNodebutton时会自动画，否则会出现两条
 
-            ViewModelFactory.Main.IsModified = "*";
+            ViewModelFactory.Main.IsModified = true;
             NodeCount = GetNodeCount();
         }
         #endregion
@@ -770,7 +758,7 @@ namespace MultiBranchTexter.ViewModel
         public void WaitClick(NodeBase waiter)
         {
             waitingNode = waiter;
-            RaiseHint("请选择一个后继节点");
+            ViewModelFactory.Main.RaiseHint("请选择一个后继节点");
             //开启等待点击
             foreach (UserControl control in _container.Children)
             {
@@ -796,7 +784,7 @@ namespace MultiBranchTexter.ViewModel
             if (post == null)//没有选择
             {
                 waitingNode = null;
-                RaiseHint("取消选择");
+                ViewModelFactory.Main.RaiseHint("取消选择");
                 return;
             }
             //首先断开waitNode原有的连线
@@ -819,27 +807,10 @@ namespace MultiBranchTexter.ViewModel
             _container.Children.Add(cl);
             //修改标签页
             ViewModelFactory.Main.ReLoadTab(waitingNode.FatherTextNode);
-            RaiseHint("完成后继节点选择");
+            ViewModelFactory.Main.RaiseHint("完成后继节点选择");
             waitingNode = null;
         }
         #endregion
-
-        /// <summary> 启动提示文本 </summary>
-        public async void RaiseHint(string newHint)
-        {
-            if (_hintTask != null && !_hintTask.IsCompleted)
-            { IsHintEnabled = false; }
-            HintText = newHint;
-            IsHintEnabled = true;
-
-            _hintTask = Task.Delay(4000);
-            int i = _hintTask.Id;
-
-            await _hintTask;
-
-            if (i == _hintTask.Id)
-            { IsHintEnabled = false; }
-        }
 
         #endregion
     }

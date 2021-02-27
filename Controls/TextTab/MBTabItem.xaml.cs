@@ -197,7 +197,7 @@ namespace MultiBranchTexter.Controls
             textNode.Fragments.Clear();
             textNode.Fragments = newFragments;
             _viewModel.IsModified = "";
-            ViewModelFactory.FCC.RaiseHint("节点" + textNode.Name + "保存成功");
+            ViewModelFactory.Main.RaiseHint("节点 " + textNode.Name + " 保存成功");
         }
 
         /// <summary>

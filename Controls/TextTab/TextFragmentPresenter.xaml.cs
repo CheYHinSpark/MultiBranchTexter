@@ -359,7 +359,7 @@ namespace MultiBranchTexter.Controls
             ShouldRecount = true;
             ownerTab.CountChar(false);
             ownerTab.ViewModel.IsModified = "*";
-            ViewModelFactory.Main.IsModified = "*";
+            ViewModelFactory.Main.IsModified = true;
         }
 
         #endregion

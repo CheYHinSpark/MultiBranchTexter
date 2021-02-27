@@ -83,7 +83,7 @@ namespace MultiBranchTexter.Controls
 
                     _clickPoint = e.GetPosition((ScrollViewer)sender);
 
-                    ViewModelFactory.Main.IsModified = "*";
+                    ViewModelFactory.Main.IsModified = true;
                 }
                 else { this.Cursor = Cursors.Arrow; }
             }

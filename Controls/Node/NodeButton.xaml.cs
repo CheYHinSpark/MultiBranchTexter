@@ -213,7 +213,7 @@ namespace MultiBranchTexter.Controls
             ShowEndCondition();
             endContainer.Child = endNode;
             //通知窗体把对应的标签改了
-            ViewModelFactory.Main.IsModified = "*";
+            ViewModelFactory.Main.IsModified = true;
             ViewModelFactory.Main.ReLoadTab(textNode);
         }
         #endregion
@@ -442,7 +442,7 @@ namespace MultiBranchTexter.Controls
             { line.Update(); }
             foreach (ConnectingLine line in postLines)
             { line.Update(); }
-            ViewModelFactory.Main.IsModified = "*";
+            ViewModelFactory.Main.IsModified = true;
         }
         #endregion
 
@@ -460,7 +460,7 @@ namespace MultiBranchTexter.Controls
             UnLinkAllPost();//清除所有后继
             //通知窗体把对应的标签删掉
             ViewModelFactory.Main.DeleteTab(textNode);
-            ViewModelFactory.Main.IsModified = "*";
+            ViewModelFactory.Main.IsModified = true;
             //删掉自己
             ViewModelFactory.FCC.Container.Children.Remove(this);
         }

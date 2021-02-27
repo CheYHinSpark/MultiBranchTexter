@@ -3,59 +3,42 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:c="clr-namespace:MultiBranchTexter.Controls"
              IsHitTestVisible="False">
-    <TextBlock x:Name="HintMsg" VerticalAlignment="Center"
-               IsEnabled="{Binding IsAwake, RelativeSource={RelativeSource AncestorType={x:Type c:HintTextBlock}}}"
-               Text="{Binding Text, RelativeSource={RelativeSource AncestorType={x:Type c:HintTextBlock}}}">
-        <TextBlock.Style>
-            <Style TargetType="{x:Type TextBlock}">
-                <Setter Property="RenderTransformOrigin" Value="-0.1,0.5"/>
-                <Setter Property="Opacity" Value="0"/>
-                <Setter Property="RenderTransform">
-                    <Setter.Value>
-                        <ScaleTransform ScaleX="0.6" ScaleY="0.6"/>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <Trigger Property="IsEnabled" Value="True">
-                        <Trigger.EnterActions>
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.4"
-                                                                       Storyboard.TargetProperty="(TextBlock.RenderTransform).(ScaleTransform.ScaleX)">
-                                        <SplineDoubleKeyFrame KeyTime="0:0:0" Value="0.6"/>
-                                        <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="1" KeySpline="0.6,1,0.6,1"/>
-                                    </DoubleAnimationUsingKeyFrames>
-                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.4"
-                                                                       Storyboard.TargetProperty="(TextBlock.RenderTransform).(ScaleTransform.ScaleY)">
-                                        <SplineDoubleKeyFrame KeyTime="0:0:0" Value="0.6"/>
-                                        <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="1" KeySpline="0.6,1,0.6,1"/>
-                                    </DoubleAnimationUsingKeyFrames>
-                                    <DoubleAnimation Duration="0:0:0.5" From="0" To="1"
-                                                         Storyboard.TargetProperty="Opacity"/>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </Trigger.EnterActions>
-                        <Trigger.ExitActions>
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.4"
-                                                                       Storyboard.TargetProperty="(TextBlock.RenderTransform).(ScaleTransform.ScaleX)">
-                                        <SplineDoubleKeyFrame KeyTime="0:0:0" Value="1"/>
-                                        <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="0.6" KeySpline="0.6,1,0.6,1"/>
-                                    </DoubleAnimationUsingKeyFrames>
-                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.4"
-                                                                       Storyboard.TargetProperty="(TextBlock.RenderTransform).(ScaleTransform.ScaleY)">
-                                        <SplineDoubleKeyFrame KeyTime="0:0:0" Value="1"/>
-                                        <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="0.6" KeySpline="0.6,1,0.6,1"/>
-                                    </DoubleAnimationUsingKeyFrames>
-                                    <DoubleAnimation Duration="0:0:0.5" From="1" To="0"
-                                                         Storyboard.TargetProperty="Opacity"/>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </Trigger.ExitActions>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-        </TextBlock.Style>
-    </TextBlock>
+    <Grid Height="18" ClipToBounds="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="18"/>
+        </Grid.RowDefinitions>
+        <Border x:Name="InTxtBd" Grid.Row="0" VerticalAlignment="Center"
+                IsEnabled="{Binding IsAwake, 
+            RelativeSource={RelativeSource AncestorType={x:Type c:HintTextBlock}}}">
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="Height" Value="18"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsEnabled" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames Duration="0:0:0.4"
+                                                                       Storyboard.TargetProperty="(Border.Height)">
+                                            <SplineDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                                            <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="18" KeySpline="0.6,1,0.6,1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <TextBlock x:Name="InTxt" VerticalAlignment="Center" 
+                       Foreground="{DynamicResource Foreground.BaseBrush}"
+                       Text="{Binding InText, 
+                RelativeSource={RelativeSource AncestorType={x:Type c:HintTextBlock}}}"/>
+        </Border>
+        <TextBlock x:Name="OutTxt" Grid.Row="1" VerticalAlignment="Center" 
+                   Foreground="{DynamicResource Foreground.BaseBrush}"
+                   Text="{Binding OutText, 
+            RelativeSource={RelativeSource AncestorType={x:Type c:HintTextBlock}}}"/>
+    </Grid>
 </UserControl>

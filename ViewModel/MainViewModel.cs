@@ -110,12 +110,47 @@ namespace MultiBranchTexter.ViewModel
         }
         private string _fileDirPath;
 
-        private string _isModified;
-        public string IsModified
+        private bool _isModified;
+        public bool IsModified
         {
             get { return _isModified; }
-            set { _isModified = value; RaisePropertyChanged("IsModified"); }
+            set 
+            { 
+                _isModified = value;
+                //如果没有在提示过程中，则会改要显示的东西
+                if (_hintTask == null || _hintTask.IsCompleted)
+                { InText = FileName + (value ? " *" : ""); }
+                RaisePropertyChanged("IsModified"); 
+            }
         }
+
+        #region 提示文本
+        private bool _isHintAwake;
+        public bool IsHintAwake
+        {
+            get { return _isHintAwake; }
+            set
+            { _isHintAwake = value; RaisePropertyChanged("IsHintAwake"); }
+        }
+
+        private string _inText;
+        public string InText
+        {
+            get { return _inText; }
+            set
+            { _inText = value; RaisePropertyChanged("InText"); }
+        }
+
+        private string _outText;
+        public string OutText
+        {
+            get { return _outText; }
+            set
+            { _outText = value; RaisePropertyChanged("OutText"); }
+        }
+
+        private Task _hintTask;
+        #endregion
         #endregion
 
         #region workTab相关
@@ -166,7 +201,7 @@ namespace MultiBranchTexter.ViewModel
             {
                 FlowChartContainer flowChart = container as FlowChartContainer;
                 // 检查是否需要保存现有文件
-                if (IsModified == "*")
+                if (IsModified)
                 {
                     MessageBoxResult warnResult = MessageBox.Show
                     (
@@ -209,7 +244,7 @@ namespace MultiBranchTexter.ViewModel
             {
                 FlowChartContainer flowChart = container as FlowChartContainer;
                 // 检查是否需要保存现有文件
-                if (IsModified == "*")
+                if (IsModified)
                 {
                     MessageBoxResult warnResult = MessageBox.Show
                     (
@@ -313,8 +348,11 @@ namespace MultiBranchTexter.ViewModel
             CanHideWorkTab = true;
             CanHideFlowChart = false;
             WorkTabs = new ObservableCollection<MBTabItem>();
-            SelectedIndex = 0;
             WorkTabs.CollectionChanged += WorkTabs_CollectionChanged;
+            SelectedIndex = 0;
+            IsHintAwake = false;
+            InText = "";
+            OutText = "";
         }
 
         private void WorkTabs_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -352,7 +390,8 @@ namespace MultiBranchTexter.ViewModel
                     SelectedIndex = i;
                     //打开worktab
                     IsWorkTabShowing = true;
-                    ViewModelFactory.FCC.RaiseHint("打开节点" + node.Name);
+                    //ViewModelFactory.FCC.
+                        RaiseHint("打开节点" + node.Name);
                     return;
                 }
             }
@@ -360,7 +399,7 @@ namespace MultiBranchTexter.ViewModel
             SelectedIndex = WorkTabs.Count - 1;
             //打开worktab
             IsWorkTabShowing = true;
-            ViewModelFactory.FCC.RaiseHint("打开节点" + node.Name);
+            RaiseHint("打开节点" + node.Name);
         }
 
         /// <summary>
@@ -418,10 +457,9 @@ namespace MultiBranchTexter.ViewModel
                 }
                 //保存文件
                 MetadataFile.WriteNodes(_fileName, ViewModelFactory.FCC.GetTextNodeWithLeftTopList());
-                IsModified = "";
-                Debug.WriteLine("文件" + _fileName + "保存成功");
-                ViewModelFactory.FCC.RaiseHint("文件"
-                    + _fileName[(_fileName.LastIndexOf('\\') + 1)..] + "保存成功");
+                IsModified = false;
+                Debug.WriteLine("文件 " + _fileName + " 保存成功");
+                RaiseHint("文件 " + _fileName[(_fileName.LastIndexOf('\\') + 1)..] + " 保存成功");
             }
             catch { }
         }
@@ -445,7 +483,7 @@ namespace MultiBranchTexter.ViewModel
             FileName = path;
             //打开新文件
             IsWorkGridVisible = true;
-            IsModified = "";
+            IsModified = false;
             ViewModelFactory.FCC.Load(path);
         }
 
@@ -462,6 +500,28 @@ namespace MultiBranchTexter.ViewModel
         {
             foreach (MBTabItem tab in _workTabs)
             { tab.CountChar(true); }
+        }
+
+        /// <summary> 启动提示文本 </summary>
+        public async void RaiseHint(string newHint)
+        {
+            OutText = InText; 
+            InText = newHint;
+            IsHintAwake = false;
+            IsHintAwake = true;//这样设置一次，可以启动动画
+
+            _hintTask = Task.Delay(4000);
+            int i = _hintTask.Id;//存下当时的id
+
+            await _hintTask;
+
+            if (i == _hintTask.Id)//说明没有插入新的提示
+            {
+                OutText = InText;
+                InText = FileName + (IsModified ? " *" : "");
+                IsHintAwake = false;
+                IsHintAwake = true;
+            }
         }
         #endregion
     }

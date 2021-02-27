@@ -167,7 +167,7 @@ namespace MultiBranchTexter.Controls
             EndNode.preLines.Remove(this);
             BeginNode.FatherNode.UpdatePostLines();
             EndNode.UpdatePreLines();
-            ViewModelFactory.Main.IsModified = "*";
+            ViewModelFactory.Main.IsModified = true;
             ControlTreeHelper.FindParentOfType<AutoSizeCanvas>(this).Children.Remove(this);
             Debug.WriteLine("成功删除连线");
         }
