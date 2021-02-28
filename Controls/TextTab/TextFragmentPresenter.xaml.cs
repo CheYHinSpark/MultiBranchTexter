@@ -57,6 +57,13 @@ namespace MultiBranchTexter.Controls
         {
             commentContainer.TextChanged += Operation_TextChanged;
             contentContainer.TextChanged += Content_TextChanged;
+            if (CommentText == null || CommentText == "")
+            {
+                commentContainer.Height = 2;
+                showHideOpBtn.IsChecked = false;
+            }
+            else
+            { showHideOpBtn.IsChecked = true; }
         }
 
         private void Grid_MouseEnter(object sender, MouseEventArgs e)

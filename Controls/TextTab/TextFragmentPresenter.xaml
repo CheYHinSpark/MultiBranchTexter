@@ -7,7 +7,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="commentContainer" Grid.Row="0" Height="2"
+        <TextBox x:Name="commentContainer" Grid.Row="0"
                  Text="{Binding CommentText,
             Mode=TwoWay,
             NotifyOnTargetUpdated=True,
