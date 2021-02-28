@@ -1,5 +1,6 @@
 ﻿<UserControl x:Class="MultiBranchTexter.Controls.TextFragmentPresenter"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:c="clr-namespace:MultiBranchTexter.Controls"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
         <Grid.RowDefinitions>
@@ -7,14 +8,24 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBox x:Name="commentContainer" Grid.Row="0" Height="2"
+                 Text="{Binding CommentText,
+            Mode=TwoWay,
+            NotifyOnTargetUpdated=True,
+            NotifyOnSourceUpdated=True,
+            UpdateSourceTrigger=PropertyChanged,
+            RelativeSource={RelativeSource AncestorType={x:Type c:TextFragmentPresenter}}}"
                  Template="{StaticResource operationTextBoxTemplate}"
                  Style="{StaticResource fragmentPresenterTextBoxStyle}"
-                 Foreground="#FF57A64A"
-                 LostFocus="Fragment_LostFocus"/>
+                 Foreground="#FF57A64A"/>
         <TextBox x:Name="contentContainer" Grid.Row="1" 
+                 Text="{Binding ContentText,
+            Mode=TwoWay,
+            NotifyOnTargetUpdated=True,
+            NotifyOnSourceUpdated=True,
+            UpdateSourceTrigger=PropertyChanged,
+            RelativeSource={RelativeSource AncestorType={x:Type c:TextFragmentPresenter}}}"
                  Template="{StaticResource contentTextBoxTemplate}"
                  Style="{StaticResource fragmentPresenterTextBoxStyle}"
-                 LostFocus="Fragment_LostFocus"
                  PreviewKeyDown="Content_KeyDown"/>
         <CheckBox x:Name="showHideOpBtn" Template="{StaticResource fragmentOperationCheckBoxTemplate}"
                   Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top"

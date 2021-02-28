@@ -1,5 +1,4 @@
-﻿using MultiBranchTexter.Controls;
-using MultiBranchTexter.Model;
+﻿using MultiBranchTexter.Model;
 using MultiBranchTexter.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -20,7 +19,7 @@ namespace MultiBranchTexter.Controls
         public MBTabItem(TextNode node)
         {
             InitializeComponent();
-            textNode = node;
+            TextNode = node;
             Header = node.Name;
             tabEnd.SetTabEnd(node);
             _viewModel = DataContext as TabItemViewModel;
@@ -29,10 +28,8 @@ namespace MultiBranchTexter.Controls
         }
 
         #region 成员变量
-        /// <summary>
-        /// 相应的textNode
-        /// </summary>
-        public TextNode textNode;
+        /// <summary> 相应的textNode </summary>
+        public TextNode TextNode { get; set; }
 
         // 父级TabControl
         private TabControl parent;
@@ -91,17 +88,22 @@ namespace MultiBranchTexter.Controls
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             e.Handled = true;// <--必须有
-            (fragmentContainer.Children[^1] as TextFragmentPresenter).GetFocus();
-            (fragmentContainer.Children[^1] as TextFragmentPresenter).SelecteLast();
+            int i = _viewModel.TextFragments.Count - 1;
+            ContentPresenter cp = fragmentContainer.ItemContainerGenerator
+                          .ContainerFromIndex(i) as ContentPresenter;
+            DataTemplate MyDataTemplate = cp.ContentTemplate;
+
+            if (MyDataTemplate.FindName("TFP", cp) is TextFragmentPresenter tfp)
+            {
+                tfp.SelecteLast();
+            }
         }
 
         #endregion
 
         #region 方法
         #region Load
-        /// <summary>
-        /// Load
-        /// </summary>
+        /// <summary> Load </summary>
         private void Load()
         {
             //注册父级TabControl尺寸发生变化事件
@@ -129,11 +131,10 @@ namespace MultiBranchTexter.Controls
         }
         #endregion
 
-        /// <summary>
-        /// 重置TabEnd
-        /// </summary>
-        public void ReLoadTabEnd()
+        /// <summary> 重置Tab </summary>
+        public void ReLoadTab()
         {
+            Header = TextNode.Name;
             tabEnd.LoadTabEnd();
         }
 
@@ -187,14 +188,16 @@ namespace MultiBranchTexter.Controls
             if (_viewModel.IsModified == "")
             { return; }
             List<TextFragment> newFragments = new List<TextFragment>();
-            for (int i = 0; i < fragmentContainer.Children.Count; i++)
+          
+            for (int i = 0; i < _viewModel.TextFragments.Count; i++)
             {
-                newFragments.Add((fragmentContainer.Children[i] as TextFragmentPresenter).Fragment);
+                newFragments.Add(_viewModel.TextFragments[i]);
             }
-            textNode.Fragments.Clear();
-            textNode.Fragments = newFragments;
+
+            //textNode.Fragments.Clear();
+            TextNode.Fragments = newFragments;
             _viewModel.IsModified = "";
-            ViewModelFactory.Main.RaiseHint("节点 " + textNode.Name + " 保存成功");
+            ViewModelFactory.Main.RaiseHint("节点 " + TextNode.Name + " 保存成功");
         }
 
         /// <summary>
@@ -202,34 +205,57 @@ namespace MultiBranchTexter.Controls
         /// </summary>
         public void LoadNode(TextNode node)
         {
-            textNode = node;
-            fragmentContainer.Children.Clear();
+            TextNode = node;
+          
+            for (int i = 0; i < TextNode.Fragments.Count; i++)
+            { _viewModel.TextFragments.Add(TextNode.Fragments[i]); }
 
-            for (int i = 0; i < textNode.Fragments.Count; i++)
-            { fragmentContainer.Children.Add(new TextFragmentPresenter(textNode.Fragments[i], this)); }
+            if (_viewModel.TextFragments.Count == 0)//至少要有一个
+            { _viewModel.TextFragments.Add(new TextFragment()); }
 
-            if (fragmentContainer.Children.Count == 0)//至少要有一个
-            { fragmentContainer.Children.Add(new TextFragmentPresenter(this)); }
-            CountChar(true);
+            _viewModel.CountChar(true);
         }
 
-        /// <summary> 统计字数，参数表示是否需要完全重新统计 </summary>
-        public async void CountChar(bool totalReCount)
+
+        /// <summary>
+        /// 将i处节点与后面一个节点合并
+        /// </summary>
+        public void GlueFragment(int i)
         {
-            await Task.Delay(10);// <--不然有许多bug
-            Dispatcher.Invoke(new Action(
-                delegate
-                {
-                    int c = 0, w = 0;
-                    foreach (TextFragmentPresenter tfp in fragmentContainer.Children)
-                    {
-                        tfp.ShouldRecount |= totalReCount;
-                        w += tfp.CharWordCount.Item1;
-                        c += tfp.CharWordCount.Item2;
-                    }
-                    _viewModel.CharCount = c;
-                    _viewModel.WordCount = w;
-                }));
+            int s = _viewModel.TextFragments[i].Content.Length;
+
+            _viewModel.TextFragments[i].Content += _viewModel.TextFragments[i + 1].Content;
+            _viewModel.TextFragments.RemoveAt(i + 1);
+
+            ContentPresenter cp = fragmentContainer.ItemContainerGenerator
+                      .ContainerFromIndex(i) as ContentPresenter;
+            DataTemplate MyDataTemplate = cp.ContentTemplate;
+
+            if (MyDataTemplate.FindName("TFP", cp) is TextFragmentPresenter tfp)
+            {
+                tfp.GetFocus();
+                tfp.contentContainer.SelectionStart = s;
+            }
+        }
+
+        /// <summary>
+        /// 切开old index处的片段，将oldContent赋予old,新的给新的
+        /// </summary>
+        public async void BreakFragment(int oldIndex, string oldContent, string newContent)
+        {
+            _viewModel.TextFragments.Insert(oldIndex + 1, new TextFragment(newContent));
+            _viewModel.TextFragments[oldIndex].Content = oldContent;
+
+            await Task.Delay(10);//等新的东西准备好
+            ContentPresenter cp = fragmentContainer.ItemContainerGenerator
+                      .ContainerFromIndex(oldIndex + 1) as ContentPresenter;
+            DataTemplate MyDataTemplate = cp.ContentTemplate;
+
+            if (MyDataTemplate.FindName("TFP", cp) is TextFragmentPresenter tfp)
+            {
+                tfp.GetFocus();
+                tfp.contentContainer.SelectionStart = 0;
+            }
         }
         #endregion
     }

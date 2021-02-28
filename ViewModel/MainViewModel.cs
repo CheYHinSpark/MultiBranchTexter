@@ -183,6 +183,13 @@ namespace MultiBranchTexter.ViewModel
             get { return _selectedIndex; }
             set { _selectedIndex = value; RaisePropertyChanged("SelectedIndex"); }
         }
+
+        /// <summary> 当前正在工作的tabitem </summary>
+        public MBTabItem WorkingTab
+        { get { return _workTabs[_selectedIndex]; } }
+        /// <summary> 当前正在工作的tabitem的viewmodel </summary>
+        public TabItemViewModel WorkingViewModel
+        { get { return _workTabs[_selectedIndex].ViewModel; } }
         #endregion
 
         #region 命令
@@ -385,7 +392,7 @@ namespace MultiBranchTexter.ViewModel
             //遍历已有的标签页看看是否已经存在同标签
             for (int i = 0; i < WorkTabs.Count; i++)
             {
-                if (WorkTabs[i].textNode == node)
+                if (WorkTabs[i].TextNode == node)
                 {
                     SelectedIndex = i;
                     //打开worktab
@@ -409,8 +416,8 @@ namespace MultiBranchTexter.ViewModel
         {
             foreach (MBTabItem item in WorkTabs)
             {
-                if (item.textNode == node)
-                { item.ReLoadTabEnd(); return; }
+                if (item.TextNode == node)
+                { item.ReLoadTab(); return; }
             }
         }
 
@@ -421,7 +428,7 @@ namespace MultiBranchTexter.ViewModel
         {
             foreach (MBTabItem item in WorkTabs)
             {
-                if (item.textNode == node)
+                if (item.TextNode == node)
                 {
                     MBTabItem theItem = item;
                     theItem.Close(true);
@@ -495,13 +502,12 @@ namespace MultiBranchTexter.ViewModel
             var node = new TextNode { Name = "new-node-0" };
             var n = new TextNodeWithLeftTop(node, 100, 100);
             MetadataFile.WriteTextNodes(path, new List<TextNodeWithLeftTop> { n });
-            //MetadataFile.WriteNodes(path, new List<TextNodeWithLeftTop> { n });
         }
 
         public void ReCountCharForAll()
         {
             foreach (MBTabItem tab in _workTabs)
-            { tab.CountChar(true); }
+            { tab.ViewModel.CountChar(true); }
         }
 
         /// <summary> 启动提示文本 </summary>
