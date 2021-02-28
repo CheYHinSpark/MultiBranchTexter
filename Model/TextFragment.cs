@@ -1,15 +1,145 @@
-﻿using System;
+﻿using MultiBranchTexter.ViewModel;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using Newtonsoft.Json;
 using System.Text;
 
 namespace MultiBranchTexter.Model
 {
-    public class TextFragment
+    public class TextFragment : INotifyPropertyChanged
     {
-        public List<string> Operations = new List<string>();
-        public string Content;
+        #region 实现接口，可以绑定
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+
+        private string _comment;
+        public string Comment
+        {
+            get { return _comment; }
+            set { _comment = value; ShouldRecount = true; RaisePropertyChanged("Comment"); }
+        }
+        private string _content;
+        public string Content
+        {
+            get { return _content; }
+            set { _content = value; ShouldRecount = true; RaisePropertyChanged("Content"); }
+        }
+
+        [JsonIgnore]
+        public bool ShouldRecount = true;//是否要重新统计字数
+        [JsonIgnore]
+        private Tuple<int, int> charWordCount = new Tuple<int, int>(0, 0);//字数统计
+
         public TextFragment() { }
         public TextFragment(string newContent)
         { Content = newContent; }
+
+        public Tuple<int, int> CountCharWord()
+        {
+            if (ShouldRecount)
+            {
+                ShouldRecount = false;
+                int charCount = 0;
+                int wordCount = 0;
+                bool isInLetterWords = false;//表示是否正在字母文字的单词中
+                if (Content != null)
+                {
+                    foreach (char ch in Content)
+                    {
+                        if (char.IsWhiteSpace(ch))
+                        { isInLetterWords = false; continue; }
+                        charCount++;
+
+                        //如果这是一个字母
+                        if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')//基本英文字母
+                            || (ch >= 0100 && ch <= 017F) || (ch >= 0180 && ch <= 024F)//拉丁文扩展
+                            )
+                        {
+                            if (!isInLetterWords)
+                            {
+                                isInLetterWords = true;
+                                wordCount++;
+                            }
+                            continue;
+                        }
+                        else if (isInLetterWords)
+                        { isInLetterWords = false; }
+
+                        //如果是汉字
+                        if ((0x4e00 <= ch && ch <= 0x9fff)
+                            || (0x3400 <= ch && ch <= 0x4dff)
+                            || (0x20000 <= ch && ch <= 0x2a6df)
+                            || (0xf900 <= ch && ch <= 0xfaff)
+                            || (0x2f800 <= ch && ch <= 0x2fa1f))
+                        { wordCount++; }
+                    }
+                }
+                if (ViewModelFactory.Settings.CountOpChar)
+                {
+                    isInLetterWords = false;
+                    if (Comment != null)
+                    {
+                        foreach (char ch in Comment)
+                        {
+                            if (char.IsWhiteSpace(ch))
+                            { isInLetterWords = false; continue; }
+                            charCount++;
+
+                            //如果这是一个字母
+                            if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')//基本英文字母
+                                || (ch >= 0100 && ch <= 017F) || (ch >= 0180 && ch <= 024F)//拉丁文扩展
+                                )
+                            {
+                                if (!isInLetterWords)
+                                {
+                                    isInLetterWords = true;
+                                    wordCount++;
+                                }
+                                continue;
+                            }
+                            else if (isInLetterWords)
+                            { isInLetterWords = false; }
+
+                            //如果是汉字
+                            if ((0x4e00 <= ch && ch <= 0x9fff)
+                                || (0x3400 <= ch && ch <= 0x4dff)
+                                || (0x20000 <= ch && ch <= 0x2a6df)
+                                || (0xf900 <= ch && ch <= 0xfaff)
+                                || (0x2f800 <= ch && ch <= 0x2fa1f))
+                            { wordCount++; }
+                        }
+                    }
+                }
+                charWordCount = new Tuple<int, int>(charCount, wordCount);
+            }
+            return charWordCount;
+        }
+    }
+
+    [Obsolete]
+    public class OldTextFragment
+    {
+        public List<string> Operations = new List<string>();
+        public string Content;
+        public OldTextFragment() { }
+        public TextFragment ToTextFragment()
+        {
+            string newComment = "";
+            for (int i = 0;i<Operations.Count;i++)
+            {
+                newComment += Operations[i];
+            }
+            return new TextFragment()
+            {
+                Comment = newComment,
+                Content = Content
+            };
+        }
     }
 }

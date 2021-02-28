@@ -16,134 +16,46 @@ namespace MultiBranchTexter.Controls
     /// </summary>
     public partial class TextFragmentPresenter : UserControl
     {
-        private readonly MBTabItem ownerTab;
-        private StackPanel parentPanel;
-        private readonly TextFragment fragment;
-        public TextFragment Fragment 
+    
+
+        public static DependencyProperty CommentTextProperty =
+         DependencyProperty.Register("CommentText", //属性名称
+             typeof(string), //属性类型
+             typeof(TextFragmentPresenter), //该属性所有者，即将该属性注册到那个类上
+             new PropertyMetadata("")//属性默认值
+             );
+
+        public string CommentText
         {
-            get
-            {
-                SaveFragment();
-                return fragment;
-            }
+            get { return (string)GetValue(CommentTextProperty); }
+            set { SetValue(CommentTextProperty, value); }
         }
 
-        public int OperationCount { get { return GetOperationLineCount(); } }
-        public string ContentText { get { return contentContainer.Text; } }
+        public static DependencyProperty ContentTextProperty =
+      DependencyProperty.Register("ContentText", //属性名称
+          typeof(string), //属性类型
+          typeof(TextFragmentPresenter), //该属性所有者，即将该属性注册到那个类上
+          new PropertyMetadata("")//属性默认值
+          );
 
-        public bool ShouldRecount = true;
-
-        private Tuple<int, int> charWordCount;
-        public Tuple<int, int> CharWordCount
+        public string ContentText
         {
-            get
-            {
-                if (ShouldRecount)
-                {
-                    int charCount = 0;
-                    int wordCount = 0;
-                    bool isInLetterWords = false;//表示是否正在字母文字的单词中
-                    foreach (char ch in contentContainer.Text)
-                    {
-                        if (char.IsWhiteSpace(ch))
-                        { isInLetterWords = false; continue; }
-                        charCount++;
-
-                        //如果这是一个字母
-                        if ((ch >= 'a' && ch <= 'z')||(ch >= 'A' && ch<='Z')//基本英文字母
-                            ||(ch >= 0100 && ch <= 017F)|| (ch >= 0180 && ch <= 024F)//拉丁文扩展
-                            )
-                        { 
-                            if (!isInLetterWords)
-                            { 
-                                isInLetterWords = true;
-                                wordCount++;
-                            }
-                            continue;
-                        }
-                        else if (isInLetterWords)
-                        { isInLetterWords = false; }
-
-                        //如果是汉字
-                        if ((0x4e00 <= ch && ch <= 0x9fff)
-                            || (0x3400 <= ch && ch <= 0x4dff)
-                            || (0x20000 <= ch && ch <= 0x2a6df)
-                            || (0xf900 <= ch && ch <= 0xfaff)
-                            || (0x2f800 <= ch && ch <= 0x2fa1f))
-                        { wordCount++; }
-                    }
-                    if (ViewModelFactory.Settings.CountOpChar)
-                    {
-                        isInLetterWords = false;
-                        foreach (char ch in opContainer.Text)
-                        {
-                            if (char.IsWhiteSpace(ch))
-                            { isInLetterWords = false; continue; }
-                            charCount++;
-
-                            //如果这是一个字母
-                            if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')//基本英文字母
-                                || (ch >= 0100 && ch <= 017F) || (ch >= 0180 && ch <= 024F)//拉丁文扩展
-                                )
-                            {
-                                if (!isInLetterWords)
-                                {
-                                    isInLetterWords = true;
-                                    wordCount++;
-                                }
-                                continue;
-                            }
-                            else if (isInLetterWords)
-                            { isInLetterWords = false; }
-
-                            //如果是汉字
-                            if ((0x4e00 <= ch && ch <= 0x9fff)
-                                || (0x3400 <= ch && ch <= 0x4dff)
-                                || (0x20000 <= ch && ch <= 0x2a6df)
-                                || (0xf900 <= ch && ch <= 0xfaff)
-                                || (0x2f800 <= ch && ch <= 0x2fa1f))
-                            { wordCount++; }
-                        }
-                    }
-                    ShouldRecount = false;
-                    charWordCount = new Tuple<int, int>(charCount, wordCount);
-                }
-                return charWordCount;
-            }
+            get { return (string)GetValue(ContentTextProperty); }
+            set { SetValue(ContentTextProperty, value); }
         }
-
 
         #region 构造方法
-        public TextFragmentPresenter(MBTabItem owner)
+        public TextFragmentPresenter()
         {
             InitializeComponent();
-            fragment = new TextFragment();
-            ownerTab = owner;
-            Loaded += TextFragmentPresenter_Loaded;
-        }
-
-        public TextFragmentPresenter(TextFragment textFragment, MBTabItem owner)
-        {
-            InitializeComponent();
-            fragment = textFragment;
-            ownerTab = owner;
-            Loaded += TextFragmentPresenter_Loaded;
+            this.Loaded += TextFragmentPresenter_Loaded;
         }
         #endregion
 
         #region 事件
         private void TextFragmentPresenter_Loaded(object sender, RoutedEventArgs e)
         {
-            parentPanel = ControlTreeHelper.FindParentOfType<StackPanel>(this);
-            contentContainer.Text = fragment.Content;
-            string opText = "";
-            for (int i = 0; i < fragment.Operations.Count; i++)
-            { opText += fragment.Operations[i] + "\r\n"; }
-            if (opText != "")
-            { opText = opText[..^2]; }
-            opContainer.Text = opText;
-
-            opContainer.TextChanged += Operation_TextChanged;
+            commentContainer.TextChanged += Operation_TextChanged;
             contentContainer.TextChanged += Content_TextChanged;
         }
 
@@ -161,20 +73,20 @@ namespace MultiBranchTexter.Controls
         {
             if (showHideOpBtn.IsChecked == true)
             {
-                opContainer.Height = double.NaN;
-                opContainer.UpdateLayout();// <--必须，否则没有动画效果
+                commentContainer.Height = double.NaN;
+                commentContainer.UpdateLayout();// <--必须，否则没有动画效果
                 Storyboard sb = new Storyboard();
                 DoubleAnimation da = new DoubleAnimation()
                 {
                     From = 2,
-                    To = opContainer.ActualHeight,
+                    To = commentContainer.ActualHeight,
                     Duration = new Duration(new TimeSpan(0, 0, 0, 0, 200)),
                     FillBehavior = FillBehavior.Stop
                 };
                 sb.Children.Add(da);
-                Storyboard.SetTarget(da, opContainer);
+                Storyboard.SetTarget(da, commentContainer);
                 Storyboard.SetTargetProperty(da, new PropertyPath("Height"));
-                sb.Completed += delegate { opContainer.Height = double.NaN; };
+                sb.Completed += delegate { commentContainer.Height = double.NaN; };
                 sb.Begin();
             }
             else
@@ -182,27 +94,19 @@ namespace MultiBranchTexter.Controls
                 Storyboard sb = new Storyboard();
                 DoubleAnimation da = new DoubleAnimation()
                 {
-                    From = opContainer.ActualHeight,
+                    From = commentContainer.ActualHeight,
                     To = 2,
                     Duration = new Duration(new TimeSpan(0, 0, 0, 0, 200)),
                     FillBehavior = FillBehavior.Stop
                 };
                 sb.Children.Add(da);
-                Storyboard.SetTarget(da, opContainer);
+                Storyboard.SetTarget(da, commentContainer);
                 Storyboard.SetTargetProperty(da, new PropertyPath("Height"));
-                sb.Completed += delegate { opContainer.Height = 2; };
+                sb.Completed += delegate { commentContainer.Height = 2; };
                 sb.Begin();
             }
         }
 
-        /// <summary>
-        /// 片段失去焦点
-        /// </summary>
-        private void Fragment_LostFocus(object sender, RoutedEventArgs e)
-        {
-            //完成修改
-            SaveFragment();
-        }
 
         //content变化
         private void Content_TextChanged(object sender, TextChangedEventArgs e)
@@ -228,12 +132,8 @@ namespace MultiBranchTexter.Controls
                     {
                         string oldF = contentContainer.Text.Substring(0, i - 4);
                         string newF = contentContainer.Text[(i)..];
-                        TextFragmentPresenter tfp = new TextFragmentPresenter(new TextFragment(newF), ownerTab);
-                        parentPanel.Children.Insert(parentPanel.Children.IndexOf(this) + 1, tfp);
-                        parentPanel.UpdateLayout();// <--必须有
-                        tfp.GetFocus();
-                        tfp.contentContainer.Select(0, 0);
-                        contentContainer.Text = oldF;
+                        i = (int)Tag;
+                        ViewModelFactory.Main.WorkingTab.BreakFragment(i, oldF, newF);
                     }
                 }
                 catch { }
@@ -248,32 +148,30 @@ namespace MultiBranchTexter.Controls
         private void Content_KeyDown(object sender, KeyEventArgs e)
         {
             //如果在开头按下退格，且本片段没有operation，则合并本段与上段
-            if (e.Key == Key.Back 
+            if (e.Key == Key.Back
                 && contentContainer.SelectionStart == 0
-                && contentContainer.SelectionLength == 0 
-                && OperationCount == 0)
+                && contentContainer.SelectionLength == 0
+                && (CommentText == null || CommentText == ""))
             {
                 e.Handled = true;// <--否则会多退格
-                int i = parentPanel.Children.IndexOf(this);
+                int i = (int)Tag;
                 if (i > 0)
                 {
-                    (parentPanel.Children[i - 1] as TextFragmentPresenter).AppendContent(ContentText);
-                    parentPanel.Children.Remove(this);
                     RaiseChange();
+                    ViewModelFactory.Main.WorkingTab.GlueFragment(i - 1);
                 }
             }
             //如果在末尾按下删除，且下一片段没有operation，则合并本段与下一段
             if (e.Key == Key.Delete 
-                && contentContainer.SelectionStart == contentContainer.Text.Length
+                && contentContainer.SelectionStart == ContentText.Length
                 && contentContainer.SelectionLength == 0)
             {
                 e.Handled = true;// <--否则会多退格
-                int i = parentPanel.Children.IndexOf(this);
-                if (i < parentPanel.Children.Count - 1 && (parentPanel.Children[i + 1] as TextFragmentPresenter).OperationCount == 0)
+                int i = (int)Tag;
+                if (i < ViewModelFactory.Main.WorkingViewModel.TextFragments.Count - 1 )
                 {
-                    AppendContent((parentPanel.Children[i + 1] as TextFragmentPresenter).ContentText);
-                    parentPanel.Children.RemoveAt(i + 1);
                     RaiseChange();
+                    ViewModelFactory.Main.WorkingTab.GlueFragment(i);
                 }
             }
             //如果按下了Ctrl+Enter，则切断fragment
@@ -282,12 +180,8 @@ namespace MultiBranchTexter.Controls
                 int i = contentContainer.SelectionStart;
                 string oldF = contentContainer.Text.Substring(0, i);
                 string newF = contentContainer.Text[(i)..];
-                TextFragmentPresenter tfp = new TextFragmentPresenter(new TextFragment(newF), ownerTab);
-                parentPanel.Children.Insert(parentPanel.Children.IndexOf(this) + 1, tfp);
-                parentPanel.UpdateLayout();// <--必须有
-                tfp.GetFocus();
-                tfp.contentContainer.Select(0, 0);
-                contentContainer.Text = oldF;
+                i = (int)Tag;
+                ViewModelFactory.Main.WorkingTab.BreakFragment(i, oldF, newF);
                 RaiseChange();
             }
         }
@@ -305,29 +199,19 @@ namespace MultiBranchTexter.Controls
         /// </summary>
         public void SelecteLast()
         {
+            GetFocus();
             contentContainer.SelectionStart = contentContainer.Text.Length;
         }
 
-        /// <summary>
-        /// 直接在后面加入一段内容，光标会回到原来内容的末尾
-        /// </summary>
-        public void AppendContent(string content)
-        {
-            int i = contentContainer.Text.Length;
-            contentContainer.Text += content;
-
-            GetFocus();
-            contentContainer.SelectionStart = i;
-        }
-
         //对operation做行计算，并消除空行
+        [Obsolete]
         private int GetOperationLineCount()
         {
             int linecount = 0;
             string newtext = "";
-            for (int i = 0; i < opContainer.LineCount;i++)
+            for (int i = 0; i < commentContainer.LineCount;i++)
             {
-                string temp = opContainer.GetLineText(i).Replace("\r", "").Replace("\n", "");
+                string temp = commentContainer.GetLineText(i).Replace("\r", "").Replace("\n", "");
                 if (temp.Replace(" ","") != "")
                 {
                     linecount++;
@@ -336,29 +220,15 @@ namespace MultiBranchTexter.Controls
             }
             if (linecount > 0)//去掉最后的换行
             { newtext = newtext[..^2]; }
-            opContainer.Text = newtext;
+            commentContainer.Text = newtext;
             return linecount;
-        }
-
-        private void SaveFragment()
-        {
-            GetOperationLineCount();
-            fragment.Content = contentContainer.Text;
-            fragment.Operations = new List<string>();
-            for (int i = 0; i < opContainer.LineCount; i++)
-            {
-                string str = opContainer.GetLineText(i).Replace("\r", "").Replace("\n","");
-                if (str != "")
-                { fragment.Operations.Add(str); }
-            }
         }
 
         //向上级通知改变
         private void RaiseChange()
         {
-            ShouldRecount = true;
-            ownerTab.CountChar(false);
-            ownerTab.ViewModel.IsModified = "*";
+            ViewModelFactory.Main.WorkingViewModel.CountChar(false);
+            ViewModelFactory.Main.WorkingViewModel.IsModified = "*";
             ViewModelFactory.Main.IsModified = true;
         }
 

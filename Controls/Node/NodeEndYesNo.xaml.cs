@@ -51,7 +51,7 @@ namespace MultiBranchTexter.Controls
         {
             titleBox.Focusable = false;
             // 完成问题修改
-            FatherTextNode.endCondition.Question = titleBox.Text;
+            FatherTextNode.EndCondition.Question = titleBox.Text;
             titleBox.SelectionStart = 0;
             // 还要通知窗口改变相应的标签页
             ViewModelFactory.Main.ReLoadTab(FatherTextNode);

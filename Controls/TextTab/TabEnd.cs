@@ -62,13 +62,13 @@ namespace MultiBranchTexter.Controls
             container.Children.Clear();
             container.RowDefinitions.Clear(); //清理container
             //开始根据后继类型添加东西
-            questionTxt.Text += "：" + textNode.endCondition.Question;
+            questionTxt.Text += "：" + textNode.EndCondition.Question;
             int i = 0;
-            foreach (string answer in textNode.endCondition.Answers.Keys)
+            foreach (string answer in textNode.EndCondition.Answers.Keys)
             {
                 RowDefinition row = new RowDefinition { Height = new GridLength(20) };
                 container.RowDefinitions.Add(row);
-                TabEndItem tei = new TabEndItem(answer, textNode.endCondition.Answers[answer]);
+                TabEndItem tei = new TabEndItem(answer, textNode.EndCondition.Answers[answer]);
                 tei.SetValue(Grid.RowProperty, i);//设置行
                 container.Children.Add(tei);
                 i++;

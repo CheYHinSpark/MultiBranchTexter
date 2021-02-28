@@ -7,30 +7,28 @@ using Newtonsoft.Json;
 
 namespace MultiBranchTexter.Model
 {
-    /// <summary>
-    /// 文本节点类
-    /// </summary>
+    /// <summary> 文本节点类 </summary>
     public class TextNode
     {
         // 文件名
         public string Name = "";
 
         // 后继条件
-        public EndCondition endCondition;
+        public EndCondition EndCondition;
 
         //文字内容
         public List<TextFragment> Fragments = new List<TextFragment>();
         
         public TextNode() 
         {
-            endCondition = new EndCondition();
+            EndCondition = new EndCondition();
         }
-        
+
         public TextNode(string name)
         {
             Name = name;
             Fragments.Add(new TextFragment());
-            endCondition = new EndCondition();
+            EndCondition = new EndCondition();
         }
 
         #region 添加与删除前后节点 静态方法
@@ -40,12 +38,12 @@ namespace MultiBranchTexter.Model
         /// /// </summary>
         public static void Link(TextNode pre, TextNode post, string answer)
         {
-            if (pre.endCondition.Answers.ContainsKey(answer))
+            if (pre.EndCondition.Answers.ContainsKey(answer))
             {
-                pre.endCondition.Answers[answer] = post.Name;
+                pre.EndCondition.Answers[answer] = post.Name;
             }
             else
-            { pre.endCondition.Answers.Add(answer, post.Name); }
+            { pre.EndCondition.Answers.Add(answer, post.Name); }
         }
 
         /// <summary>
@@ -53,31 +51,22 @@ namespace MultiBranchTexter.Model
         /// </summary>
         public static void UnLink(TextNode pre, TextNode post, string answer)
         {
-            if (pre.endCondition.Answers.ContainsKey(answer))
+            if (pre.EndCondition.Answers.ContainsKey(answer))
             {
-                if (pre.endCondition.Answers[answer] == post.Name)
-                { pre.endCondition.Answers.Remove(answer); }
+                if (pre.EndCondition.Answers[answer] == post.Name)
+                { pre.EndCondition.Answers.Remove(answer); }
             }
         }
         #endregion
 
         [Obsolete]
-        public int GetPostNodeIndex(List<TextNodeWithLeftTop> textNodes)
-        {
-            for (int i = 0; i < textNodes.Count; i++)
-            {
-                if (endCondition.Answers.ContainsValue(textNodes[i].Node.Name))
-                { return i; }
-            }
-            return -1;//可能没有后继了
-        }
-    
         public static List<TextNode> DeserializeFromFile(string file)
         {
             string txt = File.ReadAllText(file);
             return JsonConvert.DeserializeObject<List<TextNode>>(txt);
         }
 
+        [Obsolete]
         public static string SerializeToFile(List<TextNode> nodes, string file)
         {
             string s = JsonConvert.SerializeObject(nodes);
@@ -100,6 +89,49 @@ namespace MultiBranchTexter.Model
             Node = node;
             Left = left;
             Top = top;
+        }
+    }
+
+    /// <summary> 旧的文本节点类 </summary>
+    [Obsolete]
+    public class OldTextNode
+    {
+        // 文件名
+        public string Name = "";
+
+        // 后继条件
+        public EndCondition endCondition;
+
+        //文字内容
+        public List<OldTextFragment> Fragments = new List<OldTextFragment>();
+
+        public OldTextNode()
+        {
+            endCondition = new EndCondition();
+        }
+
+        public TextNode ToTextNode()
+        {
+            TextNode textNode = new TextNode
+            {
+                Name = Name,
+                EndCondition = endCondition
+            };
+            for (int i = 0;i< Fragments.Count;i++)
+            {
+                textNode.Fragments.Add(Fragments[i].ToTextFragment());
+            }
+            return textNode;
+        }
+
+        public static List<TextNode> ToTextNodeList(List<OldTextNode> oldNodes)
+        {
+            List<TextNode> nodes = new List<TextNode>();
+            for (int i =0;i<oldNodes.Count;i++)
+            {
+                nodes.Add(oldNodes[i].ToTextNode());
+            }
+            return nodes;
         }
     }
 }

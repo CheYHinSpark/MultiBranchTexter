@@ -34,7 +34,12 @@ namespace MultiBranchTexter.Model
             }).ToList();
         }
 
+        public static List<TextNodeWithLeftTop> ReadTextNodes(string metaUrl)
+        {
+            return JsonConvert.DeserializeObject<List<TextNodeWithLeftTop>>(File.ReadAllText(metaUrl));
+        }
 
+        [Obsolete]
         public static List<TextNodeWithLeftTop> ReadNodes(string metaUrl)
         {
             var meta = JsonConvert.DeserializeObject<MetadataFile>(File.ReadAllText(metaUrl)) ?? new MetadataFile();
@@ -51,10 +56,16 @@ namespace MultiBranchTexter.Model
                 }
                 meta.nodeFilePath = tryUrl;
             }
-            var list = JsonConvert.DeserializeObject<List<TextNode>>(File.ReadAllText(meta.nodeFilePath));
-            return meta.SetNodeCoordinate(list);
+            var list = JsonConvert.DeserializeObject<List<OldTextNode>>(File.ReadAllText(meta.nodeFilePath));
+            return meta.SetNodeCoordinate(OldTextNode.ToTextNodeList(list));
         }
 
+        public static void WriteTextNodes(string metaUrl, List<TextNodeWithLeftTop> nodes)
+        {
+            File.WriteAllText(metaUrl, JsonConvert.SerializeObject(nodes, Formatting.Indented));
+        }
+
+        [Obsolete]//以后导出可以用用看
         public static void WriteNodes(string metaUrl, List<TextNodeWithLeftTop> nodes)
         {
             var nodeUrl = new Regex(@"\.mbjson$", RegexOptions.IgnoreCase).Replace(metaUrl, ".json");

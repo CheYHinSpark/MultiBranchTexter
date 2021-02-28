@@ -87,7 +87,10 @@ namespace MultiBranchTexter.ViewModel
         #region 容器，虽然这样做不太符合mvvm的理念，但我不想再搞了
         private ScrollViewer _scrollViewer;
         public ScrollViewer ScrollViewer
-        { set { _scrollViewer = value; } }
+        { 
+            get { return _scrollViewer; }
+            set { _scrollViewer = value; }
+        }
         private AutoSizeCanvas _container;
         public AutoSizeCanvas Container
         {
@@ -241,7 +244,7 @@ namespace MultiBranchTexter.ViewModel
             SearchedNodes = new ObservableCollection<NodeButton>();
             SearchedNodes.CollectionChanged += SearchedNodes_CollectionChanged;
             NodeCount = 0;
-            SearchedIndex = -1;
+            _searchedIndex = -1;
         }
 
         #region 事件
@@ -269,15 +272,24 @@ namespace MultiBranchTexter.ViewModel
             SelectedNodes.Clear();// <--必须
             try
             {
-                var nodes = MetadataFile.ReadNodes(mbtxtPath);
+                var nodes = MetadataFile.ReadTextNodes(mbtxtPath);
                 _container.Dispatcher.BeginInvoke(new Action(
                     delegate { DrawFlowChart(nodes); }));
             }
             catch 
             {
+                try
+                {
+                    var nodes = MetadataFile.ReadNodes(mbtxtPath);
+                    _container.Dispatcher.BeginInvoke(new Action(
+                        delegate { DrawFlowChart(nodes); }));
+                }
+                catch
+                {
 #if DEBUG
-                throw new FormatException("未找到对应脚本文件");
+                    throw new FormatException("全部木大");
 #endif
+                }
             }
         }
 
@@ -339,7 +351,7 @@ namespace MultiBranchTexter.ViewModel
                 {
                     for (int i = 0; i < textNodes.Count; i++)
                     {
-                        EndCondition ec = textNodes[i].endCondition;
+                        EndCondition ec = textNodes[i].EndCondition;
 
                         Dictionary<string, int> waitToLink = new Dictionary<string, int>();
 
@@ -441,6 +453,7 @@ namespace MultiBranchTexter.ViewModel
         /// 不能处理循坏连接的情况
         /// 有向无环图排序
         /// </summary>
+        [Obsolete]
         private async void ReDrawFlowChart(List<TextNode> textNodes)
         {
             waitingNode = null;
@@ -486,7 +499,7 @@ namespace MultiBranchTexter.ViewModel
                 {
                     for (int i = 0; i < textNodes.Count; i++)
                     {
-                        EndCondition ec = textNodes[i].endCondition;
+                        EndCondition ec = textNodes[i].EndCondition;
 
                         Dictionary<string, int> waitToLink = new Dictionary<string, int>();
 
@@ -606,7 +619,7 @@ namespace MultiBranchTexter.ViewModel
                 {
                     for (int i = 0; i < textNodes.Count; i++)
                     {
-                        EndCondition ec = textNodes[i].Node.endCondition;
+                        EndCondition ec = textNodes[i].Node.EndCondition;
 
                         Dictionary<string, int> waitToLink = new Dictionary<string, int>();
 

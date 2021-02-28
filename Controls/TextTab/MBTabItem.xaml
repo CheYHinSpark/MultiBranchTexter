@@ -23,7 +23,26 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*" MinHeight="160"/>
                 </Grid.RowDefinitions>
-                <StackPanel x:Name="fragmentContainer" Grid.Row="0" Orientation="Vertical"/>
+                <ItemsControl x:Name="fragmentContainer" AlternationCount="2147483647"
+                              ItemsSource="{Binding TextFragments,NotifyOnSourceUpdated=True, 
+                    UpdateSourceTrigger=PropertyChanged}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <c:TextFragmentPresenter x:Name="TFP"
+                                                     Tag="{Binding Path=(ItemsControl.AlternationIndex),
+                                RelativeSource={RelativeSource TemplatedParent}}"
+                                                     CommentText="{Binding Comment, Mode=TwoWay,
+                                NotifyOnSourceUpdated=True,
+                                NotifyOnTargetUpdated=True,
+                                UpdateSourceTrigger=PropertyChanged}"
+                                                     ContentText="{Binding Content, Mode=TwoWay,
+                                NotifyOnSourceUpdated=True,
+                                NotifyOnTargetUpdated=True,
+                                UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
                 <Border Grid.Row="1" Background="Transparent" 
                         MouseLeftButtonDown="Border_MouseLeftButtonDown" 
                         Cursor="IBeam"/>
@@ -43,6 +62,11 @@
                 </EventTrigger>
             </ScrollViewer.Triggers>
         </ScrollViewer>
+        <!--<ScrollViewer VerticalScrollBarVisibility="Auto">
+         
+          
+          
+        </ScrollViewer>-->
         <!--下方信息栏-->
         <c:TabEnd x:Name="tabEnd" Grid.Row="1" HorizontalAlignment="Stretch"/>
         <!--这是为了让tabend里的信息可以绑定-->

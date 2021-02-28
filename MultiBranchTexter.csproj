@@ -9,7 +9,7 @@
     <Company>GlumickStudio</Company>
     <Authors>GlumickStudio</Authors>
     <Description>为了满足多分支的游戏剧情等的写作需要而开发的多分支文本编辑器。</Description>
-    <AssemblyVersion>1.1.2.0</AssemblyVersion>
+    <AssemblyVersion>1.1.4.0</AssemblyVersion>
     <SignAssembly>false</SignAssembly>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
