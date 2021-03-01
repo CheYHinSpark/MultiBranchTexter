@@ -16,14 +16,15 @@ namespace MultiBranchTexter.Controls
         {
             InitializeComponent();
         }
+
         public NodeEndMA(EndCondition maEnd)
         {
             InitializeComponent();
             titleBox.Text = maEnd.Question;
             isQuestionBtn.IsChecked = maEnd.IsQuestion;
-            foreach (string answer in maEnd.Answers.Keys)
+            for (int i =0;i<maEnd.Answers.Count;i++)
             {
-                NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(answer);
+                NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(maEnd.Answers[i].Item1);
                 answerContainer.Children.Add(nodeEnd);
             }
         }
@@ -57,15 +58,23 @@ namespace MultiBranchTexter.Controls
         //点击添加按钮
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
-            Dictionary<string,string> atns = FatherTextNode.EndCondition.Answers;
+            List<(string,string)> atns = FatherTextNode.EndCondition.Answers;
             //创造一个不重名的回答
             string newAnswer = "新回答";
-            int i = 1;
-            while (atns.ContainsKey(newAnswer + i.ToString()))
-            { i++; }
+            int i = 0;
+            bool repeated = true;
+            while (repeated)
+            {
+                i++;
+                bool b = true;
+                for (int j = 0; j < atns.Count; j++)
+                { b &= atns[j].Item1 != newAnswer + i.ToString(); }
+                //全都不重复b才会为真
+                repeated = !b;
+            }
             newAnswer += i.ToString();
             //添加键
-            atns.Add(newAnswer,"");
+            atns.Add((newAnswer,""));
             FatherNode.answerToNodes.Add(newAnswer, null);
             NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(newAnswer)
             { FatherNode = this.FatherNode };

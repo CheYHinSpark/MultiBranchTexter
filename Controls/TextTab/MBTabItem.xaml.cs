@@ -266,21 +266,5 @@ namespace MultiBranchTexter.Controls
             }
         }
         #endregion
-
-        private void ScrollViewer_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-       
-        }
-
-        private void sv_ScrollChanged(object sender, ScrollChangedEventArgs e)
-        {
-            //if (e.Source is ScrollViewer)
-            //{ 
-            //    if (Keyboard.Modifiers == ModifierKeys.Shift)
-            //    {
-            //        ViewModelFactory.Main.SideWidth += e.VerticalChange / 20.0;
-            //    }
-            //}
-        }
     }
 }

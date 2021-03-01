@@ -38,23 +38,29 @@ namespace MultiBranchTexter.Model
         /// /// </summary>
         public static void Link(TextNode pre, TextNode post, string answer)
         {
-            if (pre.EndCondition.Answers.ContainsKey(answer))
+            for (int i = 0; i < pre.EndCondition.Answers.Count; i++)
             {
-                pre.EndCondition.Answers[answer] = post.Name;
+                if (pre.EndCondition.Answers[i].Item1 == answer)
+                {
+                    pre.EndCondition.Answers[i] = (answer, post.Name);
+                    return;
+                }
             }
-            else
-            { pre.EndCondition.Answers.Add(answer, post.Name); }
+            pre.EndCondition.Answers.Add((answer, post.Name));
         }
 
         /// <summary>
         /// 断开，注意不能在对键值的遍历中搞这个
         /// </summary>
-        public static void UnLink(TextNode pre, TextNode post, string answer)
+        public static void UnLink(TextNode pre, string answer)
         {
-            if (pre.EndCondition.Answers.ContainsKey(answer))
+            for (int i = 0; i < pre.EndCondition.Answers.Count; i++)
             {
-                if (pre.EndCondition.Answers[answer] == post.Name)
-                { pre.EndCondition.Answers.Remove(answer); }
+                if (pre.EndCondition.Answers[i].Item1 == answer)
+                {
+                    pre.EndCondition.Answers[i] = (answer, "");
+                    return;
+                }
             }
         }
         #endregion
@@ -92,7 +98,71 @@ namespace MultiBranchTexter.Model
         }
     }
 
+    /// <summary>
+    /// 带左上角坐标的文本节点，用于读取和保存数据
+    /// </summary>
+    [Obsolete]
+    public class OldTextNodeWithLeftTop
+    {
+        public ReOldTextNode Node;
+        public double Left;
+        public double Top;
+        public OldTextNodeWithLeftTop(ReOldTextNode node, double left, double top)
+        {
+            Node = node;
+            Left = left;
+            Top = top;
+        }
+        public TextNodeWithLeftTop ToNew()
+        {
+            return new TextNodeWithLeftTop(Node.ToTextNode(), Left, Top);
+        }
+    }
+
     /// <summary> 旧的文本节点类 </summary>
+    [Obsolete]
+    public class ReOldTextNode
+    {
+        // 文件名
+        public string Name = "";
+
+        // 后继条件
+        public OldEndCondition endCondition;
+
+        //文字内容
+        public List<TextFragment> Fragments = new List<TextFragment>();
+
+        public ReOldTextNode()
+        {
+            endCondition = new OldEndCondition();
+        }
+
+        public TextNode ToTextNode()
+        {
+            TextNode textNode = new TextNode
+            {
+                Name = Name,
+                EndCondition = endCondition.ToEndCondition()
+            };
+            for (int i = 0; i < Fragments.Count; i++)
+            {
+                textNode.Fragments.Add(Fragments[i]);
+            }
+            return textNode;
+        }
+
+        public static List<TextNode> ToTextNodeList(List<OldTextNode> oldNodes)
+        {
+            List<TextNode> nodes = new List<TextNode>();
+            for (int i = 0; i < oldNodes.Count; i++)
+            {
+                nodes.Add(oldNodes[i].ToTextNode());
+            }
+            return nodes;
+        }
+    }
+
+    /// <summary> 更旧的文本节点类 </summary>
     [Obsolete]
     public class OldTextNode
     {

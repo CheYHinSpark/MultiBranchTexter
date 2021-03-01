@@ -63,15 +63,14 @@ namespace MultiBranchTexter.Controls
             container.RowDefinitions.Clear(); //清理container
             //开始根据后继类型添加东西
             questionTxt.Text += "：" + textNode.EndCondition.Question;
-            int i = 0;
-            foreach (string answer in textNode.EndCondition.Answers.Keys)
+            for (int i =0;i < textNode.EndCondition.Answers.Count;i++)
             {
                 RowDefinition row = new RowDefinition { Height = new GridLength(20) };
                 container.RowDefinitions.Add(row);
-                TabEndItem tei = new TabEndItem(answer, textNode.EndCondition.Answers[answer]);
+                TabEndItem tei = new TabEndItem(textNode.EndCondition.Answers[i].Item1,
+                    textNode.EndCondition.Answers[i].Item2);
                 tei.SetValue(Grid.RowProperty, i);//设置行
                 container.Children.Add(tei);
-                i++;
             }
             container.UpdateLayout();
             //调整scrollviewer的最大高度

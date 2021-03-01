@@ -77,19 +77,21 @@ namespace MultiBranchTexter.Controls
             }
             //取得节点的后继条件
             EndCondition ec = FatherTextNode.EndCondition;
-            if (ec.Answers.ContainsKey(Answer))
-            { 
-                answerTxt.Text = answer;
-                MessageBox.Show("回答出现重复，已还原");
-            }
-            else
+            for (int i = 0; i < ec.Answers.Count; i++)
             {
-                FatherNode.ChangeAnswer(answer, answerTxt.Text);
-                //没有重复，完成修改
-                answer = answerTxt.Text;
-                //通知标签页改变
-                ViewModelFactory.Main.ReLoadTab(FatherTextNode);
+                if (ec.Answers[i].Item1 == Answer)
+                {
+                    answerTxt.Text = answer;
+                    MessageBox.Show("回答出现重复，已还原");
+                    return;
+                } 
             }
+
+            FatherNode.ChangeAnswer(answer, answerTxt.Text);
+            //没有重复，完成修改
+            answer = answerTxt.Text;
+            //通知标签页改变
+            ViewModelFactory.Main.ReLoadTab(FatherTextNode);
             answerTxt.SelectionStart = 0;
             FatherNode.UpdateLines();
         }
@@ -110,12 +112,19 @@ namespace MultiBranchTexter.Controls
             //可能没有连线
             if (line != null)
             {
-                NodeButton.UnLink(this, line.EndNode);
+                NodeButton.UnLink(this);
                 line.Delete();
             }
             //如果没有连线，也要删除相应的key
             FatherNode.answerToNodes.Remove(answer);
-            FatherTextNode.EndCondition.Answers.Remove(answer);
+            for (int i =0;i<FatherTextNode.EndCondition.Answers.Count;i++)
+            {
+                if (answer == FatherTextNode.EndCondition.Answers[i].Item1)
+                { 
+                    FatherTextNode.EndCondition.Answers.RemoveAt(i);
+                    break;
+                }
+            }
             //通知标签页改变
             ViewModelFactory.Main.ReLoadTab(FatherTextNode);
             //移除自身

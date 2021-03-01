@@ -240,12 +240,12 @@ namespace MultiBranchTexter.Controls
         /// <summary>
         /// 断开，注意不能在对键值的遍历中搞这个
         /// </summary>
-        public static void UnLink(NodeButton pre, NodeButton post,string answer)
+        public static void UnLink(NodeButton pre, string answer)
         {
             //移除
             if (pre.answerToNodes.ContainsKey(answer))
             { pre.answerToNodes[answer] = null; }
-            TextNode.UnLink(pre.textNode, post.textNode, answer);
+            TextNode.UnLink(pre.textNode, answer);
         }
 
         /// <summary>
@@ -272,21 +272,21 @@ namespace MultiBranchTexter.Controls
         /// <summary>
         /// 已经有相当信息的unLink，能根据信息自动选择断开方式
         /// </summary>
-        public static void UnLink(NodeBase pre, NodeButton post)
+        public static void UnLink(NodeBase pre)
         {
             switch (pre.FatherTextNode.EndCondition.EndType)
             {
                 case EndType.MultiAnswers:
-                    UnLink(pre.FatherNode, post, (pre as NodeEndMAAnswer).Answer);
+                    UnLink(pre.FatherNode, (pre as NodeEndMAAnswer).Answer);
                     break;
                 case EndType.YesNo:
                     if (pre.Name == "yesNode")
-                    { UnLink(pre.FatherNode, post, "yes"); }
+                    { UnLink(pre.FatherNode, "yes"); }
                     if (pre.Name == "noNode")
-                    { UnLink(pre.FatherNode, post, "no"); }
+                    { UnLink(pre.FatherNode,  "no"); }
                     break;
                 case EndType.Single:
-                    UnLink(pre.FatherNode, post, ""); break;
+                    UnLink(pre.FatherNode, ""); break;
             }
         }
         #endregion
@@ -395,7 +395,7 @@ namespace MultiBranchTexter.Controls
         {
             while (postLines.Count > 0)
             {
-                NodeButton.UnLink(postLines[0].BeginNode, postLines[0].EndNode);
+                NodeButton.UnLink(postLines[0].BeginNode);
                 postLines[0].Delete();
             }
         }
@@ -449,7 +449,7 @@ namespace MultiBranchTexter.Controls
             //清除所有前驱
             while (preLines.Count > 0)
             {
-                NodeButton.UnLink(preLines[0].BeginNode, preLines[0].EndNode);
+                NodeButton.UnLink(preLines[0].BeginNode);
                 preLines[0].Delete();
             }
             UnLinkAllPost();//清除所有后继
@@ -488,8 +488,16 @@ namespace MultiBranchTexter.Controls
         {
             answerToNodes.Add(newKey, answerToNodes[oldKey]);
             answerToNodes.Remove(oldKey);
-            textNode.EndCondition.Answers.Add(newKey, textNode.EndCondition.Answers[oldKey]);
-            textNode.EndCondition.Answers.Remove(oldKey);
+            for (int i =0;i<textNode.EndCondition.Answers.Count;i++)
+            {
+                if (textNode.EndCondition.Answers[i].Item1 == oldKey)
+                {
+                    string temp = textNode.EndCondition.Answers[i].Item2;
+                    textNode.EndCondition.Answers[i] = (newKey, temp);
+                    return;
+                }
+            }
+          
         }
         #endregion
     }

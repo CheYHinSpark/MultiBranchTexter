@@ -74,7 +74,7 @@ namespace MultiBranchTexter.Controls
         private void DeleteLine_Click(object sender, RoutedEventArgs e)
         {
             //断开起始点和终止点
-            NodeButton.UnLink(BeginNode, EndNode);
+            NodeButton.UnLink(BeginNode);
             //删去本线条
             Delete();
         }
@@ -82,7 +82,7 @@ namespace MultiBranchTexter.Controls
         private void AddNode_Click(object sender, RoutedEventArgs e)
         {
             //断开起始点和终止点
-            NodeButton.UnLink(BeginNode, EndNode);
+            NodeButton.UnLink(BeginNode);
             //加入新节点，相关的link和画线都在fcc里完成
             ViewModelFactory.FCC.AddNodeButton(BeginNode, EndNode, mousePt.X, mousePt.Y);
             //删去本线条

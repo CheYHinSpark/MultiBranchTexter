@@ -40,7 +40,7 @@ namespace MultiBranchTexter.Model
         }
 
         [Obsolete]
-        public static List<TextNodeWithLeftTop> ReadNodes(string metaUrl)
+        public static List<TextNodeWithLeftTop> ReadVeryNodes(string metaUrl)
         {
             var meta = JsonConvert.DeserializeObject<MetadataFile>(File.ReadAllText(metaUrl)) ?? new MetadataFile();
             if (!File.Exists(meta.nodeFilePath))
@@ -58,6 +58,18 @@ namespace MultiBranchTexter.Model
             }
             var list = JsonConvert.DeserializeObject<List<OldTextNode>>(File.ReadAllText(meta.nodeFilePath));
             return meta.SetNodeCoordinate(OldTextNode.ToTextNodeList(list));
+        }
+
+        [Obsolete]
+        public static List<TextNodeWithLeftTop> ReadOldNodes(string metaUrl)
+        {
+            List<OldTextNodeWithLeftTop> data = JsonConvert.DeserializeObject<List<OldTextNodeWithLeftTop>>(File.ReadAllText(metaUrl));
+            List<TextNodeWithLeftTop> newd = new List<TextNodeWithLeftTop>();
+            for (int i = 0; i < data.Count; i++)
+            {
+                newd.Add(data[i].ToNew());
+            }
+            return newd;
         }
 
         public static void WriteTextNodes(string metaUrl, List<TextNodeWithLeftTop> nodes)

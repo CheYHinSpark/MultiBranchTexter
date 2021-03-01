@@ -278,17 +278,26 @@ namespace MultiBranchTexter.ViewModel
             }
             catch 
             {
-                try
+                try//1.2.0版本兼容
                 {
-                    var nodes = MetadataFile.ReadNodes(mbtxtPath);
+                    var nodes = MetadataFile.ReadOldNodes(mbtxtPath);
                     _container.Dispatcher.BeginInvoke(new Action(
-                        delegate { DrawFlowChart(nodes); }));
+                    delegate { DrawFlowChart(nodes); }));
                 }
                 catch
                 {
+                    try//1.1.4版本兼容
+                    {
+                        var nodes = MetadataFile.ReadVeryNodes(mbtxtPath);
+                        _container.Dispatcher.BeginInvoke(new Action(
+                            delegate { DrawFlowChart(nodes); }));
+                    }
+                    catch
+                    {
 #if DEBUG
-                    throw new FormatException("全部木大");
+                        throw new FormatException("全部木大");
 #endif
+                    }
                 }
             }
         }
@@ -353,35 +362,24 @@ namespace MultiBranchTexter.ViewModel
                     {
                         EndCondition ec = textNodes[i].EndCondition;
 
-                        Dictionary<string, int> waitToLink = new Dictionary<string, int>();
-
-                        foreach (string answer in ec.Answers.Keys)
-                        {
-                            if (ec.Answers[answer] == "")
+                        for (int j = 0;j<ec.Answers.Count;j++)
+                        { 
+                            if (ec.Answers[j].Item2 == "")
                             { continue; }//直接跳过空的
 
                             bool found = false;
                             for (int k = 0; k < num; k++)
                             {
-                                if (ec.Answers[answer] == textNodes[k].Name)
+                                if (ec.Answers[j].Item2 == textNodes[k].Name)
                                 {
                                     found = true;
                                     //准备为nodeButton添加post
-                                    waitToLink.Add(answer, k);
-
+                                    mat[i, k] = true;
                                     break;
                                 }
                             }
                             if (!found)
-                            { waitToLink.Add(answer, -1); }
-                        }
-
-                        foreach (string answer in waitToLink.Keys)
-                        {
-                            if (waitToLink[answer] == -1)
-                            { ec.Answers[answer] = ""; }
-                            else
-                            { mat[i, waitToLink[answer]] = true; }
+                            { ec.Answers[j] = (ec.Answers[j].Item1, ""); }
                         }
                     }
                 }));
@@ -503,36 +501,25 @@ namespace MultiBranchTexter.ViewModel
 
                         Dictionary<string, int> waitToLink = new Dictionary<string, int>();
 
-                        foreach (string answer in ec.Answers.Keys)
+                        for (int j = 0; j < ec.Answers.Count; j++)
                         {
-                            if (ec.Answers[answer] == "")
+                            if (ec.Answers[j].Item2 == "")
                             { continue; }//直接跳过空的
 
                             bool found = false;
                             for (int k = 0; k < num; k++)
                             {
-                                if (ec.Answers[answer] == textNodes[k].Name)
+                                if (ec.Answers[j].Item2 == textNodes[k].Name)
                                 {
                                     found = true;
                                     //准备为nodeButton添加post
-                                    waitToLink.Add(answer, k);
-
+                                    NodeButton.Link(nodeButtons[i], nodeButtons[k], ec.Answers[j].Item1);
+                                    mat[i, k] = true;
                                     break;
                                 }
                             }
                             if (!found)
-                            { waitToLink.Add(answer, -1); }
-                        }
-
-                        foreach (string answer in waitToLink.Keys)
-                        {
-                            if (waitToLink[answer] == -1)
-                            { ec.Answers[answer] = ""; }
-                            else
-                            {
-                                mat[i, waitToLink[answer]] = true;
-                                NodeButton.Link(nodeButtons[i], nodeButtons[waitToLink[answer]], answer);
-                            }
+                            { ec.Answers[j] = (ec.Answers[j].Item1, ""); }
                         }
                     }
                 }));
@@ -602,12 +589,13 @@ namespace MultiBranchTexter.ViewModel
         {
             waitingNode = null;
             Debug.WriteLine("开始绘制节点图");
+            int num = textNodes.Count;
             //nodeButtons总表
             List<NodeButton> nodeButtons = new List<NodeButton>();
             await _container.Dispatcher.BeginInvoke(new Action(
                 delegate
                 {
-                    for (int i = 0; i < textNodes.Count; i++)
+                    for (int i = 0; i < num; i++)
                     {
                         //初始化button
                         nodeButtons.Add(new NodeButton(textNodes[i].Node));
@@ -617,39 +605,31 @@ namespace MultiBranchTexter.ViewModel
             await _container.Dispatcher.BeginInvoke(new Action(
                 delegate
                 {
-                    for (int i = 0; i < textNodes.Count; i++)
+                    for (int i = 0; i < num; i++)
                     {
                         EndCondition ec = textNodes[i].Node.EndCondition;
 
                         Dictionary<string, int> waitToLink = new Dictionary<string, int>();
 
-                        foreach (string answer in ec.Answers.Keys)
+                        for (int j = 0; j < ec.Answers.Count; j++)
                         {
-                            if (ec.Answers[answer] == "")
+                            if (ec.Answers[j].Item2 == "")
                             { continue; }//直接跳过空的
 
                             bool found = false;
-                            for (int k = 0; k < textNodes.Count; k++)
+                            for (int k = 0; k < num; k++)
                             {
-                                if (ec.Answers[answer] == textNodes[k].Node.Name)
+                                if (ec.Answers[j].Item2 == textNodes[k].Node.Name)
                                 {
                                     found = true;
                                     //准备为nodeButton添加post
-                                    waitToLink.Add(answer, k);
-
+                                    NodeButton.Link(nodeButtons[i], nodeButtons[k], ec.Answers[j].Item1);
+                                    //mat[i, k] = true;
                                     break;
                                 }
                             }
                             if (!found)
-                            { waitToLink.Add(answer, -1); }
-                        }
-
-                        foreach (string answer in waitToLink.Keys)
-                        {
-                            if (waitToLink[answer] == -1)
-                            { ec.Answers[answer] = ""; }
-                            else
-                            { NodeButton.Link(nodeButtons[i], nodeButtons[waitToLink[answer]], answer); }
+                            { ec.Answers[j] = (ec.Answers[j].Item1, ""); }
                         }
                     }
                 }));
@@ -657,7 +637,7 @@ namespace MultiBranchTexter.ViewModel
             await _container.Dispatcher.BeginInvoke(new Action(
                 delegate
                 {
-                    for (int i = 0; i < textNodes.Count; i++)
+                    for (int i = 0; i < num; i++)
                     {
                         Canvas.SetLeft(nodeButtons[i], Math.Max(0, textNodes[i].Left));
                         Canvas.SetTop(nodeButtons[i], Math.Max(0, textNodes[i].Top));
@@ -669,7 +649,7 @@ namespace MultiBranchTexter.ViewModel
             //连线现在放到别的地方，即nodebutton的loaded里面执行
             Debug.WriteLine("节点图创建完成");
             ViewModelFactory.Main.RaiseHint("节点图创建完成");
-            NodeCount = textNodes.Count;
+            NodeCount = num;
         }
         #endregion
 
@@ -964,7 +944,7 @@ namespace MultiBranchTexter.ViewModel
             }
             if (cline != null)//不一定有这条原本连线
             {
-                NodeButton.UnLink(waitingNode, cline.EndNode);
+                NodeButton.UnLink(waitingNode);
                 cline.Delete();
             }
             //在waitNode和Post之间连线

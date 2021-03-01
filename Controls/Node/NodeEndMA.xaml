@@ -15,7 +15,7 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <CheckBox x:Name="isQuestionBtn" Grid.Column="0" ToolTip="切换询问或判断"
                           Click="IsQuestionBtn_Click"

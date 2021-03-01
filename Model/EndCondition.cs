@@ -15,7 +15,7 @@ namespace MultiBranchTexter.Model
 
         public bool IsQuestion = true;
 
-        public Dictionary<string, string> Answers = new Dictionary<string, string>();
+        public List<(string, string)> Answers = new List<(string, string)>();
 
         public EndCondition()
         {
@@ -26,12 +26,48 @@ namespace MultiBranchTexter.Model
         {
             EndType = endType;
             if (EndType == EndType.Single)
-            { Answers.Add("", ""); }
+            { Answers.Add(("", "")); }
             else if (EndType == EndType.YesNo)
             {
-                Answers.Add("yes", "");
-                Answers.Add("no", "");
+                Answers.Add(("yes", ""));
+                Answers.Add(("no", ""));
             }
+        }
+    }
+
+    [Obsolete]
+    public class OldEndCondition
+    {
+        public string Question;
+
+        public EndType EndType;
+
+        public bool IsQuestion = true;
+
+        public Dictionary<string, string> Answers = new Dictionary<string, string>();
+
+        public OldEndCondition()
+        {
+            EndType = EndType.Single;
+        }
+
+        public OldEndCondition(EndType endType)
+        {
+            EndType = endType;
+        }
+        public EndCondition ToEndCondition()
+        {
+            EndCondition ec = new EndCondition();
+            ec.Question = Question;
+            ec.EndType = EndType;
+            ec.IsQuestion = IsQuestion;
+            ec.Answers = new List<(string, string)>();
+            foreach (string answer in Answers.Keys)
+            {
+                ec.Answers.Add((answer, Answers[answer]));
+            }
+
+            return ec;
         }
     }
 }

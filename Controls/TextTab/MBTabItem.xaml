@@ -16,8 +16,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ScrollViewer VerticalScrollBarVisibility="Auto"
-                      ScrollChanged="sv_ScrollChanged">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
             <ScrollViewer.RenderTransform>
                 <TranslateTransform/>
             </ScrollViewer.RenderTransform>
