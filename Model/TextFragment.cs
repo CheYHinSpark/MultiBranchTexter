@@ -18,23 +18,41 @@ namespace MultiBranchTexter.Model
         }
         #endregion
 
+        #region 核心数据
         private string _comment;
         public string Comment
         {
             get { return _comment; }
-            set { _comment = value; ShouldRecount = true; RaisePropertyChanged("Comment"); }
+            set
+            {
+                if (value == null)
+                { value = ""; }
+                _comment = value; 
+                ShouldRecount = true; 
+                RaisePropertyChanged("Comment");
+            }
         }
         private string _content;
         public string Content
         {
             get { return _content; }
-            set { _content = value; ShouldRecount = true; RaisePropertyChanged("Content"); }
+            set 
+            {
+                if (value == null)
+                { value = ""; }
+                _content = value; 
+                ShouldRecount = true; 
+                RaisePropertyChanged("Content");
+            }
         }
+        #endregion
 
+        #region 统计用
         [JsonIgnore]
         public bool ShouldRecount = true;//是否要重新统计字数
         [JsonIgnore]
         private Tuple<int, int> charWordCount = new Tuple<int, int>(0, 0);//字数统计
+        #endregion
 
         public TextFragment() { }
         public TextFragment(string newContent)

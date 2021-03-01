@@ -56,6 +56,7 @@ namespace MultiBranchTexter.Controls
             }
             if (parent != null)
             { Load(); }
+            ViewModel.ClearUndoStack();
         }
 
         /// <summary>
@@ -95,7 +96,7 @@ namespace MultiBranchTexter.Controls
 
             if (MyDataTemplate.FindName("TFP", cp) is TextFragmentPresenter tfp)
             {
-                tfp.SelecteLast();
+                tfp.SetFocus(-1);
             }
         }
 
@@ -194,7 +195,6 @@ namespace MultiBranchTexter.Controls
                 newFragments.Add(_viewModel.TextFragments[i]);
             }
 
-            //textNode.Fragments.Clear();
             TextNode.Fragments = newFragments;
             _viewModel.IsModified = "";
             ViewModelFactory.Main.RaiseHint("节点 " + TextNode.Name + " 保存成功");
@@ -213,7 +213,7 @@ namespace MultiBranchTexter.Controls
             if (_viewModel.TextFragments.Count == 0)//至少要有一个
             { _viewModel.TextFragments.Add(new TextFragment()); }
 
-            _viewModel.CountChar(true);
+            _viewModel.CountCharWord(true);
         }
 
 
@@ -233,8 +233,7 @@ namespace MultiBranchTexter.Controls
 
             if (MyDataTemplate.FindName("TFP", cp) is TextFragmentPresenter tfp)
             {
-                tfp.GetFocus();
-                tfp.contentContainer.SelectionStart = s;
+                tfp.SetFocus(s);
             }
         }
 
@@ -253,8 +252,7 @@ namespace MultiBranchTexter.Controls
 
             if (MyDataTemplate.FindName("TFP", cp) is TextFragmentPresenter tfp)
             {
-                tfp.GetFocus();
-                tfp.contentContainer.SelectionStart = 0;
+                tfp.SetFocus(0);
             }
         }
         #endregion

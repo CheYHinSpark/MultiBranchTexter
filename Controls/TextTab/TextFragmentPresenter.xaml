@@ -16,6 +16,10 @@
             RelativeSource={RelativeSource AncestorType={x:Type c:TextFragmentPresenter}}}"
                  Template="{StaticResource operationTextBoxTemplate}"
                  Style="{StaticResource fragmentPresenterTextBoxStyle}"
+                 LostFocus="Container_LostFocus"
+                 GotFocus="CommentContainer_GotFocus"
+                 ContextMenu="{x:Null}"
+                 SelectionChanged="CommentContainer_SelectionChanged"
                  Foreground="#FF57A64A"/>
         <TextBox x:Name="contentContainer" Grid.Row="1" 
                  Text="{Binding ContentText,
@@ -26,6 +30,10 @@
             RelativeSource={RelativeSource AncestorType={x:Type c:TextFragmentPresenter}}}"
                  Template="{StaticResource contentTextBoxTemplate}"
                  Style="{StaticResource fragmentPresenterTextBoxStyle}"
+                 LostFocus="Container_LostFocus"
+                 GotFocus="ContentContainer_GotFocus"
+                 ContextMenu="{x:Null}"
+                 SelectionChanged="ContentContainer_SelectionChanged"
                  PreviewKeyDown="Content_KeyDown"/>
         <CheckBox x:Name="showHideOpBtn" Template="{StaticResource fragmentOperationCheckBoxTemplate}"
                   Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top"

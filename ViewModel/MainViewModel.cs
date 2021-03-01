@@ -507,7 +507,7 @@ namespace MultiBranchTexter.ViewModel
         public void ReCountCharForAll()
         {
             foreach (MBTabItem tab in _workTabs)
-            { tab.ViewModel.CountChar(true); }
+            { tab.ViewModel.CountCharWord(true); }
         }
 
         /// <summary> 启动提示文本 </summary>

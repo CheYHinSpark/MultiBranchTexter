@@ -16,8 +16,10 @@ namespace MultiBranchTexter.Controls
     /// </summary>
     public partial class TextFragmentPresenter : UserControl
     {
-    
-
+        #region 依赖属性
+        /// <summary>
+        /// 注释文本
+        /// </summary>
         public static DependencyProperty CommentTextProperty =
          DependencyProperty.Register("CommentText", //属性名称
              typeof(string), //属性类型
@@ -31,6 +33,9 @@ namespace MultiBranchTexter.Controls
             set { SetValue(CommentTextProperty, value); }
         }
 
+        /// <summary>
+        /// 内容文本
+        /// </summary>
         public static DependencyProperty ContentTextProperty =
       DependencyProperty.Register("ContentText", //属性名称
           typeof(string), //属性类型
@@ -43,6 +48,7 @@ namespace MultiBranchTexter.Controls
             get { return (string)GetValue(ContentTextProperty); }
             set { SetValue(ContentTextProperty, value); }
         }
+        #endregion
 
         #region 构造方法
         public TextFragmentPresenter()
@@ -55,7 +61,6 @@ namespace MultiBranchTexter.Controls
         #region 事件
         private void TextFragmentPresenter_Loaded(object sender, RoutedEventArgs e)
         {
-            commentContainer.TextChanged += Operation_TextChanged;
             contentContainer.TextChanged += Content_TextChanged;
             if (CommentText == null || CommentText == "")
             {
@@ -114,12 +119,9 @@ namespace MultiBranchTexter.Controls
             }
         }
 
-
         //content变化
         private void Content_TextChanged(object sender, TextChangedEventArgs e)
         {
-            RaiseChange();
-
             int i = 0;
             if (contentContainer.IsKeyboardFocusWithin)
             {
@@ -147,11 +149,6 @@ namespace MultiBranchTexter.Controls
             }
         }
 
-        private void Operation_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            RaiseChange();
-        }
-
         private void Content_KeyDown(object sender, KeyEventArgs e)
         {
             //如果在开头按下退格，且本片段没有operation，则合并本段与上段
@@ -164,7 +161,6 @@ namespace MultiBranchTexter.Controls
                 int i = (int)Tag;
                 if (i > 0)
                 {
-                    RaiseChange();
                     ViewModelFactory.Main.WorkingTab.GlueFragment(i - 1);
                 }
             }
@@ -177,7 +173,6 @@ namespace MultiBranchTexter.Controls
                 int i = (int)Tag;
                 if (i < ViewModelFactory.Main.WorkingViewModel.TextFragments.Count - 1 )
                 {
-                    RaiseChange();
                     ViewModelFactory.Main.WorkingTab.GlueFragment(i);
                 }
             }
@@ -189,25 +184,68 @@ namespace MultiBranchTexter.Controls
                 string newF = contentContainer.Text[(i)..];
                 i = (int)Tag;
                 ViewModelFactory.Main.WorkingTab.BreakFragment(i, oldF, newF);
-                RaiseChange();
             }
+        }
+
+
+        #region tabitemviewmodel逻辑
+        private void Container_LostFocus(object sender, RoutedEventArgs e)
+        {
+            ViewModelFactory.Main.WorkingViewModel.FocusInfo = null;
+        }
+
+        private void CommentContainer_GotFocus(object sender, RoutedEventArgs e)
+        {
+            ViewModelFactory.Main.WorkingViewModel
+                .SetFocusSelectInfo((int)Tag, false,
+                commentContainer.SelectionStart,
+                commentContainer.SelectionLength);
+        }
+
+        private void ContentContainer_GotFocus(object sender, RoutedEventArgs e)
+        {
+            ViewModelFactory.Main.WorkingViewModel
+                .SetFocusSelectInfo((int)Tag, true,
+                contentContainer.SelectionStart,
+                contentContainer.SelectionLength);
+        }
+
+        private void CommentContainer_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            ViewModelFactory.Main.WorkingViewModel.SelectionLength = commentContainer.SelectionLength;
+            ViewModelFactory.Main.WorkingViewModel.SelectionStart = commentContainer.SelectionStart;
+        }
+
+        private void ContentContainer_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            ViewModelFactory.Main.WorkingViewModel.SelectionLength = contentContainer.SelectionLength;
+            ViewModelFactory.Main.WorkingViewModel.SelectionStart = contentContainer.SelectionStart;
         }
         #endregion
 
-        #region 方法
-        public void GetFocus()
-        {
-            Keyboard.Focus(contentContainer);
-            contentContainer.Focus();
-        }
+        #endregion
 
-        /// <summary>
-        /// 移动光标到最后
-        /// </summary>
-        public void SelecteLast()
+        #region 方法
+        public void SetFocus(int SelectS, bool isContent = true, int SelectL = 0)
         {
-            GetFocus();
-            contentContainer.SelectionStart = contentContainer.Text.Length;
+            if (isContent)
+            {
+                Keyboard.Focus(contentContainer);
+                contentContainer.Focus();
+                if (SelectS >= 0 && SelectS <= ContentText.Length)
+                {  contentContainer.SelectionStart = SelectS; }
+                else { contentContainer.SelectionStart = ContentText.Length; }
+                contentContainer.SelectionLength = SelectL;
+            }
+            else
+            {
+                Keyboard.Focus(commentContainer);
+                commentContainer.Focus();
+                if (SelectS >= 0 && SelectS <= CommentText.Length)
+                { commentContainer.SelectionStart = SelectS; }
+                else { commentContainer.SelectionStart = CommentText.Length; }
+                commentContainer.SelectionLength = SelectL;
+            }
         }
 
         //对operation做行计算，并消除空行
@@ -230,15 +268,6 @@ namespace MultiBranchTexter.Controls
             commentContainer.Text = newtext;
             return linecount;
         }
-
-        //向上级通知改变
-        private void RaiseChange()
-        {
-            ViewModelFactory.Main.WorkingViewModel.CountChar(false);
-            ViewModelFactory.Main.WorkingViewModel.IsModified = "*";
-            ViewModelFactory.Main.IsModified = true;
-        }
-
         #endregion
     }
 }

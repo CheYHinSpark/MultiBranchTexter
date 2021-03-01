@@ -9,6 +9,7 @@
     <TabItem.DataContext>
         <vm:TabItemViewModel/>
     </TabItem.DataContext>
+   
     <Grid Background="{DynamicResource MainBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -18,6 +19,10 @@
             <ScrollViewer.RenderTransform>
                 <TranslateTransform/>
             </ScrollViewer.RenderTransform>
+            <ScrollViewer.InputBindings>
+                <KeyBinding Gesture="Ctrl+Alt+Z" Command="{Binding UndoCommand}"/>
+                <KeyBinding Gesture="Ctrl+Alt+Y" Command="{Binding RedoCommand}"/>
+            </ScrollViewer.InputBindings>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
