@@ -97,6 +97,15 @@ namespace MultiBranchTexter.ViewModel
         }
         #endregion
 
+        //文本编辑器两侧的宽度，可以用于避免文本区域过宽
+        private double _sideWidth;
+        public double SideWidth
+        {
+            get { return _sideWidth; }
+            set
+            { _sideWidth = value; RaisePropertyChanged("SideWidth"); }
+        }
+
         #endregion
 
         #region 版本信息
@@ -137,6 +146,7 @@ namespace MultiBranchTexter.ViewModel
             _colorR = 238;
             _colorG = 170;
             ColorB = 22;
+            SideWidth = 10;
             WriteIni();
         });
 
@@ -205,6 +215,7 @@ namespace MultiBranchTexter.ViewModel
             IsDarkMode = iniFile.GetBool("Settings", "IsDarkMode", false);
             AllowDoubleEnter = iniFile.GetBool("Settings", "AllowDoubleEnter", false);
             CountOpChar = iniFile.GetBool("Settings", "CountOpChar", false);
+            SideWidth = iniFile.GetInt("Setting", "SideWidth", 10);
             _colorR = iniFile.GetInt("Color", "Red", 238);
             _colorG = iniFile.GetInt("Color", "Green", 170);
             ColorB = iniFile.GetInt("Color", "Blue", 22);
@@ -217,6 +228,7 @@ namespace MultiBranchTexter.ViewModel
             iniFile.WriteBool("Settings", "IsDarkMode", IsDarkMode == true);
             iniFile.WriteBool("Settings", "AllowDoubleEnter", AllowDoubleEnter == true);
             iniFile.WriteBool("Settings", "CountOpChar", CountOpChar == true);
+            iniFile.WriteInt("Setting", "SideWidth", (int)SideWidth);
             iniFile.WriteInt("Color", "Red", (int)_colorR);
             iniFile.WriteInt("Color", "Green", (int)_colorG);
             iniFile.WriteInt("Color", "Blue", (int)_colorB);

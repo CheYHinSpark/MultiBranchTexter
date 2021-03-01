@@ -492,7 +492,30 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    
+    <!--文字checkBox模板-->
+    <ControlTemplate x:Key="textCheckTemplate" TargetType="{x:Type CheckBox}">
+        <Border x:Name="BD" Height="Auto" Width="Auto" Background="Transparent">
+            <ContentPresenter x:Name="CP" Margin="2,0,2,0"
+                              TextElement.Foreground="{TemplateBinding Foreground}"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center">
+            </ContentPresenter>
+        </Border>
+        <ControlTemplate.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsPressed" Value="False"/>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="{StaticResource Highlight.ThemeBrush}" TargetName="BD"/>
+            </MultiTrigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource Highlight.ThemeBrush}" TargetName="BD"/>
+                <Setter Property="Opacity" Value="0.8" TargetName="BD"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
     <!--通用CheckBox样式-->
     <ControlTemplate x:Key="generalCheckTemplate" TargetType="{x:Type CheckBox}">
         <Border x:Name="BD" CornerRadius="4" Margin="2" BorderThickness="1"

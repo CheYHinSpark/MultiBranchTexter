@@ -13,6 +13,8 @@ namespace MultiBranchTexter.Model
 
         public EndType EndType;
 
+        public bool IsQuestion = true;
+
         public Dictionary<string, string> Answers = new Dictionary<string, string>();
 
         public EndCondition()

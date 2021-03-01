@@ -228,6 +228,10 @@ namespace MultiBranchTexter.Controls
         #region 方法
         public void SetFocus(int SelectS, bool isContent = true, int SelectL = 0)
         {
+            if (commentContainer.Text == null)
+            { commentContainer.Text = ""; }
+            if (contentContainer.Text == null)
+            { contentContainer.Text = ""; }
             if (isContent)
             {
                 Keyboard.Focus(contentContainer);

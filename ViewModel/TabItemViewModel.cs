@@ -243,7 +243,7 @@ namespace MultiBranchTexter.ViewModel
         {
             TextFragments = Clone(nd.Item1);
 
-            await Task.Delay(20);
+            await Task.Delay(10);
 
             if (nd.Item3 != null)
             {

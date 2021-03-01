@@ -20,6 +20,7 @@ namespace MultiBranchTexter.Controls
         {
             InitializeComponent();
             titleBox.Text = maEnd.Question;
+            isQuestionBtn.IsChecked = maEnd.IsQuestion;
             foreach (string answer in maEnd.Answers.Keys)
             {
                 NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(answer);
@@ -71,6 +72,13 @@ namespace MultiBranchTexter.Controls
             answerContainer.Children.Add(nodeEnd);
             // 还要通知窗口改变相应的标签页
             ViewModelFactory.Main.ReLoadTab(FatherTextNode);
+        }
+
+        //变更是否是询问
+        private void IsQuestionBtn_Click(object sender, RoutedEventArgs e)
+        {
+            FatherNode.textNode.EndCondition.IsQuestion = isQuestionBtn.IsChecked == true;
+            ViewModelFactory.Main.IsModified = true;
         }
         #endregion
 
