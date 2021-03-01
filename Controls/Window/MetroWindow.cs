@@ -218,5 +218,10 @@ namespace MultiBranchTexter
             base.OnMouseLeftButtonDown(e);
         }
 
+        public void ToMaximize()
+        {
+            MaxButton.IsChecked = true;
+            this.WindowState = WindowState.Maximized;
+        }
     }
 }

@@ -106,6 +106,19 @@ namespace MultiBranchTexter.ViewModel
             { _sideWidth = value; RaisePropertyChanged("SideWidth"); }
         }
 
+        //标题栏高度，用于全屏显示
+        private double _titleBarHeight;
+        public double TitleBarHeight
+        {
+            get { return _titleBarHeight; }
+            set
+            {
+                _titleBarHeight = value;
+                if (value == 0)
+                { (Application.Current.MainWindow as MetroWindow).ToMaximize(); }
+                RaisePropertyChanged("TitleBarHeight"); 
+            }
+        }
         #endregion
 
         #region 版本信息
@@ -134,6 +147,7 @@ namespace MultiBranchTexter.ViewModel
             VersionInfo = "当前版本  "
                 + tempV.Major.ToString() + "." + tempV.Minor.ToString() + "." + tempV.Build.ToString();
             NewVersionInfo = "";
+            TitleBarHeight = 24;
         }
 
         #region 命令

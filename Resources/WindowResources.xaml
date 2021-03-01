@@ -189,13 +189,12 @@
                 <vm:SettingViewModel x:Name="svm"/>
             </Grid.DataContext>
             <Grid.RowDefinitions>
-                <RowDefinition Height="24"/>
+                <RowDefinition Height="{Binding TitleBarHeight}"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <!--标题栏-->
-            <StackPanel Orientation="Horizontal" Grid.Row="0" 
-                        HorizontalAlignment="Left">
+            <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
                 <ContentControl Width="24" Content="{DynamicResource iconImg}"/>
                 <TextBlock x:Name="WindowTitleTbl" Grid.Row="0" Text="" 
                            VerticalAlignment="Center"

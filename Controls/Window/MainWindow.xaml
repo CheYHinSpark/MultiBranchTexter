@@ -31,25 +31,32 @@
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
                     Grid.Row="0">
-            <Button ToolTip="新建文件" Width="28"
+            <Button ToolTip="新建" Width="28"
                     Template="{StaticResource generalButtonTemplate}"
                     Command="{Binding NewFileCommand}"
                     CommandParameter="{Binding ElementName=flowChart}"
                     Content="M0,9 L6,9 M3,6 3,12
-                      M2,5 2,0 9,0 12,3 12,14 2,14 L2,13
-                      M9,0 9,3 L12,3"/>
-            <Button ToolTip="打开文件" Width="28"
+                    M2,5 2,0 9,0 12,3 12,14 2,14 L2,13
+                    M9,0 9,3 L12,3"/>
+            <Button ToolTip="打开" Width="28"
                     Template="{StaticResource generalButtonTemplate}"
                     Command="{Binding OpenFileCommand}"
                     CommandParameter="{Binding ElementName=flowChart}"
                     Content="M1,12 13,12 16,6 4,6 Z
-                      M1,12 0,12 0,4 2,2 6,2 8,4 13,4 L13,6"/>
-            <Button ToolTip="保存文件" Width="28"
+                    M1,12 0,12 0,4 2,2 6,2 8,4 13,4 L13,6"/>
+            <Button ToolTip="保存" Width="28"
                     Template="{StaticResource generalButtonTemplate}"
                     Command="{Binding SaveFileCommand}"
                     CommandParameter="{Binding ElementName=flowChart}"
                     Content="M0,14 0,0 3,0 3,5 8,5 8,0 9,0 12,3 12,14 Z
-                      M4,0 6,0 L6,4"/>
+                    M4,0 6,0 L6,4"/>
+            <Button ToolTip="另存为" Width="28"
+                    Template="{StaticResource generalButtonTemplate}"
+                    Command="{Binding SaveAsFileCommand}"
+                    CommandParameter="{Binding ElementName=flowChart}"
+                    Content="M0,5 0,0 3,0 3,5 8,5 8,0 9,0 12,3 12,14 L8,14 
+                    M4,14 0,14 L0,13
+                    M4,0 6,0 L6,4 M0,10 L8,10 M5,7 8,10 L5,13"/>
             <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
                        Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
             <CheckBox ToolTip="节点图" Width="28" Tag="r"
@@ -72,8 +79,8 @@
                     Command="{Binding FontSizeDownCommand}"
                     Template="{StaticResource generalButtonTemplate}"
                     Content="M0,16 5,4 L10,16 M2,11 L8,11
-                      M12,16 14,11.2 16,16
-                      M10,4 16,4"/>
+                    M12,16 14,11.2 16,16
+                    M10,4 16,4"/>
             <TextBlock Text="{Binding TextFontSize}" Width="14" VerticalAlignment="Center"
                        TextAlignment="Center" Foreground="{DynamicResource Foreground.BaseBrush}"/>
             <Button ToolTip="字体放大" Width="28"
@@ -96,11 +103,17 @@
             <Menu Background="Transparent" Height="28">
                 <MenuItem Header="M0,0 6,6 L0,12 M8,0 14,6 L8,12"
                           ToolTip="导出">
+                    <MenuItem Header="导出为json"/>
                     <MenuItem Header="导出为txt"/>
                     <MenuItem Header="导出为docx"/>
                     <MenuItem Header="导出为latex"/>
                 </MenuItem>
             </Menu>
+            <CheckBox ToolTip="切换全屏" Width="28"
+                      Template="{StaticResource generalCheckTemplate}" 
+                      IsChecked="{Binding IsFullScreen}" 
+                      Content="M0,6 0,12 L6,12 
+                      M6,0 12,0 L12,6"/>
         </StackPanel>
         <!--没有加载文件时的提示文本-->
         <StackPanel Grid.Row="1" Orientation="Vertical" 

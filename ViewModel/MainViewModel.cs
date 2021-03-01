@@ -93,6 +93,21 @@ namespace MultiBranchTexter.ViewModel
             get { return _workTabWidth; }
             set { _workTabWidth = value; RaisePropertyChanged("WorkTabWidth"); }
         }
+
+        private bool _isFullScreen;
+        public bool IsFullScreen
+        {
+            get { return _isFullScreen; }
+            set 
+            {
+                _isFullScreen = value; 
+                if (value)
+                { ViewModelFactory.Settings.TitleBarHeight = 0; }
+                else
+                { ViewModelFactory.Settings.TitleBarHeight = 24; }
+                RaisePropertyChanged("IsFullScreen"); 
+            }
+        }
         #endregion
 
         #region 文件相关
@@ -360,6 +375,7 @@ namespace MultiBranchTexter.ViewModel
             IsHintAwake = false;
             InText = "";
             OutText = "";
+            //IsFullScreen = false;//这个不能要。。。
         }
 
         private void WorkTabs_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
