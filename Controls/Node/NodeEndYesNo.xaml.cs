@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using MultiBranchTexter.Model;
 using MultiBranchTexter.ViewModel;
 
@@ -30,6 +20,7 @@ namespace MultiBranchTexter.Controls
         {
             InitializeComponent();
             titleBox.Text = yesNoCond.Question;
+            isQuestionBtn.IsChecked = yesNoCond.IsQuestion;
         }
 
         #region 事件
@@ -66,6 +57,13 @@ namespace MultiBranchTexter.Controls
             { return; }
             //进入选择模式
             ViewModelFactory.FCC.WaitClick(node);
+        }
+
+        //变更是否是询问
+        private void IsQuestionBtn_Click(object sender, RoutedEventArgs e)
+        {
+            FatherNode.textNode.EndCondition.IsQuestion = isQuestionBtn.IsChecked == true;
+            ViewModelFactory.Main.IsModified = true;
         }
         #endregion
 

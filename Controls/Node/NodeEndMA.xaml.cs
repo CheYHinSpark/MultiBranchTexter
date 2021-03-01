@@ -22,7 +22,7 @@ namespace MultiBranchTexter.Controls
             InitializeComponent();
             titleBox.Text = maEnd.Question;
             isQuestionBtn.IsChecked = maEnd.IsQuestion;
-            for (int i =0;i<maEnd.Answers.Count;i++)
+            for (int i =0;i < maEnd.Answers.Count;i++)
             {
                 NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(maEnd.Answers[i].Item1);
                 answerContainer.Children.Add(nodeEnd);

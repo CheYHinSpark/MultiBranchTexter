@@ -16,9 +16,28 @@
                 Background="{DynamicResource NodeBgBrush}" BorderBrush="{DynamicResource ThemeBrush}"
                 BorderThickness="1" CornerRadius="4">
             <Grid>
-                <Rectangle Margin="1"
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <CheckBox x:Name="isQuestionBtn" Grid.Column="0" ToolTip="切换询问或判断"
+                          Click="IsQuestionBtn_Click"
+                          Foreground="{DynamicResource Foreground.BaseBrush}"
+                          Template="{StaticResource textCheckTemplate}">
+                    <CheckBox.Style>
+                        <Style TargetType="{x:Type CheckBox}">
+                            <Setter Property="Content" Value="判断"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Content" Value="询问"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </CheckBox.Style>
+                </CheckBox>
+                <Rectangle Margin="1" Grid.Column="1"
                            VerticalAlignment="Bottom" Fill="Gray" Height="2"/>
-                <TextBox x:Name="titleBox" Margin="1"
+                <TextBox x:Name="titleBox" Margin="1" Grid.Column="1"
                          Focusable="False" Background="Transparent"
                          PreviewMouseDoubleClick="TitleBox_PreviewMouseDoubleClick"
                          LostFocus="TitleBox_LostFocus"/>
