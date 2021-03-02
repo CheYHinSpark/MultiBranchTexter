@@ -12,17 +12,15 @@
     </local:MetroWindow.DataContext>
     
     <local:MetroWindow.InputBindings>
-        <KeyBinding Gesture="Ctrl+Shift+N" Command="{Binding NewFileCommand}" 
-                    CommandParameter="{Binding ElementName=flowChart}"/>
-        <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenFileCommand}"
-                    CommandParameter="{Binding ElementName=flowChart}"/>
-        <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveNodeCommand}" 
-                    CommandParameter="{Binding ElementName=flowChart}"/>
-        <KeyBinding Gesture="Ctrl+Alt+S" Command="{Binding SaveFileCommand}" 
-                    CommandParameter="{Binding ElementName=flowChart}"/>
-        <KeyBinding Gesture="Ctrl+Shift+S" Command="{Binding SaveAsFileCommand}" 
-                    CommandParameter="{Binding ElementName=flowChart}"/>
+        <KeyBinding Gesture="Ctrl+Shift+N" Command="{Binding NewFileCommand}"/>
+        <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenFileCommand}"/>
+        <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveNodeCommand}"/>
+        <KeyBinding Gesture="Ctrl+Alt+S" Command="{Binding SaveFileCommand}"/>
+        <KeyBinding Gesture="Ctrl+Shift+S" Command="{Binding SaveAsFileCommand}"/>
+        <KeyBinding Gesture="Alt+Left" Command="{Binding LeftPullCommand}"/>
+        <KeyBinding Gesture="Alt+Right" Command="{Binding RightPullCommand}"/>
     </local:MetroWindow.InputBindings>
+    
     <Grid Background="{DynamicResource BaseBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="28"/>
@@ -34,30 +32,26 @@
             <Button ToolTip="新建" Width="28"
                     Template="{StaticResource generalButtonTemplate}"
                     Command="{Binding NewFileCommand}"
-                    CommandParameter="{Binding ElementName=flowChart}"
                     Content="M0,9 L6,9 M3,6 3,12
                     M2,5 2,0 9,0 12,3 12,14 2,14 L2,13
                     M9,0 9,3 L12,3"/>
             <Button ToolTip="打开" Width="28"
                     Template="{StaticResource generalButtonTemplate}"
                     Command="{Binding OpenFileCommand}"
-                    CommandParameter="{Binding ElementName=flowChart}"
                     Content="M1,12 13,12 16,6 4,6 Z
                     M1,12 0,12 0,4 2,2 6,2 8,4 13,4 L13,6"/>
             <Button ToolTip="保存" Width="28"
                     Template="{StaticResource generalButtonTemplate}"
                     Command="{Binding SaveFileCommand}"
-                    CommandParameter="{Binding ElementName=flowChart}"
                     Content="M0,14 0,0 3,0 3,5 8,5 8,0 9,0 12,3 12,14 Z
                     M4,0 6,0 L6,4"/>
             <Button ToolTip="另存为" Width="28"
                     Template="{StaticResource generalButtonTemplate}"
                     Command="{Binding SaveAsFileCommand}"
-                    CommandParameter="{Binding ElementName=flowChart}"
                     Content="M0,5 0,0 3,0 3,5 8,5 8,0 9,0 12,3 12,14 L8,14 
                     M4,14 0,14 L0,13
                     M4,0 6,0 L6,4 M0,10 L8,10 M5,7 8,10 L5,13"/>
-            <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
+            <!--<Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
                        Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
             <CheckBox ToolTip="节点图" Width="28" Tag="r"
                       Template="{StaticResource generalCheckTemplate}"  
@@ -72,7 +66,7 @@
                       IsChecked="{Binding IsWorkTabShowing}" 
                       IsEnabled="{Binding CanHideWorkTab}"
                       Content="M0,0 L14,0
-                      M0,4 L14,4 M0,8 L9,8 M0,12 L14,12"/>
+                      M0,4 L14,4 M0,8 L9,8 M0,12 L14,12"/>-->
             <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
                        Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
             <Button ToolTip="字体缩小" Width="28"
@@ -109,11 +103,24 @@
                     <MenuItem Header="导出为latex"/>
                 </MenuItem>
             </Menu>
-            <CheckBox ToolTip="切换全屏" Width="28"
+            <CheckBox Width="28"
                       Template="{StaticResource generalCheckTemplate}" 
-                      IsChecked="{Binding IsFullScreen}" 
-                      Content="M0,6 0,12 L6,12 
-                      M6,0 12,0 L12,6"/>
+                      IsChecked="{Binding IsFullScreen}" >
+                <CheckBox.Style>
+                    <Style TargetType="{x:Type CheckBox}">
+                        <Setter Property="ToolTip" Value="全屏"/>
+                        <Setter Property="Content" Value="M0,6 0,12 L6,12 
+                                M6,0 12,0 L12,6"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="ToolTip" Value="还原"/>
+                                <Setter Property="Content" Value="M0,8 6,8 L6,14 
+                                        M8,0 8,6 L14,6"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </CheckBox.Style>
+            </CheckBox>
         </StackPanel>
         <!--没有加载文件时的提示文本-->
         <StackPanel Grid.Row="1" Orientation="Vertical" 
@@ -124,15 +131,85 @@
                        Foreground="{DynamicResource Foreground.BaseBrush}" FontSize="24"/>
         </StackPanel>
         <!--正式的两个工作控件-->
-        <Grid Grid.Row="1" IsEnabled="{Binding IsWorkGridVisible}">
+        <Grid Grid.Row="1" Background="{DynamicResource ThemeBrush}" IsEnabled="{Binding IsWorkGridVisible}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding FlowChartWidth}"/>
+                <ColumnDefinition Width="0"/>
                 <ColumnDefinition Width="{Binding WorkTabWidth}"/>
             </Grid.ColumnDefinitions>
-            <c:FlowChartContainer x:Name="flowChart" Grid.Column="0" />
-            <TabControl x:Name="workTabControl" Grid.Column="1" Padding="0" 
+            <c:FlowChartContainer x:Name="flowChart" Grid.Column="0" Margin="0,0,6,0"/>
+            <TabControl x:Name="workTabControl" Grid.Column="2" Padding="0"  Margin="6,0,0,0"
                         ItemsSource="{Binding WorkTabs, Mode=TwoWay}"
                         SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"/>
+            <!--中央的左右调节控件-->
+            <UserControl Grid.Column="1">
+                <UserControl.Template>
+                    <ControlTemplate TargetType="{x:Type UserControl}">
+                        <Grid x:Name="Root" Background="Transparent" Margin="-6,0,-6,0" >
+                            <Rectangle Fill="{StaticResource BaseBrush}" Margin="0,0,0,20"
+                                       HorizontalAlignment="Center" Width="12"/>
+                            <Rectangle x:Name="bgBorder" Opacity="0" Margin="0,0,0,20"
+                                       IsHitTestVisible="False"
+                                       Fill="{DynamicResource ThemeBrush}">
+                                <Rectangle.OpacityMask>
+                                    <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
+                                        <GradientStop Color="Transparent"/>
+                                        <GradientStop Color="White" Offset="0.5"/>
+                                        <GradientStop Color="Transparent" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                            <Grid x:Name="btnHost" IsHitTestVisible="False" Height="28" Width="56"
+                                  Opacity="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Border BorderBrush="{DynamicResource ThemeBrush}" 
+                                        Background="{DynamicResource BaseBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="4"/>
+                                <Button Background="{DynamicResource ThemeBrush}"
+                                        Command="{Binding LeftPullCommand}"
+                                        HorizontalAlignment="Left" Width="28" Tag="r"
+                                        Template="{StaticResource generalButtonTemplate}"
+                                        Content="M7,0 7,4 14,4 14,10 7,10 7,14 0,7Z"/>
+                                <Button Background="{DynamicResource ThemeBrush}" 
+                                        Command="{Binding RightPullCommand}"
+                                        HorizontalAlignment="Right" Width="28" Tag="l"
+                                        Template="{StaticResource generalButtonTemplate}"
+                                        Content="M7,0 7,4 0,4 0,10 7,10 7,14 14,7Z"/>
+                            </Grid>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Margin" Value="-28,0,-28,0" TargetName="Root"/>
+                                <Setter Property="IsHitTestVisible" Value="True" TargetName="btnHost"/>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0:0:0.3" From="0" To="0.6"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             Storyboard.TargetName="bgBorder"/>
+                                            <DoubleAnimation Duration="0:0:0.3" From="0" To="1"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             Storyboard.TargetName="btnHost"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>                            
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0:0:0.3" From="0.6" To="0"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             Storyboard.TargetName="bgBorder"/>
+                                            <DoubleAnimation Duration="0:0:0.3" From="1" To="0"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             Storyboard.TargetName="btnHost"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </UserControl.Template>
+            </UserControl>
             <Grid.Style>
                 <Style TargetType="{x:Type Grid}">
                     <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>

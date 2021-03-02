@@ -356,10 +356,11 @@
                               CornerRadius="0" 
                               CaptionHeight="0"
                               UseAeroCaptionButtons="False"
-                              ResizeBorderThickness="4" />
+                              ResizeBorderThickness="2" />
             </Setter.Value>
         </Setter>
         <Style.Triggers>
+            <!--这是为了防止某些恶心的东西出现-->
             <Trigger Property="WindowState" Value="Maximized">
                 <Setter Property="WindowChrome.WindowChrome">
                     <Setter.Value>

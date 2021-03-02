@@ -520,7 +520,7 @@
     <ControlTemplate x:Key="generalCheckTemplate" TargetType="{x:Type CheckBox}">
         <Border x:Name="BD" CornerRadius="4" Margin="2" BorderThickness="1"
                 Background="Transparent" BorderBrush="Transparent">
-            <Path x:Name="CP" Stroke="{StaticResource MiddleBrush}"
+            <Path x:Name="CP" Stroke="{DynamicResource Foreground.BaseBrush}"
                   HorizontalAlignment="Center" StrokeThickness="1"
                   VerticalAlignment="Center"
                   Data="{Binding Content, 
@@ -532,9 +532,15 @@
                 <Setter Property="BorderBrush" Value="{DynamicResource ThemeBrush}" TargetName="BD"/>
                 <Setter Property="Background" Value="{DynamicResource Highlight.BaseBrush}" TargetName="BD"/>
             </Trigger>
-            <Trigger Property="IsChecked" Value="True">
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsChecked" Value="True"/>
+                    <Condition Property="IsEnabled" Value="True"/>
+                </MultiTrigger.Conditions>
                 <Setter Property="BorderBrush" Value="{DynamicResource ThemeBrush}" TargetName="BD"/>
-                <Setter Property="Stroke" Value="{DynamicResource Foreground.BaseBrush}" TargetName="CP"/>
+            </MultiTrigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Stroke" Value="{StaticResource MiddleBrush}" TargetName="CP"/>
             </Trigger>
             <Trigger Property="Tag" Value="l">
                 <Setter Property="CornerRadius" TargetName="BD" Value="0,4,4,0"/>

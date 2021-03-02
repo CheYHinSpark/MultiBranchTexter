@@ -151,7 +151,7 @@ namespace MultiBranchTexter.Controls
 
         private void Content_KeyDown(object sender, KeyEventArgs e)
         {
-            //如果在开头按下退格，且本片段没有operation，则合并本段与上段
+            //如果在开头按下退格，且本片段没有comment，则合并本段与上段
             if (e.Key == Key.Back
                 && contentContainer.SelectionStart == 0
                 && contentContainer.SelectionLength == 0
@@ -164,16 +164,20 @@ namespace MultiBranchTexter.Controls
                     ViewModelFactory.Main.WorkingTab.GlueFragment(i - 1);
                 }
             }
-            //如果在末尾按下删除，且下一片段没有operation，则合并本段与下一段
-            if (e.Key == Key.Delete 
+            //如果在末尾按下删除，且下一片段没有comment，则合并本段与下一段
+            if (e.Key == Key.Delete
                 && contentContainer.SelectionStart == ContentText.Length
                 && contentContainer.SelectionLength == 0)
             {
                 e.Handled = true;// <--否则会多退格
                 int i = (int)Tag;
-                if (i < ViewModelFactory.Main.WorkingViewModel.TextFragments.Count - 1 )
+                if (i < ViewModelFactory.Main.WorkingViewModel.TextFragments.Count - 1)
                 {
-                    ViewModelFactory.Main.WorkingTab.GlueFragment(i);
+                    string str = ViewModelFactory.Main.WorkingViewModel.TextFragments[i + 1].Comment;
+                    if (str == null || str == "")
+                    {
+                        ViewModelFactory.Main.WorkingTab.GlueFragment(i);
+                    }
                 }
             }
             //如果按下了Ctrl+Enter，则切断fragment

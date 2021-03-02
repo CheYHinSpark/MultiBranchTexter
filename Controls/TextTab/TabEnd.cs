@@ -48,7 +48,8 @@ namespace MultiBranchTexter.Controls
 
         private void BackBtn_Click(object sender, RoutedEventArgs e)
         {
-            ViewModelFactory.Main.IsFlowChartShowing = true;
+            ViewModelFactory.Main.FlowChartWidth = "*";
+            //ViewModelFactory.Main.IsFlowChartShowing = true;
             ViewModelFactory.FCC.LocateToNode(textNode);
         }
         #endregion
