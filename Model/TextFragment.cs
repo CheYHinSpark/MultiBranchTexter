@@ -138,14 +138,32 @@ namespace MultiBranchTexter.Model
             }
             return charWordCount;
         }
+
+        /// <summary> 
+        /// 将Comments转换为一个operation的list
+        /// 游戏开发导出JSON使用
+        /// </summary>
+        public OperationTextFragment ToOperation()
+        {
+            if (Comment == null)
+            { Comment = ""; }
+            string[] preOps = Comment.Split(new char[] { '\r', '\n' });
+            List<string> vs = new List<string>();
+            for (int i =0;i<preOps.Length;i++)
+            {
+                string p = preOps[i].Replace(" ", "").Replace("\t", "");
+                if (p != "")
+                { vs.Add(p); }
+            }
+            return new OperationTextFragment() { Content = Content, Operations = vs };
+        }
     }
 
-    [Obsolete]
-    public class OldTextFragment
+    public class OperationTextFragment
     {
         public List<string> Operations = new List<string>();
         public string Content;
-        public OldTextFragment() { }
+        public OperationTextFragment() { }
         public TextFragment ToTextFragment()
         {
             string newComment = "";

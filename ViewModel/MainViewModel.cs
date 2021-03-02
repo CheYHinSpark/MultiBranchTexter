@@ -380,9 +380,28 @@ namespace MultiBranchTexter.ViewModel
         });
         #endregion
 
-        #endregion
-
         #region 导出命令
+        /// <summary>
+        /// 导出为JSON，游戏开发
+        /// </summary>
+        public ICommand OutputAsJSONCommand => new RelayCommand(async (t) =>
+        {
+            if (FileName == "" || _fileDirPath == "")
+            { return; }
+            List<TextNode> nodes = ViewModelFactory.FCC.GetTextNodeList();
+            List<OperationTextNode> newNodes = new List<OperationTextNode>();
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                newNodes.Add(nodes[i].ToOperationTextNode());
+            }
+            await Task.Run(() =>
+            {
+                MetadataFile.WriteJSONNodes(FileName, newNodes);
+            });
+            await Task.Delay(10);
+            Process.Start("explorer.exe", _fileDirPath);
+        });
+        #endregion
 
         #endregion
 

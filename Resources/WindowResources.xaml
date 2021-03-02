@@ -182,8 +182,8 @@
     </Style>
     
 
-    <!--窗体控件模板-->
-    <ControlTemplate x:Key="MetroWindowTemplate" TargetType="{x:Type local:MetroWindow}">
+    <!--主窗体控件模板-->
+    <ControlTemplate x:Key="MainWindowTemplate" TargetType="{x:Type local:MetroWindow}">
         <Grid x:Name="LayoutRoot" Background="{DynamicResource ThemeBrush}">
             <Grid.DataContext>
                 <vm:SettingViewModel x:Name="svm"/>
@@ -341,14 +341,13 @@
             </EventTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    <!--窗体控件Style-->
-    <Style x:Key="MetroWindowStyle" TargetType="{x:Type local:MetroWindow}">
+    <!--主窗体控件Style-->
+    <Style x:Key="MainWindowStyle" TargetType="{x:Type local:MetroWindow}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="MinHeight" Value="300"/>
         <Setter Property="MinWidth" Value="400"/>
-        <Setter Property="Background" Value="Red"/>
-        <Setter Property="Template" Value="{StaticResource MetroWindowTemplate}"/>
+        <Setter Property="Template" Value="{StaticResource MainWindowTemplate}"/>
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
                 <!--允许调整窗口大小-->

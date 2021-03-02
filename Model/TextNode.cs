@@ -65,19 +65,15 @@ namespace MultiBranchTexter.Model
         }
         #endregion
 
-        [Obsolete]
-        public static List<TextNode> DeserializeFromFile(string file)
+        /// <summary>
+        /// JSON保存，游戏开发用
+        /// </summary>
+        public OperationTextNode ToOperationTextNode()
         {
-            string txt = File.ReadAllText(file);
-            return JsonConvert.DeserializeObject<List<TextNode>>(txt);
-        }
-
-        [Obsolete]
-        public static string SerializeToFile(List<TextNode> nodes, string file)
-        {
-            string s = JsonConvert.SerializeObject(nodes);
-            File.WriteAllText(file, s);
-            return s;
+            List<OperationTextFragment> newFragments = new List<OperationTextFragment>();
+            for (int i =0;i<Fragments.Count;i++)
+            { newFragments.Add(Fragments[i].ToOperation()); }
+            return new OperationTextNode() { Name = Name, Fragments = newFragments, EndCondition = EndCondition };
         }
     }
 
@@ -99,42 +95,23 @@ namespace MultiBranchTexter.Model
     }
 
     /// <summary>
-    /// 带左上角坐标的文本节点，用于读取和保存数据
+    /// 转换为operation的文本节点类 
+    /// JSON保存，游戏开发用
     /// </summary>
-    [Obsolete]
-    public class OldTextNodeWithLeftTop
-    {
-        public ReOldTextNode Node;
-        public double Left;
-        public double Top;
-        public OldTextNodeWithLeftTop(ReOldTextNode node, double left, double top)
-        {
-            Node = node;
-            Left = left;
-            Top = top;
-        }
-        public TextNodeWithLeftTop ToNew()
-        {
-            return new TextNodeWithLeftTop(Node.ToTextNode(), Left, Top);
-        }
-    }
-
-    /// <summary> 旧的文本节点类 </summary>
-    [Obsolete]
-    public class ReOldTextNode
+    public class OperationTextNode
     {
         // 文件名
         public string Name = "";
 
         // 后继条件
-        public OldEndCondition endCondition;
+        public EndCondition EndCondition;
 
         //文字内容
-        public List<TextFragment> Fragments = new List<TextFragment>();
+        public List<OperationTextFragment> Fragments = new List<OperationTextFragment>();
 
-        public ReOldTextNode()
+        public OperationTextNode()
         {
-            endCondition = new OldEndCondition();
+            EndCondition = new EndCondition();
         }
 
         public TextNode ToTextNode()
@@ -142,50 +119,7 @@ namespace MultiBranchTexter.Model
             TextNode textNode = new TextNode
             {
                 Name = Name,
-                EndCondition = endCondition.ToEndCondition()
-            };
-            for (int i = 0; i < Fragments.Count; i++)
-            {
-                textNode.Fragments.Add(Fragments[i]);
-            }
-            return textNode;
-        }
-
-        public static List<TextNode> ToTextNodeList(List<OldTextNode> oldNodes)
-        {
-            List<TextNode> nodes = new List<TextNode>();
-            for (int i = 0; i < oldNodes.Count; i++)
-            {
-                nodes.Add(oldNodes[i].ToTextNode());
-            }
-            return nodes;
-        }
-    }
-
-    /// <summary> 更旧的文本节点类 </summary>
-    [Obsolete]
-    public class OldTextNode
-    {
-        // 文件名
-        public string Name = "";
-
-        // 后继条件
-        public EndCondition endCondition;
-
-        //文字内容
-        public List<OldTextFragment> Fragments = new List<OldTextFragment>();
-
-        public OldTextNode()
-        {
-            endCondition = new EndCondition();
-        }
-
-        public TextNode ToTextNode()
-        {
-            TextNode textNode = new TextNode
-            {
-                Name = Name,
-                EndCondition = endCondition
+                EndCondition = EndCondition
             };
             for (int i = 0;i< Fragments.Count;i++)
             {
@@ -194,7 +128,7 @@ namespace MultiBranchTexter.Model
             return textNode;
         }
 
-        public static List<TextNode> ToTextNodeList(List<OldTextNode> oldNodes)
+        public static List<TextNode> ToTextNodeList(List<OperationTextNode> oldNodes)
         {
             List<TextNode> nodes = new List<TextNode>();
             for (int i =0;i<oldNodes.Count;i++)

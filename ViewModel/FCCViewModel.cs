@@ -276,26 +276,17 @@ namespace MultiBranchTexter.ViewModel
             }
             catch 
             {
-                try//1.2.0版本兼容
+                try//1.1.4版本兼容
                 {
-                    var nodes = MetadataFile.ReadOldNodes(mbtxtPath);
+                    var nodes = MetadataFile.ReadVeryNodes(mbtxtPath);
                     _container.Dispatcher.BeginInvoke(new Action(
-                    delegate { DrawFlowChart(nodes); }));
+                        delegate { DrawFlowChart(nodes); }));
                 }
                 catch
                 {
-                    try//1.1.4版本兼容
-                    {
-                        var nodes = MetadataFile.ReadVeryNodes(mbtxtPath);
-                        _container.Dispatcher.BeginInvoke(new Action(
-                            delegate { DrawFlowChart(nodes); }));
-                    }
-                    catch
-                    {
 #if DEBUG
-                        throw new FormatException("全部木大");
+                    throw new FormatException("全部木大");
 #endif
-                    }
                 }
             }
         }

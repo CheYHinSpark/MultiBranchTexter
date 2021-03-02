@@ -4,7 +4,7 @@
                    xmlns:local="clr-namespace:MultiBranchTexter"
                    xmlns:vm="clr-namespace:MultiBranchTexter.ViewModel"
                    xmlns:c="clr-namespace:MultiBranchTexter.Controls"
-                   Style="{StaticResource MetroWindowStyle}"
+                   Style="{StaticResource MainWindowStyle}"
                    WindowStartupLocation="CenterScreen"
                    Title="MultiBranchTexter" Height="450" Width="800">
     <local:MetroWindow.DataContext>
@@ -98,7 +98,7 @@
             <Menu Background="Transparent" Height="28">
                 <MenuItem Header="M0,0 6,6 L0,12 M8,0 14,6 L8,12"
                           ToolTip="导出">
-                    <MenuItem Header="导出为json"/>
+                    <MenuItem Header="导出为json" Command="{Binding OutputAsJSONCommand}"/>
                     <MenuItem Header="导出为txt"/>
                     <MenuItem Header="导出为docx"/>
                     <MenuItem Header="导出为latex"/>

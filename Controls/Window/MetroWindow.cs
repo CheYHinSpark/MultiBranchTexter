@@ -142,7 +142,7 @@ namespace MultiBranchTexter
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // 查找窗体模板
-            if (App.Current.Resources["MetroWindowTemplate"] is ControlTemplate mWTemplate)
+            if (App.Current.Resources["MainWindowTemplate"] is ControlTemplate mWTemplate)
             {
                 ViewModelFactory.SetViewModel(typeof(SettingViewModel), 
                     mWTemplate.FindName("svm", this) as SettingViewModel);

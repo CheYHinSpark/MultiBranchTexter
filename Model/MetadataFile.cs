@@ -56,20 +56,8 @@ namespace MultiBranchTexter.Model
                 }
                 meta.nodeFilePath = tryUrl;
             }
-            var list = JsonConvert.DeserializeObject<List<OldTextNode>>(File.ReadAllText(meta.nodeFilePath));
-            return meta.SetNodeCoordinate(OldTextNode.ToTextNodeList(list));
-        }
-
-        [Obsolete]
-        public static List<TextNodeWithLeftTop> ReadOldNodes(string metaUrl)
-        {
-            List<OldTextNodeWithLeftTop> data = JsonConvert.DeserializeObject<List<OldTextNodeWithLeftTop>>(File.ReadAllText(metaUrl));
-            List<TextNodeWithLeftTop> newd = new List<TextNodeWithLeftTop>();
-            for (int i = 0; i < data.Count; i++)
-            {
-                newd.Add(data[i].ToNew());
-            }
-            return newd;
+            var list = JsonConvert.DeserializeObject<List<OperationTextNode>>(File.ReadAllText(meta.nodeFilePath));
+            return meta.SetNodeCoordinate(OperationTextNode.ToTextNodeList(list));
         }
 
         public static void WriteTextNodes(string metaUrl, List<TextNodeWithLeftTop> nodes)
@@ -77,29 +65,13 @@ namespace MultiBranchTexter.Model
             File.WriteAllText(metaUrl, JsonConvert.SerializeObject(nodes, Formatting.Indented));
         }
 
-        [Obsolete]//以后导出可以用用看
-        public static void WriteNodes(string metaUrl, List<TextNodeWithLeftTop> nodes)
+        /// <summary>
+        /// 保存为相应的JSON数据，游戏开发用
+        /// </summary>
+        public static void WriteJSONNodes(string metaUrl, List<OperationTextNode> nodes)
         {
             var nodeUrl = new Regex(@"\.mbjson$", RegexOptions.IgnoreCase).Replace(metaUrl, ".json");
-            if (nodeUrl.ToLowerInvariant() == metaUrl.ToLowerInvariant())
-            {
-                nodeUrl = new Regex(@"\.json$", RegexOptions.IgnoreCase).Replace(nodeUrl, ".node.json");
-            }
-            if (nodeUrl.ToLowerInvariant() == metaUrl.ToLowerInvariant())
-            {
-                throw new Exception("wtf?");
-            }
-            var nodeToSave = nodes.Select(n => n.Node).ToList();
-
-            var m = new MetadataFile();
-            foreach (var n in nodes)
-            {
-                m.coordinates[n.Node.Name] = (n.Left, n.Top);
-            }
-            m.nodeFilePath = nodeUrl;
-
-            File.WriteAllText(nodeUrl, JsonConvert.SerializeObject(nodeToSave, Formatting.Indented));
-            File.WriteAllText(metaUrl, JsonConvert.SerializeObject(m, Formatting.Indented));
+            File.WriteAllText(nodeUrl, JsonConvert.SerializeObject(nodes, Formatting.Indented));
         }
     }
 }
