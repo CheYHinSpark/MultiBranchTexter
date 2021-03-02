@@ -19,6 +19,7 @@
         <KeyBinding Gesture="Ctrl+Shift+S" Command="{Binding SaveAsFileCommand}"/>
         <KeyBinding Gesture="Alt+Left" Command="{Binding LeftPullCommand}"/>
         <KeyBinding Gesture="Alt+Right" Command="{Binding RightPullCommand}"/>
+        <KeyBinding Gesture="Esc" Command="{Binding ExitFullScreenCommand}"/>
     </local:MetroWindow.InputBindings>
     
     <Grid Background="{DynamicResource BaseBrush}">
@@ -146,7 +147,7 @@
                 <UserControl.Template>
                     <ControlTemplate TargetType="{x:Type UserControl}">
                         <Grid x:Name="Root" Background="Transparent" Margin="-6,0,-6,0" >
-                            <Rectangle Fill="{StaticResource BaseBrush}" Margin="0,0,0,20"
+                            <Rectangle Fill="{DynamicResource BaseBrush}" Margin="0,0,0,20"
                                        HorizontalAlignment="Center" Width="12"/>
                             <Rectangle x:Name="bgBorder" Opacity="0" Margin="0,0,0,20"
                                        IsHitTestVisible="False"
@@ -164,7 +165,7 @@
                                 <Border BorderBrush="{DynamicResource ThemeBrush}" 
                                         Background="{DynamicResource BaseBrush}"
                                         BorderThickness="1"
-                                        CornerRadius="4"/>
+                                        CornerRadius="5"/>
                                 <Button Background="{DynamicResource ThemeBrush}"
                                         Command="{Binding LeftPullCommand}"
                                         HorizontalAlignment="Left" Width="28" Tag="r"

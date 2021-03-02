@@ -230,8 +230,6 @@ namespace MultiBranchTexter.ViewModel
                             );
             if (warnResult == MessageBoxResult.No)
             { return; }
-            //List<TextNode> textNodes = GetTextNodeList();
-            //_container.Children.Clear();
             ReDrawFlowChart();
         });
         #endregion
@@ -906,7 +904,7 @@ namespace MultiBranchTexter.ViewModel
         public void WaitClick(NodeBase waiter)
         {
             waitingNode = waiter;
-            ViewModelFactory.Main.RaiseHint("请选择一个后继节点");
+            int nodeCount = 0;
             //开启等待点击
             foreach (UserControl control in _container.Children)
             {
@@ -914,9 +912,14 @@ namespace MultiBranchTexter.ViewModel
                 {
                     //开启nodebutton的上层border，等待点击其中一个
                     (control as NodeButton).UpperBd.Visibility = Visibility.Visible;
+                    nodeCount++;
                 }
             }
             waiter.FatherNode.UpperBd.Visibility = Visibility.Hidden;
+            if (nodeCount > 1)
+            { ViewModelFactory.Main.RaiseHint("请选择一个后继节点"); }
+            else
+            { waiter = null; }
         }
 
         /// <summary> 新的后继节点选择完成了，传入null表示取消选择 </summary>

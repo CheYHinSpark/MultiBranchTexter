@@ -79,12 +79,14 @@ namespace MultiBranchTexter.Controls
 
         private void NodeButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            NodeState = NodeState.Selected;
-            if (e.OriginalSource is Border)
+            if (e.OriginalSource is Border)//表示点到了背景上
             {
-                SwitchMoving();
-                //通知flowchart改变selectedNodes
-                ViewModelFactory.FCC.NewSelection(this);
+                if ((e.OriginalSource as Border).Name == "bgBorder")
+                {
+                    SwitchMoving();
+                    //通知flowchart改变selectedNodes
+                    ViewModelFactory.FCC.NewSelection(this);
+                }
             }
             oldPoint = e.GetPosition(ViewModelFactory.FCC.Container);
         }

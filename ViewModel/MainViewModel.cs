@@ -216,6 +216,9 @@ namespace MultiBranchTexter.ViewModel
         { TextFontSize--; });
         #endregion
 
+        public ICommand ExitFullScreenCommand => new RelayCommand((t) =>
+        { IsFullScreen = false; });
+
         #region 左右框框调节
         public ICommand RightPullCommand => new RelayCommand((t) =>
         { 
