@@ -10,6 +10,7 @@
         <KeyBinding Gesture="Ctrl+N" Command="{Binding NewNodeCommand}"/>
         <KeyBinding Gesture="Delete" Command="{Binding DeleteCommand}"/>
         <KeyBinding Gesture="Ctrl+F" Command="{Binding StartSearchCommand}"/>
+        <KeyBinding Gesture="Ctrl+A" Command="{Binding SelectAllCommand}"/>
     </UserControl.InputBindings>
     <Grid Background="{DynamicResource ThemeBrush}">
         <Grid.RowDefinitions>

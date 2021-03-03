@@ -186,7 +186,7 @@ namespace MultiBranchTexter.ViewModel
             ViewModelFactory.Main.IsModified = true;
         });
 
-        public ICommand DeleteCommand => new RelayCommand((sender) =>
+        public ICommand DeleteCommand => new RelayCommand((t) =>
         {
             if (SelectedNodes.Count == 0)
             { return; }
@@ -230,6 +230,10 @@ namespace MultiBranchTexter.ViewModel
             { return; }
             ReDrawFlowChart();
         });
+
+        /// <summary> 全选 </summary>
+        public ICommand SelectAllCommand => new RelayCommand((t) =>
+        { SelectAll(); });
         #endregion
 
         public FCCViewModel()
@@ -693,6 +697,18 @@ namespace MultiBranchTexter.ViewModel
             {
                 nodes[i].NodeState = NodeState.Selected;
                 SelectedNodes.Add(nodes[i]);
+            }
+        }
+
+        public void SelectAll()
+        {
+            foreach (UserControl control in Container.Children)
+            {
+                if (control is NodeButton)
+                {
+                    (control as NodeButton).NodeState = NodeState.Selected;
+                    SelectedNodes.Add((control as NodeButton));
+                }
             }
         }
         #endregion
