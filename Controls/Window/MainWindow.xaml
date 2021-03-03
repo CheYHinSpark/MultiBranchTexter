@@ -54,22 +54,6 @@
                     Content="M0,5 0,0 3,0 3,5 8,5 8,0 9,0 12,3 12,14 L8,14 
                     M4,14 0,14 L0,13
                     M4,0 6,0 L6,4 M0,10 L8,10 M5,7 8,10 L5,13"/>
-            <!--<Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
-                       Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
-            <CheckBox ToolTip="节点图" Width="28" Tag="r"
-                      Template="{StaticResource generalCheckTemplate}"  
-                      IsChecked="{Binding IsFlowChartShowing}" 
-                      IsEnabled="{Binding CanHideFlowChart}"
-                      Content="M0,0 0,3 6,3 6,0 Z
-                      M3,3 L3,11 M11,3 11,7 5,7 L5,11
-                      M1,11 1,14 7,14 7,11 Z
-                      M8,0 8,3 14,3 14,0 Z"/>
-            <CheckBox ToolTip="文本页" Width="28" Tag="l"
-                      Template="{StaticResource generalCheckTemplate}" 
-                      IsChecked="{Binding IsWorkTabShowing}" 
-                      IsEnabled="{Binding CanHideWorkTab}"
-                      Content="M0,0 L14,0
-                      M0,4 L14,4 M0,8 L9,8 M0,12 L14,12"/>-->
             <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
                        Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
             <Button ToolTip="字体缩小" Width="28"
@@ -128,9 +112,7 @@
         <!--没有加载文件时的提示文本-->
         <StackPanel Grid.Row="1" Orientation="Vertical" 
                     HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="欢迎使用多分支文本编辑器"
-                       Foreground="{DynamicResource Foreground.BaseBrush}" FontSize="24"/>
-            <TextBlock Text="请点击[浏览]或按下Ctrl+O打开导航文件"
+            <TextBlock Text="欢迎使用多分支文本编辑器&#x000A;打开导航文件 Ctrl+O&#x000A;新建导航文件 Ctrl+Shift+N"
                        Foreground="{DynamicResource Foreground.BaseBrush}" FontSize="24"/>
         </StackPanel>
         <!--正式的两个工作控件-->
