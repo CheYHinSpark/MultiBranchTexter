@@ -19,6 +19,8 @@
         <KeyBinding Gesture="Ctrl+Shift+S" Command="{Binding SaveAsFileCommand}"/>
         <KeyBinding Gesture="Alt+Left" Command="{Binding LeftPullCommand}"/>
         <KeyBinding Gesture="Alt+Right" Command="{Binding RightPullCommand}"/>
+        <KeyBinding Gesture="Alt+Up" Command="{Binding FontSizeUpCommand}"/>
+        <KeyBinding Gesture="Alt+Down" Command="{Binding FontSizeDownCommand}"/>
         <KeyBinding Gesture="Esc" Command="{Binding ExitFullScreenCommand}"/>
     </local:MetroWindow.InputBindings>
     
