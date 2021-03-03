@@ -1,17 +1,12 @@
 ﻿using MultiBranchTexter.Controls;
 using MultiBranchTexter.Model;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MultiBranchTexter.ViewModel
@@ -25,60 +20,6 @@ namespace MultiBranchTexter.ViewModel
             get { return _isWorkGridVisible; }
             set { _isWorkGridVisible = value; RaisePropertyChanged("IsWorkGridVisible"); }
         }
-        //private bool? _isFlowChartShowing;
-        //public bool? IsFlowChartShowing
-        //{
-        //    get { return _isFlowChartShowing; }
-        //    set
-        //    {
-        //        _isFlowChartShowing = value;
-        //        if (value == true)
-        //        {
-        //            FlowChartWidth = "*";
-        //            CanHideWorkTab = true;
-        //        }
-        //        else
-        //        {
-        //            FlowChartWidth = "0";
-        //            CanHideWorkTab = false;
-        //            CanHideFlowChart = true;
-        //        }
-        //        RaisePropertyChanged("IsFlowChartShowing");
-        //    }
-        //}
-        //private bool? _isWorkTabShowing;
-        //public bool? IsWorkTabShowing
-        //{
-        //    get { return _isWorkTabShowing; }
-        //    set
-        //    {
-        //        _isWorkTabShowing = value;
-        //        if (value == true)
-        //        {
-        //            WorkTabWidth = "*";
-        //            CanHideFlowChart = true;
-        //        }
-        //        else
-        //        {
-        //            WorkTabWidth = "0";
-        //            CanHideFlowChart = false;
-        //            CanHideWorkTab = true;
-        //        }
-        //        RaisePropertyChanged("IsWorkTabShowing");
-        //    }
-        //}
-        //private bool _canHideFlowChart;
-        //public bool CanHideFlowChart
-        //{
-        //    get { return _canHideFlowChart; }
-        //    set { _canHideFlowChart = value; RaisePropertyChanged("CanHideFlowChart"); }
-        //}
-        //private bool _canHideWorkTab;
-        //public bool CanHideWorkTab
-        //{
-        //    get { return _canHideWorkTab; }
-        //    set { _canHideWorkTab = value; RaisePropertyChanged("CanHideWorkTab"); }
-        //}
 
         private string _flowChartWidth;
         public string FlowChartWidth
@@ -327,15 +268,11 @@ namespace MultiBranchTexter.ViewModel
         {
             try
             {
-                //if (!IsWorkGridVisible)
-                //{ return; }
-                //if (IsWorkTabShowing == true && WorkTabs.Count > 0)
-                //{
-                    if (!IsWorkGridVisible)
-                    { return; }
-                    if (WorkTabWidth == "*" && WorkTabs.Count > 0)
-                    {
-                        Debug.WriteLine("开始保存单个节点");
+                if (!IsWorkGridVisible)
+                { return; }
+                if (WorkTabWidth == "*" && WorkTabs.Count > 0)
+                {
+                    Debug.WriteLine("开始保存单个节点");
                     WorkTabs[SelectedIndex].Save();
                 }
                 else
@@ -410,10 +347,6 @@ namespace MultiBranchTexter.ViewModel
             IsWorkGridVisible = false;
             FileName = "";
             TextFontSize = 14;
-            //IsFlowChartShowing = true;
-            //IsWorkTabShowing = false;
-            //CanHideWorkTab = true;
-            //CanHideFlowChart = false;
             FlowChartWidth = "*";
             WorkTabWidth = "0";
             WorkTabs = new ObservableCollection<MBTabItem>();
@@ -433,8 +366,6 @@ namespace MultiBranchTexter.ViewModel
                 {
                     FlowChartWidth = "*";
                     WorkTabWidth = "0";
-                    //IsFlowChartShowing = true;
-                    //IsWorkTabShowing = false;
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Reset)
@@ -443,8 +374,6 @@ namespace MultiBranchTexter.ViewModel
                 {
                     FlowChartWidth = "*";
                     WorkTabWidth = "0";
-                    //IsFlowChartShowing = true;
-                    //IsWorkTabShowing = false;
                 }
             }
             RaisePropertyChanged("WorkTabs");
@@ -533,7 +462,6 @@ namespace MultiBranchTexter.ViewModel
                 }
                 //保存文件
                 MetadataFile.WriteTextNodes(_fileName, ViewModelFactory.FCC.GetTextNodeWithLeftTopList());
-                //MetadataFile.WriteNodes(_fileName, ViewModelFactory.FCC.GetTextNodeWithLeftTopList());
                 IsModified = false;
                 Debug.WriteLine("文件 " + _fileName + " 保存成功");
                 RaiseHint("文件 " + _fileName[(_fileName.LastIndexOf('\\') + 1)..] + " 保存成功");
