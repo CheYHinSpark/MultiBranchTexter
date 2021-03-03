@@ -266,7 +266,7 @@ namespace MultiBranchTexter.ViewModel
         #region 方法
 
         /// <summary> 输入文件路径加载之 </summary>
-        public void Load(string mbtxtPath)
+        public bool Load(string mbtxtPath)
         {
             _container.Children.Clear();
             SelectedNodes.Clear();// <--必须
@@ -286,11 +286,15 @@ namespace MultiBranchTexter.ViewModel
                 }
                 catch
                 {
+                    ViewModelFactory.Main.RaiseHint("未能成功打开文件");
 #if DEBUG
                     throw new FormatException("全部木大");
+#else
+                    return false;
 #endif
                 }
             }
+            return true;
         }
 
         #region 流程图绘制方法

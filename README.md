@@ -7,6 +7,7 @@
 [获取最新版本](https://github.com/CheYHinSpark/MultiBranchTexter/releases)
 
 ## TODO 
+- 多语言支持
 - 文本搜索、替换
 - 导出为TXT，整体导出，单独导出
 - 导出为docx

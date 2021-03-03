@@ -1,4 +1,6 @@
 ﻿using MultiBranchTexter.ViewModel;
+using System;
+using System.Windows;
 
 namespace MultiBranchTexter
 {
@@ -11,6 +13,12 @@ namespace MultiBranchTexter
         {
             InitializeComponent();
             ViewModelFactory.SetViewModel(typeof(MainViewModel), DataContext as MainViewModel);
+        }
+
+        private void BgGrid_Drop(object sender, DragEventArgs e)
+        {
+            string fileName =((Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString();
+            ViewModelFactory.Main.OpenFile(fileName);
         }
     }
 }

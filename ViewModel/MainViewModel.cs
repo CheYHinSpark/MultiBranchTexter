@@ -393,9 +393,7 @@ namespace MultiBranchTexter.ViewModel
                     SelectedIndex = i;
                     //打开worktab
                     WorkTabWidth = "*";
-                    //IsWorkTabShowing = true;
-                    //ViewModelFactory.FCC.
-                        RaiseHint("打开节点" + node.Name);
+                    RaiseHint("打开节点" + node.Name);
                     return;
                 }
             }
@@ -403,7 +401,6 @@ namespace MultiBranchTexter.ViewModel
             SelectedIndex = WorkTabs.Count - 1;
             //打开worktab
             WorkTabWidth = "*";
-            //IsWorkTabShowing = true;
             RaiseHint("打开节点" + node.Name);
         }
 
@@ -484,12 +481,14 @@ namespace MultiBranchTexter.ViewModel
 
             //关闭原有标签页
             WorkTabs.Clear();
-            //新的文件名
-            FileName = path;
-            //打开新文件
-            IsWorkGridVisible = true;
             IsModified = false;
-            ViewModelFactory.FCC.Load(path);
+            if (ViewModelFactory.FCC.Load(path))
+            {
+                //新的文件名
+                FileName = path;
+                //打开新文件
+                IsWorkGridVisible = true;
+            }
         }
 
         public void CreateFile(string path)
