@@ -18,7 +18,7 @@ namespace MultiBranchTexter.Controls
         /// <summary>
         /// 获取fathernode的节点，即是这个控件真正对应的节点
         /// </summary>
-        public TextNode FatherTextNode { get { return FatherNode.textNode; } }
+        public TextNode FatherTextNode { get { return FatherNode.TextNode; } }
 
         /// <summary>
         /// 获得左上角坐标

@@ -528,9 +528,24 @@
             </Path>
         </Border>
         <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsPressed" Value="False"/>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
                 <Setter Property="BorderBrush" Value="{DynamicResource ThemeBrush}" TargetName="BD"/>
                 <Setter Property="Background" Value="{DynamicResource Highlight.BaseBrush}" TargetName="BD"/>
+            </MultiTrigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeBrush}" TargetName="BD"/>
+                <Setter Property="Background" TargetName="BD">
+                    <Setter.Value>
+                        <RadialGradientBrush>
+                            <GradientStop Color="{DynamicResource Base}" Offset="0.4"/>
+                            <GradientStop Color="{DynamicResource Theme}" Offset="1"/>
+                        </RadialGradientBrush>
+                    </Setter.Value>
+                </Setter>
             </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>

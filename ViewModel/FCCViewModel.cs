@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -308,7 +306,7 @@ namespace MultiBranchTexter.ViewModel
             {
                 if (control is NodeButton)
                 {
-                    textNodes.Add((control as NodeButton).textNode);
+                    textNodes.Add((control as NodeButton).TextNode);
                     nodeButtons.Add((control as NodeButton));
                 }
             }
@@ -722,7 +720,7 @@ namespace MultiBranchTexter.ViewModel
                 if (control is NodeButton)
                 {
                     textNodes.Add(new TextNodeWithLeftTop(
-                        (control as NodeButton).textNode,
+                        (control as NodeButton).TextNode,
                         Canvas.GetLeft(control),
                         Canvas.GetTop(control)));//注意left和top都不受scale影响
                 }
@@ -739,7 +737,7 @@ namespace MultiBranchTexter.ViewModel
             {
                 if (control is NodeButton)
                 {
-                    textNodes.Add((control as NodeButton).textNode);
+                    textNodes.Add((control as NodeButton).TextNode);
                 }
             }
             return textNodes;
@@ -786,8 +784,8 @@ namespace MultiBranchTexter.ViewModel
             {
                 if (control is NodeButton)
                 {
-                    if ((control as NodeButton).textNode.Name == name)
-                    { return (control as NodeButton).textNode; }
+                    if ((control as NodeButton).TextNode.Name == name)
+                    { return (control as NodeButton).TextNode; }
                 }
             }
             return null;
@@ -877,7 +875,7 @@ namespace MultiBranchTexter.ViewModel
                 if (control is NodeButton)
                 {
                     NodeButton nb = control as NodeButton;
-                    if (nb.textNode == node)
+                    if (nb.TextNode == node)
                     {
                         SearchedNodes.Add(nb);
                         nb.NodeState = NodeState.Searched;
@@ -910,7 +908,7 @@ namespace MultiBranchTexter.ViewModel
             if (nodeCount > 1)
             { ViewModelFactory.Main.RaiseHint("请选择一个后继节点"); }
             else
-            { waiter = null; }
+            { waitingNode = null; }
         }
 
         /// <summary> 新的后继节点选择完成了，传入null表示取消选择 </summary>
@@ -931,7 +929,7 @@ namespace MultiBranchTexter.ViewModel
             }
             //首先断开waitNode原有的连线
             ConnectingLine cline = null;//找到原本的连线
-            foreach (ConnectingLine line in waitingNode.FatherNode.postLines)
+            foreach (ConnectingLine line in waitingNode.FatherNode.PostLines)
             {
                 if (line.BeginNode == waitingNode)
                 { cline = line; }

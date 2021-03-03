@@ -102,11 +102,11 @@ namespace MultiBranchTexter.Controls
             ViewModelFactory.FCC.PostNodeChoosed(null);
             //断开连接
             ConnectingLine line = null;
-            for (int i = 0;i < FatherNode.postLines.Count;i++)
+            for (int i = 0;i < FatherNode.PostLines.Count;i++)
             {
-                if (FatherNode.postLines[i].BeginNode == this)
+                if (FatherNode.PostLines[i].BeginNode == this)
                 {
-                    line = FatherNode.postLines[i];
+                    line = FatherNode.PostLines[i];
                 }
             }
             //可能没有连线
@@ -116,7 +116,7 @@ namespace MultiBranchTexter.Controls
                 line.Delete();
             }
             //如果没有连线，也要删除相应的key
-            FatherNode.answerToNodes.Remove(answer);
+            FatherNode.AnswerToNodes.Remove(answer);
             for (int i =0;i<FatherTextNode.EndCondition.Answers.Count;i++)
             {
                 if (answer == FatherTextNode.EndCondition.Answers[i].Item1)

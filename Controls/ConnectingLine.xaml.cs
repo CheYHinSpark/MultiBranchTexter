@@ -25,8 +25,8 @@ namespace MultiBranchTexter.Controls
             InitializeComponent();
             BeginNode = begin;
             EndNode = end;
-            begin.FatherNode.postLines.Add(this);
-            end.preLines.Add(this);
+            begin.FatherNode.PostLines.Add(this);
+            end.PreLines.Add(this);
             begin.FatherNode.UpdatePostLines();
             isBeginMA = begin.FatherTextNode.EndCondition.EndType == EndType.MultiAnswers;
             end.UpdatePreLines();
@@ -151,7 +151,7 @@ namespace MultiBranchTexter.Controls
                     + c2Pt.ToString() + " L" + endPt.ToString());
             }
             //更新tooltip
-            Path.ToolTip = "从 " + BeginNode.FatherTextNode.Name + "\n到 " + EndNode.textNode.Name;
+            Path.ToolTip = "从 " + BeginNode.FatherTextNode.Name + "\n到 " + EndNode.TextNode.Name;
             //如果后继在上方，调整颜色
             if (beginPt.Y > endPt.Y)
             { Path.Tag = "1"; }
@@ -163,8 +163,8 @@ namespace MultiBranchTexter.Controls
         /// </summary>
         public void Delete()
         {
-            BeginNode.FatherNode.postLines.Remove(this);
-            EndNode.preLines.Remove(this);
+            BeginNode.FatherNode.PostLines.Remove(this);
+            EndNode.PreLines.Remove(this);
             BeginNode.FatherNode.UpdatePostLines();
             EndNode.UpdatePreLines();
             ViewModelFactory.Main.IsModified = true;

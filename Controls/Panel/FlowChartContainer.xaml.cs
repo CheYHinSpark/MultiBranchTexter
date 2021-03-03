@@ -1,20 +1,11 @@
-﻿using MultiBranchTexter.Converters;
-using MultiBranchTexter.Model;
-using MultiBranchTexter.ViewModel;
+﻿using MultiBranchTexter.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Shapes;
 using System.Windows.Input;
-using System.Windows.Threading;
 using System.Windows.Media;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Windows.Data;
-using System.Collections.ObjectModel;
 
 namespace MultiBranchTexter.Controls
 {

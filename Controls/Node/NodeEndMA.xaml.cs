@@ -75,7 +75,7 @@ namespace MultiBranchTexter.Controls
             newAnswer += i.ToString();
             //添加键
             atns.Add((newAnswer,""));
-            FatherNode.answerToNodes.Add(newAnswer, null);
+            FatherNode.AnswerToNodes.Add(newAnswer, null);
             NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(newAnswer)
             { FatherNode = this.FatherNode };
             answerContainer.Children.Add(nodeEnd);
@@ -86,7 +86,7 @@ namespace MultiBranchTexter.Controls
         //变更是否是询问
         private void IsQuestionBtn_Click(object sender, RoutedEventArgs e)
         {
-            FatherNode.textNode.EndCondition.IsQuestion = isQuestionBtn.IsChecked == true;
+            FatherNode.TextNode.EndCondition.IsQuestion = isQuestionBtn.IsChecked == true;
             ViewModelFactory.Main.IsModified = true;
         }
         #endregion
@@ -101,7 +101,7 @@ namespace MultiBranchTexter.Controls
             foreach (UserControl control in answerContainer.Children)
             {
                 (control as NodeEndMAAnswer).FatherNode = father;
-                father.answerToNodes.Add((control as NodeEndMAAnswer).Answer, null);
+                father.AnswerToNodes.Add((control as NodeEndMAAnswer).Answer, null);
             }
         }
         #endregion

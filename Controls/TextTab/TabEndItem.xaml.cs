@@ -19,8 +19,6 @@ namespace MultiBranchTexter.Controls
         /// <summary>
         /// 新建TabEndItem
         /// </summary>
-        /// <param name="answer"></param>
-        /// <param name="postNode"></param>
         public TabEndItem(string answer, string postName)
         {
             InitializeComponent();

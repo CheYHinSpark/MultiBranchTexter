@@ -2,12 +2,10 @@
 using MultiBranchTexter.Model;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using System.Windows.Input;
 using MultiBranchTexter.Controls;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows.Threading;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;

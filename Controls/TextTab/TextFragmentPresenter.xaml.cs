@@ -1,9 +1,6 @@
-﻿using MultiBranchTexter.Model;
-using MultiBranchTexter.ViewModel;
+﻿using MultiBranchTexter.ViewModel;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -254,27 +251,6 @@ namespace MultiBranchTexter.Controls
                 else { commentContainer.SelectionStart = CommentText.Length; }
                 commentContainer.SelectionLength = SelectL;
             }
-        }
-
-        //对operation做行计算，并消除空行
-        [Obsolete]
-        private int GetOperationLineCount()
-        {
-            int linecount = 0;
-            string newtext = "";
-            for (int i = 0; i < commentContainer.LineCount;i++)
-            {
-                string temp = commentContainer.GetLineText(i).Replace("\r", "").Replace("\n", "");
-                if (temp.Replace(" ","") != "")
-                {
-                    linecount++;
-                    newtext += temp + "\r\n";
-                }
-            }
-            if (linecount > 0)//去掉最后的换行
-            { newtext = newtext[..^2]; }
-            commentContainer.Text = newtext;
-            return linecount;
         }
         #endregion
     }

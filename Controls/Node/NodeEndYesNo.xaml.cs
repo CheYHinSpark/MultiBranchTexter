@@ -62,7 +62,7 @@ namespace MultiBranchTexter.Controls
         //变更是否是询问
         private void IsQuestionBtn_Click(object sender, RoutedEventArgs e)
         {
-            FatherNode.textNode.EndCondition.IsQuestion = isQuestionBtn.IsChecked == true;
+            FatherNode.TextNode.EndCondition.IsQuestion = isQuestionBtn.IsChecked == true;
             ViewModelFactory.Main.IsModified = true;
         }
         #endregion

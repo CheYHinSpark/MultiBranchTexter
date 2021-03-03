@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Globalization;
-using System.Text;
 using System.Windows.Data;
 using MultiBranchTexter.Controls;
-using MultiBranchTexter.Model;
 
 namespace MultiBranchTexter.Converters
 {

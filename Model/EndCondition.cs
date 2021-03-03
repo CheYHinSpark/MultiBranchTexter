@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace MultiBranchTexter.Model
 {
@@ -32,42 +30,6 @@ namespace MultiBranchTexter.Model
                 Answers.Add(("yes", ""));
                 Answers.Add(("no", ""));
             }
-        }
-    }
-
-    [Obsolete]
-    public class OldEndCondition
-    {
-        public string Question;
-
-        public EndType EndType;
-
-        public bool IsQuestion = true;
-
-        public Dictionary<string, string> Answers = new Dictionary<string, string>();
-
-        public OldEndCondition()
-        {
-            EndType = EndType.Single;
-        }
-
-        public OldEndCondition(EndType endType)
-        {
-            EndType = endType;
-        }
-        public EndCondition ToEndCondition()
-        {
-            EndCondition ec = new EndCondition();
-            ec.Question = Question;
-            ec.EndType = EndType;
-            ec.IsQuestion = IsQuestion;
-            ec.Answers = new List<(string, string)>();
-            foreach (string answer in Answers.Keys)
-            {
-                ec.Answers.Add((answer, Answers[answer]));
-            }
-
-            return ec;
         }
     }
 }
