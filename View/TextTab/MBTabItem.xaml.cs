@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 
 namespace MultiBranchTexter.View
@@ -33,7 +34,11 @@ namespace MultiBranchTexter.View
         public TextNode TextNode { get; set; }
 
         private readonly TabItemViewModel _viewModel;
+
         public TabItemViewModel ViewModel { get { return _viewModel; } }
+
+        //拖动
+        private bool _isDragging;
         #endregion
 
         #region 事件
@@ -84,7 +89,7 @@ namespace MultiBranchTexter.View
 
         #endregion
 
-        #region 方法
+        #region Node相关方法
 
         /// <summary> 重置Tab </summary>
         public void ReLoadTab()
@@ -208,6 +213,56 @@ namespace MultiBranchTexter.View
             }
              BeginAnimation(WidthProperty, da);
             
+        }
+        #endregion
+
+        #region 拖拽相关override方法
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+
+            if (VisualTreeHelper.HitTest(this, e.GetPosition(this)) == null) return;
+
+            if ( !_isDragging)
+            {
+                _isDragging = true;
+                CaptureMouse();
+            }
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+
+            if ( _isDragging)
+            {
+                var p = e.GetPosition(this);
+                if (p.X > this.ActualWidth)
+                {
+                    int i = ViewModelFactory.Main.WorkTabs.IndexOf(this);
+                    if (i < ViewModelFactory.Main.WorkTabs.Count - 1)
+                    {
+                        ViewModelFactory.Main.WorkTabs.Move(i + 1, i);
+                    }
+                }
+                if (p.X < 0)
+                {
+                    int i = ViewModelFactory.Main.WorkTabs.IndexOf(this);
+                    if (i > 0)
+                    {
+                        ViewModelFactory.Main.WorkTabs.Move(i - 1, i);
+                    }
+                }
+            }
+        }
+
+        protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonUp(e);
+
+            ReleaseMouseCapture();
+
+            _isDragging = false;
         }
         #endregion
     }
