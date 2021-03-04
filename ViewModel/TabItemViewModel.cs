@@ -3,7 +3,7 @@ using MultiBranchTexter.Model;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Input;
-using MultiBranchTexter.Controls;
+using MultiBranchTexter.View;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Collections.Specialized;

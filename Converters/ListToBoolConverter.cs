@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows.Data;
-using MultiBranchTexter.Controls;
+using MultiBranchTexter.View;
 
 namespace MultiBranchTexter.Converters
 {

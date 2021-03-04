@@ -9,72 +9,72 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Controls\ConnectingLine.xaml.cs">
+    <Compile Update="View\ConnectingLine.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\HintTextBlock.xaml.cs">
+    <Compile Update="View\HintTextBlock.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\TextTab\TextFragmentPresenter.xaml.cs">
+    <Compile Update="View\TextTab\TextFragmentPresenter.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\TextTab\MBTabItem.xaml.cs">
+    <Compile Update="View\TextTab\MBTabItem.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\Panel\FlowChartContainer.xaml.cs">
+    <Compile Update="View\Panel\FlowChartContainer.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\Node\NodeButton.xaml.cs">
+    <Compile Update="View\Node\NodeButton.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\Node\NodeEndMA.xaml.cs">
+    <Compile Update="View\Node\NodeEndMA.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\Node\NodeEndMAAnswer.xaml.cs">
+    <Compile Update="View\Node\NodeEndMAAnswer.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\Node\NodeEndYesNo.xaml.cs">
+    <Compile Update="View\Node\NodeEndYesNo.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\NodeSearchBox.xaml.cs">
+    <Compile Update="View\NodeSearchBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\TextTab\TabEnd.cs">
+    <Compile Update="View\TextTab\TabEnd.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\TextTab\TabEndItem.xaml.cs">
+    <Compile Update="View\TextTab\TabEndItem.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Controls\ConnectingLine.xaml">
+    <Page Update="View\ConnectingLine.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\HintTextBlock.xaml">
+    <Page Update="View\HintTextBlock.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\TextTab\TextFragmentPresenter.xaml">
+    <Page Update="View\TextTab\TextFragmentPresenter.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\TextTab\MBTabItem.xaml">
+    <Page Update="View\TextTab\MBTabItem.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\Panel\FlowChartContainer.xaml">
+    <Page Update="View\Panel\FlowChartContainer.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\Node\NodeEndMA.xaml">
+    <Page Update="View\Node\NodeEndMA.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\Node\NodeEndMAAnswer.xaml">
+    <Page Update="View\Node\NodeEndMAAnswer.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\Node\NodeEndYesNo.xaml">
+    <Page Update="View\Node\NodeEndYesNo.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\NodeSearchBox.xaml">
+    <Page Update="View\NodeSearchBox.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\TextTab\TabEndItem.xaml">
+    <Page Update="View\TextTab\TabEndItem.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Resources\FCCResources.xaml">
@@ -89,10 +89,10 @@
     <Page Update="Resources\Dictionary.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\Window\MainWindow.xaml">
+    <Page Update="View\Window\MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\Node\NodeButton.xaml">
+    <Page Update="View\Node\NodeButton.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Resources\WindowResources.xaml">

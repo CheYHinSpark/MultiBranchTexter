@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="MultiBranchTexter.View.TextFragmentPresenter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:v="clr-namespace:MultiBranchTexter.View"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="commentContainer" Grid.Row="0"
+                 Text="{Binding CommentText,
+            Mode=TwoWay,
+            NotifyOnTargetUpdated=True,
+            NotifyOnSourceUpdated=True,
+            UpdateSourceTrigger=PropertyChanged,
+            RelativeSource={RelativeSource AncestorType={x:Type v:TextFragmentPresenter}}}"
+                 Template="{StaticResource operationTextBoxTemplate}"
+                 Style="{StaticResource fragmentPresenterTextBoxStyle}"
+                 LostFocus="Container_LostFocus"
+                 GotFocus="CommentContainer_GotFocus"
+                 ContextMenu="{x:Null}"
+                 SelectionChanged="CommentContainer_SelectionChanged"
+                 Foreground="#FF57A64A"/>
+        <TextBox x:Name="contentContainer" Grid.Row="1" 
+                 Text="{Binding ContentText,
+            Mode=TwoWay,
+            NotifyOnTargetUpdated=True,
+            NotifyOnSourceUpdated=True,
+            UpdateSourceTrigger=PropertyChanged,
+            RelativeSource={RelativeSource AncestorType={x:Type v:TextFragmentPresenter}}}"
+                 Template="{StaticResource contentTextBoxTemplate}"
+                 Style="{StaticResource fragmentPresenterTextBoxStyle}"
+                 LostFocus="Container_LostFocus"
+                 GotFocus="ContentContainer_GotFocus"
+                 ContextMenu="{x:Null}"
+                 SelectionChanged="ContentContainer_SelectionChanged"
+                 PreviewKeyDown="Content_KeyDown"/>
+        <CheckBox x:Name="showHideOpBtn" Template="{StaticResource fragmentOperationCheckBoxTemplate}"
+                  Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top"
+                  Margin="0,-10,0,0" Click="ShowHideOpBtn_Click" Visibility="Hidden"/>
+    </Grid>
+</UserControl>

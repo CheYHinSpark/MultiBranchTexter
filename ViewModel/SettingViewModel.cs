@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using MultiBranchTexter.View;
 using MultiBranchTexter.Model;
 
 namespace MultiBranchTexter.ViewModel
@@ -50,7 +51,8 @@ namespace MultiBranchTexter.ViewModel
             set
             {
                 _countOpChar = value;
-                ViewModelFactory.Main.ReCountCharForAll();
+                foreach (MBTabItem tab in ViewModelFactory.Main.WorkTabs)
+                { tab.ViewModel.CountCharWord(true); }
                 RaisePropertyChanged("CountOpChar");
             }
         }

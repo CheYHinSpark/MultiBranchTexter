@@ -1,9 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:MultiBranchTexter"
-                    xmlns:c="clr-namespace:MultiBranchTexter.Controls"
-                    xmlns:cvt="clr-namespace:MultiBranchTexter.Converters"
-                    >
+                    xmlns:cvt="clr-namespace:MultiBranchTexter.Converters">
 
     <!--颜色部分-->
     <!--主题色-->
@@ -599,7 +597,7 @@
     <!--TabItem模板-->
     <ControlTemplate x:Key="MBTabItemTemplate" TargetType="{x:Type TabItem}">
         <Border x:Name="BD" BorderBrush="{DynamicResource MainBrush}" 
-                Background="{DynamicResource MainBrush}" TextElement.Foreground="AliceBlue"
+                Background="{DynamicResource MainBrush}"
                 BorderThickness="1" CornerRadius="4,4,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -613,7 +611,7 @@
                 <TextBlock x:Name="TB" Grid.Column="1" Text="{Binding IsModified}" 
                            Foreground="{DynamicResource Foreground.BaseBrush}" />
                 <Button Grid.ColumnSpan="2" Name="CloseBtn" 
-                        Width="16" Height="16" x:Uid="0" Margin="2"
+                        x:Uid="0" Margin="2"
                         Template="{StaticResource TabItemCloseBtnTemplate}"
                         HorizontalAlignment="Right" VerticalAlignment="Center"/>
             </Grid>

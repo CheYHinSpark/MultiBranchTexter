@@ -1,5 +1,6 @@
-﻿using MultiBranchTexter.Controls;
+﻿using MultiBranchTexter.View;
 using MultiBranchTexter.Model;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -33,6 +34,18 @@ namespace MultiBranchTexter.ViewModel
         {
             get { return _workTabWidth; }
             set { _workTabWidth = value; RaisePropertyChanged("WorkTabWidth"); }
+        }
+
+        private double _workTabActualWidth;
+        public double WorkTabActualWidth
+        {
+            get { return _workTabActualWidth; }
+            set 
+            {
+                _workTabActualWidth = value;
+                ReSizeTabs();
+                RaisePropertyChanged("WorkTabActualWidth");
+            }
         }
 
         private bool _isFullScreen;
@@ -380,7 +393,8 @@ namespace MultiBranchTexter.ViewModel
         }
 
         #region 方法
-        //打开标签页
+        #region 标签页
+        /// <summary> 打开标签页 </summary>
         public void OpenMBTabItem(TextNode node)
         {
             if (node == null)
@@ -404,9 +418,7 @@ namespace MultiBranchTexter.ViewModel
             RaiseHint("打开节点" + node.Name);
         }
 
-        /// <summary>
-        /// 重置某个标签页的页尾
-        /// </summary>
+        /// <summary> 重置某个标签页的页尾 </summary>
         public void ReLoadTab(TextNode node)
         {
             foreach (MBTabItem item in WorkTabs)
@@ -416,9 +428,7 @@ namespace MultiBranchTexter.ViewModel
             }
         }
 
-        /// <summary>
-        /// 删除某个标签页
-        /// </summary>
+        /// <summary> 删除某个标签页 </summary>
         public void DeleteTab(TextNode node)
         {
             foreach (MBTabItem item in WorkTabs)
@@ -432,6 +442,32 @@ namespace MultiBranchTexter.ViewModel
             }
         }
 
+        /// <summary> 重新计算所有宽度 </summary>
+        public void ReSizeTabs()
+        {
+            //保持约定宽度item的临界个数
+            int criticalCount = (int)((WorkTabActualWidth - 5) / 120.0);
+            double targetWidth;
+            if (WorkTabs.Count <= criticalCount)
+            {
+                //小于等于临界个数 等于约定宽度
+                targetWidth = 120;
+            }
+            else
+            {
+                //大于临界个数 等于平均宽度
+                targetWidth = (WorkTabActualWidth - 5) / WorkTabs.Count;
+            }
+            for (int i = 0; i < WorkTabs.Count; i++)
+            {
+                WorkTabs[i].ToWidth(Math.Max(0, targetWidth));
+            }
+
+        }
+
+        #endregion
+
+        #region 文件相关
         public void SaveFile()
         {
             try
@@ -499,12 +535,9 @@ namespace MultiBranchTexter.ViewModel
             var n = new TextNodeWithLeftTop(node, 100, 100);
             MetadataFile.WriteTextNodes(path, new List<TextNodeWithLeftTop> { n });
         }
+        #endregion
 
-        public void ReCountCharForAll()
-        {
-            foreach (MBTabItem tab in _workTabs)
-            { tab.ViewModel.CountCharWord(true); }
-        }
+      
 
         /// <summary> 启动提示文本 </summary>
         public async void RaiseHint(string newHint)
