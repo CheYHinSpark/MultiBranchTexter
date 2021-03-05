@@ -11,7 +11,7 @@
                     SavePath="yes"
                     mc:Ignorable="d" 
                     d:DesignHeight="400" d:DesignWidth="600">
-    <Grid Background="Red">
+    <Grid Background="{DynamicResource MainBrush}">
             
     </Grid>
 </v:OutputWindowBase>

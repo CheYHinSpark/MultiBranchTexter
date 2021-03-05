@@ -18,6 +18,13 @@ namespace MultiBranchTexter.View
     /// </summary>
     public partial class OutputAsTxtWindow : OutputWindowBase
     {
+        private string commentParPre;
+        private string commentParPost;
+        private string commentLinePre;
+        private string contentParPre;
+        private string contentParPost;
+        private bool isCommentBefore;
+
         public OutputAsTxtWindow()
         {
             InitializeComponent();

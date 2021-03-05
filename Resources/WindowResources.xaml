@@ -383,7 +383,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="24"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="24"/>
+                <RowDefinition Height="26"/>
             </Grid.RowDefinitions>
             <!--标题栏-->
             <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
@@ -408,27 +408,32 @@
                 </Button>
             </StackPanel>
             <!--内容部分-->
-            <AdornerDecorator Grid.Row="1">
+            <AdornerDecorator Grid.Row="1" Margin="2,0,2,0">
                 <ContentPresenter/>
             </AdornerDecorator>
             <!--下方部分-->
-            <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="8,0,0,0">
-                <TextBlock Text="导出路径" TextAlignment="Center" VerticalAlignment="Center"
-                           Foreground="{DynamicResource Foreground.ThemeBrush}"/>
-                <Border Background="{DynamicResource BaseBrush}" MinWidth="200"
-                        Margin="4,2,4,2" BorderBrush="{DynamicResource Text.Foreground.BaseBrush}"
-                        BorderThickness="0,0,0,2">
-                    <TextBlock Foreground="{DynamicResource Foreground.BaseBrush}"
-                               VerticalAlignment="Center" Margin="4,0,8,0"
-                               Text="{Binding SavePath, 
-                        RelativeSource={RelativeSource AncestorType={x:Type v:OutputWindowBase}}}"/>
+            <Grid Background="{DynamicResource BaseBrush}" Margin="2,0,2,2" Grid.Row="2">
+                <StackPanel Orientation="Horizontal" Margin="8,0,0,0">
+                    <TextBlock Text="导出路径" TextAlignment="Center" VerticalAlignment="Center"
+                               Foreground="{DynamicResource Foreground.BaseBrush}"/>
+                    <Border MinWidth="200" Margin="8,2,4,2" BorderThickness="0,0,0,2"
+                            BorderBrush="{DynamicResource Text.Foreground.BaseBrush}">
+                        <TextBlock Foreground="{DynamicResource Foreground.BaseBrush}"
+                                   VerticalAlignment="Center" Margin="4,0,8,0"
+                                   Text="{Binding SavePath, 
+                            RelativeSource={RelativeSource AncestorType={x:Type v:OutputWindowBase}}}"/>
+                    </Border>
+                    <Border Background="{DynamicResource ThemeBrush}">
+                        <Button x:Name="BrowseButton" Content="浏览"
+                                Template="{StaticResource textButtonTemplate}"/>
+                    </Border>
+                </StackPanel>
+                <Border Background="{DynamicResource ThemeBrush}" Margin="0,0,8,0"
+                        HorizontalAlignment="Right">
+                    <Button x:Name="OutputButton" Content="导出" 
+                            Template="{StaticResource textButtonTemplate}"/>
                 </Border>
-                <Button x:Name="BrowseButton" Content="浏览"
-                        Template="{StaticResource textButtonTemplate}"/>
-            </StackPanel>
-            <Button x:Name="OutputButton" Content="导出" Margin="0,0,8,0"
-                    Grid.Row="2" HorizontalAlignment="Right"
-                    Template="{StaticResource textButtonTemplate}"/>
+            </Grid>
         </Grid>
     </ControlTemplate>
     <!--导出窗体控件Style-->
