@@ -376,4 +376,75 @@
         </Style.Triggers>
     </Style>
 
+    
+    <!--以下为导出窗口-->
+    <ControlTemplate x:Key="OutputWindowTemplate" TargetType="{x:Type v:OutputWindowBase}">
+        <Grid x:Name="LayoutRoot" Background="{DynamicResource ThemeBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="24"/>
+            </Grid.RowDefinitions>
+            <!--标题栏-->
+            <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
+                <ContentControl Width="24" Content="{DynamicResource iconImg}"/>
+                <TextBlock x:Name="WindowTitleTbl" Grid.Row="0"
+                           VerticalAlignment="Center"
+                           Text="{Binding Title, 
+                    RelativeSource={RelativeSource AncestorType={x:Type v:OutputWindowBase}}}"
+                           Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
+                <Button x:Name="MinWinButton" ToolTip="最小化"
+                        Style="{DynamicResource ThemeBtnStyle}">
+                    <Path Stroke="{DynamicResource Foreground.ThemeBrush}" 
+                          StrokeThickness="2" Data="M8,12 L22,12"/>
+                </Button>
+                <Button x:Name="CloseWinButton" ToolTip="关闭"
+                        Style="{DynamicResource ThemeBtnStyle}">
+                    <Path Stroke="{DynamicResource Foreground.ThemeBrush}" 
+                          StrokeThickness="2" Data="M9,6 L21,18 M9,18 L21,6"/>
+                </Button>
+            </StackPanel>
+            <!--内容部分-->
+            <AdornerDecorator Grid.Row="1">
+                <ContentPresenter/>
+            </AdornerDecorator>
+            <!--下方部分-->
+            <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="8,0,0,0">
+                <TextBlock Text="导出路径" TextAlignment="Center" VerticalAlignment="Center"
+                           Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+                <Border Background="{DynamicResource BaseBrush}" MinWidth="200"
+                        Margin="4,2,4,2" BorderBrush="{DynamicResource Text.Foreground.BaseBrush}"
+                        BorderThickness="0,0,0,2">
+                    <TextBlock Foreground="{DynamicResource Foreground.BaseBrush}"
+                               VerticalAlignment="Center" Margin="4,0,8,0"
+                               Text="{Binding SavePath, 
+                        RelativeSource={RelativeSource AncestorType={x:Type v:OutputWindowBase}}}"/>
+                </Border>
+                <Button x:Name="BrowseButton" Content="浏览"
+                        Template="{StaticResource textButtonTemplate}"/>
+            </StackPanel>
+            <Button x:Name="OutputButton" Content="导出" Margin="0,0,8,0"
+                    Grid.Row="2" HorizontalAlignment="Right"
+                    Template="{StaticResource textButtonTemplate}"/>
+        </Grid>
+    </ControlTemplate>
+    <!--导出窗体控件Style-->
+    <Style x:Key="OutputWindowStyle" TargetType="{x:Type v:OutputWindowBase}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template" Value="{StaticResource OutputWindowTemplate}"/>
+        <Setter Property="WindowChrome.WindowChrome">
+            <Setter.Value>
+                <!--允许调整窗口大小-->
+                <WindowChrome GlassFrameThickness="0"
+                              CornerRadius="0" 
+                              CaptionHeight="0"
+                              UseAeroCaptionButtons="False"
+                              ResizeBorderThickness="0" />
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

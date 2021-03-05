@@ -86,7 +86,7 @@
                           ToolTip="导出">
                     <MenuItem Header="导出为json" Command="{Binding OutputAsJSONCommand}"
                               IsEnabled="{Binding IsWorkGridVisible}"/>
-                    <MenuItem Header="导出为txt"
+                    <MenuItem Header="导出为txt" Command="{Binding OutputAsTxtCommand}"
                               IsEnabled="{Binding IsWorkGridVisible}"/>
                     <MenuItem Header="导出为docx"
                               IsEnabled="{Binding IsWorkGridVisible}"/>

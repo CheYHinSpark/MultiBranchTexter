@@ -12,14 +12,37 @@ namespace MultiBranchTexter.View
     public class OutputWindowBase : Window
     {
         #region 依赖属性
+        //保存路径
         public static DependencyProperty SavePathProperty =
-          DependencyProperty.Register("SavePath", typeof(string),
+            DependencyProperty.Register("SavePath", typeof(string),
               typeof(OutputWindowBase), new PropertyMetadata(""));
 
         public string SavePath
         {
             get { return (string)GetValue(SavePathProperty); }
             set { SetValue(SavePathProperty, value); }
+        }
+
+        //是否保存注释
+        public static DependencyProperty SaveCommentProperty =
+            DependencyProperty.Register("SaveComment", typeof(bool),
+                typeof(OutputWindowBase), new PropertyMetadata(false));
+
+        public bool SaveComment
+        {
+            get { return (bool)GetValue(SaveCommentProperty); }
+            set { SetValue(SaveCommentProperty, value); }
+        }
+
+        //是否逐个保存
+        public static DependencyProperty SaveIndividuallyProperty =
+            DependencyProperty.Register("SaveIndividually", typeof(bool),
+                typeof(OutputWindowBase), new PropertyMetadata(false));
+
+        public bool SaveIndividually
+        {
+            get { return (bool)GetValue(SaveIndividuallyProperty); }
+            set { SetValue(SaveIndividuallyProperty, value); }
         }
         #endregion
 
@@ -49,7 +72,7 @@ namespace MultiBranchTexter.View
 
         private void MinButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            this.Owner.WindowState = WindowState.Minimized;
         }
 
         private void BrowseBtn_Click(object sender, RoutedEventArgs e)

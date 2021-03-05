@@ -331,9 +331,7 @@ namespace MultiBranchTexter.ViewModel
         #endregion
 
         #region 导出命令
-        /// <summary>
-        /// 导出为JSON，游戏开发
-        /// </summary>
+        /// <summary> 导出为JSON，游戏开发 </summary>
         public ICommand OutputAsJSONCommand => new RelayCommand(async (t) =>
         {
             if (FileName == "" || _fileDirPath == "")
@@ -350,6 +348,14 @@ namespace MultiBranchTexter.ViewModel
             });
             await Task.Delay(10);
             Process.Start("explorer.exe", _fileDirPath);
+        });
+
+        /// <summary> 导出为txt </summary>
+        public ICommand OutputAsTxtCommand => new RelayCommand((t) =>
+        {
+            if (FileName == "" || _fileDirPath == "")
+            { return; }
+            new OutputAsTxtWindow().Show();
         });
         #endregion
 
