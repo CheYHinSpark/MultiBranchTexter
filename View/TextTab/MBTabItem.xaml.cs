@@ -39,6 +39,9 @@ namespace MultiBranchTexter.View
 
         //拖动
         private bool _isDragging;
+
+        //触摸
+        private Point _touchPoint;
         #endregion
 
         #region 事件
@@ -216,7 +219,7 @@ namespace MultiBranchTexter.View
         }
         #endregion
 
-        #region 拖拽相关override方法
+        #region 拖拽标签页相关override方法
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
@@ -237,6 +240,7 @@ namespace MultiBranchTexter.View
             if ( _isDragging)
             {
                 var p = e.GetPosition(this);
+       
                 if (p.X > this.ActualWidth)
                 {
                     int i = ViewModelFactory.Main.WorkTabs.IndexOf(this);
@@ -263,6 +267,28 @@ namespace MultiBranchTexter.View
             ReleaseMouseCapture();
 
             _isDragging = false;
+        }
+        #endregion
+
+        #region 触摸屏支持
+        private void ScrollViewer_TouchDown(object sender, TouchEventArgs e)
+        {
+            _touchPoint = e.GetTouchPoint(this).Position;
+            fragmentContainer.IsHitTestVisible = false;
+        }
+
+        private void ScrollViewer_TouchMove(object sender, TouchEventArgs e)
+        {
+            Point point = e.GetTouchPoint(this).Position;
+            ScrollViewer sv = sender as ScrollViewer;
+            sv.ScrollToVerticalOffset(sv.VerticalOffset - point.Y + _touchPoint.Y);
+            sv.ScrollToHorizontalOffset(sv.HorizontalOffset - point.X + _touchPoint.X);
+            _touchPoint = point;
+        }
+
+        private void ScrollViewer_TouchLeaveUp(object sender, TouchEventArgs e)
+        {
+            fragmentContainer.IsHitTestVisible = true;
         }
         #endregion
     }

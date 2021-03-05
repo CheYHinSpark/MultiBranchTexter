@@ -15,7 +15,11 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      PreviewTouchDown="ScrollViewer_TouchDown"
+                      TouchMove="ScrollViewer_TouchMove"
+                      TouchUp="ScrollViewer_TouchLeaveUp"
+                      TouchLeave="ScrollViewer_TouchLeaveUp">
             <ScrollViewer.RenderTransform>
                 <TranslateTransform/>
             </ScrollViewer.RenderTransform>
