@@ -1,8 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:MultiBranchTexter"
-                    xmlns:vm="clr-namespace:MultiBranchTexter.ViewModel">
-    
+                    xmlns:v="clr-namespace:MultiBranchTexter.View"
+                    xmlns:vm="clr-namespace:MultiBranchTexter.ViewModel"
+                    >
     <!--标题栏的按钮样式-->
     <Style x:Key="ThemeBtnStyle" TargetType="{x:Type Button}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -183,7 +184,7 @@
     
 
     <!--主窗体控件模板-->
-    <ControlTemplate x:Key="MainWindowTemplate" TargetType="{x:Type local:MetroWindow}">
+    <ControlTemplate x:Key="MainWindowTemplate" TargetType="{x:Type v:MetroWindow}">
         <Grid x:Name="LayoutRoot" Background="{DynamicResource ThemeBrush}">
             <Grid.DataContext>
                 <vm:SettingViewModel x:Name="svm"/>
@@ -342,7 +343,7 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <!--主窗体控件Style-->
-    <Style x:Key="MainWindowStyle" TargetType="{x:Type local:MetroWindow}">
+    <Style x:Key="MainWindowStyle" TargetType="{x:Type v:MetroWindow}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="MinHeight" Value="300"/>

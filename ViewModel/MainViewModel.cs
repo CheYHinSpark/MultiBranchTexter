@@ -73,7 +73,7 @@ namespace MultiBranchTexter.ViewModel
             {
                 _fileName = value;
                 if (value != "")
-                { _fileDirPath = value.Substring(0, value.LastIndexOfAny(new char[] { '\\', '/' }) + 1); }
+                { _fileDirPath = Path.GetDirectoryName(value); }
                 RaisePropertyChanged("FileName");
             }
         }

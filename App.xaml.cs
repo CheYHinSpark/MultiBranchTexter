@@ -1,4 +1,5 @@
-﻿using MultiBranchTexter.Model;
+﻿using MultiBranchTexter.View;
+using MultiBranchTexter.Model;
 using MultiBranchTexter.ViewModel;
 using System;
 using System.Collections.Generic;

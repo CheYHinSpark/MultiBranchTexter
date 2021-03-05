@@ -7,7 +7,7 @@ using System.Windows.Input;
 using MultiBranchTexter.ViewModel;
 using System.Windows.Interop;
 
-namespace MultiBranchTexter
+namespace MultiBranchTexter.View
 {
     public class MetroWindow : Window
     {

@@ -1,4 +1,4 @@
-﻿<local:MetroWindow x:Class="MultiBranchTexter.MainWindow"
+﻿<v:MetroWindow x:Class="MultiBranchTexter.View.MainWindow"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:local="clr-namespace:MultiBranchTexter"
@@ -7,11 +7,11 @@
                    Style="{StaticResource MainWindowStyle}"
                    WindowStartupLocation="CenterScreen"
                    Title="MultiBranchTexter" Height="450" Width="800">
-    <local:MetroWindow.DataContext>
+    <v:MetroWindow.DataContext>
         <vm:MainViewModel/>
-    </local:MetroWindow.DataContext>
+    </v:MetroWindow.DataContext>
     
-    <local:MetroWindow.InputBindings>
+    <v:MetroWindow.InputBindings>
         <KeyBinding Gesture="Ctrl+Shift+N" Command="{Binding NewFileCommand}"/>
         <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenFileCommand}"/>
         <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveNodeCommand}"/>
@@ -22,7 +22,7 @@
         <KeyBinding Gesture="Alt+Up" Command="{Binding FontSizeUpCommand}"/>
         <KeyBinding Gesture="Alt+Down" Command="{Binding FontSizeDownCommand}"/>
         <KeyBinding Gesture="Esc" Command="{Binding ExitFullScreenCommand}"/>
-    </local:MetroWindow.InputBindings>
+    </v:MetroWindow.InputBindings>
     
     <Grid Background="{DynamicResource BaseBrush}">
         <Grid.RowDefinitions>
@@ -256,4 +256,4 @@
         </Grid>
     </Grid>
 
-</local:MetroWindow>
+</v:MetroWindow>
