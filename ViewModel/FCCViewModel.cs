@@ -8,6 +8,10 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace MultiBranchTexter.ViewModel
 {
@@ -645,6 +649,27 @@ namespace MultiBranchTexter.ViewModel
             Debug.WriteLine("节点图创建完成");
             ViewModelFactory.Main.RaiseHint("节点图创建完成");
             NodeCount = num;
+        }
+        #endregion
+
+        #region 导出图片
+        public async void OutputImg(string fileName)
+        {
+            //如果要提高清晰度，可以把下面的4个*2都改为*4
+            RenderTargetBitmap targetBitmap = new RenderTargetBitmap(((int)Container.RenderSize.Width + 10) * 2,
+                ((int)Container.RenderSize.Height + 10) * 2,
+                2 * 96d / Container.ScaleRatio, 2 * 96d / Container.ScaleRatio, PixelFormats.Default);
+            targetBitmap.Render(Container);
+            PngBitmapEncoder saveEncoder = new PngBitmapEncoder();
+            saveEncoder.Frames.Add(BitmapFrame.Create(targetBitmap));
+            FileStream fs = File.Open(fileName, FileMode.OpenOrCreate);
+            saveEncoder.Save(fs);
+
+            await Task.Delay(10);
+            fs.Flush();
+            fs.Close();
+            Process.Start("explorer.exe", Path.GetDirectoryName(fileName));
+            ViewModelFactory.Main.RaiseHint("图片导出成功");
         }
         #endregion
 

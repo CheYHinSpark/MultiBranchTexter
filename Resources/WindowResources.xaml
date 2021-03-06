@@ -387,7 +387,7 @@
             </Grid.RowDefinitions>
             <!--标题栏-->
             <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
-                <ContentControl Width="24" Content="{DynamicResource iconImg}"/>
+                <ContentControl Width="24" Content="{DynamicResource outputIconImg}"/>
                 <TextBlock x:Name="WindowTitleTbl" Grid.Row="0"
                            VerticalAlignment="Center"
                            Text="{Binding Title, 
@@ -443,8 +443,7 @@
         <Setter Property="Template" Value="{StaticResource OutputWindowTemplate}"/>
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
-                <!--允许调整窗口大小-->
-                <WindowChrome GlassFrameThickness="0"
+                <WindowChrome GlassFrameThickness="1"
                               CornerRadius="0" 
                               CaptionHeight="0"
                               UseAeroCaptionButtons="False"

@@ -13,4 +13,5 @@
     <SolidColorBrush x:Key="NodeBgHBrush" Color="#FFC9EAFF"/>
 
     <Image x:Key="iconImg" Source="pack://application:,,,/Resources/Images/lightIcon.png" Stretch="Fill"/>
+    <Image x:Key="outputIconImg" Source="pack://application:,,,/Resources/Images/lightIcon.png" Stretch="Fill"/>
 </ResourceDictionary>
