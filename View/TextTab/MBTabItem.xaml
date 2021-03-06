@@ -12,10 +12,26 @@
    
     <Grid Background="{DynamicResource MainBrush}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="1"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ScrollViewer VerticalScrollBarVisibility="Auto"
+        <Rectangle IsEnabled="{Binding IsFocused}">
+            <Rectangle.Style>
+                <Style TargetType="{x:Type Rectangle}">
+                    <Setter Property="Fill" Value="Transparent"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsEnabled" Value="True">
+                            <Setter Property="Fill" Value="{DynamicResource ThemeBrush}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Rectangle.Style>
+        </Rectangle>
+
+
+        <ScrollViewer Grid.Row="1"
+                      VerticalScrollBarVisibility="Auto"
                       PreviewTouchDown="ScrollViewer_TouchDown"
                       TouchMove="ScrollViewer_TouchMove"
                       TouchUp="ScrollViewer_TouchLeaveUp"
@@ -78,7 +94,7 @@
         </ScrollViewer>
         
         <!--下方信息栏-->
-        <v:TabEnd x:Name="tabEnd" Grid.Row="1" HorizontalAlignment="Stretch"/>
+        <v:TabEnd x:Name="tabEnd" Grid.Row="2" HorizontalAlignment="Stretch"/>
         <!--这是为了让tabend里的信息可以绑定-->
         <TextBlock x:Name="copyWordCount" Text="{Binding CharCount}" Visibility="Collapsed"/>
         <TextBlock x:Name="copyCharCount" Text="{Binding WordCount}" Visibility="Collapsed"/>

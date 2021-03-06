@@ -58,10 +58,11 @@ namespace MultiBranchTexter.ViewModel
         }
 
         private bool? _focusInfo;
+        /// <summary> true表示在content，false表示在comment，null表示没选中 </summary>
         public bool? FocusInfo
         {
             get { return _focusInfo; }
-            set { _focusInfo = value; }
+            set { _focusInfo = value; IsFocused = value != null; }
         }
         private int _selectionStart;
         public int SelectionStart
@@ -89,6 +90,17 @@ namespace MultiBranchTexter.ViewModel
         Task _undoRedoTask;
         Task _saveUndoTask;
         #endregion
+
+        #region 外观绑定用
+        private bool _isFocused;
+
+        public bool IsFocused
+        {
+            get { return _isFocused; }
+            set { _isFocused = value; RaisePropertyChanged("IsFocused"); }
+        }
+        #endregion
+
         #endregion
 
         #region 构造方法
