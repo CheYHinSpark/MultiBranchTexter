@@ -1,7 +1,6 @@
 ﻿<v:MetroWindow x:Class="MultiBranchTexter.View.MainWindow"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:local="clr-namespace:MultiBranchTexter"
                    xmlns:vm="clr-namespace:MultiBranchTexter.ViewModel"
                    xmlns:v="clr-namespace:MultiBranchTexter.View"
                    Style="{StaticResource MainWindowStyle}"
