@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,6 +29,12 @@ namespace MultiBranchTexter.View
         public OutputAsTxtWindow()
         {
             InitializeComponent();
+            _fileFilter = "文本文档|*.txt";
+        }
+
+        protected override void Output()
+        {
+            Debug.WriteLine("导出成功了");
         }
     }
 }

@@ -359,7 +359,11 @@ namespace MultiBranchTexter.ViewModel
         {
             if (FileName == "" || _fileDirPath == "")
             { return; }
-            new OutputAsTxtWindow() { Owner = Application.Current.MainWindow}.Show();
+            new OutputAsTxtWindow() 
+            {
+                Owner = Application.Current.MainWindow,
+                SavePath = new Regex(@"\.mbjson$", RegexOptions.IgnoreCase).Replace(FileName, ".txt")
+            }.Show();
         });
 
 
