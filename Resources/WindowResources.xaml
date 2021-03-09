@@ -93,13 +93,9 @@
                 <Setter Property="BorderThickness" Value="4" TargetName="TrueBd"/>
                 <Setter Property="Background" Value="{DynamicResource ThemeBrush}" TargetName="TrueBd"/>
             </Trigger>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="IsChecked" Value="False"/>
-                    <Condition Property="IsMouseOver" Value="True"/>
-                </MultiTrigger.Conditions>
-                <Setter Property="Opacity" Value="0.8" TargetName="TrueBd"/>
-            </MultiTrigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Opacity" Value="0.6" TargetName="TrueBd"/>
+            </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
