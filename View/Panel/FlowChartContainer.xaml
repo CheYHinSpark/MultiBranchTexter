@@ -27,7 +27,7 @@
                       HorizontalScrollBarVisibility="Auto">
             <v:AutoSizeCanvas x:Name="container"
                               Width="Auto" Height="Auto" 
-                              Margin="0,0,20,20"
+                              Margin="0,0,100,400"
                               HorizontalAlignment="Left" 
                               VerticalAlignment="Top">
                 <v:AutoSizeCanvas.LayoutTransform>
@@ -40,7 +40,7 @@
                 </v:AutoSizeCanvas.LayoutTransform>
             </v:AutoSizeCanvas>
             <ScrollViewer.ContextMenu>
-                <ContextMenu x:Name="sv_cm">
+                <ContextMenu>
                     <MenuItem Header="新建节点(Ctrl+N)" Command="{Binding NewNodeCommand}"/>
                     <MenuItem Header="统一横坐标" IsEnabled="{Binding SelectedNodes,
                         Converter={StaticResource listToBoolCvt}, ConverterParameter=1}">
@@ -80,7 +80,7 @@
             </Border.Style>
         </Border>
         <!--搜索框-->
-        <v:NodeSearchBox x:Name="searchBox" Visibility="{Binding SearchBoxVisibility, Mode=TwoWay}"
+        <v:NodeSearchBox Visibility="{Binding SearchBoxVisibility, Mode=TwoWay}"
                          VerticalAlignment="Top" HorizontalAlignment="Right"/>
         <!--框选框-->
         <v:NegaBorder x:Name="selectBorder" Grid.Row="0"

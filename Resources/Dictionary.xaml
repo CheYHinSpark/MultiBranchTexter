@@ -30,8 +30,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ContextMenu}">
-                    <Border x:Name="Border"
-                            Background="{DynamicResource NodeBgBrush}"
+                    <Border Background="{DynamicResource NodeBgBrush}"
                             BorderThickness="1"
                             BorderBrush="{DynamicResource ThemeBrush}">
                         <StackPanel IsItemsHost="True"
