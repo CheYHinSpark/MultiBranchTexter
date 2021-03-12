@@ -278,7 +278,7 @@ namespace MultiBranchTexter.ViewModel
             catch { }
         });
 
-        //保存单个节点命令，但是在worktab没有打开时将执行savefile
+        //保存单个节点命令，但是在worktab没有打开时或者在已经保存好的tab上save将执行savefile，
         public ICommand SaveNodeCommand => new RelayCommand((t) =>
         {
             try
@@ -287,11 +287,16 @@ namespace MultiBranchTexter.ViewModel
                 { return; }
                 if (WorkTabWidth == "*" && WorkTabs.Count > 0)
                 {
-                    Debug.WriteLine("开始保存单个节点");
-                    WorkTabs[SelectedIndex].Save();
+                    if (WorkingViewModel.IsModified == "*")
+                    {
+                        Debug.WriteLine("开始保存单个节点");
+                        WorkTabs[SelectedIndex].Save();
+                        return;
+                    }
+                    else if (!ViewModelFactory.Settings.DoubleSaveAwake)
+                    { return; }
                 }
-                else
-                { SaveFile(); }
+                SaveFile();
             }
             catch { }
         });

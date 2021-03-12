@@ -56,6 +56,15 @@ namespace MultiBranchTexter.ViewModel
                 RaisePropertyChanged("CountOpChar");
             }
         }
+
+        private bool _doubleSaveAwake;
+
+        public bool DoubleSaveAwake
+        {
+            get { return _doubleSaveAwake; }
+            set
+            { _doubleSaveAwake = value; RaisePropertyChanged("DoubleSaveAwake"); }
+        }
         #endregion
 
         #region 颜色
@@ -231,6 +240,8 @@ namespace MultiBranchTexter.ViewModel
             IsDarkMode = iniFile.GetBool("Settings", "IsDarkMode", false);
             AllowDoubleEnter = iniFile.GetBool("Settings", "AllowDoubleEnter", false);
             CountOpChar = iniFile.GetBool("Settings", "CountOpChar", false);
+            DoubleSaveAwake = iniFile.GetBool("Settings", "DoubleSaveAwake", true);
+
             SideWidth = iniFile.GetInt("Settings", "SideWidth", 10);
             _colorR = iniFile.GetInt("Color", "Red", 238);
             _colorG = iniFile.GetInt("Color", "Green", 170);
@@ -241,9 +252,11 @@ namespace MultiBranchTexter.ViewModel
         public void WriteIni()
         {
             IniFile iniFile = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "Settings.ini");
-            iniFile.WriteBool("Settings", "IsDarkMode", IsDarkMode == true);
-            iniFile.WriteBool("Settings", "AllowDoubleEnter", AllowDoubleEnter == true);
-            iniFile.WriteBool("Settings", "CountOpChar", CountOpChar == true);
+            iniFile.WriteBool("Settings", "IsDarkMode", IsDarkMode);
+            iniFile.WriteBool("Settings", "AllowDoubleEnter", AllowDoubleEnter);
+            iniFile.WriteBool("Settings", "CountOpChar", CountOpChar);
+            iniFile.WriteBool("Settings", "DoubleSaveAwake", DoubleSaveAwake);
+
             iniFile.WriteInt("Settings", "SideWidth", (int)SideWidth);
             iniFile.WriteInt("Color", "Red", (int)_colorR);
             iniFile.WriteInt("Color", "Green", (int)_colorG);
