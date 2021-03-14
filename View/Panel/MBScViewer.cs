@@ -44,7 +44,7 @@ namespace MultiBranchTexter.View
                 return;
             }
             e.Handled = true;
-            _targetVOffset = e.Delta;
+            _targetVOffset = -e.Delta * 0.2;
             if (!_isRunning)
             { ScrollToTargetInertia(); }
         }
