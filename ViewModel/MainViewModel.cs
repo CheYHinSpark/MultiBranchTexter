@@ -172,8 +172,13 @@ namespace MultiBranchTexter.ViewModel
         { TextFontSize--; });
         #endregion
 
+        #region 界面命令，全屏、设置页
         public ICommand ExitFullScreenCommand => new RelayCommand((t) =>
         { IsFullScreen = false; });
+
+        public ICommand SwitchOptionsPanelCommand => new RelayCommand((t) =>
+        { (Application.Current.MainWindow as MetroWindow).SwitchShowOptions(); });
+        #endregion
 
         #region 左右框框调节
         public ICommand RightPullCommand => new RelayCommand((t) =>

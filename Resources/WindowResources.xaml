@@ -215,15 +215,23 @@
             </StackPanel>
             <!--内容部分-->
             <AdornerDecorator Grid.Row="2">
+                <AdornerDecorator.RenderTransform>
+                    <TranslateTransform x:Name="ttf"/>
+                </AdornerDecorator.RenderTransform>
                 <ContentPresenter x:Name="CP" Opacity="0"/>
             </AdornerDecorator>
             <!--设置栏-->
-            <Grid x:Name="SettingPanel" Grid.Row="1" Height="0" Opacity="0" Background="#80808080">
+            <Border x:Name="UpperBd" Grid.Row="2" IsHitTestVisible="False"
+                    Background="Transparent"/>
+            <Grid x:Name="SettingPanel" Grid.Row="1" Grid.RowSpan="2"
+                  VerticalAlignment="Top"
+                  Height="0" Opacity="0" Background="{DynamicResource ThemeBrush}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                <Rectangle Fill="#80808080" Grid.ColumnSpan="3"/>
                 <StackPanel Orientation="Vertical" Grid.Column="0" Margin="6">
                     <CheckBox Content="深色模式"
                               IsChecked="{Binding IsDarkMode}"
@@ -254,6 +262,9 @@
                     <CheckBox Content="连续Ctrl+S保存整个文档"
                               IsChecked="{Binding DoubleSaveAwake}"
                               Template="{StaticResource settingCheckBox}"/>
+                    <CheckBox Content="启用滚动条惯性"
+                              IsChecked="{Binding IsEnableInertia}"
+                              Template="{StaticResource settingCheckBox}"/>
                     <StackPanel Orientation="Vertical" Margin="2"
                                 Background="{DynamicResource BaseBrush}">
                         <TextBlock Text="文本编辑页边距" Margin="4,4,0,0" 
@@ -273,17 +284,15 @@
                             HorizontalAlignment="Left" />
                     <Grid>
                         <Button Content="检查更新" Command="{Binding CheckUpdateCommand}"
-                            Template="{StaticResource textButtonTemplate}"
-                            Height="24" Margin="2"
-                            HorizontalAlignment="Left" />
+                                Template="{StaticResource textButtonTemplate}"
+                                Height="24" Margin="2"
+                                HorizontalAlignment="Left" />
                         <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center"
                                    Text="{Binding VersionInfo}"
                                    Foreground="{DynamicResource Foreground.ThemeBrush}"/>
                     </Grid>
                 </StackPanel>
             </Grid>
-            <Border x:Name="UpperBd" Grid.Row="2" IsHitTestVisible="False"
-                    Background="Transparent"/>
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="ShowSettings" Value="True">
@@ -330,8 +339,8 @@
                         <DoubleAnimation Duration="0:0:1" To="1"
                                          Storyboard.TargetProperty="Opacity"
                                          Storyboard.TargetName="CP"/>
-                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.Height)"
-                                                       Storyboard.TargetName="SettingPanel"
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Y"
+                                                       Storyboard.TargetName="ttf"
                                                        FillBehavior="Stop">
                             <SplineDoubleKeyFrame KeyTime="0:0:0" Value="60"/>
                             <SplineDoubleKeyFrame KeyTime="0:0:1" Value="0" KeySpline="0.4,1,0.4,1"/>

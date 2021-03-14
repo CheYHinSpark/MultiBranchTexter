@@ -166,7 +166,7 @@ namespace MultiBranchTexter.View
 
         private void SettingBtn_Click(object sender, RoutedEventArgs e)
         {
-            ShowSettings = !ShowSettings;
+            SwitchShowOptions();
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -222,5 +222,8 @@ namespace MultiBranchTexter.View
             MaxButton.IsChecked = true;
             this.WindowState = WindowState.Maximized;
         }
+
+        public void SwitchShowOptions()
+        { ShowSettings = !ShowSettings; }
     }
 }

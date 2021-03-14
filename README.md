@@ -46,3 +46,5 @@
 - Ctrl+F 可以在节点图中进行搜索
 - 在文本编辑中，Ctrl+Z，Ctrl+Y，Ctrl+A，Ctrl+C，Ctrl+X，Ctrl+V这些常见命令仍然可以在单个片段中生效
 - Ctrl+Alt+Z、Ctrl+Alt+Y跨片段撤销和重做
+- 全屏下Esc退出全屏
+- Ctrl+Alt+O打开或关闭设置页

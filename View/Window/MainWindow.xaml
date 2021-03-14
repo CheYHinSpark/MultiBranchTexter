@@ -21,6 +21,7 @@
         <KeyBinding Gesture="Alt+Up" Command="{Binding FontSizeUpCommand}"/>
         <KeyBinding Gesture="Alt+Down" Command="{Binding FontSizeDownCommand}"/>
         <KeyBinding Gesture="Esc" Command="{Binding ExitFullScreenCommand}"/>
+        <KeyBinding Gesture="Ctrl+Alt+O" Command="{Binding SwitchOptionsPanelCommand}"/>
     </v:MetroWindow.InputBindings>
     
     <Grid Background="{DynamicResource BaseBrush}">

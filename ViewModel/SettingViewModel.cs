@@ -65,6 +65,15 @@ namespace MultiBranchTexter.ViewModel
             set
             { _doubleSaveAwake = value; RaisePropertyChanged("DoubleSaveAwake"); }
         }
+
+        private bool _isEnableInertia;
+
+        public bool IsEnableInertia
+        {
+            get { return _isEnableInertia; }
+            set
+            { _isEnableInertia = value; RaisePropertyChanged("IsEnableInertia"); }
+        }
         #endregion
 
         #region 颜色
@@ -168,6 +177,8 @@ namespace MultiBranchTexter.ViewModel
             IsDarkMode = false;
             AllowDoubleEnter = false;
             CountOpChar = false;
+            DoubleSaveAwake = true;
+            IsEnableInertia = true;
             _colorR = 238;
             _colorG = 170;
             ColorB = 22;
@@ -241,6 +252,7 @@ namespace MultiBranchTexter.ViewModel
             AllowDoubleEnter = iniFile.GetBool("Settings", "AllowDoubleEnter", false);
             CountOpChar = iniFile.GetBool("Settings", "CountOpChar", false);
             DoubleSaveAwake = iniFile.GetBool("Settings", "DoubleSaveAwake", true);
+            IsEnableInertia = iniFile.GetBool("Settings", "IsEnableInertia", true);
 
             SideWidth = iniFile.GetInt("Settings", "SideWidth", 10);
             _colorR = iniFile.GetInt("Color", "Red", 238);
@@ -256,6 +268,7 @@ namespace MultiBranchTexter.ViewModel
             iniFile.WriteBool("Settings", "AllowDoubleEnter", AllowDoubleEnter);
             iniFile.WriteBool("Settings", "CountOpChar", CountOpChar);
             iniFile.WriteBool("Settings", "DoubleSaveAwake", DoubleSaveAwake);
+            iniFile.WriteBool("Settings", "IsEnableInertia", IsEnableInertia);
 
             iniFile.WriteInt("Settings", "SideWidth", (int)SideWidth);
             iniFile.WriteInt("Color", "Red", (int)_colorR);

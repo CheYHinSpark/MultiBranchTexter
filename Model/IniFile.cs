@@ -47,6 +47,7 @@ namespace MultiBranchTexter.Model
                         "AllowDoubleEnter=false\n" +
                         "CountOpChar=false\n" +
                         "DoubleSaveAwake=true\n" +
+                        "IsEnableInertia=true\n" + 
                         "SideWidth=10\n" +
                         "[Color]\n" +
                         "Red=238\n" +
