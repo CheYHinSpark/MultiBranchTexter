@@ -15,8 +15,9 @@ namespace MultiBranchTexter.View
     public partial class FlowChartContainer : UserControl
     {
         //与拖拽、移动有关的变量
+        private Point _oldclickPoint;
         private Point _clickPoint;
-       
+
         private readonly FCCViewModel _viewModel;
 
         public FlowChartContainer()
@@ -46,33 +47,31 @@ namespace MultiBranchTexter.View
         {
             if (e.OriginalSource is Grid)
             {
-                if (Keyboard.Modifiers == ModifierKeys.None && e.LeftButton == MouseButtonState.Pressed)
+                if (Keyboard.Modifiers == ModifierKeys.None && e.LeftButton == MouseButtonState.Pressed && this.Cursor == Cursors.Hand)
                 {
                     double x, y;
-                    Point p = e.GetPosition((ScrollViewer)sender);
+                    _oldclickPoint = _clickPoint;
+                    _clickPoint = e.GetPosition((ScrollViewer)sender);
 
-                    x = _clickPoint.X - p.X;
-                    y = _clickPoint.Y - p.Y;
+                    x = _oldclickPoint.X - _clickPoint.X;
+                    y = _oldclickPoint.Y - _clickPoint.Y;
 
                     scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + x);
                     scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + y);
-
-                    _clickPoint = e.GetPosition((ScrollViewer)sender);
                 }
                 else if (Keyboard.Modifiers == ModifierKeys.Alt && e.LeftButton == MouseButtonState.Pressed)
                 {
                     double x, y;
-                    Point p = e.GetPosition((ScrollViewer)sender);
+                    _oldclickPoint = _clickPoint;
+                    _clickPoint = e.GetPosition((ScrollViewer)sender);
 
-                    x = p.X - _clickPoint.X;
-                    y = p.Y - _clickPoint.Y;
+                    x = _clickPoint.X - _oldclickPoint.X;
+                    y = _clickPoint.Y - _oldclickPoint.Y;
 
                     for (int i = 0; i < _viewModel.SelectedNodes.Count; i++)
                     {
                         _viewModel.SelectedNodes[i].Move(x / container.ScaleRatio, y / container.ScaleRatio);
                     }
-
-                    _clickPoint = e.GetPosition((ScrollViewer)sender);
 
                     ViewModelFactory.Main.IsModified = true;
                 }
@@ -88,11 +87,13 @@ namespace MultiBranchTexter.View
         //点击scrollViewer
         private void ScrollViewer_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+            //更新点击点
+            _clickPoint = e.GetPosition((ScrollViewer)sender);
+            _oldclickPoint = _clickPoint;
+            scrollViewer.StopInertia();
             //表示点击到了空白部分
             if (e.OriginalSource is Grid)
             {
-                //更新点击点
-                _clickPoint = e.GetPosition((ScrollViewer)sender);
                 //右键点击，取消选择后继
                 if (e.RightButton == MouseButtonState.Pressed)
                 {
@@ -110,11 +111,8 @@ namespace MultiBranchTexter.View
                     selectBorder.Width = 0;
                     selectBorder.Height = 0;
                 }
-                else if (Keyboard.Modifiers == ModifierKeys.Alt)//同时按下了Alt，进入移动选中的节点模式
-                {
-                    this.Cursor = Cursors.Hand;
-                }
-                else//没有按下Ctrl
+                else if (Keyboard.Modifiers != ModifierKeys.Alt)
+                    //没有同时按下了Alt或者Ctrl
                 {
                     //取消选择
                     _viewModel.ClearSelection();
@@ -129,7 +127,6 @@ namespace MultiBranchTexter.View
 
         private void ScrollViewer_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            this.Cursor = Cursors.Arrow;
             //如果是完成多选
             if (selectBorder.Visibility == Visibility.Visible)
             {
@@ -158,6 +155,14 @@ namespace MultiBranchTexter.View
                 }
                 selectBorder.Visibility = Visibility.Hidden;
                 ViewModelFactory.FCC.NewSelection(newSelect);
+            }
+            if (this.Cursor == Cursors.Hand)
+            {
+                //控制滑动
+                scrollViewer
+                    .ScrollOffsetInertia(-_clickPoint.X + _oldclickPoint.X,
+                    -_clickPoint.Y + _oldclickPoint.Y);
+                this.Cursor = Cursors.Arrow;
             }
         }
         #endregion

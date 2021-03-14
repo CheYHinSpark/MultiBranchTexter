@@ -30,19 +30,19 @@
         </Rectangle>
 
 
-        <ScrollViewer Grid.Row="1"
+        <v:MBScViewer Grid.Row="1"
                       VerticalScrollBarVisibility="Auto"
                       PreviewTouchDown="ScrollViewer_TouchDown"
                       TouchMove="ScrollViewer_TouchMove"
                       TouchUp="ScrollViewer_TouchLeaveUp"
                       TouchLeave="ScrollViewer_TouchLeaveUp">
-            <ScrollViewer.RenderTransform>
+            <v:MBScViewer.RenderTransform>
                 <TranslateTransform/>
-            </ScrollViewer.RenderTransform>
-            <ScrollViewer.InputBindings>
+            </v:MBScViewer.RenderTransform>
+            <v:MBScViewer.InputBindings>
                 <KeyBinding Gesture="Ctrl+Alt+Z" Command="{Binding UndoCommand}"/>
                 <KeyBinding Gesture="Ctrl+Alt+Y" Command="{Binding RedoCommand}"/>
-            </ScrollViewer.InputBindings>
+            </v:MBScViewer.InputBindings>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -77,7 +77,7 @@
                         MouseLeftButtonDown="Border_MouseLeftButtonDown" 
                         Cursor="IBeam"/>
             </Grid>
-            <ScrollViewer.Triggers>
+            <v:MBScViewer.Triggers>
                 <EventTrigger RoutedEvent="Loaded">
                     <BeginStoryboard>
                         <Storyboard>
@@ -90,8 +90,8 @@
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
-            </ScrollViewer.Triggers>
-        </ScrollViewer>
+            </v:MBScViewer.Triggers>
+        </v:MBScViewer>
         
         <!--下方信息栏-->
         <v:TabEnd x:Name="tabEnd" Grid.Row="2" HorizontalAlignment="Stretch"/>

@@ -17,7 +17,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
-        <ScrollViewer x:Name="scrollViewer" Background="{DynamicResource MainBrush}"
+        <v:MBScViewer x:Name="scrollViewer" Background="{DynamicResource MainBrush}"
                       FocusVisualStyle="{x:Null}"
                       PreviewMouseDown="ScrollViewer_PreviewMouseDown"
                       PreviewMouseUp="ScrollViewer_PreviewMouseUp"
@@ -39,7 +39,7 @@
                         Mode=FindAncestor}}"/>
                 </v:AutoSizeCanvas.LayoutTransform>
             </v:AutoSizeCanvas>
-            <ScrollViewer.ContextMenu>
+            <v:MBScViewer.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="新建节点(Ctrl+N)" Command="{Binding NewNodeCommand}"/>
                     <MenuItem Header="统一横坐标" IsEnabled="{Binding SelectedNodes,
@@ -64,8 +64,8 @@
                               IsEnabled="{Binding SelectedNodes,
                         Converter={StaticResource listToBoolCvt}}"/>
                 </ContextMenu>
-            </ScrollViewer.ContextMenu>
-        </ScrollViewer>
+            </v:MBScViewer.ContextMenu>
+        </v:MBScViewer>
         <Border Background="Transparent" BorderThickness="1" IsHitTestVisible="False"
                 IsEnabled="{Binding IsFocused, ElementName=scrollViewer}">
             <Border.Style>

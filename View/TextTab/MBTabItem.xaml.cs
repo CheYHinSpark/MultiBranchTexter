@@ -41,6 +41,7 @@ namespace MultiBranchTexter.View
         private bool _isDragging;
 
         //触摸
+        private Point _oldTouchPoint;
         private Point _touchPoint;
         #endregion
 
@@ -273,21 +274,25 @@ namespace MultiBranchTexter.View
         #region 触摸屏支持
         private void ScrollViewer_TouchDown(object sender, TouchEventArgs e)
         {
+            (sender as MBScViewer).StopInertia();
             _touchPoint = e.GetTouchPoint(this).Position;
+            _oldTouchPoint = _touchPoint;
             fragmentContainer.IsHitTestVisible = false;
         }
 
         private void ScrollViewer_TouchMove(object sender, TouchEventArgs e)
         {
-            Point point = e.GetTouchPoint(this).Position;
+            _oldTouchPoint = _touchPoint;
+            _touchPoint = e.GetTouchPoint(this).Position;
             ScrollViewer sv = sender as ScrollViewer;
-            sv.ScrollToVerticalOffset(sv.VerticalOffset - point.Y + _touchPoint.Y);
-            sv.ScrollToHorizontalOffset(sv.HorizontalOffset - point.X + _touchPoint.X);
-            _touchPoint = point;
+            sv.ScrollToVerticalOffset(sv.VerticalOffset - _touchPoint.Y + _oldTouchPoint.Y);
+            sv.ScrollToHorizontalOffset(sv.HorizontalOffset - _touchPoint.X + _oldTouchPoint.X);
         }
 
         private void ScrollViewer_TouchLeaveUp(object sender, TouchEventArgs e)
         {
+            MBScViewer sv = sender as MBScViewer;
+            sv.ScrollOffsetInertia(_oldTouchPoint.X - _touchPoint.X, _oldTouchPoint.Y - _touchPoint.Y);
             fragmentContainer.IsHitTestVisible = true;
         }
         #endregion
