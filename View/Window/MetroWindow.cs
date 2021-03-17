@@ -129,9 +129,6 @@ namespace MultiBranchTexter.View
         }
         #endregion
 
-        //标题栏
-        private CheckBox MaxButton;
-
         public MetroWindow()
         {
             this.Loaded += MetroWindow_Loaded;
@@ -146,9 +143,6 @@ namespace MultiBranchTexter.View
                 ViewModelFactory.SetViewModel(typeof(SettingViewModel), 
                     mWTemplate.FindName("svm", this) as SettingViewModel);
 
-                MaxButton = mWTemplate.FindName("MaxWinButton", this) as CheckBox;
-
-                MaxButton.Click += MaxButton_Click;
                 (mWTemplate.FindName("SettingButton", this) as Button).Click += SettingBtn_Click;
                 (mWTemplate.FindName("CloseWinButton", this) as Button).Click += CloseButton_Click;
                 (mWTemplate.FindName("MinWinButton", this) as Button).Click += MinButton_Click;
@@ -193,18 +187,6 @@ namespace MultiBranchTexter.View
             { Close(); }
         }
 
-        private void MaxButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (MaxButton.IsChecked == true)
-            {
-                WindowState = WindowState.Maximized;
-            }
-            else
-            {
-                WindowState = WindowState.Normal;
-            }
-        }
-
         private void MinButton_Click(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
@@ -215,12 +197,6 @@ namespace MultiBranchTexter.View
         {
             DragMove();
             base.OnMouseLeftButtonDown(e);
-        }
-
-        public void ToMaximize()
-        {
-            MaxButton.IsChecked = true;
-            this.WindowState = WindowState.Maximized;
         }
 
         public void SwitchShowOptions()

@@ -135,7 +135,7 @@ namespace MultiBranchTexter.ViewModel
             {
                 _titleBarHeight = value;
                 if (value == 0)
-                { (Application.Current.MainWindow as MetroWindow).ToMaximize(); }
+                { Application.Current.MainWindow.WindowState = WindowState.Maximized; }
                 RaisePropertyChanged("TitleBarHeight"); 
             }
         }

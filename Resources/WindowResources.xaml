@@ -206,7 +206,10 @@
                     <Path Stroke="{DynamicResource Foreground.ThemeBrush}" 
                           StrokeThickness="2" Data="M8,12 L22,12"/>
                 </Button>
-                <CheckBox x:Name="MaxWinButton" Style="{DynamicResource WinMaxBtnStyle}"/>
+                <CheckBox x:Name="MaxWinButton" Style="{DynamicResource WinMaxBtnStyle}"
+                          IsChecked="{Binding Path=WindowState, 
+                    RelativeSource={RelativeSource AncestorType=Window},
+                    Converter={StaticResource stateToBoolCvt}}"/>
                 <Button x:Name="CloseWinButton" ToolTip="关闭"
                         Style="{DynamicResource ThemeBtnStyle}">
                     <Path Stroke="{DynamicResource Foreground.ThemeBrush}" 
