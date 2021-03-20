@@ -18,6 +18,7 @@ namespace MultiBranchTexter.ViewModel
     public class FCCViewModel : ViewModelBase
     {
         #region 字段
+        public HashSet<TextNode> Nodes { get; set; }
 
         #region 节点搜索、选择、节点累计
         //搜索相关的变量
@@ -70,13 +71,21 @@ namespace MultiBranchTexter.ViewModel
         }
         #endregion
 
-        #region 提示文本
-        private bool _isHintEnabled;
-        public bool IsHintEnabled
+        #region 字数次数统计
+        private int _charCount;
+        public int CharCount
         {
-            get { return _isHintEnabled; }
+            get { return _charCount; }
             set
-            { _isHintEnabled = value; RaisePropertyChanged("IsHintEnabled"); }
+            { _charCount = value; RaisePropertyChanged("CharCount"); }
+        }
+
+        private int _wordCount;
+        public int WordCount
+        {
+            get { return _wordCount; }
+            set
+            { _wordCount = value; RaisePropertyChanged("WordCount"); }
         }
         #endregion
 
@@ -249,6 +258,7 @@ namespace MultiBranchTexter.ViewModel
             SearchedNodes.CollectionChanged += SearchedNodes_CollectionChanged;
             NodeCount = 0;
             _searchedIndex = -1;
+            Nodes = new HashSet<TextNode>();
         }
 
         #region 事件
@@ -273,6 +283,7 @@ namespace MultiBranchTexter.ViewModel
         public bool Load(string mbtxtPath)
         {
             _container.Children.Clear();
+            Nodes.Clear();
             SelectedNodes.Clear();// <--必须
             try
             {
@@ -298,7 +309,30 @@ namespace MultiBranchTexter.ViewModel
 #endif
                 }
             }
+            CountCharWord(true);
             return true;
+        }
+
+        public async void CountCharWord(bool totalReCount)
+        {
+            await Task.Delay(10);// <--不然有许多bug
+            await Task.Run(new Action(
+                delegate
+                {
+                    int c = 0, w = 0;
+                    foreach (TextNode node in Nodes)
+                    {
+                        foreach (TextFragment tfp in node.Fragments)
+                        {
+                            tfp.ShouldRecount |= totalReCount;
+                            var ccw = tfp.CountCharWord();
+                            c += ccw.Item1;
+                            w += ccw.Item2;
+                        }
+                    }
+                    CharCount = c;
+                    WordCount = w;
+                }));
         }
 
         #region 流程图绘制方法
@@ -313,17 +347,14 @@ namespace MultiBranchTexter.ViewModel
 
             //nodeButtons总表
             List<NodeButton> nodeButtons = new List<NodeButton>();
-            List<TextNode> textNodes = new List<TextNode>();
-            foreach (UserControl control in _container.Children)
+            List<TextNode> _Nodes = new List<TextNode>();
+            foreach (TextNode node in Nodes)
             {
-                if (control is NodeButton)
-                {
-                    textNodes.Add((control as NodeButton).TextNode);
-                    nodeButtons.Add((control as NodeButton));
-                }
+                _Nodes.Add(node);
+                nodeButtons.Add(new NodeButton(node));
             }
 
-            int num = textNodes.Count;
+            int num = Nodes.Count;
             if (num == 0)
             {
                 Debug.WriteLine("创建了空节点图");
@@ -357,11 +388,11 @@ namespace MultiBranchTexter.ViewModel
             await _container.Dispatcher.BeginInvoke(new Action(
                 delegate
                 {
-                    for (int i = 0; i < textNodes.Count; i++)
+                    for (int i = 0; i < num; i++)
                     {
-                        EndCondition ec = textNodes[i].EndCondition;
+                        EndCondition ec = _Nodes[i].EndCondition;
 
-                        for (int j = 0;j<ec.Answers.Count;j++)
+                        for (int j = 0; j < ec.Answers.Count;j++)
                         { 
                             if (ec.Answers[j].Item2 == "")
                             { continue; }//直接跳过空的
@@ -369,7 +400,7 @@ namespace MultiBranchTexter.ViewModel
                             bool found = false;
                             for (int k = 0; k < num; k++)
                             {
-                                if (ec.Answers[j].Item2 == textNodes[k].Name)
+                                if (ec.Answers[j].Item2 == _Nodes[k].Name)
                                 {
                                     found = true;
                                     //准备为nodeButton添加post
@@ -454,7 +485,7 @@ namespace MultiBranchTexter.ViewModel
         private async void ReDrawFlowChart(List<TextNode> textNodes)
         {
             waitingNode = null;
-
+            //TODO Nodes = textNodes.;
             //nodeButtons总表
             List<NodeButton> nodeButtons = new List<NodeButton>();
 
@@ -596,6 +627,7 @@ namespace MultiBranchTexter.ViewModel
                 {
                     for (int i = 0; i < num; i++)
                     {
+                        Nodes.Add(textNodes[i].Node);
                         //初始化button
                         nodeButtons.Add(new NodeButton(textNodes[i].Node));
                     }
@@ -775,6 +807,7 @@ namespace MultiBranchTexter.ViewModel
         }
 
         /// <summary> 获得textNode列表  </summary>
+        [Obsolete]
         public List<TextNode> GetTextNodeList()
         {
             List<TextNode> textNodes = new List<TextNode>();
@@ -791,7 +824,6 @@ namespace MultiBranchTexter.ViewModel
         /// <summary>获得一个新名字</summary>
         public string GetNewName()
         {
-            List<TextNode> tns = GetTextNodeList();
             //创造一个不重名的
             string newName = "new-node-";
             int i = 1;
@@ -799,9 +831,9 @@ namespace MultiBranchTexter.ViewModel
             while (repeated)
             {
                 repeated = false;
-                for (int j = 0; j < tns.Count; j++)
+                foreach (TextNode node in Nodes)
                 {
-                    if (tns[j].Name == newName + i.ToString())
+                    if (node.Name == newName + i.ToString())
                     {
                         repeated = true;
                         i++;
@@ -814,10 +846,9 @@ namespace MultiBranchTexter.ViewModel
 
         public bool CheckRepeat(string newName)
         {
-            List<TextNode> tns = GetTextNodeList();
-            for (int j = 0; j < tns.Count; j++)
+            foreach (TextNode node in Nodes)
             {
-                if (tns[j].Name == newName)
+                if (node.Name == newName)
                 { return true; }
             }
             return false;
@@ -825,13 +856,10 @@ namespace MultiBranchTexter.ViewModel
 
         public TextNode GetNodeByName(string name)
         {
-            foreach (UserControl control in _container.Children)
+            foreach (TextNode node in Nodes)
             {
-                if (control is NodeButton)
-                {
-                    if ((control as NodeButton).TextNode.Name == name)
-                    { return (control as NodeButton).TextNode; }
-                }
+                if (node.Name == name)
+                { return node; }
             }
             return null;
         }

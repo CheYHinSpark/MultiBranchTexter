@@ -349,11 +349,10 @@ namespace MultiBranchTexter.ViewModel
             if (FileName == "" || _fileDirPath == "")
             { return; }
             RaiseHint("开始导出JSON");
-            List<TextNode> nodes = ViewModelFactory.FCC.GetTextNodeList();
             List<OperationTextNode> newNodes = new List<OperationTextNode>();
-            for (int i = 0; i < nodes.Count; i++)
+            foreach (TextNode node in ViewModelFactory.FCC.Nodes)
             {
-                newNodes.Add(nodes[i].ToOperationTextNode());
+                newNodes.Add(node.ToOperationTextNode());
             }
             await Task.Run(() =>
             {
@@ -375,8 +374,6 @@ namespace MultiBranchTexter.ViewModel
                 SavePath = new Regex(@"\.mbjson$", RegexOptions.IgnoreCase).Replace(FileName, ".txt")
             }.Show();
         });
-
-
 
         /// <summary> 导出节点图 </summary>
         public ICommand OutputFCCCommand => new RelayCommand((t) =>

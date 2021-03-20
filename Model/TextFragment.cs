@@ -50,14 +50,15 @@ namespace MultiBranchTexter.Model
         [JsonIgnore]
         public bool ShouldRecount = true;//是否要重新统计字数
         [JsonIgnore]
-        private Tuple<int, int> charWordCount = new Tuple<int, int>(0, 0);//字数统计
+        private (int, int) charWordCount = (0, 0);//字数统计
         #endregion
 
         public TextFragment() { }
         public TextFragment(string newContent)
         { Content = newContent; }
 
-        public Tuple<int, int> CountCharWord()
+        /// <summary> 返回字数，词数 </summary>
+        public (int, int) CountCharWord()
         {
             if (ShouldRecount)
             {
@@ -133,7 +134,7 @@ namespace MultiBranchTexter.Model
                         }
                     }
                 }
-                charWordCount = new Tuple<int, int>(charCount, wordCount);
+                charWordCount = (charCount, wordCount);
             }
             return charWordCount;
         }

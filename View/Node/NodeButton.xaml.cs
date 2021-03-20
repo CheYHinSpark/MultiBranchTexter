@@ -40,11 +40,13 @@ namespace MultiBranchTexter.View
 
         public NodeButton(TextNode newNode)
         {
+            ViewModelFactory.FCC.Nodes.Add(newNode);
             InitializeComponent();
             TextNode = newNode;
             FatherNode = this;
             ShowEndCondition();
         }
+
         #region 事件
         //加载完成
         private async void NodeBase_Loaded(object sender, RoutedEventArgs e)
@@ -55,8 +57,8 @@ namespace MultiBranchTexter.View
 
             Panel.SetZIndex(this, 2);
             Debug.WriteLine("节点成功生成" + TextNode.Name);
-            await Task.Delay(10);//这是为了能让线条的位置正确
-            DrawPostLines(ViewModelFactory.FCC.Container);
+            await Task.Delay(20);//这是为了能让线条的位置正确
+            DrawPostLines();
         }
 
         #region 移动与选中事件
@@ -325,7 +327,7 @@ namespace MultiBranchTexter.View
         /// <summary>
         /// 根据textNode的连接情况在自己和后续节点间生成连线
         /// </summary>
-        public void DrawPostLines(Panel container)
+        public void DrawPostLines()
         {
             switch (TextNode.EndCondition.EndType)
             {
@@ -333,18 +335,18 @@ namespace MultiBranchTexter.View
                     if (AnswerToNodes[""] == null)//可能没有
                     { return; }
                     ConnectingLine line = new ConnectingLine(this, AnswerToNodes[""]);
-                    container.Children.Add(line);
+                    ViewModelFactory.FCC.Container.Children.Add(line);
                     break;
                 case EndType.YesNo:
                     if (AnswerToNodes["yes"] != null)
                     {
-                        container.Children.Add(
+                        ViewModelFactory.FCC.Container.Children.Add(
                             new ConnectingLine((endNode as NodeEndYesNo).yesNode, AnswerToNodes["yes"])
                             );
                     }
                     if (AnswerToNodes["no"] != null)
                     {
-                        container.Children.Add(
+                        ViewModelFactory.FCC.Container.Children.Add(
                             new ConnectingLine((endNode as NodeEndYesNo).noNode, AnswerToNodes["no"])
                             );
                     }
@@ -357,7 +359,7 @@ namespace MultiBranchTexter.View
                         string answer = (control as NodeEndMAAnswer).Answer;
                         if (AnswerToNodes[answer] != null)
                         {
-                            container.Children.Add(new ConnectingLine(control as NodeBase, AnswerToNodes[answer]));
+                            ViewModelFactory.FCC.Container.Children.Add(new ConnectingLine(control as NodeBase, AnswerToNodes[answer]));
                         }
                     }
                     break;
@@ -459,6 +461,8 @@ namespace MultiBranchTexter.View
             ViewModelFactory.Main.IsModified = true;
             //删掉自己
             ViewModelFactory.FCC.Container.Children.Remove(this);
+            ViewModelFactory.FCC.Nodes.Remove(TextNode);
+            ViewModelFactory.FCC.CountCharWord(false);
         }
 
         /// <summary>

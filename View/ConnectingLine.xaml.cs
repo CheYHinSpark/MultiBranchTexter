@@ -27,9 +27,8 @@ namespace MultiBranchTexter.View
             EndNode = end;
             begin.FatherNode.PostLines.Add(this);
             end.PreLines.Add(this);
-            begin.FatherNode.UpdatePostLines();
             isBeginMA = begin.FatherTextNode.EndCondition.EndType == EndType.MultiAnswers;
-            end.UpdatePreLines();
+            Loaded += ConnectingLine_Loaded;
         }
 
         #region 成员变量
@@ -46,6 +45,13 @@ namespace MultiBranchTexter.View
         #endregion
 
         #region 事件
+
+        private void ConnectingLine_Loaded(object sender, RoutedEventArgs e)
+        {
+            BeginNode.FatherNode.UpdatePostLines();
+            EndNode.UpdatePreLines();
+        }
+
         #region 自身鼠标事件
         //鼠标进入
         private void Path_MouseEnter(object sender, MouseEventArgs e)

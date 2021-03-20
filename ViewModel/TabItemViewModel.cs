@@ -187,12 +187,14 @@ namespace MultiBranchTexter.ViewModel
                     foreach (TextFragment tfp in TextFragments)
                     {
                         tfp.ShouldRecount |= totalReCount;
-                        w += tfp.CountCharWord().Item1;
-                        c += tfp.CountCharWord().Item2;
+                        var ccw = tfp.CountCharWord();
+                        w += ccw.Item1;
+                        c += ccw.Item2;
                     }
                     CharCount = c;
                     WordCount = w;
                 }));
+            ViewModelFactory.FCC.CountCharWord(totalReCount);
         }
         #endregion
 

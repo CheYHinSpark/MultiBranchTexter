@@ -105,6 +105,18 @@
             <TextBlock Text="{Binding NodeCount}" Margin="0,0,8,0"
                        VerticalAlignment="Center"
                        Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+            <TextBlock Text="总词数：" Margin="8,0,0,0"
+                       VerticalAlignment="Center"
+                       Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+            <TextBlock Margin="0,0,8,0"  Text="{Binding WordCount}"
+                       VerticalAlignment="Center" 
+                       Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+            <TextBlock Text="总字数：" Margin="8,0,0,0"
+                       VerticalAlignment="Center"
+                       Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+            <TextBlock Margin="0,0,8,0"  Text="{Binding CharCount}"
+                       VerticalAlignment="Center" 
+                       Foreground="{DynamicResource Foreground.ThemeBrush}"/>
         </StackPanel>
     </Grid>
 </UserControl>
