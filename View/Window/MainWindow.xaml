@@ -1,11 +1,11 @@
 ﻿<v:MetroWindow x:Class="MultiBranchTexter.View.MainWindow"
-                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:vm="clr-namespace:MultiBranchTexter.ViewModel"
-                   xmlns:v="clr-namespace:MultiBranchTexter.View"
-                   Style="{StaticResource MainWindowStyle}"
-                   WindowStartupLocation="CenterScreen"
-                   Title="MultiBranchTexter" Height="450" Width="800">
+               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:vm="clr-namespace:MultiBranchTexter.ViewModel"
+               xmlns:v="clr-namespace:MultiBranchTexter.View"
+               Style="{StaticResource MainWindowStyle}"
+               WindowStartupLocation="CenterScreen"
+               Title="MultiBranchTexter" Height="450" Width="800">
     <v:MetroWindow.DataContext>
         <vm:MainViewModel/>
     </v:MetroWindow.DataContext>
