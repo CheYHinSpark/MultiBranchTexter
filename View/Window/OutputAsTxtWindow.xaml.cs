@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MultiBranchTexter.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -19,17 +20,10 @@ namespace MultiBranchTexter.View
     /// </summary>
     public partial class OutputAsTxtWindow : OutputWindowBase
     {
-        private string commentParPre;
-        private string commentParPost;
-        private string commentLinePre;
-        private string contentParPre;
-        private string contentParPost;
-        private bool isCommentBefore;
-
         public OutputAsTxtWindow()
         {
             InitializeComponent();
-            _fileFilter = "文本文档|*.txt";
+            this.DataContext = ViewModelFactory.Output;
         }
 
         protected override void Output()

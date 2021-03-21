@@ -44,5 +44,9 @@ namespace MultiBranchTexter.ViewModel
         /// <summary> 获得唯一的SettingViewModel </summary>
         public static SettingViewModel Settings
         { get { return GetViewModel(typeof(SettingViewModel)) as SettingViewModel; } }
+
+        /// <summary> 获得唯一的OutputViewModel </summary>
+        public static OutputViewModel Output
+        { get { return GetViewModel(typeof(OutputViewModel)) as OutputViewModel; } }
     }
 }

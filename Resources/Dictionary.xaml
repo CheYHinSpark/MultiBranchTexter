@@ -490,7 +490,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    <!--文字checkBox模板-->
+    <!--纯文字checkBox模板-->
     <ControlTemplate x:Key="textCheckTemplate" TargetType="{x:Type CheckBox}">
         <Border x:Name="BD" Height="Auto" Width="Auto" Background="Transparent">
             <ContentPresenter x:Name="CP" Margin="2,0,2,0"

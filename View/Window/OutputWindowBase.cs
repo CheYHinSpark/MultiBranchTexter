@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,17 +18,6 @@ namespace MultiBranchTexter.View
         {
             get { return (string)GetValue(SavePathProperty); }
             set { SetValue(SavePathProperty, value); }
-        }
-
-        //是否保存注释
-        public static DependencyProperty SaveCommentProperty =
-            DependencyProperty.Register("SaveComment", typeof(bool),
-                typeof(OutputWindowBase), new PropertyMetadata(false));
-
-        public bool SaveComment
-        {
-            get { return (bool)GetValue(SaveCommentProperty); }
-            set { SetValue(SaveCommentProperty, value); }
         }
 
         //是否逐个保存
@@ -73,26 +63,37 @@ namespace MultiBranchTexter.View
 
         private void BrowseBtn_Click(object sender, RoutedEventArgs e)
         {
-            // 文件夹对话框
-            Microsoft.Win32.SaveFileDialog dialog =
-                 new Microsoft.Win32.SaveFileDialog
-                 {
-                     RestoreDirectory = true,
-                     Filter = _fileFilter
-                 };
-            string _fileDirPath = Path.GetDirectoryName(SavePath);
-            if (Directory.Exists(_fileDirPath))
-            { dialog.InitialDirectory = _fileDirPath; }
-            if (dialog.ShowDialog() == true)
+            // 基本上是用第一种，导出latex才用第二种
+            if (SaveIndividually)
             {
-                SavePath = dialog.FileName;
+                // 文件夹对话框
+                CommonOpenFileDialog dialog = new CommonOpenFileDialog
+                {
+                    IsFolderPicker = true//设置为选择文件夹
+                };
+                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                { SavePath = dialog.FileName; }
+            }
+            else
+            {
+                Microsoft.Win32.OpenFileDialog dialog =
+                     new Microsoft.Win32.OpenFileDialog
+                     {
+                         RestoreDirectory = true,
+                         Filter = _fileFilter
+                     };
+                string _fileDirPath = Path.GetDirectoryName(SavePath);
+                if (Directory.Exists(_fileDirPath))
+                { dialog.InitialDirectory = _fileDirPath; }
+                if (dialog.ShowDialog() == true)
+                {
+                    SavePath = dialog.FileName;
+                }
             }
         }
 
         private void OutputBtn_Click(object sender, RoutedEventArgs e)
-        {
-            Output();
-        }
+        { Output(); }
 
         protected virtual void Output()
         { }
