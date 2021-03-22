@@ -135,10 +135,26 @@ namespace MultiBranchTexter.View
                 }
                 else
                 {
-                    //没有重复，完成修改
-                    TextNode.Name = titleBox.Text;
-                    //通知窗体改变相应的标签页
-                    ViewModelFactory.Main.ReLoadTab(TextNode);
+                    //没有重复，检查是否符合文件夹命名规则
+                    if (titleBox.Text.Contains('*')
+                        || titleBox.Text.Contains('\\')
+                        || titleBox.Text.Contains('/')
+                        || titleBox.Text.Contains(':')
+                        || titleBox.Text.Contains('?')
+                        || titleBox.Text.Contains('"')
+                        || titleBox.Text.Contains('<')
+                        || titleBox.Text.Contains('>')
+                        || titleBox.Text.Contains('|'))
+                    {
+                        titleBox.Text = TextNode.Name;
+                        MessageBox.Show("节点名称不能含有*\\/:\"?<>|，已还原");
+                    }
+                    else
+                    {
+                        TextNode.Name = titleBox.Text;
+                        //通知窗体改变相应的标签页
+                        ViewModelFactory.Main.ReLoadTab(TextNode);
+                    }
                 }
             }
             UpdateLines();
