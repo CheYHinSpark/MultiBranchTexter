@@ -1009,7 +1009,7 @@ namespace MultiBranchTexter.ViewModel
             }
             if (cline != null)//不一定有这条原本连线
             {
-                NodeButton.UnLink(waitingNode);
+                NodeButton.UnLink(waitingNode, false);
                 cline.Delete();
             }
             //在waitNode和Post之间连线

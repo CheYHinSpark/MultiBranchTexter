@@ -6,49 +6,197 @@
                     xmlns:v="clr-namespace:MultiBranchTexter.View"
                     xmlns:vm="clr-namespace:MultiBranchTexter.ViewModel"
                     Style="{StaticResource OutputWindowStyle}"
-                    Height="400" Width="600"
+                    Height="560" Width="640"
                     WindowStartupLocation="CenterOwner"
                     Title="导出为txt"
                     SavePath="yes"
                     mc:Ignorable="d" 
-                    d:DesignHeight="400" d:DesignWidth="600">
+                    d:DesignHeight="560" d:DesignWidth="640">
+    <v:OutputWindowBase.Resources>
+        <Style x:Key="outputTextBoxStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="AcceptsTab" Value="True"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="CaretBrush" Value="{DynamicResource ThemeBrush}"/>
+            <Setter Property="Template" Value="{StaticResource textBoxTemplate}"/>
+            <Setter Property="Foreground" Value="{DynamicResource Text.Foreground.BaseBrush}"/>
+            <Setter Property="Background" Value="{DynamicResource BaseBrush}"/>
+        </Style>
+    </v:OutputWindowBase.Resources>
+    
     <v:OutputWindowBase.DataContext>
         <vm:OutputViewModel/>
     </v:OutputWindowBase.DataContext>
     
-    <Grid Background="{DynamicResource MainBrush}">
+    <Grid Background="{DynamicResource MainBrush}" Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel>
-            <CheckBox Content="导出注释" IsChecked="{Binding OutputComment}"
+        
+        <TextBlock Grid.Row="0"
+                   Text="&amp;&amp;将被替换为该节点标题，\&amp;将被替换为&amp;  $$将被替换为文件工程标题，\$将被替换为$"
+                   Foreground="{DynamicResource Foreground.BaseBrush}"
+                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <Grid Grid.Row="1" Margin="10,5,10,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="tt"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="节点前" Foreground="{DynamicResource Foreground.BaseBrush}"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox Grid.Column="1" Text="{Binding NodeParPre}" 
+                     Style="{StaticResource outputTextBoxStyle}"/>
+        </Grid>
+
+        <!--后继条件导出-->
+        <Grid Grid.Row="4" Margin="10,5,10,5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="tt"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.Row="0" Grid.ColumnSpan="2" Fill="{DynamicResource ThemeBrush}"/>
+            <CheckBox Grid.Row="0" Grid.ColumnSpan="2"
+                      Content="导出节点后继条件" IsChecked="{Binding OutputEnd}"
                       Template="{StaticResource settingCheckBox}"/>
-            <TextBox Text="{Binding CommentParPre}" TextWrapping="Wrap"/>
-            <TextBlock Text="片段注释前"/>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
-                <TextBox Text="{Binding CommentLinePre}" Grid.Column="0"/>
-                <TextBlock Text="片段注释每行前" TextAlignment="Center" Grid.Column="1"/>
-                <TextBlock Text="片段注释每行后" TextAlignment="Center" Grid.Column="3"/>
-                <TextBox Text="{Binding CommentLinePost}" Grid.Column="4"/>
-            </Grid>
-            <TextBlock Text="片段注释后"/>
-            <TextBox Text="{Binding CommentParPost}" TextWrapping="Wrap"/>
-        </StackPanel>
-        <StackPanel Grid.Row="1">
-            <CheckBox Content="片段注释导出在文本前面" IsChecked="{Binding IsCommentBefore}"
+            <Rectangle Grid.Row="1" Grid.ColumnSpan="2" Fill="{DynamicResource ThemeBrush}"/>
+            <CheckBox Grid.Row="1" Grid.ColumnSpan="2"
+                      Content="忽略空答案" IsChecked="{Binding IgnoreEmptyAnswer}"
                       Template="{StaticResource settingCheckBox}"/>
-            <TextBox Text="{Binding ContentParPre}" TextWrapping="Wrap"/>
-            <TextBlock Text="片段文本前"/>
-            <TextBlock Text="片段文本后"/>
-            <TextBox Text="{Binding ContentParPost}" TextWrapping="Wrap"/>
-        </StackPanel>
+            <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Text="##将被替换为问题文本，\#将被替换为#"
+                       Foreground="{DynamicResource Foreground.BaseBrush}"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="问题模板"
+                       Foreground="{DynamicResource Foreground.BaseBrush}"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox Grid.Row="3" Grid.Column="1" VerticalScrollBarVisibility="Auto"
+                     Text="{Binding QPattern}" Style="{StaticResource outputTextBoxStyle}"/>
+            <TextBlock Grid.Row="4" Grid.ColumnSpan="2" 
+                       Text="##将被替换为答案文本，\#将被替换为#   @@将被替换为答案对应节点标题，\@将被替换为@"
+                       Foreground="{DynamicResource Foreground.BaseBrush}"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="5" Grid.Column="0" Text="答案模板"
+                       Foreground="{DynamicResource Foreground.BaseBrush}"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox Grid.Row="5" Grid.Column="1" VerticalScrollBarVisibility="Auto"
+                     Text="{Binding APattern}" Style="{StaticResource outputTextBoxStyle}"/>
+            <Rectangle Grid.Row="1" Grid.RowSpan="5" Grid.ColumnSpan="2"
+                       Fill="{DynamicResource MainBrush}" IsEnabled="{Binding OutputEnd}">
+                <Rectangle.Style>
+                    <Style TargetType="{x:Type Rectangle}">
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.7"/>
+                                <Setter Property="IsHitTestVisible" Value="True"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="True">
+                                <Setter Property="Opacity" Value="0"/>
+                                <Setter Property="IsHitTestVisible" Value="False"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Rectangle.Style>
+            </Rectangle>
+        </Grid>
+        
+        <Grid Grid.Row="5" Margin="10,5,10,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="tt"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="节点后" Foreground="{DynamicResource Foreground.BaseBrush}"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox Grid.Column="1" Text="{Binding NodeParPost}" 
+                     Style="{StaticResource outputTextBoxStyle}"/>
+        </Grid>
+        
+        <!--注释部分-->
+        <Grid Grid.Row="2" Margin="10,5,10,5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="tt"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.Row="0" Grid.ColumnSpan="2" Fill="{DynamicResource ThemeBrush}"/>
+            <CheckBox Grid.Row="0" Grid.ColumnSpan="2"
+                      Content="导出注释" IsChecked="{Binding OutputComment}"
+                      Template="{StaticResource settingCheckBox}"/>
+            <TextBox Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto"
+                     Text="{Binding CommentParPre}" Style="{StaticResource outputTextBoxStyle}"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="片段注释前"
+                       Foreground="{DynamicResource Foreground.BaseBrush}"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Rectangle Grid.Row="2" Grid.ColumnSpan="2" Fill="{DynamicResource ThemeBrush}"/>
+            <CheckBox Grid.Row="2" Grid.ColumnSpan="2" 
+                      Content="忽略空注释" IsChecked="{Binding IgnoreEmptyComment}"
+                      Template="{StaticResource settingCheckBox}"/>
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="片段注释后"
+                       Foreground="{DynamicResource Foreground.BaseBrush}"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox Grid.Row="3" Grid.Column="1" VerticalScrollBarVisibility="Auto"
+                     Text="{Binding CommentParPost}" Style="{StaticResource outputTextBoxStyle}"/>
+            <Rectangle Grid.Row="1" Grid.RowSpan="3" Grid.ColumnSpan="2"
+                       Fill="{DynamicResource MainBrush}" IsEnabled="{Binding OutputComment}">
+                <Rectangle.Style>
+                    <Style TargetType="{x:Type Rectangle}">
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.7"/>
+                                <Setter Property="IsHitTestVisible" Value="True"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="True">
+                                <Setter Property="Opacity" Value="0"/>
+                                <Setter Property="IsHitTestVisible" Value="False"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Rectangle.Style>
+            </Rectangle>
+        </Grid>
+        
+        <!--文本部分-->
+        <Grid Grid.Row="3" Margin="10,5,10,5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="tt"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.Row="0" Grid.ColumnSpan="2" Fill="{DynamicResource ThemeBrush}"/>
+            <CheckBox Grid.Row="0" Grid.ColumnSpan="2"
+                      Content="片段注释导出在文本前面" IsChecked="{Binding IsCommentBefore}"
+                      Template="{StaticResource settingCheckBox}"/>
+            <TextBox Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto"
+                     Text="{Binding ContentParPre}" Style="{StaticResource outputTextBoxStyle}"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="片段文本前"
+                       Foreground="{DynamicResource Foreground.BaseBrush}"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="片段文本后"
+                       Foreground="{DynamicResource Foreground.BaseBrush}"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox Grid.Row="3" Grid.Column="1" VerticalScrollBarVisibility="Auto"
+                     Text="{Binding ContentParPost}" Style="{StaticResource outputTextBoxStyle}"/>
+        </Grid>
     </Grid>
 </v:OutputWindowBase>

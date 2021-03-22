@@ -286,10 +286,6 @@
                                   IsEnabled="{Binding IsWorkGridVisible}"/>
                         <MenuItem Header="导出为txt" Command="{Binding OutputAsTxtCommand}"
                                   IsEnabled="{Binding IsWorkGridVisible}"/>
-                        <MenuItem Header="导出为docx"
-                                  IsEnabled="{Binding IsWorkGridVisible}"/>
-                        <MenuItem Header="导出为latex"
-                                  IsEnabled="{Binding IsWorkGridVisible}"/>
                         <MenuItem Header="导出节点图.png" Command="{Binding OutputFCCCommand}"
                                   IsEnabled="{Binding IsWorkGridVisible}"/>
                     </MenuItem>

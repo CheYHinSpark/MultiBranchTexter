@@ -9,7 +9,6 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using System.Text.RegularExpressions;
 
 namespace MultiBranchTexter.ViewModel
@@ -349,6 +348,7 @@ namespace MultiBranchTexter.ViewModel
             if (FileName == "" || _fileDirPath == "")
             { return; }
             RaiseHint("开始导出JSON");
+            SaveFile();
             List<OperationTextNode> newNodes = new List<OperationTextNode>();
             foreach (TextNode node in ViewModelFactory.FCC.Nodes)
             {
@@ -368,10 +368,11 @@ namespace MultiBranchTexter.ViewModel
         {
             if (FileName == "" || _fileDirPath == "")
             { return; }
+            SaveFile();
             new OutputAsTxtWindow() 
             {
                 Owner = Application.Current.MainWindow,
-                SavePath = new Regex(@"\.mbjson$", RegexOptions.IgnoreCase).Replace(FileName, ".txt")
+                SavePath = new Regex(@"\.mbjson$", RegexOptions.IgnoreCase).Replace(FileName, "")
             }.Show();
         });
 
@@ -379,6 +380,7 @@ namespace MultiBranchTexter.ViewModel
         public ICommand OutputFCCCommand => new RelayCommand((t) =>
         {
             RaiseHint("开始导出图片，请稍后");
+            SaveFile();
             var imgUrl = new Regex(@"\.mbjson$", RegexOptions.IgnoreCase).Replace(FileName, ".png");
             ViewModelFactory.FCC.OutputImg(imgUrl);
         });

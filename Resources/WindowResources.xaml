@@ -83,7 +83,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Border x:Name="TrueBd" BorderBrush="{DynamicResource Foreground.ThemeBrush}"
-                    BorderThickness="2" Background="{StaticResource MiddleBrush}"
+                    BorderThickness="2" Background="{DynamicResource BaseBrush}"
                     Margin="4"/>
             <ContentPresenter Grid.Column="1" TextElement.Foreground="{DynamicResource Foreground.ThemeBrush}" 
                               Content="{TemplateBinding Content}" VerticalAlignment="Center"/>

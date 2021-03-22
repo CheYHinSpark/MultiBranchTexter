@@ -23,7 +23,7 @@ namespace MultiBranchTexter.View
         //是否逐个保存
         public static DependencyProperty SaveIndividuallyProperty =
             DependencyProperty.Register("SaveIndividually", typeof(bool),
-                typeof(OutputWindowBase), new PropertyMetadata(false));
+                typeof(OutputWindowBase), new PropertyMetadata(true));
 
         public bool SaveIndividually
         {
@@ -33,6 +33,8 @@ namespace MultiBranchTexter.View
         #endregion
 
         protected string _fileFilter;
+
+        public string FileName;
 
         public OutputWindowBase()
         {
@@ -72,7 +74,13 @@ namespace MultiBranchTexter.View
                     IsFolderPicker = true//设置为选择文件夹
                 };
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-                { SavePath = dialog.FileName; }
+                {
+                    string sv = dialog.FileName;
+                    DirectoryInfo directoryInfo = new DirectoryInfo(sv);
+                    if (directoryInfo.Exists && directoryInfo.GetFiles().Length > 0)
+                    { MessageBox.Show("检测到目标文件夹非空，请谨慎操作！"); }
+                    SavePath = dialog.FileName; 
+                }
             }
             else
             {
