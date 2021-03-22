@@ -275,7 +275,7 @@ namespace MultiBranchTexter.View
         /// <summary>
         /// 已经有相当信息的unLink，能根据信息自动选择断开方式
         /// </summary>
-        public static void UnLink(NodeBase pre)
+        public static void UnLink(NodeBase pre, bool needReload = true)
         {
             switch (pre.FatherTextNode.EndCondition.EndType)
             {
@@ -291,6 +291,8 @@ namespace MultiBranchTexter.View
                 case EndType.Single:
                     UnLink(pre.FatherNode, ""); break;
             }
+            if (needReload)
+            { ViewModelFactory.Main.ReLoadTab(pre.FatherTextNode); }
         }
         #endregion
 
@@ -398,7 +400,7 @@ namespace MultiBranchTexter.View
         {
             while (PostLines.Count > 0)
             {
-                NodeButton.UnLink(PostLines[0].BeginNode);
+                NodeButton.UnLink(PostLines[0].BeginNode, false);
                 PostLines[0].Delete();
             }
         }
@@ -452,7 +454,7 @@ namespace MultiBranchTexter.View
             //清除所有前驱
             while (PreLines.Count > 0)
             {
-                NodeButton.UnLink(PreLines[0].BeginNode);
+                NodeButton.UnLink(PreLines[0].BeginNode, false);
                 PreLines[0].Delete();
             }
             UnLinkAllPost();//清除所有后继

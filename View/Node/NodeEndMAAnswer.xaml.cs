@@ -112,12 +112,12 @@ namespace MultiBranchTexter.View
             //可能没有连线
             if (line != null)
             {
-                NodeButton.UnLink(this);
+                NodeButton.UnLink(this, false);
                 line.Delete();
             }
             //如果没有连线，也要删除相应的key
             FatherNode.AnswerToNodes.Remove(answer);
-            for (int i =0;i<FatherTextNode.EndCondition.Answers.Count;i++)
+            for (int i = 0; i < FatherTextNode.EndCondition.Answers.Count; i++)
             {
                 if (answer == FatherTextNode.EndCondition.Answers[i].Item1)
                 { 
