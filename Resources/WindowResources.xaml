@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:MultiBranchTexter"
                     xmlns:v="clr-namespace:MultiBranchTexter.View"
+                    xmlns:r="clr-namespace:MultiBranchTexter.Resources"
                     xmlns:vm="clr-namespace:MultiBranchTexter.ViewModel"
                     >
     <!--标题栏的按钮样式-->
@@ -46,7 +47,7 @@
         <Setter Property="Height" Value="24"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="ToolTip" Value="最大化"/>
+        <Setter Property="ToolTip" Value="{Binding [Win_Max], Source={x:Static r:LanguageManager.Instance}}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="CheckBox">
@@ -70,7 +71,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="ToolTip" Value="还原"/>
+                <Setter Property="ToolTip" Value="{Binding [Win_Restore], Source={x:Static r:LanguageManager.Instance}}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -199,9 +200,11 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
-                <Button x:Name="SettingButton" Width="30" Content="设置"
+                <Button x:Name="SettingButton" Width="Auto" 
+                        Content="{Binding [Win_Option], Source={x:Static r:LanguageManager.Instance}}"
                         Template="{StaticResource textButtonTemplate}"/>
-                <Button x:Name="MinWinButton" ToolTip="最小化"
+                <Button x:Name="MinWinButton"
+                        ToolTip="{Binding [Win_Min], Source={x:Static r:LanguageManager.Instance}}"
                         Style="{DynamicResource ThemeBtnStyle}">
                     <Path Stroke="{DynamicResource Foreground.ThemeBrush}" 
                           StrokeThickness="2" Data="M8,12 L22,12"/>
@@ -210,7 +213,8 @@
                           IsChecked="{Binding Path=WindowState, 
                     RelativeSource={RelativeSource AncestorType=Window},
                     Converter={StaticResource stateToBoolCvt}}"/>
-                <Button x:Name="CloseWinButton" ToolTip="关闭"
+                <Button x:Name="CloseWinButton" 
+                        ToolTip="{Binding [Win_Close], Source={x:Static r:LanguageManager.Instance}}"
                         Style="{DynamicResource ThemeBtnStyle}">
                     <Path Stroke="{DynamicResource Foreground.ThemeBrush}" 
                           StrokeThickness="2" Data="M9,6 L21,18 M9,18 L21,6"/>
@@ -275,6 +279,10 @@
                         <Slider Maximum="200" Style="{StaticResource colorSliderStyle}"
                                 Foreground="{DynamicResource ThemeBrush}" Value="{Binding SideWidth}"/>
                     </StackPanel>
+                    <ComboBox SelectedIndex="{Binding LangIndex}">
+                        <ComboBoxItem Content="中文"/>
+                        <ComboBoxItem Content="English"/>
+                    </ComboBox>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Column="2" Margin="6">
                     <Button Content="查看说明" Command="{Binding OpenIntroCommand}"
@@ -407,12 +415,14 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
-                <Button x:Name="MinWinButton" ToolTip="最小化"
+                <Button x:Name="MinWinButton" 
+                        ToolTip="{Binding [Win_Min], Source={x:Static r:LanguageManager.Instance}}"
                         Style="{DynamicResource ThemeBtnStyle}">
                     <Path Stroke="{DynamicResource Foreground.ThemeBrush}" 
                           StrokeThickness="2" Data="M8,12 L22,12"/>
                 </Button>
-                <Button x:Name="CloseWinButton" ToolTip="关闭"
+                <Button x:Name="CloseWinButton" 
+                        ToolTip="{Binding [Win_Close], Source={x:Static r:LanguageManager.Instance}}"
                         Style="{DynamicResource ThemeBtnStyle}">
                     <Path Stroke="{DynamicResource Foreground.ThemeBrush}" 
                           StrokeThickness="2" Data="M9,6 L21,18 M9,18 L21,6"/>

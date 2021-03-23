@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using MultiBranchTexter.View;
 using MultiBranchTexter.Model;
+using MultiBranchTexter.Resources;
 
 namespace MultiBranchTexter.ViewModel
 {
@@ -117,6 +118,7 @@ namespace MultiBranchTexter.ViewModel
         }
         #endregion
 
+        #region 布局
         //文本编辑器两侧的宽度，可以用于避免文本区域过宽
         private double _sideWidth;
         public double SideWidth
@@ -141,6 +143,24 @@ namespace MultiBranchTexter.ViewModel
         }
         #endregion
 
+        //标题栏高度，用于全屏显示
+        private int _langIndex;
+        public int LangIndex
+        {
+            get { return _langIndex; }
+            set
+            {
+                _langIndex = value;
+                if (value == 0)
+                { LanguageManager.Instance.ChangeLanguage(new System.Globalization.CultureInfo("zh-CHS")); }
+                else
+                { LanguageManager.Instance.ChangeLanguage(new System.Globalization.CultureInfo("en")); }
+                RaisePropertyChanged("LangIndex");
+            }
+        }
+
+        #endregion
+
         #region 版本信息
         private string _versionInfo;
         public string VersionInfo
@@ -161,6 +181,8 @@ namespace MultiBranchTexter.ViewModel
 
         public SettingViewModel()
         {
+            LangIndex = 0;
+
             ReadIni();
             Version tempV = Application.ResourceAssembly.GetName().Version;
             //只要前三位

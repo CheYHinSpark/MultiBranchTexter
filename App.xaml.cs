@@ -1,11 +1,13 @@
 ﻿using MultiBranchTexter.View;
 using MultiBranchTexter.Model;
 using MultiBranchTexter.ViewModel;
+using MultiBranchTexter.Resources;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows;
+using System.Globalization;
 
 namespace MultiBranchTexter
 {
@@ -18,6 +20,10 @@ namespace MultiBranchTexter
         {
             // 创建ViewModel全局映射
             Current.Properties.Add("ViewModelMap",new Dictionary<string, object>());
+            if (CultureInfo.CurrentCulture.Name[..2] == "zh")
+            { LanguageManager.Instance.ChangeLanguage(new CultureInfo("zh-CHS")); }
+            else
+            { LanguageManager.Instance.ChangeLanguage(new CultureInfo("en")); }
             Startup += App_Startup;
         }
 
@@ -35,9 +41,7 @@ namespace MultiBranchTexter
                 delegate
                 {
                     if (FileTypeRegister.FileTypeRegistered(".mbjson") == true)
-                    {
-                        return;
-                    }
+                    { return; }
                     try
                     {
                         string culInfo = Thread.CurrentThread.CurrentCulture.TextInfo.CultureName;
