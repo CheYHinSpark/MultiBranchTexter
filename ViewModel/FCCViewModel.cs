@@ -209,15 +209,19 @@ namespace MultiBranchTexter.ViewModel
             MessageBoxResult warnResult = MessageBox.Show
                 (
                 Application.Current.MainWindow,
-                "你即将删除" + n.ToString()
-                + "个节点！\n这将同时断开这些节点的所有连接线，并且此操作不可撤销！",
-                "警告",
+                LanguageManager.Instance["Msg_MultiDeletePre"] + n.ToString()
+                + LanguageManager.Instance["Msg_MultiDeletePost"],
+                LanguageManager.Instance["Win_Warn"],
                 MessageBoxButton.YesNo
                 );
             if (warnResult == MessageBoxResult.No)
             { return; }
             while (SelectedNodes.Count > 0)
             {
+                if (SearchedNodes.Contains(SelectedNodes[0]))
+                {
+                    SearchedNodes.Remove(SelectedNodes[0]);
+                }
                 SelectedNodes[0].Delete();
                 SelectedNodes.RemoveAt(0);
             }
@@ -271,6 +275,10 @@ namespace MultiBranchTexter.ViewModel
                     + SearchedNodes.Count.ToString() 
                     + LanguageManager.Instance["Hint_Nodes"]); 
             }
+            else
+            {
+                ViewModelFactory.Main.QuickEndHint();
+            }
             RaisePropertyChanged("SearchedNodes");
         }
 
@@ -281,6 +289,10 @@ namespace MultiBranchTexter.ViewModel
                 ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_Selected"]
                       + SelectedNodes.Count.ToString()
                       + LanguageManager.Instance["Hint_Nodes"]);
+            }
+            else
+            {
+                ViewModelFactory.Main.QuickEndHint();
             }
             RaisePropertyChanged("SelectedNodes");
         }
@@ -740,6 +752,11 @@ namespace MultiBranchTexter.ViewModel
 
         public void NewSelection(NodeButton node)
         {
+            if (SelectedNodes.Contains(node) && SelectedNodes.Count == 1)
+            {
+                SelectedNodes[0].NodeState = NodeState.Selected;
+                return;
+            }
             ClearSelection();
             SelectedNodes.Add(node);
             SelectedNodes[0].NodeState = NodeState.Selected;

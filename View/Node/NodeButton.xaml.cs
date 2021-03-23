@@ -1,5 +1,6 @@
 ﻿using MultiBranchTexter.Model;
 using MultiBranchTexter.ViewModel;
+using MultiBranchTexter.Resources;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -131,7 +132,7 @@ namespace MultiBranchTexter.View
                 if (ViewModelFactory.FCC.CheckRepeat(titleBox.Text))
                 {
                     titleBox.Text = TextNode.Name;
-                    MessageBox.Show("节点名称重复，已还原");
+                    MessageBox.Show(LanguageManager.Instance["Msg_NameRepeat"]);
                 }
                 else
                 {
@@ -147,7 +148,7 @@ namespace MultiBranchTexter.View
                         || titleBox.Text.Contains('|'))
                     {
                         titleBox.Text = TextNode.Name;
-                        MessageBox.Show("节点名称不能含有*\\/:\"?<>|，已还原");
+                        MessageBox.Show(LanguageManager.Instance["Msg_NameIllegal"]);
                     }
                     else
                     {
@@ -189,8 +190,8 @@ namespace MultiBranchTexter.View
             MessageBoxResult warnResult = MessageBox.Show
                 (
                 Application.Current.MainWindow,
-                "确定要删除节点吗？\n这将同时断开节点的所有连接线，并且此操作不可撤销！",
-                "警告",
+                LanguageManager.Instance["Msg_DeleteNode"],
+                LanguageManager.Instance["Win_Warn"],
                 MessageBoxButton.YesNo
                 );
             if (warnResult == MessageBoxResult.No)
@@ -216,8 +217,8 @@ namespace MultiBranchTexter.View
                 MessageBoxResult warnResult = MessageBox.Show
                     (
                     Application.Current.MainWindow,
-                    "确定要变更后继条件吗？\n这将同时断开节点的所有后继连接线以及与所有后继节点的连接。\n此操作不可撤销！",
-                    "警告",
+                    LanguageManager.Instance["Msg_ChangeEnd"],
+                    LanguageManager.Instance["Win_Warn"],
                     MessageBoxButton.YesNo
                     );
                 if (warnResult == MessageBoxResult.No)

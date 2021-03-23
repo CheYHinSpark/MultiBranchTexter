@@ -218,8 +218,29 @@
   <data name="Line_To" xml:space="preserve">
     <value>到 </value>
   </data>
+  <data name="Msg_ChangeEnd" xml:space="preserve">
+    <value>确定要变更后继条件吗？
+这将同时断开节点的所有后继连接线，并且此操作不可撤销！</value>
+  </data>
+  <data name="Msg_DeleteNode" xml:space="preserve">
+    <value>确定要删除节点吗？
+这将同时断开节点的所有连接线，并且此操作不可撤销！</value>
+  </data>
   <data name="Msg_LatestVer" xml:space="preserve">
     <value>当前已是最新版本</value>
+  </data>
+  <data name="Msg_MultiDeletePost" xml:space="preserve">
+    <value>个节点！
+这将同时断开这些节点的所有连接线，并且此操作不可撤销！</value>
+  </data>
+  <data name="Msg_MultiDeletePre" xml:space="preserve">
+    <value>你即将删除</value>
+  </data>
+  <data name="Msg_NameIllegal" xml:space="preserve">
+    <value>节点名称不能含有*\/:"?&lt;&gt;|，已还原</value>
+  </data>
+  <data name="Msg_NameRepeat" xml:space="preserve">
+    <value>节点名称重复，已还原</value>
   </data>
   <data name="Msg_NewVerFound" xml:space="preserve">
     <value>检测到新版本  </value>

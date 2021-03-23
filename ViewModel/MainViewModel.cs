@@ -578,6 +578,8 @@ namespace MultiBranchTexter.ViewModel
         public async void RaiseHint(string newHint)
         {
             OutText = InText; 
+            if (InText == newHint)
+            { return; }
             InText = newHint;
             IsHintAwake = false;
             IsHintAwake = true;//这样设置一次，可以启动动画
@@ -591,9 +593,19 @@ namespace MultiBranchTexter.ViewModel
             {
                 OutText = InText;
                 InText = FileName + (IsModified ? " *" : "");
-                IsHintAwake = false;
-                IsHintAwake = true;
+                if (OutText != InText)
+                {
+                    IsHintAwake = false;
+                    IsHintAwake = true;
+                }
             }
+        }
+
+        public void QuickEndHint()
+        {
+            if (_hintTask == null || _hintTask.IsCompleted)
+            { return; }
+            RaiseHint(FileName + (IsModified ? " *" : ""));
         }
         #endregion
     }

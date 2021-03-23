@@ -218,8 +218,29 @@ Create navigation file by Ctrl+Shift+N</value>
   <data name="Line_To" xml:space="preserve">
     <value>To </value>
   </data>
+  <data name="Msg_ChangeEnd" xml:space="preserve">
+    <value>Be sure to change end condition?
+This will delete all post connecting lines of this node, and the action cannot be cancelled!</value>
+  </data>
+  <data name="Msg_DeleteNode" xml:space="preserve">
+    <value>Be sure to delete node?
+This will delete all connecting lines of this node, and the action cannot be cancelled!</value>
+  </data>
   <data name="Msg_LatestVer" xml:space="preserve">
     <value>Current version is the latest</value>
+  </data>
+  <data name="Msg_MultiDeletePost" xml:space="preserve">
+    <value> nodes!
+All connecting lines of these nodes will be deleted, and this action cannot be cancelled!</value>
+  </data>
+  <data name="Msg_MultiDeletePre" xml:space="preserve">
+    <value>You are going to delete </value>
+  </data>
+  <data name="Msg_NameIllegal" xml:space="preserve">
+    <value>Node name cannot contain *\/:"?&lt;&gt;|, and has been restored</value>
+  </data>
+  <data name="Msg_NameRepeat" xml:space="preserve">
+    <value>Node name repeated, and has been restored</value>
   </data>
   <data name="Msg_NewVerFound" xml:space="preserve">
     <value>New version is released  </value>
