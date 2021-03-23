@@ -26,11 +26,11 @@
                               Click="DeleteNode_Click"/>
                     <MenuItem Header="{Binding [N_ChangeEnd], Source={x:Static r:LanguageManager.Instance}}" >
                         <MenuItem Header="{Binding [N_Single], Source={x:Static r:LanguageManager.Instance}}" 
-                                  Click="ChangeEnd_Click"/>
+                                  Click="ChangeEnd_Click" x:Name="single"/>
                         <MenuItem Header="{Binding [N_YesNo], Source={x:Static r:LanguageManager.Instance}}" 
-                                  Click="ChangeEnd_Click"/>
+                                  Click="ChangeEnd_Click" x:Name="yesno"/>
                         <MenuItem Header="{Binding [N_Multi], Source={x:Static r:LanguageManager.Instance}}" 
-                                  Click="ChangeEnd_Click"/>
+                                  Click="ChangeEnd_Click" x:Name="multi"/>
                     </MenuItem>
                 </ContextMenu>
             </Border.ContextMenu>

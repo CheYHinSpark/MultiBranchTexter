@@ -201,10 +201,10 @@ namespace MultiBranchTexter.View
 
         private void ChangeEnd_Click(object sender, RoutedEventArgs e)
         {
-            string header = (string)(sender as MenuItem).Header;
-            if ((header == "单一后继" && TextNode.EndCondition.EndType == EndType.Single)
-                || (header == "判断后继" && TextNode.EndCondition.EndType == EndType.YesNo)
-                || (header == "多选后继" && TextNode.EndCondition.EndType == EndType.MultiAnswers))
+            string header = (string)(sender as MenuItem).Name;
+            if ((header == "single" && TextNode.EndCondition.EndType == EndType.Single)
+                || (header == "yesno" && TextNode.EndCondition.EndType == EndType.YesNo)
+                || (header == "multi" && TextNode.EndCondition.EndType == EndType.MultiAnswers))
             { return; }
             bool needWarn = true;
             if (TextNode.EndCondition.EndType == EndType.Single)
@@ -224,9 +224,9 @@ namespace MultiBranchTexter.View
                 { return; }
             }
             UnLinkAllPost();//清除后继
-            if (header == "单一后继")
+            if (header == "single")
             { TextNode.EndCondition = new EndCondition(EndType.Single); }
-            else if (header == "判断后继")
+            else if (header == "yesno")
             { TextNode.EndCondition = new EndCondition(EndType.YesNo); }
             else
             { TextNode.EndCondition = new EndCondition(EndType.MultiAnswers); }
