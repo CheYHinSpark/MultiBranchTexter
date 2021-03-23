@@ -779,9 +779,10 @@
                           ToolTip="{Binding [Tab_EndCond], Source={x:Static r:LanguageManager.Instance}}"
                           Template="{DynamicResource upDownCheckBoxTemplate}"
                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <TextBlock x:Name="questionTxt" Margin="4,0,4,0"
+                <TextBlock x:Name="questionTxt"
                            Foreground="{DynamicResource Foreground.ThemeBrush}"
                            VerticalAlignment="Center"/>
+                <Rectangle Width="1" Fill="{DynamicResource Foreground.ThemeBrush}" Margin="4,0,4,0"/>
                 <Button x:Name="backBtn" Template="{StaticResource textButtonTemplate}"
                         Content="{Binding [Tab_Back], Source={x:Static r:LanguageManager.Instance}}"/>
             </StackPanel>
