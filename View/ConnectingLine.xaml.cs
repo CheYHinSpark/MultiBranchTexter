@@ -1,5 +1,6 @@
 ﻿using MultiBranchTexter.Model;
 using MultiBranchTexter.ViewModel;
+using MultiBranchTexter.Resources;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -157,7 +158,10 @@ namespace MultiBranchTexter.View
                     + c2Pt.ToString() + " L" + endPt.ToString());
             }
             //更新tooltip
-            Path.ToolTip = "从 " + BeginNode.FatherTextNode.Name + "\n到 " + EndNode.TextNode.Name;
+            Path.ToolTip = LanguageManager.Instance["Line_From"]
+                + BeginNode.FatherTextNode.Name + "\n" 
+                + LanguageManager.Instance["Line_To"] 
+                + EndNode.TextNode.Name;
             //如果后继在上方，调整颜色
             if (beginPt.Y > endPt.Y)
             { Path.Tag = "1"; }

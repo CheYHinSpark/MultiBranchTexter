@@ -117,10 +117,152 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Bg_EmptyTab" xml:space="preserve">
+    <value>Please open a node from nodes' picture</value>
+  </data>
   <data name="Bg_Main" xml:space="preserve">
     <value>Welcome to MultiBranchTexter
 Open navigation file by Ctrl+O or drag in
 Create navigation file by Ctrl+Shift+N</value>
+  </data>
+  <data name="FCC_Avg" xml:space="preserve">
+    <value>Average</value>
+  </data>
+  <data name="FCC_CharCount" xml:space="preserve">
+    <value>Char: </value>
+  </data>
+  <data name="FCC_Delete" xml:space="preserve">
+    <value>Delete node(Delete)</value>
+  </data>
+  <data name="FCC_Max" xml:space="preserve">
+    <value>Maximum</value>
+  </data>
+  <data name="FCC_Min" xml:space="preserve">
+    <value>Minimum</value>
+  </data>
+  <data name="FCC_NewNode" xml:space="preserve">
+    <value>New node(Ctrl+N)</value>
+  </data>
+  <data name="FCC_NodeCount" xml:space="preserve">
+    <value>Node: </value>
+  </data>
+  <data name="FCC_Rearrange" xml:space="preserve">
+    <value>Rearrange</value>
+  </data>
+  <data name="FCC_SearchTitle" xml:space="preserve">
+    <value>Search title</value>
+  </data>
+  <data name="FCC_UniteX" xml:space="preserve">
+    <value>Unite X</value>
+  </data>
+  <data name="FCC_UniteY" xml:space="preserve">
+    <value>Unite Y</value>
+  </data>
+  <data name="FCC_WordCount" xml:space="preserve">
+    <value>Word: </value>
+  </data>
+  <data name="Hint_Cancelled" xml:space="preserve">
+    <value>Action cancelled</value>
+  </data>
+  <data name="Hint_ClickOver" xml:space="preserve">
+    <value>Complete choosing post node</value>
+  </data>
+  <data name="Hint_CreateFC" xml:space="preserve">
+    <value>Create nodes' picture successfully</value>
+  </data>
+  <data name="Hint_File" xml:space="preserve">
+    <value>File </value>
+  </data>
+  <data name="Hint_Node" xml:space="preserve">
+    <value>Node </value>
+  </data>
+  <data name="Hint_Nodes" xml:space="preserve">
+    <value> nodes</value>
+  </data>
+  <data name="Hint_OpenFailed" xml:space="preserve">
+    <value>Open file failed</value>
+  </data>
+  <data name="Hint_OpenNode" xml:space="preserve">
+    <value>Open node </value>
+  </data>
+  <data name="Hint_OutputJSON" xml:space="preserve">
+    <value>Start outputting JSON, please wait</value>
+  </data>
+  <data name="Hint_OutputPic" xml:space="preserve">
+    <value>Start outputting picture, please wait</value>
+  </data>
+  <data name="Hint_Rearrange" xml:space="preserve">
+    <value>Rearrange nodes' picture successfully</value>
+  </data>
+  <data name="Hint_SaveSuccess" xml:space="preserve">
+    <value> has been saved</value>
+  </data>
+  <data name="Hint_Searched" xml:space="preserve">
+    <value>Found </value>
+  </data>
+  <data name="Hint_Selected" xml:space="preserve">
+    <value>Selected </value>
+  </data>
+  <data name="Hint_WaitClick" xml:space="preserve">
+    <value>Wait to choose post node</value>
+  </data>
+  <data name="Line_AddNode" xml:space="preserve">
+    <value>Add node</value>
+  </data>
+  <data name="Line_Delete" xml:space="preserve">
+    <value>Delete line</value>
+  </data>
+  <data name="Line_From" xml:space="preserve">
+    <value>From </value>
+  </data>
+  <data name="Line_To" xml:space="preserve">
+    <value>To </value>
+  </data>
+  <data name="Msg_LatestVer" xml:space="preserve">
+    <value>Current version is the latest</value>
+  </data>
+  <data name="Msg_NewVerFound" xml:space="preserve">
+    <value>New version is released  </value>
+  </data>
+  <data name="Msg_SaveFile" xml:space="preserve">
+    <value>File hasn't been saved. Save it now?</value>
+  </data>
+  <data name="Msg_SaveTxt" xml:space="preserve">
+    <value>Text hasn't been saved. Save it now?</value>
+  </data>
+  <data name="Msg_UpdateQ" xml:space="preserve">
+    <value>Update now?</value>
+  </data>
+  <data name="N_ChangeEnd" xml:space="preserve">
+    <value>Change end condition</value>
+  </data>
+  <data name="N_Check" xml:space="preserve">
+    <value>Check</value>
+  </data>
+  <data name="N_Delete" xml:space="preserve">
+    <value>Delete node</value>
+  </data>
+  <data name="N_Multi" xml:space="preserve">
+    <value>Multiple</value>
+  </data>
+  <data name="N_NewEndHint" xml:space="preserve">
+    <value>Click to set as 
+new post node</value>
+  </data>
+  <data name="N_Question" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="N_Single" xml:space="preserve">
+    <value>Single</value>
+  </data>
+  <data name="N_ToCheck" xml:space="preserve">
+    <value>Switch to check</value>
+  </data>
+  <data name="N_ToQuestion" xml:space="preserve">
+    <value>Switch to question</value>
+  </data>
+  <data name="N_YesNo" xml:space="preserve">
+    <value>Yes &amp; No</value>
   </data>
   <data name="Set_CheckUpdate" xml:space="preserve">
     <value>Check update</value>
@@ -150,13 +292,34 @@ Create navigation file by Ctrl+Shift+N</value>
     <value>README</value>
   </data>
   <data name="Set_ScrollInertia" xml:space="preserve">
-    <value>Awake scrollbar's inertia</value>
+    <value>Enable scrollbar's inertia</value>
   </data>
   <data name="Set_TextMargin" xml:space="preserve">
     <value>Text margin</value>
   </data>
   <data name="Set_ViewWeb" xml:space="preserve">
     <value>View Github</value>
+  </data>
+  <data name="Tab_Back" xml:space="preserve">
+    <value>Back to picture</value>
+  </data>
+  <data name="Tab_Char" xml:space="preserve">
+    <value>Char: </value>
+  </data>
+  <data name="Tab_EndCond" xml:space="preserve">
+    <value>End condition</value>
+  </data>
+  <data name="Tab_HideComment" xml:space="preserve">
+    <value>Hide comment</value>
+  </data>
+  <data name="Tab_ShowComment" xml:space="preserve">
+    <value>Show comment</value>
+  </data>
+  <data name="Tab_ToNode" xml:space="preserve">
+    <value>Jump to the post node</value>
+  </data>
+  <data name="Tab_Word" xml:space="preserve">
+    <value>Word: </value>
   </data>
   <data name="TB_Create" xml:space="preserve">
     <value>New(Ctrl+Shift+N)</value>
@@ -208,5 +371,8 @@ Create navigation file by Ctrl+Shift+N</value>
   </data>
   <data name="Win_Restore" xml:space="preserve">
     <value>Restore</value>
+  </data>
+  <data name="Win_Warn" xml:space="preserve">
+    <value>WARNING</value>
   </data>
 </root>

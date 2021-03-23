@@ -1,5 +1,6 @@
 ﻿using MultiBranchTexter.Model;
 using MultiBranchTexter.ViewModel;
+using MultiBranchTexter.Resources;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,7 +27,6 @@ namespace MultiBranchTexter.View
             tabEnd.SetTabEnd(node);
             _viewModel = DataContext as TabItemViewModel;
             LoadNode(node);
-            _viewModel.IsModified = "";
         }
 
         #region 成员变量
@@ -111,8 +111,8 @@ namespace MultiBranchTexter.View
             {
                 MessageBoxResult result = MessageBox.Show(
                     Application.Current.MainWindow,
-                    "文本尚未保存，是否保存？",
-                    "警告",
+                    LanguageManager.Instance["Msg_SaveTxt"],
+                    LanguageManager.Instance["Win_Warn"],
                     MessageBoxButton.YesNoCancel,
                     MessageBoxImage.Warning,
                     MessageBoxResult.Cancel);
@@ -121,7 +121,7 @@ namespace MultiBranchTexter.View
                 else if (result == MessageBoxResult.Yes)
                 { Save(); }
             }
-            ////移除自身
+            //移除自身
             ToWidth(0, true);
         }
 
@@ -138,7 +138,8 @@ namespace MultiBranchTexter.View
 
             TextNode.Fragments = newFragments;
             _viewModel.IsModified = "";
-            ViewModelFactory.Main.RaiseHint("节点 " + TextNode.Name + " 保存成功");
+            ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_Node"] 
+                + TextNode.Name + LanguageManager.Instance["Hint_SaveSuccess"]);
         }
 
         /// <summary>
@@ -146,6 +147,7 @@ namespace MultiBranchTexter.View
         /// </summary>
         public void LoadNode(TextNode node)
         {
+            bool temp = ViewModelFactory.Main.IsModified;
             TextNode = node;
           
             for (int i = 0; i < TextNode.Fragments.Count; i++)
@@ -155,6 +157,8 @@ namespace MultiBranchTexter.View
             { _viewModel.TextFragments.Add(new TextFragment()); }
 
             _viewModel.CountCharWord(true);
+            _viewModel.IsModified = "";
+            ViewModelFactory.Main.IsModified = temp;
         }
 
 

@@ -117,10 +117,152 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Bg_EmptyTab" xml:space="preserve">
+    <value>请从节点图中打开一个节点</value>
+  </data>
   <data name="Bg_Main" xml:space="preserve">
     <value>欢迎使用多分支文本编辑器
 打开导航文件 Ctrl+O 或者拖入
 新建导航文件 Ctrl+Shift+N</value>
+  </data>
+  <data name="FCC_Avg" xml:space="preserve">
+    <value>平均值</value>
+  </data>
+  <data name="FCC_CharCount" xml:space="preserve">
+    <value>总字数：</value>
+  </data>
+  <data name="FCC_Delete" xml:space="preserve">
+    <value>删除节点(Delete)</value>
+  </data>
+  <data name="FCC_Max" xml:space="preserve">
+    <value>最大值</value>
+  </data>
+  <data name="FCC_Min" xml:space="preserve">
+    <value>最小值</value>
+  </data>
+  <data name="FCC_NewNode" xml:space="preserve">
+    <value>新建节点(Ctrl+N)</value>
+  </data>
+  <data name="FCC_NodeCount" xml:space="preserve">
+    <value>节点数：</value>
+  </data>
+  <data name="FCC_Rearrange" xml:space="preserve">
+    <value>重新排列</value>
+  </data>
+  <data name="FCC_SearchTitle" xml:space="preserve">
+    <value>搜索标题</value>
+  </data>
+  <data name="FCC_UniteX" xml:space="preserve">
+    <value>统一横坐标</value>
+  </data>
+  <data name="FCC_UniteY" xml:space="preserve">
+    <value>统一纵坐标</value>
+  </data>
+  <data name="FCC_WordCount" xml:space="preserve">
+    <value>总词数：</value>
+  </data>
+  <data name="Hint_Cancelled" xml:space="preserve">
+    <value>取消选择</value>
+  </data>
+  <data name="Hint_ClickOver" xml:space="preserve">
+    <value>完成后继节点选择</value>
+  </data>
+  <data name="Hint_CreateFC" xml:space="preserve">
+    <value>节点图创建完成</value>
+  </data>
+  <data name="Hint_File" xml:space="preserve">
+    <value>文件 </value>
+  </data>
+  <data name="Hint_Node" xml:space="preserve">
+    <value>节点 </value>
+  </data>
+  <data name="Hint_Nodes" xml:space="preserve">
+    <value>个节点</value>
+  </data>
+  <data name="Hint_OpenFailed" xml:space="preserve">
+    <value>未能成功打开文件</value>
+  </data>
+  <data name="Hint_OpenNode" xml:space="preserve">
+    <value>打开节点 </value>
+  </data>
+  <data name="Hint_OutputJSON" xml:space="preserve">
+    <value>开始导出JSON，请稍候</value>
+  </data>
+  <data name="Hint_OutputPic" xml:space="preserve">
+    <value>开始导出节点图，请稍候</value>
+  </data>
+  <data name="Hint_Rearrange" xml:space="preserve">
+    <value>节点图重绘完成</value>
+  </data>
+  <data name="Hint_SaveSuccess" xml:space="preserve">
+    <value> 保存成功</value>
+  </data>
+  <data name="Hint_Searched" xml:space="preserve">
+    <value>搜索到</value>
+  </data>
+  <data name="Hint_Selected" xml:space="preserve">
+    <value>选中</value>
+  </data>
+  <data name="Hint_WaitClick" xml:space="preserve">
+    <value>请选择一个后继节点</value>
+  </data>
+  <data name="Line_AddNode" xml:space="preserve">
+    <value>添加节点</value>
+  </data>
+  <data name="Line_Delete" xml:space="preserve">
+    <value>删除连线</value>
+  </data>
+  <data name="Line_From" xml:space="preserve">
+    <value>从 </value>
+  </data>
+  <data name="Line_To" xml:space="preserve">
+    <value>到 </value>
+  </data>
+  <data name="Msg_LatestVer" xml:space="preserve">
+    <value>当前已是最新版本</value>
+  </data>
+  <data name="Msg_NewVerFound" xml:space="preserve">
+    <value>检测到新版本  </value>
+  </data>
+  <data name="Msg_SaveFile" xml:space="preserve">
+    <value>尚未保存，是否保存？</value>
+  </data>
+  <data name="Msg_SaveTxt" xml:space="preserve">
+    <value>文本尚未保存，是否保存？</value>
+  </data>
+  <data name="Msg_UpdateQ" xml:space="preserve">
+    <value>是否前往更新？</value>
+  </data>
+  <data name="N_ChangeEnd" xml:space="preserve">
+    <value>变更后继条件</value>
+  </data>
+  <data name="N_Check" xml:space="preserve">
+    <value>判断</value>
+  </data>
+  <data name="N_Delete" xml:space="preserve">
+    <value>删除节点</value>
+  </data>
+  <data name="N_Multi" xml:space="preserve">
+    <value>多选后继</value>
+  </data>
+  <data name="N_NewEndHint" xml:space="preserve">
+    <value>点击以设置为
+新的后继节点</value>
+  </data>
+  <data name="N_Question" xml:space="preserve">
+    <value>询问</value>
+  </data>
+  <data name="N_Single" xml:space="preserve">
+    <value>单一后继</value>
+  </data>
+  <data name="N_ToCheck" xml:space="preserve">
+    <value>切换为判断</value>
+  </data>
+  <data name="N_ToQuestion" xml:space="preserve">
+    <value>切换为询问</value>
+  </data>
+  <data name="N_YesNo" xml:space="preserve">
+    <value>判断后继</value>
   </data>
   <data name="Set_CheckUpdate" xml:space="preserve">
     <value>检查更新</value>
@@ -157,6 +299,27 @@
   </data>
   <data name="Set_ViewWeb" xml:space="preserve">
     <value>访问项目主页</value>
+  </data>
+  <data name="Tab_Back" xml:space="preserve">
+    <value>返回节点图</value>
+  </data>
+  <data name="Tab_Char" xml:space="preserve">
+    <value>字数：</value>
+  </data>
+  <data name="Tab_EndCond" xml:space="preserve">
+    <value>后继条件</value>
+  </data>
+  <data name="Tab_HideComment" xml:space="preserve">
+    <value>隐藏备注</value>
+  </data>
+  <data name="Tab_ShowComment" xml:space="preserve">
+    <value>显示备注</value>
+  </data>
+  <data name="Tab_ToNode" xml:space="preserve">
+    <value>转到相应节点</value>
+  </data>
+  <data name="Tab_Word" xml:space="preserve">
+    <value>词数：</value>
   </data>
   <data name="TB_Create" xml:space="preserve">
     <value>新建(Ctrl+Shift+N)</value>
@@ -208,5 +371,8 @@
   </data>
   <data name="Win_Restore" xml:space="preserve">
     <value>还原</value>
+  </data>
+  <data name="Win_Warn" xml:space="preserve">
+    <value>警告</value>
   </data>
 </root>

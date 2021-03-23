@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MultiBranchTexter.ViewModel;
+using MultiBranchTexter.Resources;
 using System.Windows.Interop;
 
 namespace MultiBranchTexter.View
@@ -140,9 +141,7 @@ namespace MultiBranchTexter.View
             // 查找窗体模板
             if (App.Current.Resources["MainWindowTemplate"] is ControlTemplate mWTemplate)
             {
-                ViewModelFactory.SetViewModel(typeof(SettingViewModel), 
-                    mWTemplate.FindName("svm", this) as SettingViewModel);
-
+                (mWTemplate.FindName("LayoutRoot", this) as Grid).DataContext = ViewModelFactory.Settings;
                 (mWTemplate.FindName("SettingButton", this) as Button).Click += SettingBtn_Click;
                 (mWTemplate.FindName("CloseWinButton", this) as Button).Click += CloseButton_Click;
                 (mWTemplate.FindName("MinWinButton", this) as Button).Click += MinButton_Click;
@@ -171,8 +170,8 @@ namespace MultiBranchTexter.View
                 MessageBoxResult warnResult = MessageBox.Show
                     (
                     Application.Current.MainWindow,
-                    "尚未保存，是否保存？",
-                    "警告",
+                    LanguageManager.Instance["Msg_SaveFile"],
+                    LanguageManager.Instance["Win_Warn"],
                     MessageBoxButton.YesNoCancel
                     );
                 if (warnResult == MessageBoxResult.Yes)

@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:v="clr-namespace:MultiBranchTexter.View"
+                    xmlns:r="clr-namespace:MultiBranchTexter.Resources"
                     xmlns:cvt="clr-namespace:MultiBranchTexter.Converters">
 
     <!--颜色部分-->
@@ -653,7 +654,8 @@
                                   Panel.ZIndex="1"
                                   IsItemsHost="True"
                                   KeyboardNavigation.TabIndex="1"/>
-                        <TextBlock Text="请从节点图中打开一个节点" FontSize="24" Grid.Row="1"
+                        <TextBlock Text="{Binding [Bg_EmptyTab], Source={x:Static r:LanguageManager.Instance}}" 
+                                   FontSize="24" Grid.Row="1"
                                    Foreground="{DynamicResource Foreground.BaseBrush}"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <Border x:Name="Border"
@@ -773,24 +775,25 @@
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Left" VerticalAlignment="Center">
-                <CheckBox x:Name="showHideBtn" IsChecked="False" Width="20" ToolTip="查看后继节点"
+                <CheckBox x:Name="showHideBtn" IsChecked="False" Width="20" 
+                          ToolTip="{Binding [Tab_EndCond], Source={x:Static r:LanguageManager.Instance}}"
                           Template="{DynamicResource upDownCheckBoxTemplate}"
                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Button x:Name="backBtn" Content="返回节点图" 
-                        Template="{StaticResource textButtonTemplate}"/>
-                <TextBlock x:Name="questionTxt" Margin="8,0,0,0"
+                <TextBlock x:Name="questionTxt" Margin="4,0,4,0"
                            Foreground="{DynamicResource Foreground.ThemeBrush}"
                            VerticalAlignment="Center"/>
+                <Button x:Name="backBtn" Template="{StaticResource textButtonTemplate}"
+                        Content="{Binding [Tab_Back], Source={x:Static r:LanguageManager.Instance}}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Right" VerticalAlignment="Center">
-                <TextBlock Text="词数："
+                <TextBlock Text="{Binding [Tab_Word], Source={x:Static r:LanguageManager.Instance}}"
                            Margin="8,0,0,0"
                            Foreground="{DynamicResource Foreground.ThemeBrush}"/>
                 <TextBlock Text="{Binding Path=Text, ElementName=copyWordCount}" 
                            Margin="0,0,8,0"
                            Foreground="{DynamicResource Foreground.ThemeBrush}"/>
-                <TextBlock Text="字数：" 
+                <TextBlock Text="{Binding [Tab_Char], Source={x:Static r:LanguageManager.Instance}}"
                            Margin="8,0,0,0"
                            Foreground="{DynamicResource Foreground.ThemeBrush}"/>
                 <TextBlock Text="{Binding Path=Text, ElementName=copyCharCount}" 
@@ -837,9 +840,11 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Path x:Name="upPath"  Grid.Row="0" ToolTip="隐藏备注"
+            <Path x:Name="upPath"  Grid.Row="0"
+                  ToolTip="{Binding [Tab_HideComment], Source={x:Static r:LanguageManager.Instance}}"
                   Fill="{DynamicResource ThemeBrush}" Data="M0,10 20,10 10,0Z"/>
-            <Path x:Name="downPath"  Grid.Row="1" ToolTip="添加备注"
+            <Path x:Name="downPath"  Grid.Row="1" 
+                  ToolTip="{Binding [Tab_ShowComment], Source={x:Static r:LanguageManager.Instance}}"
                   Fill="{DynamicResource ThemeBrush}" Data="M0,0 20,0 10,10Z"/>
         </Grid>
         <ControlTemplate.Triggers>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MultiBranchTexter.ViewModel;
@@ -12,20 +11,6 @@ namespace MultiBranchTexter.View
     /// </summary>
     public class MBScViewer : ScrollViewer
     {
-        //是否启用惯性
-        //public static DependencyProperty IsEnableInertiaProperty =
-        //    DependencyProperty.Register("IsEnableInertia", //属性名称
-        //        typeof(bool), //属性类型
-        //        typeof(MBScViewer), //该属性所有者，即将该属性注册到那个类上
-        //        new PropertyMetadata(true)//属性默认值
-        //        );
-
-        //public bool IsEnableInertia
-        //{
-        //    get { return (bool)GetValue(IsEnableInertiaProperty); }
-        //    set { SetValue(IsEnableInertiaProperty, value); }
-        //}
-
         private bool _isRunning = false;
         private bool _stopOldOne = false;
         private double _targetVOffset;

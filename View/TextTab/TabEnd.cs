@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using MultiBranchTexter.Model;
+using MultiBranchTexter.Resources;
 using MultiBranchTexter.ViewModel;
 
 namespace MultiBranchTexter.View
@@ -49,11 +50,10 @@ namespace MultiBranchTexter.View
         /// <summary> 重新装载tabend </summary>
         public void LoadTabEnd()
         { 
-            questionTxt.Text = "查看后继节点";
             container.Children.Clear();
             container.RowDefinitions.Clear(); //清理container
             //开始根据后继类型添加东西
-            questionTxt.Text += "：" + textNode.EndCondition.Question;
+            questionTxt.Text = textNode.EndCondition.Question;
             for (int i =0;i < textNode.EndCondition.Answers.Count;i++)
             {
                 RowDefinition row = new RowDefinition { Height = new GridLength(20) };

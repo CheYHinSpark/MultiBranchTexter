@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows;
-using System.Globalization;
 
 namespace MultiBranchTexter
 {
@@ -20,10 +19,9 @@ namespace MultiBranchTexter
         {
             // 创建ViewModel全局映射
             Current.Properties.Add("ViewModelMap",new Dictionary<string, object>());
-            if (CultureInfo.CurrentCulture.Name[..2] == "zh")
-            { LanguageManager.Instance.ChangeLanguage(new CultureInfo("zh-CHS")); }
-            else
-            { LanguageManager.Instance.ChangeLanguage(new CultureInfo("en")); }
+
+            LanguageManager.Instance.PreloadLanguage();
+
             Startup += App_Startup;
         }
 
@@ -36,6 +34,7 @@ namespace MultiBranchTexter
                 ViewModelFactory.Main.OpenFile(e.Args[0]);
             }
             window.Show();
+
             //注册文件关联
             await Dispatcher.BeginInvoke(new Action(
                 delegate

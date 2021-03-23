@@ -1,13 +1,18 @@
 ﻿<UserControl x:Class="MultiBranchTexter.View.ConnectingLine"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:r="clr-namespace:MultiBranchTexter.Resources"
              HorizontalAlignment="Left"
              VerticalAlignment="Top">
     <UserControl.Resources>
         <!--右键菜单部分-->
         <ContextMenu x:Key="lineContextMenu">
-            <MenuItem x:Name="addNode" Header="添加节点" Click="AddNode_Click"/>
-            <MenuItem x:Name="deleteLine" Header="删除连线" Click="DeleteLine_Click"/>
+            <MenuItem x:Name="addNode" 
+                      Header="{Binding [Line_AddNode], Source={x:Static r:LanguageManager.Instance}}"
+                      Click="AddNode_Click"/>
+            <MenuItem x:Name="deleteLine"
+                      Header="{Binding [Line_Delete], Source={x:Static r:LanguageManager.Instance}}"
+                      Click="DeleteLine_Click"/>
         </ContextMenu>
     </UserControl.Resources>
     <Path x:Name="Path" StrokeThickness="3" 

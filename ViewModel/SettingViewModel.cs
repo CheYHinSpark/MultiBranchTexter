@@ -6,6 +6,7 @@ using System.Windows.Media;
 using MultiBranchTexter.View;
 using MultiBranchTexter.Model;
 using MultiBranchTexter.Resources;
+using System.Globalization;
 
 namespace MultiBranchTexter.ViewModel
 {
@@ -143,7 +144,7 @@ namespace MultiBranchTexter.ViewModel
         }
         #endregion
 
-        //标题栏高度，用于全屏显示
+        // 语言
         private int _langIndex;
         public int LangIndex
         {
@@ -151,10 +152,11 @@ namespace MultiBranchTexter.ViewModel
             set
             {
                 _langIndex = value;
+                // 0中文，1英文
                 if (value == 0)
-                { LanguageManager.Instance.ChangeLanguage(new System.Globalization.CultureInfo("zh-CHS")); }
+                { LanguageManager.Instance.ChangeLanguage(new CultureInfo("zh-CHS")); }
                 else
-                { LanguageManager.Instance.ChangeLanguage(new System.Globalization.CultureInfo("en")); }
+                { LanguageManager.Instance.ChangeLanguage(new CultureInfo("en")); }
                 RaisePropertyChanged("LangIndex");
             }
         }
@@ -181,8 +183,6 @@ namespace MultiBranchTexter.ViewModel
 
         public SettingViewModel()
         {
-            LangIndex = 0;
-
             ReadIni();
             Version tempV = Application.ResourceAssembly.GetName().Version;
             //只要前三位
@@ -233,7 +233,7 @@ namespace MultiBranchTexter.ViewModel
             if (await UpdateChecker.CheckGitHubNewerVersion())
             { DemandUpdate(); }
             else
-            { MessageBox.Show("当前已是最新版本"); }
+            { MessageBox.Show(LanguageManager.Instance["Msg_LatestVer"]); }
         });
         #endregion
 
@@ -246,10 +246,10 @@ namespace MultiBranchTexter.ViewModel
         public void DemandUpdate()
         {
             MessageBoxResult result = MessageBox
-                  .Show("检测到新版本  " + NewVersionInfo
-                  + "\n" + VersionInfo
-                  + "\n是否前往更新？",
-                  "检查更新",
+                  .Show(LanguageManager.Instance["Msg_NewVerFound"] + NewVersionInfo
+                  + "\n" + LanguageManager.Instance["Set_CurrentVer"] + VersionInfo
+                  + "\n" + LanguageManager.Instance["Msg_UpdateQ"],
+                  LanguageManager.Instance["Set_CheckUpdate"],
                   MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             { Process.Start("explorer.exe", "https://github.com/CheYHinSpark/MultiBranchTexter/releases"); }
@@ -268,6 +268,12 @@ namespace MultiBranchTexter.ViewModel
 
         public void ReadIni()
         {
+            string culInfo;
+            if (CultureInfo.CurrentCulture.Name[..2] == "zh")
+            { culInfo ="zh-CHS"; }
+            else
+            { culInfo="en"; }
+
             IniFile iniFile = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "Settings.ini");
             IsDarkMode = iniFile.GetBool("Settings", "IsDarkMode", false);
             AllowDoubleEnter = iniFile.GetBool("Settings", "AllowDoubleEnter", false);
@@ -279,6 +285,19 @@ namespace MultiBranchTexter.ViewModel
             _colorR = iniFile.GetInt("Color", "Red", 238);
             _colorG = iniFile.GetInt("Color", "Green", 170);
             ColorB = iniFile.GetInt("Color", "Blue", 22);
+
+            culInfo = iniFile.GetString("Language", "Language", culInfo);
+            if (culInfo == "zh-CHS")
+            { 
+                LangIndex = 0;
+                LanguageManager.Instance.ChangeLanguage(new CultureInfo("zh-CHS"));
+            }
+            else
+            { 
+                LangIndex = 1;
+                LanguageManager.Instance.ChangeLanguage(new CultureInfo("en"));
+            }
+
             Debug.WriteLine("成功读取配置");
         }
 
@@ -295,6 +314,12 @@ namespace MultiBranchTexter.ViewModel
             iniFile.WriteInt("Color", "Red", (int)_colorR);
             iniFile.WriteInt("Color", "Green", (int)_colorG);
             iniFile.WriteInt("Color", "Blue", (int)_colorB);
+
+            if (LangIndex == 0)
+            { iniFile.WriteString("Language", "Language", "zh-CHS"); }
+            else
+            { iniFile.WriteString("Language", "Language", "en"); }
+
             Debug.WriteLine("成功保存配置");
         }
     }

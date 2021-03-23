@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.IO;
 using System.Threading.Tasks;
+using MultiBranchTexter.Resources;
 
 namespace MultiBranchTexter.ViewModel
 {
@@ -265,14 +266,22 @@ namespace MultiBranchTexter.ViewModel
         private void SearchedNodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (SearchedNodes.Count > 0)
-            { ViewModelFactory.Main.RaiseHint("搜索到" + SearchedNodes.Count.ToString() + "个节点"); }
+            { 
+                ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_Searched"] 
+                    + SearchedNodes.Count.ToString() 
+                    + LanguageManager.Instance["Hint_Nodes"]); 
+            }
             RaisePropertyChanged("SearchedNodes");
         }
 
         private void SelectedNodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (SelectedNodes.Count > 0)
-            { ViewModelFactory.Main.RaiseHint("选中" + SelectedNodes.Count.ToString() + "个节点"); }
+            {
+                ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_Selected"]
+                      + SelectedNodes.Count.ToString()
+                      + LanguageManager.Instance["Hint_Nodes"]);
+            }
             RaisePropertyChanged("SelectedNodes");
         }
         #endregion
@@ -301,7 +310,7 @@ namespace MultiBranchTexter.ViewModel
                 }
                 catch
                 {
-                    ViewModelFactory.Main.RaiseHint("未能成功打开文件");
+                    ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_OpenFailed"]);
 #if DEBUG
                     throw new FormatException("全部木大");
 #else
@@ -472,7 +481,7 @@ namespace MultiBranchTexter.ViewModel
                    { nodeButtons[i].UpdateLines(); }
                }));
             Debug.WriteLine("节点图重绘完成");
-            ViewModelFactory.Main.RaiseHint("节点图重绘完成");
+            ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_Rearrange"]);
             NodeCount = num;
         }
 
@@ -608,7 +617,7 @@ namespace MultiBranchTexter.ViewModel
             //添加线
             //连线现在放到别的地方，即nodebutton的loaded里面执行
             Debug.WriteLine("节点图重绘完成");
-            ViewModelFactory.Main.RaiseHint("节点图重绘完成");
+            ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_Rearrange"]);
             NodeCount = num;
         }
 
@@ -679,7 +688,7 @@ namespace MultiBranchTexter.ViewModel
             //添加线
             //连线现在放到别的地方，即nodebutton的loaded里面执行
             Debug.WriteLine("节点图创建完成");
-            ViewModelFactory.Main.RaiseHint("节点图创建完成");
+            ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_CreateFC"]);
             NodeCount = num;
         }
         #endregion
@@ -701,7 +710,6 @@ namespace MultiBranchTexter.ViewModel
             fs.Flush();
             fs.Close();
             Process.Start("explorer.exe", Path.GetDirectoryName(fileName));
-            ViewModelFactory.Main.RaiseHint("图片导出成功");
         }
         #endregion
 
@@ -979,7 +987,7 @@ namespace MultiBranchTexter.ViewModel
             }
             waiter.FatherNode.UpperBd.Visibility = Visibility.Hidden;
             if (nodeCount > 1)
-            { ViewModelFactory.Main.RaiseHint("请选择一个后继节点"); }
+            { ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_WaitClick"]); }
             else
             { waitingNode = null; }
         }
@@ -997,7 +1005,7 @@ namespace MultiBranchTexter.ViewModel
             if (post == null)//没有选择
             {
                 waitingNode = null;
-                ViewModelFactory.Main.RaiseHint("取消选择");
+                ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_Cancelled"]);
                 return;
             }
             //首先断开waitNode原有的连线
@@ -1017,7 +1025,7 @@ namespace MultiBranchTexter.ViewModel
             _container.Children.Add(new ConnectingLine(waitingNode, post));
             //修改标签页
             ViewModelFactory.Main.ReLoadTab(waitingNode.FatherTextNode);
-            ViewModelFactory.Main.RaiseHint("完成后继节点选择");
+            ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_ClickOver"]);
             waitingNode = null;
         }
         #endregion

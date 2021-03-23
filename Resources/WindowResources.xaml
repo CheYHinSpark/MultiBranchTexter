@@ -184,7 +184,7 @@
     <ControlTemplate x:Key="MainWindowTemplate" TargetType="{x:Type v:MetroWindow}">
         <Grid x:Name="LayoutRoot" Background="{DynamicResource ThemeBrush}">
             <Grid.DataContext>
-                <vm:SettingViewModel x:Name="svm"/>
+                <vm:SettingViewModel/>
             </Grid.DataContext>
             <Grid.RowDefinitions>
                 <RowDefinition Height="{Binding TitleBarHeight}"/>

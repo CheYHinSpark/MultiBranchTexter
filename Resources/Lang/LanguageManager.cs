@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MultiBranchTexter.Model;
+using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Resources;
@@ -35,6 +36,31 @@ namespace MultiBranchTexter.Resources
             CultureInfo.CurrentCulture = cultureInfo;
             CultureInfo.CurrentUICulture = cultureInfo;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
+        }
+
+        /// <summary>
+        /// 为了消灭一些bug必须预加载一次
+        /// </summary>
+        public void PreloadLanguage()
+        {
+            string culInfo;
+            if (CultureInfo.CurrentCulture.Name[..2] == "zh")
+            { culInfo = "zh-CHS"; }
+            else
+            { culInfo = "en"; }
+
+            IniFile iniFile = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "Settings.ini");
+
+            culInfo = iniFile.GetString("Language", "Language", culInfo);
+
+            if (culInfo == "zh-CHS")
+            {
+                ChangeLanguage(new CultureInfo("zh-CHS"));
+            }
+            else
+            {
+                ChangeLanguage(new CultureInfo("en"));
+            }
         }
     }
 }

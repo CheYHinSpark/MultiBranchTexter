@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Text.RegularExpressions;
+using MultiBranchTexter.Resources;
 
 namespace MultiBranchTexter.ViewModel
 {
@@ -347,7 +348,7 @@ namespace MultiBranchTexter.ViewModel
         {
             if (FileName == "" || _fileDirPath == "")
             { return; }
-            RaiseHint("开始导出JSON");
+            RaiseHint(LanguageManager.Instance["Hint_OutputJSON"]);
             SaveFile();
             List<OperationTextNode> newNodes = new List<OperationTextNode>();
             foreach (TextNode node in ViewModelFactory.FCC.Nodes)
@@ -360,7 +361,6 @@ namespace MultiBranchTexter.ViewModel
             });
             await Task.Delay(10);
             Process.Start("explorer.exe", _fileDirPath);
-            RaiseHint("导出JSON成功");
         });
 
         /// <summary> 导出为txt </summary>
@@ -379,7 +379,7 @@ namespace MultiBranchTexter.ViewModel
         /// <summary> 导出节点图 </summary>
         public ICommand OutputFCCCommand => new RelayCommand((t) =>
         {
-            RaiseHint("开始导出图片，请稍后");
+            RaiseHint(LanguageManager.Instance["Hint_OutputPic"]);
             SaveFile();
             var imgUrl = new Regex(@"\.mbjson$", RegexOptions.IgnoreCase).Replace(FileName, ".png");
             ViewModelFactory.FCC.OutputImg(imgUrl);
@@ -440,7 +440,7 @@ namespace MultiBranchTexter.ViewModel
                     SelectedIndex = i;
                     //打开worktab
                     WorkTabWidth = "*";
-                    RaiseHint("打开节点" + node.Name);
+                    RaiseHint(LanguageManager.Instance["Hint_OpenNode"] + node.Name);
                     return;
                 }
             }
@@ -448,7 +448,7 @@ namespace MultiBranchTexter.ViewModel
             SelectedIndex = WorkTabs.Count - 1;
             //打开worktab
             WorkTabWidth = "*";
-            RaiseHint("打开节点" + node.Name);
+            RaiseHint(LanguageManager.Instance["Hint_OpenNode"] + node.Name);
         }
 
         /// <summary> 重置某个标签页的页尾 </summary>
@@ -530,7 +530,9 @@ namespace MultiBranchTexter.ViewModel
                 MetadataFile.WriteTextNodes(_fileName, ViewModelFactory.FCC.GetTextNodeWithLeftTopList());
                 IsModified = false;
                 Debug.WriteLine("文件 " + _fileName + " 保存成功");
-                RaiseHint("文件 " + _fileName[(_fileName.LastIndexOf('\\') + 1)..] + " 保存成功");
+                RaiseHint(LanguageManager.Instance["Hint_File"] 
+                    + _fileName[(_fileName.LastIndexOf('\\') + 1)..] 
+                    + LanguageManager.Instance["Hint_SaveSuccess"]);
             }
             catch { }
         }

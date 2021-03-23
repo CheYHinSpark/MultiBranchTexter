@@ -2,6 +2,7 @@
             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             xmlns:v="clr-namespace:MultiBranchTexter.View"
+            xmlns:r="clr-namespace:MultiBranchTexter.Resources"
             Loaded="NodeBase_Loaded"
             MouseDoubleClick="NodeBase_MouseDoubleClick"
             HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -21,11 +22,15 @@
                 Style="{StaticResource nodebuttonBorderStyle}">
             <Border.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="删除节点" Click="DeleteNode_Click"/>
-                    <MenuItem Header="变更后继节点">
-                        <MenuItem Header="单一后继" Click="ChangeEnd_Click"/>
-                        <MenuItem Header="判断后继" Click="ChangeEnd_Click"/>
-                        <MenuItem Header="多选后继" Click="ChangeEnd_Click"/>
+                    <MenuItem Header="{Binding [N_Delete], Source={x:Static r:LanguageManager.Instance}}" 
+                              Click="DeleteNode_Click"/>
+                    <MenuItem Header="{Binding [N_ChangeEnd], Source={x:Static r:LanguageManager.Instance}}" >
+                        <MenuItem Header="{Binding [N_Single], Source={x:Static r:LanguageManager.Instance}}" 
+                                  Click="ChangeEnd_Click"/>
+                        <MenuItem Header="{Binding [N_YesNo], Source={x:Static r:LanguageManager.Instance}}" 
+                                  Click="ChangeEnd_Click"/>
+                        <MenuItem Header="{Binding [N_Multi], Source={x:Static r:LanguageManager.Instance}}" 
+                                  Click="ChangeEnd_Click"/>
                     </MenuItem>
                 </ContextMenu>
             </Border.ContextMenu>
@@ -49,7 +54,8 @@
                 <Border x:Name="UpperBd" Background="#FFB2E4E4" Grid.RowSpan="2" 
                         Opacity="0.9" MouseDown="UpperBd_MouseDown" CornerRadius="4"
                         Margin="-8,-2,-8,-2" Visibility="Hidden">
-                    <TextBlock Text="点击以设置为&#x000A;新的后继节点" IsHitTestVisible="False"
+                    <TextBlock Text="{Binding [N_NewEndHint], Source={x:Static r:LanguageManager.Instance}}" 
+                               IsHitTestVisible="False"
                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
             </Grid>
