@@ -240,18 +240,19 @@
                 </Grid.ColumnDefinitions>
                 <Rectangle Fill="#80808080" Grid.ColumnSpan="3"/>
                 <StackPanel Orientation="Vertical" Grid.Column="0" Margin="6">
-                    <CheckBox Content="深色模式"
+                    <CheckBox Content="{Binding [Set_DarkMode], Source={x:Static r:LanguageManager.Instance}}"
                               IsChecked="{Binding IsDarkMode}"
                               Template="{StaticResource settingCheckBox}"/>
-                    <CheckBox Content="连续回车不切割片段"
+                    <CheckBox Content="{Binding [Set_DoubleEnter], Source={x:Static r:LanguageManager.Instance}}"
                               IsChecked="{Binding AllowDoubleEnter}"
                               Template="{StaticResource settingCheckBox}"/>
-                    <CheckBox Content="统计注释字数"
+                    <CheckBox Content="{Binding [Set_CountComment], Source={x:Static r:LanguageManager.Instance}}"
                               IsChecked="{Binding CountOpChar}"
                               Template="{StaticResource settingCheckBox}"/>
                     <StackPanel Orientation="Vertical" Margin="2"
                                 Background="{DynamicResource BaseBrush}">
-                        <TextBlock Text="颜色设置" Margin="4,4,0,0" 
+                        <TextBlock Text="{Binding [Set_Color], Source={x:Static r:LanguageManager.Instance}}"
+                                   Margin="4,4,0,0" 
                                    Foreground="{DynamicResource Foreground.BaseBrush}"/>
                         <Slider Style="{StaticResource colorSliderStyle}"
                                 Foreground="#FFFF0000" Value="{Binding ColorR}"/>
@@ -260,21 +261,23 @@
                         <Slider Style="{StaticResource colorSliderStyle}" 
                                 Foreground="#FF0000FF" Value="{Binding ColorB}"/>
                     </StackPanel>
-                    <Button Content="还原默认" Command="{Binding ToDefaultCommand}"
+                    <Button Content="{Binding [Set_Default], Source={x:Static r:LanguageManager.Instance}}"
+                            Command="{Binding ToDefaultCommand}"
                             Template="{StaticResource textButtonTemplate}"
                             Height="24" Margin="2"
                             HorizontalAlignment="Left"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Column="1" Margin="6">
-                    <CheckBox Content="连续Ctrl+S保存整个文档"
+                    <CheckBox Content="{Binding [Set_DoubleCtrlS], Source={x:Static r:LanguageManager.Instance}}"
                               IsChecked="{Binding DoubleSaveAwake}"
                               Template="{StaticResource settingCheckBox}"/>
-                    <CheckBox Content="启用滚动条惯性"
+                    <CheckBox Content="{Binding [Set_ScrollInertia], Source={x:Static r:LanguageManager.Instance}}"
                               IsChecked="{Binding IsEnableInertia}"
                               Template="{StaticResource settingCheckBox}"/>
                     <StackPanel Orientation="Vertical" Margin="2"
                                 Background="{DynamicResource BaseBrush}">
-                        <TextBlock Text="文本编辑页边距" Margin="4,4,0,0" 
+                        <TextBlock Text="{Binding [Set_TextMargin], Source={x:Static r:LanguageManager.Instance}}"
+                                   Margin="4,4,0,0" 
                                    Foreground="{DynamicResource Foreground.BaseBrush}"/>
                         <Slider Maximum="200" Style="{StaticResource colorSliderStyle}"
                                 Foreground="{DynamicResource ThemeBrush}" Value="{Binding SideWidth}"/>
@@ -285,22 +288,29 @@
                     </ComboBox>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Column="2" Margin="6">
-                    <Button Content="查看说明" Command="{Binding OpenIntroCommand}"
+                    <Button Content="{Binding [Set_ReadMe], Source={x:Static r:LanguageManager.Instance}}"
+                            Command="{Binding OpenIntroCommand}"
                             Template="{StaticResource textButtonTemplate}"
                             Height="24" Margin="2"
                             HorizontalAlignment="Left" />
-                    <Button Content="访问项目主页" Command="{Binding OpenMainWebCommand}"
+                    <Button Content="{Binding [Set_ViewWeb], Source={x:Static r:LanguageManager.Instance}}"
+                            Command="{Binding OpenMainWebCommand}"
                             Template="{StaticResource textButtonTemplate}"
                             Height="24" Margin="2"
                             HorizontalAlignment="Left" />
                     <Grid>
-                        <Button Content="检查更新" Command="{Binding CheckUpdateCommand}"
+                        <Button Content="{Binding [Set_CheckUpdate], Source={x:Static r:LanguageManager.Instance}}"
+                                Command="{Binding CheckUpdateCommand}"
                                 Template="{StaticResource textButtonTemplate}"
                                 Height="24" Margin="2"
                                 HorizontalAlignment="Left" />
-                        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center"
-                                   Text="{Binding VersionInfo}"
-                                   Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding [Set_CurrentVer], Source={x:Static r:LanguageManager.Instance}}"
+                                       Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+                            <TextBlock Text="{Binding VersionInfo}"
+                                       Foreground="{DynamicResource Foreground.ThemeBrush}"/>
+                        </StackPanel>
                     </Grid>
                 </StackPanel>
             </Grid>

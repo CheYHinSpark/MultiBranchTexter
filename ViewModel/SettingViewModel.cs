@@ -186,8 +186,7 @@ namespace MultiBranchTexter.ViewModel
             ReadIni();
             Version tempV = Application.ResourceAssembly.GetName().Version;
             //只要前三位
-            VersionInfo = "当前版本  "
-                + tempV.Major.ToString() + "." + tempV.Minor.ToString() + "." + tempV.Build.ToString();
+            VersionInfo = tempV.Major.ToString() + "." + tempV.Minor.ToString() + "." + tempV.Build.ToString();
             NewVersionInfo = "";
             TitleBarHeight = 24;
         }

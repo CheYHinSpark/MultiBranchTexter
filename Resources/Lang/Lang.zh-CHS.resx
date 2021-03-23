@@ -117,6 +117,83 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Bg_Main" xml:space="preserve">
+    <value>欢迎使用多分支文本编辑器
+打开导航文件 Ctrl+O 或者拖入
+新建导航文件 Ctrl+Shift+N</value>
+  </data>
+  <data name="Set_CheckUpdate" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
+  <data name="Set_Color" xml:space="preserve">
+    <value>颜色设置</value>
+  </data>
+  <data name="Set_CountComment" xml:space="preserve">
+    <value>统计注释字数</value>
+  </data>
+  <data name="Set_CurrentVer" xml:space="preserve">
+    <value>当前版本  </value>
+  </data>
+  <data name="Set_DarkMode" xml:space="preserve">
+    <value>深色模式</value>
+  </data>
+  <data name="Set_Default" xml:space="preserve">
+    <value>还原默认</value>
+  </data>
+  <data name="Set_DoubleCtrlS" xml:space="preserve">
+    <value>连续Ctrl+S保存整个文档</value>
+  </data>
+  <data name="Set_DoubleEnter" xml:space="preserve">
+    <value>连续回车不切割片段</value>
+  </data>
+  <data name="Set_ReadMe" xml:space="preserve">
+    <value>查看说明</value>
+  </data>
+  <data name="Set_ScrollInertia" xml:space="preserve">
+    <value>启用滚动条惯性</value>
+  </data>
+  <data name="Set_TextMargin" xml:space="preserve">
+    <value>文本编辑页边距</value>
+  </data>
+  <data name="Set_ViewWeb" xml:space="preserve">
+    <value>访问项目主页</value>
+  </data>
+  <data name="TB_Create" xml:space="preserve">
+    <value>新建(Ctrl+Shift+N)</value>
+  </data>
+  <data name="TB_FontDown" xml:space="preserve">
+    <value>字体缩小(Alt+Down)</value>
+  </data>
+  <data name="TB_FontUp" xml:space="preserve">
+    <value>字体增大(Alt+Up)</value>
+  </data>
+  <data name="TB_FullSc" xml:space="preserve">
+    <value>全屏</value>
+  </data>
+  <data name="TB_Open" xml:space="preserve">
+    <value>打开(Ctrl+O)</value>
+  </data>
+  <data name="TB_Output" xml:space="preserve">
+    <value>导出</value>
+  </data>
+  <data name="TB_OutputJSON" xml:space="preserve">
+    <value>导出JSON</value>
+  </data>
+  <data name="TB_OutputPic" xml:space="preserve">
+    <value>导出节点图 .png</value>
+  </data>
+  <data name="TB_OutputTxt" xml:space="preserve">
+    <value>分节点导出文本</value>
+  </data>
+  <data name="TB_Restore" xml:space="preserve">
+    <value>还原(Esc)</value>
+  </data>
+  <data name="TB_Save" xml:space="preserve">
+    <value>保存(Ctrl+Alt+S)</value>
+  </data>
+  <data name="TB_SaveAs" xml:space="preserve">
+    <value>另存为(Ctrl+Shift+S)</value>
+  </data>
   <data name="Win_Close" xml:space="preserve">
     <value>关闭</value>
   </data>

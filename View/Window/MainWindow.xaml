@@ -3,6 +3,7 @@
                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                xmlns:vm="clr-namespace:MultiBranchTexter.ViewModel"
                xmlns:v="clr-namespace:MultiBranchTexter.View"
+               xmlns:r="clr-namespace:MultiBranchTexter.Resources"
                Style="{StaticResource MainWindowStyle}"
                WindowStartupLocation="CenterScreen"
                Title="MultiBranchTexter" Height="450" Width="800">
@@ -31,7 +32,7 @@
         </Grid.RowDefinitions>
         <!--没有加载文件时的提示文本-->
         <Grid Grid.Row="1" Background="Transparent" AllowDrop="True" Drop="BgGrid_Drop">
-            <TextBlock Text="欢迎使用多分支文本编辑器&#x000A;打开导航文件 Ctrl+O 或者拖入&#x000A;新建导航文件 Ctrl+Shift+N"
+            <TextBlock Text="{Binding [Bg_Main], Source={x:Static r:LanguageManager.Instance}}"
                        HorizontalAlignment="Center" VerticalAlignment="Center"
                        Foreground="{DynamicResource Foreground.BaseBrush}" FontSize="24"/>
         </Grid>
@@ -231,23 +232,23 @@
             </v:ToolBarBorder.Style>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
                         Grid.Row="0" Height="28">
-                <Button ToolTip="新建" Width="28"
+                <Button ToolTip="{Binding [TB_Create], Source={x:Static r:LanguageManager.Instance}}" Width="28"
                         Template="{StaticResource generalButtonTemplate}"
                         Command="{Binding NewFileCommand}"
                         Content="M0,9 L6,9 M3,6 3,12
                         M2,5 2,0 9,0 12,3 12,14 2,14 L2,13
                         M9,0 9,3 L12,3"/>
-                <Button ToolTip="打开" Width="28"
+                <Button ToolTip="{Binding [TB_Open], Source={x:Static r:LanguageManager.Instance}}" Width="28"
                         Template="{StaticResource generalButtonTemplate}"
                         Command="{Binding OpenFileCommand}"
                         Content="M1,12 13,12 16,6 4,6 Z
                         M1,12 0,12 0,4 2,2 6,2 8,4 13,4 L13,6"/>
-                <Button ToolTip="保存" Width="28"
+                <Button ToolTip="{Binding [TB_Save], Source={x:Static r:LanguageManager.Instance}}" Width="28"
                         Template="{StaticResource generalButtonTemplate}"
                         Command="{Binding SaveFileCommand}"
                         Content="M0,14 0,0 3,0 3,5 8,5 8,0 9,0 12,3 12,14 Z
                         M4,0 6,0 L6,4"/>
-                <Button ToolTip="另存为" Width="28"
+                <Button ToolTip="{Binding [TB_SaveAs], Source={x:Static r:LanguageManager.Instance}}" Width="28"
                         Template="{StaticResource generalButtonTemplate}"
                         Command="{Binding SaveAsFileCommand}"
                         Content="M0,5 0,0 3,0 3,5 8,5 8,0 9,0 12,3 12,14 L8,14 
@@ -255,7 +256,7 @@
                         M4,0 6,0 L6,4 M0,10 L8,10 M5,7 8,10 L5,13"/>
                 <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
                            Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
-                <Button ToolTip="字体缩小" Width="28"
+                <Button ToolTip="{Binding [TB_FontDown], Source={x:Static r:LanguageManager.Instance}}" Width="28"
                         Command="{Binding FontSizeDownCommand}"
                         Template="{StaticResource generalButtonTemplate}"
                         Content="M0,16 5,4 L10,16 M2,11 L8,11
@@ -263,7 +264,7 @@
                         M10,4 16,4"/>
                 <TextBlock Text="{Binding TextFontSize}" Width="14" VerticalAlignment="Center"
                            TextAlignment="Center" Foreground="{DynamicResource Foreground.BaseBrush}"/>
-                <Button ToolTip="字体放大" Width="28"
+                <Button ToolTip="{Binding [TB_FontUp], Source={x:Static r:LanguageManager.Instance}}" Width="28"
                         Command="{Binding FontSizeUpCommand}"
                         Template="{StaticResource generalButtonTemplate}"
                         Content="M6,16 11,4 L16,16 M8,11 L14,11
@@ -281,12 +282,13 @@
                 <Separator Width="1" Margin="4" Background="{DynamicResource ThemeBrush}" Opacity="0.5"
                            Style="{DynamicResource {x:Static ToolBar.SeparatorStyleKey}}" />
                 <Menu Background="Transparent" Height="28">
-                    <MenuItem Header="M0,0 6,6 L0,12 M8,0 14,6 L8,12" ToolTip="导出">
-                        <MenuItem Header="导出为json" Command="{Binding OutputAsJSONCommand}"
+                    <MenuItem Header="M0,0 6,6 L0,12 M8,0 14,6 L8,12" 
+                              ToolTip="{Binding [TB_Output], Source={x:Static r:LanguageManager.Instance}}">
+                        <MenuItem Header="{Binding [TB_OutputJSON], Source={x:Static r:LanguageManager.Instance}}" Command="{Binding OutputAsJSONCommand}"
                                   IsEnabled="{Binding IsWorkGridVisible}"/>
-                        <MenuItem Header="导出为txt" Command="{Binding OutputAsTxtCommand}"
+                        <MenuItem Header="{Binding [TB_OutputTxt], Source={x:Static r:LanguageManager.Instance}}" Command="{Binding OutputAsTxtCommand}"
                                   IsEnabled="{Binding IsWorkGridVisible}"/>
-                        <MenuItem Header="导出节点图.png" Command="{Binding OutputFCCCommand}"
+                        <MenuItem Header="{Binding [TB_OutputPic], Source={x:Static r:LanguageManager.Instance}}" Command="{Binding OutputFCCCommand}"
                                   IsEnabled="{Binding IsWorkGridVisible}"/>
                     </MenuItem>
                 </Menu>
@@ -294,12 +296,12 @@
                           IsChecked="{Binding IsFullScreen}" >
                     <CheckBox.Style>
                         <Style TargetType="{x:Type CheckBox}">
-                            <Setter Property="ToolTip" Value="全屏"/>
+                            <Setter Property="ToolTip" Value="{Binding [TB_FullSc], Source={x:Static r:LanguageManager.Instance}}"/>
                             <Setter Property="Content" Value="M0,6 0,12 L6,12 
                                     M6,0 12,0 L12,6"/>
                             <Style.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter Property="ToolTip" Value="还原"/>
+                                    <Setter Property="ToolTip" Value="{Binding [TB_Restore], Source={x:Static r:LanguageManager.Instance}}"/>
                                     <Setter Property="Content" Value="M0,8 6,8 L6,14 
                                             M8,0 8,6 L14,6"/>
                                 </Trigger>
