@@ -58,8 +58,10 @@ namespace MultiBranchTexter.View
             {
                 RowDefinition row = new RowDefinition { Height = new GridLength(20) };
                 container.RowDefinitions.Add(row);
-                TabEndItem tei = new TabEndItem(textNode.EndCondition.Answers[i].Item1,
-                    textNode.EndCondition.Answers[i].Item2);
+                TabEndItem tei = new TabEndItem(
+                    textNode.EndCondition.Answers[i].Item1,
+                    textNode.EndCondition.Answers[i].Item2,
+                    textNode.EndCondition.Answers[i].Item3);
                 tei.SetValue(Grid.RowProperty, i);//设置行
                 container.Children.Add(tei);
             }

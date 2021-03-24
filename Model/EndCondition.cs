@@ -13,7 +13,7 @@ namespace MultiBranchTexter.Model
 
         public bool IsQuestion = true;
 
-        public List<(string, string)> Answers = new List<(string, string)>();
+        public List<(string, string, string)> Answers = new List<(string, string, string)>();
 
         public EndCondition()
         {
@@ -24,11 +24,11 @@ namespace MultiBranchTexter.Model
         {
             EndType = endType;
             if (EndType == EndType.Single)
-            { Answers.Add(("", "")); }
+            { Answers.Add(("", "", "")); }
             else if (EndType == EndType.YesNo)
             {
-                Answers.Add(("yes", ""));
-                Answers.Add(("no", ""));
+                Answers.Add(("yes", "", ""));
+                Answers.Add(("no", "", ""));
             }
         }
     }

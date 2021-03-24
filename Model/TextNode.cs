@@ -37,11 +37,11 @@ namespace MultiBranchTexter.Model
             {
                 if (pre.EndCondition.Answers[i].Item1 == answer)
                 {
-                    pre.EndCondition.Answers[i] = (answer, post.Name);
+                    pre.EndCondition.Answers[i] = (answer, post.Name, pre.EndCondition.Answers[i].Item3);
                     return;
                 }
             }
-            pre.EndCondition.Answers.Add((answer, post.Name));
+            pre.EndCondition.Answers.Add((answer, post.Name, ""));
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace MultiBranchTexter.Model
             {
                 if (pre.EndCondition.Answers[i].Item1 == answer)
                 {
-                    pre.EndCondition.Answers[i] = (answer, "");
+                    pre.EndCondition.Answers[i] = (answer, "", pre.EndCondition.Answers[i].Item3);
                     return;
                 }
             }

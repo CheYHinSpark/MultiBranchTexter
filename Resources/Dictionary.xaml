@@ -868,7 +868,7 @@
 
     <!--operationTextBox的模板-->
     <ControlTemplate x:Key="operationTextBoxTemplate" TargetType="{x:Type TextBox}">
-        <Border x:Name="BD" Background="#60808080" Margin="20,0,120,0"
+        <Border x:Name="BD" Background="#60808080"
                 BorderThickness="1" BorderBrush="{StaticResource Fragment.BorderBrush}">
             <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
         </Border>

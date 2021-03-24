@@ -512,16 +512,32 @@ namespace MultiBranchTexter.View
         {
             AnswerToNodes.Add(newKey, AnswerToNodes[oldKey]);
             AnswerToNodes.Remove(oldKey);
-            for (int i =0;i<TextNode.EndCondition.Answers.Count;i++)
+            for (int i =0; i < TextNode.EndCondition.Answers.Count; i++)
             {
                 if (TextNode.EndCondition.Answers[i].Item1 == oldKey)
                 {
                     string temp = TextNode.EndCondition.Answers[i].Item2;
-                    TextNode.EndCondition.Answers[i] = (newKey, temp);
+                    TextNode.EndCondition.Answers[i] = (newKey, temp, TextNode.EndCondition.Answers[i].Item3);
+                    ViewModelFactory.Main.IsModified = true;
                     return;
                 }
             }
-          
+        }
+
+        /// <summary>
+        /// 替换多选的hint
+        /// </summary>
+        public void ChangeHint(string key, string newHint)
+        {
+            for (int i = 0; i < TextNode.EndCondition.Answers.Count; i++)
+            {
+                if (TextNode.EndCondition.Answers[i].Item1 == key)
+                {
+                    TextNode.EndCondition.Answers[i] = (key, TextNode.EndCondition.Answers[i].Item2, newHint);
+                    ViewModelFactory.Main.IsModified = true;
+                    return;
+                }
+            }
         }
         #endregion
     }

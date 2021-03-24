@@ -19,13 +19,15 @@ namespace MultiBranchTexter.View
         /// <summary>
         /// 新建TabEndItem
         /// </summary>
-        public TabEndItem(string answer, string postName)
+        public TabEndItem(string answer, string postName, string hint)
         {
             InitializeComponent();
             answerTxt.Text = answer;
             nextNodeName = postName;
-            if (postName != "")//有可能为null
+            if (postName != null)//有可能为null
             { postNameTxt.Text = postName; }
+            if (hint != null)
+            { hintTxt.Text = hint; }
         }
 
         private void NextBtn_Click(object sender, RoutedEventArgs e)

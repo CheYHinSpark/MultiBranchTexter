@@ -58,7 +58,7 @@ namespace MultiBranchTexter.View
         //点击添加按钮
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
-            List<(string,string)> atns = FatherTextNode.EndCondition.Answers;
+            List<(string,string, string)> atns = FatherTextNode.EndCondition.Answers;
             //创造一个不重名的回答
             string newAnswer = "新回答";
             int i = 0;
@@ -74,7 +74,7 @@ namespace MultiBranchTexter.View
             }
             newAnswer += i.ToString();
             //添加键
-            atns.Add((newAnswer,""));
+            atns.Add((newAnswer, "", ""));
             FatherNode.AnswerToNodes.Add(newAnswer, null);
             NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(newAnswer)
             { FatherNode = this.FatherNode };

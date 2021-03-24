@@ -12,6 +12,7 @@ namespace MultiBranchTexter.View
     public partial class NodeEndMAAnswer : NodeBase
     {
         private Button maCloseBtn;
+        private TextBox hintTxt;
         private TextBox answerTxt;
         private string answer = "";
 
@@ -32,19 +33,23 @@ namespace MultiBranchTexter.View
         {
             InitializeComponent();
         }
+
         public NodeEndMAAnswer(string newAnswer)
         {
             InitializeComponent();
             answer = newAnswer;
         }
+
         #region 事件
         //加载完成
         private void NodeBase_Loaded(object sender, RoutedEventArgs e)
         {
             maCloseBtn = GetTemplateChild("maCloseBtn") as Button;
+            hintTxt = GetTemplateChild("hintTxt") as TextBox;
             answerTxt = GetTemplateChild("answerTxt") as TextBox;
 
             maCloseBtn.Click += MaCloseBtn_Click;
+            hintTxt.LostFocus += HintTxt_LostFocus;
             answerTxt.LostFocus += AnswerTxt_LostFocus;
             MouseDoubleClick += NodeEndMAAnswer_MouseDoubleClick;
 
@@ -93,6 +98,16 @@ namespace MultiBranchTexter.View
             //通知标签页改变
             ViewModelFactory.Main.ReLoadTab(FatherTextNode);
             answerTxt.SelectionStart = 0;
+            FatherNode.UpdateLines();
+        }
+
+        // 修改hint，即item3
+        private void HintTxt_LostFocus(object sender, RoutedEventArgs e)
+        {
+            FatherNode.ChangeHint(answer, hintTxt.Text);
+            //通知标签页改变
+            ViewModelFactory.Main.ReLoadTab(FatherTextNode);
+            hintTxt.SelectionStart = 0;
             FatherNode.UpdateLines();
         }
 

@@ -430,7 +430,7 @@ namespace MultiBranchTexter.ViewModel
                                 }
                             }
                             if (!found)
-                            { ec.Answers[j] = (ec.Answers[j].Item1, ""); }
+                            { ec.Answers[j] = (ec.Answers[j].Item1, "", ec.Answers[j].Item3); }
                         }
                     }
                 }));
@@ -570,7 +570,7 @@ namespace MultiBranchTexter.ViewModel
                                 }
                             }
                             if (!found)
-                            { ec.Answers[j] = (ec.Answers[j].Item1, ""); }
+                            { ec.Answers[j] = (ec.Answers[j].Item1, "", ec.Answers[j].Item3); }
                         }
                     }
                 }));
@@ -681,7 +681,7 @@ namespace MultiBranchTexter.ViewModel
                                 }
                             }
                             if (!found)
-                            { ec.Answers[j] = (ec.Answers[j].Item1, ""); }
+                            { ec.Answers[j] = (ec.Answers[j].Item1, "", ec.Answers[j].Item3); }
                         }
                     }
                 }));
