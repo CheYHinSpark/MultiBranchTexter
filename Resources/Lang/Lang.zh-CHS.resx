@@ -218,6 +218,12 @@
   <data name="Line_To" xml:space="preserve">
     <value>到 </value>
   </data>
+  <data name="Msg_AEmpty" xml:space="preserve">
+    <value>回答不能为空，已还原</value>
+  </data>
+  <data name="Msg_ARepeated" xml:space="preserve">
+    <value>回答出现重复，已还原</value>
+  </data>
   <data name="Msg_ChangeEnd" xml:space="preserve">
     <value>确定要变更后继条件吗？
 这将同时断开节点的所有后继连接线，并且此操作不可撤销！</value>
@@ -225,6 +231,10 @@
   <data name="Msg_DeleteNode" xml:space="preserve">
     <value>确定要删除节点吗？
 这将同时断开节点的所有连接线，并且此操作不可撤销！</value>
+  </data>
+  <data name="Msg_FirstStart" xml:space="preserve">
+    <value>初次启动，需要修改注册表，
+请重新以管理员身份启动一次程序。</value>
   </data>
   <data name="Msg_LatestVer" xml:space="preserve">
     <value>当前已是最新版本</value>
@@ -244,6 +254,9 @@
   </data>
   <data name="Msg_NewVerFound" xml:space="preserve">
     <value>检测到新版本  </value>
+  </data>
+  <data name="Msg_NotEmptyDir" xml:space="preserve">
+    <value>检测到目标文件夹非空，请谨慎操作！</value>
   </data>
   <data name="Msg_SaveFile" xml:space="preserve">
     <value>尚未保存，是否保存？</value>
@@ -285,6 +298,66 @@
   <data name="N_YesNo" xml:space="preserve">
     <value>判断后继</value>
   </data>
+  <data name="Out_AfterComment" xml:space="preserve">
+    <value>片段注释后</value>
+  </data>
+  <data name="Out_AfterContent" xml:space="preserve">
+    <value>片段文本后</value>
+  </data>
+  <data name="Out_AfterNode" xml:space="preserve">
+    <value>节点后</value>
+  </data>
+  <data name="Out_AnswerTemplate" xml:space="preserve">
+    <value>答案模板</value>
+  </data>
+  <data name="Out_BeforeComment" xml:space="preserve">
+    <value>片段注释前</value>
+  </data>
+  <data name="Out_BeforeContent" xml:space="preserve">
+    <value>片段文本前</value>
+  </data>
+  <data name="Out_BeforeNode" xml:space="preserve">
+    <value>节点前</value>
+  </data>
+  <data name="Out_Browser" xml:space="preserve">
+    <value>浏览</value>
+  </data>
+  <data name="Out_EndAnswerTitle" xml:space="preserve">
+    <value>##将被替换为答案文本，\#将被替换为#  @@将被替换为答案对应节点标题，\@将被替换为@</value>
+  </data>
+  <data name="Out_EndTitle" xml:space="preserve">
+    <value>##将被替换为问题文本，\#将被替换为#</value>
+  </data>
+  <data name="Out_IgnoreEmptyAnswer" xml:space="preserve">
+    <value>忽略空答案</value>
+  </data>
+  <data name="Out_IgnoreEmptyComment" xml:space="preserve">
+    <value>忽略空注释</value>
+  </data>
+  <data name="Out_IsCommentBefore" xml:space="preserve">
+    <value>片段注释导出在文本前面</value>
+  </data>
+  <data name="Out_Output" xml:space="preserve">
+    <value>导出</value>
+  </data>
+  <data name="Out_OutputComment" xml:space="preserve">
+    <value>导出注释</value>
+  </data>
+  <data name="Out_OutputEnd" xml:space="preserve">
+    <value>导出节点后继条件</value>
+  </data>
+  <data name="Out_Path" xml:space="preserve">
+    <value>导出路径</value>
+  </data>
+  <data name="Out_QTemplate" xml:space="preserve">
+    <value>问题模板</value>
+  </data>
+  <data name="Out_Title" xml:space="preserve">
+    <value>&amp;&amp;将被替换为该节点标题，\&amp;将被替换为&amp;  $$将被替换为文件工程标题，\$将被替换为$</value>
+  </data>
+  <data name="Out_Win" xml:space="preserve">
+    <value>导出各个节点</value>
+  </data>
   <data name="Set_CheckUpdate" xml:space="preserve">
     <value>检查更新</value>
   </data>
@@ -320,6 +393,9 @@
   </data>
   <data name="Set_ViewWeb" xml:space="preserve">
     <value>访问项目主页</value>
+  </data>
+  <data name="Sys_Extname" xml:space="preserve">
+    <value>多分支导航文件</value>
   </data>
   <data name="Tab_Back" xml:space="preserve">
     <value>返回节点图</value>

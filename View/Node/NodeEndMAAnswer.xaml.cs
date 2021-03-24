@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using MultiBranchTexter.Model;
+using MultiBranchTexter.Resources;
 using MultiBranchTexter.ViewModel;
 
 namespace MultiBranchTexter.View
@@ -77,7 +78,7 @@ namespace MultiBranchTexter.View
             if (answerTxt.Text == "")//禁止为空
             {
                 answerTxt.Text = answer;
-                MessageBox.Show("回答不能为空，已还原");
+                MessageBox.Show(LanguageManager.Instance["Msg_AEmpty"]);
                 return;
             }
             //取得节点的后继条件
@@ -87,7 +88,7 @@ namespace MultiBranchTexter.View
                 if (ec.Answers[i].Item1 == Answer)
                 {
                     answerTxt.Text = answer;
-                    MessageBox.Show("回答出现重复，已还原");
+                    MessageBox.Show(LanguageManager.Instance["Msg_ARepeated"]);
                     return;
                 } 
             }

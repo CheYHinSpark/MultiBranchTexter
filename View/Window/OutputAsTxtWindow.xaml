@@ -4,11 +4,12 @@
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
                     xmlns:v="clr-namespace:MultiBranchTexter.View"
+                    xmlns:r="clr-namespace:MultiBranchTexter.Resources"
                     xmlns:vm="clr-namespace:MultiBranchTexter.ViewModel"
                     Style="{StaticResource OutputWindowStyle}"
                     Height="560" Width="640"
                     WindowStartupLocation="CenterOwner"
-                    Title="导出为txt"
+                    Title="{Binding [Out_Win], Source={x:Static r:LanguageManager.Instance}}"
                     SavePath="yes"
                     mc:Ignorable="d" 
                     d:DesignHeight="560" d:DesignWidth="640">
@@ -39,7 +40,7 @@
         </Grid.RowDefinitions>
         
         <TextBlock Grid.Row="0"
-                   Text="&amp;&amp;将被替换为该节点标题，\&amp;将被替换为&amp;  $$将被替换为文件工程标题，\$将被替换为$"
+                   Text="{Binding [Out_Title], Source={x:Static r:LanguageManager.Instance}}"
                    Foreground="{DynamicResource Foreground.BaseBrush}"
                    VerticalAlignment="Center" HorizontalAlignment="Center"/>
         <Grid Grid.Row="1" Margin="10,5,10,5">
@@ -47,7 +48,8 @@
                 <ColumnDefinition Width="Auto" SharedSizeGroup="tt"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="节点前" Foreground="{DynamicResource Foreground.BaseBrush}"
+            <TextBlock Grid.Column="0" Text="{Binding [Out_BeforeNode], Source={x:Static r:LanguageManager.Instance}}"
+                       Foreground="{DynamicResource Foreground.BaseBrush}"
                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <TextBox Grid.Column="1" Text="{Binding NodeParPre}" 
                      Style="{StaticResource outputTextBoxStyle}"/>
@@ -69,25 +71,30 @@
             </Grid.ColumnDefinitions>
             <Rectangle Grid.Row="0" Grid.ColumnSpan="2" Fill="{DynamicResource ThemeBrush}"/>
             <CheckBox Grid.Row="0" Grid.ColumnSpan="2"
-                      Content="导出节点后继条件" IsChecked="{Binding OutputEnd}"
+                      Content="{Binding [Out_OutputEnd], Source={x:Static r:LanguageManager.Instance}}" 
+                      IsChecked="{Binding OutputEnd}"
                       Template="{StaticResource settingCheckBox}"/>
             <Rectangle Grid.Row="1" Grid.ColumnSpan="2" Fill="{DynamicResource ThemeBrush}"/>
             <CheckBox Grid.Row="1" Grid.ColumnSpan="2"
-                      Content="忽略空答案" IsChecked="{Binding IgnoreEmptyAnswer}"
+                      Content="{Binding [Out_IgnoreEmptyAnswer], Source={x:Static r:LanguageManager.Instance}}"
+                      IsChecked="{Binding IgnoreEmptyAnswer}"
                       Template="{StaticResource settingCheckBox}"/>
-            <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Text="##将被替换为问题文本，\#将被替换为#"
+            <TextBlock Grid.Row="2" Grid.ColumnSpan="2" 
+                       Text="{Binding [Out_EndTitle], Source={x:Static r:LanguageManager.Instance}}"
                        Foreground="{DynamicResource Foreground.BaseBrush}"
                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="问题模板"
+            <TextBlock Grid.Row="3" Grid.Column="0" 
+                       Text="{Binding [Out_QTemplate], Source={x:Static r:LanguageManager.Instance}}"
                        Foreground="{DynamicResource Foreground.BaseBrush}"
                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <TextBox Grid.Row="3" Grid.Column="1" VerticalScrollBarVisibility="Auto"
                      Text="{Binding QPattern}" Style="{StaticResource outputTextBoxStyle}"/>
             <TextBlock Grid.Row="4" Grid.ColumnSpan="2" 
-                       Text="##将被替换为答案文本，\#将被替换为#   @@将被替换为答案对应节点标题，\@将被替换为@"
+                       Text="{Binding [Out_EndAnswerTitle], Source={x:Static r:LanguageManager.Instance}}"
                        Foreground="{DynamicResource Foreground.BaseBrush}"
                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <TextBlock Grid.Row="5" Grid.Column="0" Text="答案模板"
+            <TextBlock Grid.Row="5" Grid.Column="0" 
+                       Text="{Binding [Out_AnswerTemplate], Source={x:Static r:LanguageManager.Instance}}"
                        Foreground="{DynamicResource Foreground.BaseBrush}"
                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <TextBox Grid.Row="5" Grid.Column="1" VerticalScrollBarVisibility="Auto"
@@ -116,7 +123,8 @@
                 <ColumnDefinition Width="Auto" SharedSizeGroup="tt"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="节点后" Foreground="{DynamicResource Foreground.BaseBrush}"
+            <TextBlock Grid.Column="0" Text="{Binding [Out_AfterNode], Source={x:Static r:LanguageManager.Instance}}"
+                       Foreground="{DynamicResource Foreground.BaseBrush}"
                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <TextBox Grid.Column="1" Text="{Binding NodeParPost}" 
                      Style="{StaticResource outputTextBoxStyle}"/>
@@ -136,18 +144,22 @@
             </Grid.ColumnDefinitions>
             <Rectangle Grid.Row="0" Grid.ColumnSpan="2" Fill="{DynamicResource ThemeBrush}"/>
             <CheckBox Grid.Row="0" Grid.ColumnSpan="2"
-                      Content="导出注释" IsChecked="{Binding OutputComment}"
+                      Content="{Binding [Out_OutputComment], Source={x:Static r:LanguageManager.Instance}}"
+                      IsChecked="{Binding OutputComment}"
                       Template="{StaticResource settingCheckBox}"/>
             <TextBox Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto"
                      Text="{Binding CommentParPre}" Style="{StaticResource outputTextBoxStyle}"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="片段注释前"
+            <TextBlock Grid.Row="1" Grid.Column="0" 
+                       Text="{Binding [Out_BeforeComment], Source={x:Static r:LanguageManager.Instance}}"
                        Foreground="{DynamicResource Foreground.BaseBrush}"
                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Rectangle Grid.Row="2" Grid.ColumnSpan="2" Fill="{DynamicResource ThemeBrush}"/>
             <CheckBox Grid.Row="2" Grid.ColumnSpan="2" 
-                      Content="忽略空注释" IsChecked="{Binding IgnoreEmptyComment}"
+                      Content="{Binding [Out_IgnoreEmptyComment], Source={x:Static r:LanguageManager.Instance}}"
+                      IsChecked="{Binding IgnoreEmptyComment}"
                       Template="{StaticResource settingCheckBox}"/>
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="片段注释后"
+            <TextBlock Grid.Row="3" Grid.Column="0" 
+                       Text="{Binding [Out_AfterComment], Source={x:Static r:LanguageManager.Instance}}"
                        Foreground="{DynamicResource Foreground.BaseBrush}"
                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <TextBox Grid.Row="3" Grid.Column="1" VerticalScrollBarVisibility="Auto"
@@ -185,14 +197,17 @@
             </Grid.ColumnDefinitions>
             <Rectangle Grid.Row="0" Grid.ColumnSpan="2" Fill="{DynamicResource ThemeBrush}"/>
             <CheckBox Grid.Row="0" Grid.ColumnSpan="2"
-                      Content="片段注释导出在文本前面" IsChecked="{Binding IsCommentBefore}"
+                      Content="{Binding [Out_IsCommentBefore], Source={x:Static r:LanguageManager.Instance}}" 
+                      IsChecked="{Binding IsCommentBefore}"
                       Template="{StaticResource settingCheckBox}"/>
             <TextBox Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto"
                      Text="{Binding ContentParPre}" Style="{StaticResource outputTextBoxStyle}"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="片段文本前"
+            <TextBlock Grid.Row="1" Grid.Column="0" 
+                       Text="{Binding [Out_BeforeContent], Source={x:Static r:LanguageManager.Instance}}"
                        Foreground="{DynamicResource Foreground.BaseBrush}"
                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="片段文本后"
+            <TextBlock Grid.Row="3" Grid.Column="0" 
+                       Text="{Binding [Out_AfterContent], Source={x:Static r:LanguageManager.Instance}}"
                        Foreground="{DynamicResource Foreground.BaseBrush}"
                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <TextBox Grid.Row="3" Grid.Column="1" VerticalScrollBarVisibility="Auto"

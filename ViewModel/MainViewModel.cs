@@ -210,8 +210,8 @@ namespace MultiBranchTexter.ViewModel
                     MessageBoxResult warnResult = MessageBox.Show
                     (
                         Application.Current.MainWindow,
-                        "尚未保存，是否保存？",
-                        "警告",
+                        LanguageManager.Instance["Msg_SaveFile"],
+                        LanguageManager.Instance["Win_Warn"],
                         MessageBoxButton.YesNoCancel
                     );
                     if (warnResult == MessageBoxResult.Yes)
@@ -229,7 +229,7 @@ namespace MultiBranchTexter.ViewModel
                      new Microsoft.Win32.SaveFileDialog
                      {
                          RestoreDirectory = true,
-                         Filter = "多分支导航文件|*.mbjson"
+                         Filter = LanguageManager.Instance["Sys_Extname"] + "|*.mbjson"
                      };
                 if (Directory.Exists(_fileDirPath))
                 { dialog.InitialDirectory = _fileDirPath; }
@@ -252,8 +252,8 @@ namespace MultiBranchTexter.ViewModel
                     MessageBoxResult warnResult = MessageBox.Show
                     (
                         Application.Current.MainWindow,
-                        "尚未保存，是否保存？",
-                        "警告",
+                         LanguageManager.Instance["Msg_SaveFile"],
+                        LanguageManager.Instance["Win_Warn"],
                         MessageBoxButton.YesNoCancel
                     );
                     if (warnResult == MessageBoxResult.Yes)
@@ -271,7 +271,7 @@ namespace MultiBranchTexter.ViewModel
                     new Microsoft.Win32.OpenFileDialog
                     {
                         RestoreDirectory = true,
-                        Filter = "多分支导航文件|*.mbjson"
+                        Filter = LanguageManager.Instance["Sys_Extname"] + "|*.mbjson"
                     };
                 if (Directory.Exists(_fileDirPath))
                 { dialog.InitialDirectory = _fileDirPath; }
@@ -326,7 +326,7 @@ namespace MultiBranchTexter.ViewModel
                     new Microsoft.Win32.SaveFileDialog
                     {
                         RestoreDirectory = true,
-                        Filter = "多分支导航文件|*.mbjson"
+                        Filter = LanguageManager.Instance["Sys_Extname"] + "|*.mbjson"
                     };
 
                 if (Directory.Exists(_fileDirPath))
@@ -516,7 +516,7 @@ namespace MultiBranchTexter.ViewModel
                         new Microsoft.Win32.SaveFileDialog
                         {
                             RestoreDirectory = true,
-                            Filter = "多分支导航文件|*.mbjson"
+                            Filter = LanguageManager.Instance["Sys_Extname"] + "|*.mbjson"
                         };
 
                     if (Directory.Exists(_fileDirPath))

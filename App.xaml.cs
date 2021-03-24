@@ -63,7 +63,7 @@ namespace MultiBranchTexter
                     catch
                     {
 #if !DEBUG
-                        MessageBox.Show("初次启动，需要修改注册表，\n请重新以管理员身份启动一次程序。");
+                        MessageBox.Show(LanguageManager.Instance["Msg_FirstStart"]);
 #endif
                     }
                 }));

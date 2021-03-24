@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using MultiBranchTexter.Resources;
 
 namespace MultiBranchTexter.View
 {
@@ -78,7 +79,7 @@ namespace MultiBranchTexter.View
                     string sv = dialog.FileName;
                     DirectoryInfo directoryInfo = new DirectoryInfo(sv);
                     if (directoryInfo.Exists && directoryInfo.GetFiles().Length > 0)
-                    { MessageBox.Show("检测到目标文件夹非空，请谨慎操作！"); }
+                    { MessageBox.Show(LanguageManager.Instance["Msg_NotEmptyDir"]); }
                     SavePath = dialog.FileName; 
                 }
             }

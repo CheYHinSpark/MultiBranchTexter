@@ -218,6 +218,12 @@ Create navigation file by Ctrl+Shift+N</value>
   <data name="Line_To" xml:space="preserve">
     <value>To </value>
   </data>
+  <data name="Msg_AEmpty" xml:space="preserve">
+    <value>Answer cannot be empty, and has been restored</value>
+  </data>
+  <data name="Msg_ARepeated" xml:space="preserve">
+    <value>Answer is repeated, and has been restored</value>
+  </data>
   <data name="Msg_ChangeEnd" xml:space="preserve">
     <value>Be sure to change end condition?
 This will delete all post connecting lines of this node, and the action cannot be cancelled!</value>
@@ -225,6 +231,10 @@ This will delete all post connecting lines of this node, and the action cannot b
   <data name="Msg_DeleteNode" xml:space="preserve">
     <value>Be sure to delete node?
 This will delete all connecting lines of this node, and the action cannot be cancelled!</value>
+  </data>
+  <data name="Msg_FirstStart" xml:space="preserve">
+    <value>First time startup, need to edit registry, 
+please restart as administrator</value>
   </data>
   <data name="Msg_LatestVer" xml:space="preserve">
     <value>Current version is the latest</value>
@@ -244,6 +254,9 @@ All connecting lines of these nodes will be deleted, and this action cannot be c
   </data>
   <data name="Msg_NewVerFound" xml:space="preserve">
     <value>New version is released  </value>
+  </data>
+  <data name="Msg_NotEmptyDir" xml:space="preserve">
+    <value>The directory is not empty, please be careful! </value>
   </data>
   <data name="Msg_SaveFile" xml:space="preserve">
     <value>File hasn't been saved. Save it now?</value>
@@ -285,6 +298,68 @@ new post node</value>
   <data name="N_YesNo" xml:space="preserve">
     <value>Yes &amp; No</value>
   </data>
+  <data name="Out_AfterComment" xml:space="preserve">
+    <value>After comment</value>
+  </data>
+  <data name="Out_AfterContent" xml:space="preserve">
+    <value>After content</value>
+  </data>
+  <data name="Out_AfterNode" xml:space="preserve">
+    <value>After node</value>
+  </data>
+  <data name="Out_AnswerTemplate" xml:space="preserve">
+    <value>Answer template</value>
+  </data>
+  <data name="Out_BeforeComment" xml:space="preserve">
+    <value>Before comment</value>
+  </data>
+  <data name="Out_BeforeContent" xml:space="preserve">
+    <value>Before content</value>
+  </data>
+  <data name="Out_BeforeNode" xml:space="preserve">
+    <value>Before node</value>
+  </data>
+  <data name="Out_Browser" xml:space="preserve">
+    <value>Browser</value>
+  </data>
+  <data name="Out_EndAnswerTitle" xml:space="preserve">
+    <value>## will be replaced by answer text, \# will be replaced by #
+@@ will be replaced by corresponding node's title, \@ will be replaced by @</value>
+  </data>
+  <data name="Out_EndTitle" xml:space="preserve">
+    <value>## will be replaced by question text, \# will be replaced by #</value>
+  </data>
+  <data name="Out_IgnoreEmptyAnswer" xml:space="preserve">
+    <value>Ignore empty answer</value>
+  </data>
+  <data name="Out_IgnoreEmptyComment" xml:space="preserve">
+    <value>Ignore empty comment</value>
+  </data>
+  <data name="Out_IsCommentBefore" xml:space="preserve">
+    <value>Output comment before content</value>
+  </data>
+  <data name="Out_Output" xml:space="preserve">
+    <value>Output</value>
+  </data>
+  <data name="Out_OutputComment" xml:space="preserve">
+    <value>Output comment</value>
+  </data>
+  <data name="Out_OutputEnd" xml:space="preserve">
+    <value>Output end condition</value>
+  </data>
+  <data name="Out_Path" xml:space="preserve">
+    <value>Path</value>
+  </data>
+  <data name="Out_QTemplate" xml:space="preserve">
+    <value>Question template</value>
+  </data>
+  <data name="Out_Title" xml:space="preserve">
+    <value>&amp;&amp; will be replaced by node's title, \&amp; will be replaced by &amp;
+$$ will be replaced by file name, \$ will be replaced by $</value>
+  </data>
+  <data name="Out_Win" xml:space="preserve">
+    <value>Output individually</value>
+  </data>
   <data name="Set_CheckUpdate" xml:space="preserve">
     <value>Check update</value>
   </data>
@@ -320,6 +395,9 @@ new post node</value>
   </data>
   <data name="Set_ViewWeb" xml:space="preserve">
     <value>View Github</value>
+  </data>
+  <data name="Sys_Extname" xml:space="preserve">
+    <value>MBT File</value>
   </data>
   <data name="Tab_Back" xml:space="preserve">
     <value>Back to picture</value>
