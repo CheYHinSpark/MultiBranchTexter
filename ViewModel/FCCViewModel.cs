@@ -369,10 +369,14 @@ namespace MultiBranchTexter.ViewModel
             //nodeButtons总表
             List<NodeButton> nodeButtons = new List<NodeButton>();
             List<TextNode> _Nodes = new List<TextNode>();
-            foreach (TextNode node in Nodes)
+
+            foreach (UIElement element in Container.Children)
             {
-                _Nodes.Add(node);
-                nodeButtons.Add(new NodeButton(node));
+                if (element is NodeButton)
+                {
+                    _Nodes.Add((element as NodeButton).TextNode);
+                    nodeButtons.Add((element as NodeButton));
+                }
             }
 
             int num = Nodes.Count;
@@ -413,7 +417,7 @@ namespace MultiBranchTexter.ViewModel
                     {
                         EndCondition ec = _Nodes[i].EndCondition;
 
-                        for (int j = 0; j < ec.Answers.Count;j++)
+                        for (int j = 0; j < ec.Answers.Count; j++)
                         { 
                             if (ec.Answers[j].Item2 == "")
                             { continue; }//直接跳过空的
@@ -489,11 +493,12 @@ namespace MultiBranchTexter.ViewModel
             await _container.Dispatcher.BeginInvoke(new Action(
                delegate
                {
-                   for (int i = 0; i < nodeButtons.Count; i++)
+                   for (int i = 0; i < num; i++)
                    { nodeButtons[i].UpdateLines(); }
                }));
             Debug.WriteLine("节点图重绘完成");
             ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_Rearrange"]);
+            ViewModelFactory.Main.IsModified = true;
             NodeCount = num;
         }
 

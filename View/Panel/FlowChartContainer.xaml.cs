@@ -31,14 +31,20 @@ namespace MultiBranchTexter.View
 
         #region 事件
         //滚轮事件
-        private void ScrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             // 按住Ctrl，开始放大缩小
             if (Keyboard.Modifiers == ModifierKeys.Control)
             {
                 e.Handled = true;
+                double x = scrollViewer.HorizontalOffset / container.ScaleRatio;
+                double y = scrollViewer.VerticalOffset / container.ScaleRatio;
                 container.ScaleRatio += 0.1 * Math.Sign(e.Delta);
                 container.ScaleRatio = container.ScaleRatio < 0.1 ? 0.1 : container.ScaleRatio;
+
+                // 放大缩小后，保持左上角相对位置不变
+                scrollViewer.ScrollToHorizontalOffset(x * container.ScaleRatio);
+                scrollViewer.ScrollToVerticalOffset(y * container.ScaleRatio);
             }
         }
 
