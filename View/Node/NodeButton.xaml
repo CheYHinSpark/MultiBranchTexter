@@ -3,7 +3,6 @@
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             xmlns:v="clr-namespace:MultiBranchTexter.View"
             xmlns:r="clr-namespace:MultiBranchTexter.Resources"
-            Loaded="NodeBase_Loaded"
             MouseDoubleClick="NodeBase_MouseDoubleClick"
             HorizontalAlignment="Left" VerticalAlignment="Top">
     <Grid>

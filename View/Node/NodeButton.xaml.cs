@@ -46,6 +46,7 @@ namespace MultiBranchTexter.View
             TextNode = newNode;
             FatherNode = this;
             ShowEndCondition();
+            Loaded += NodeBase_Loaded;
         }
 
         #region 事件
