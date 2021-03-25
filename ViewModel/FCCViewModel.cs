@@ -84,7 +84,8 @@ namespace MultiBranchTexter.ViewModel
                 _undrawedNode = value;
                 if (value == 0)// 节点全部生成了，再画线
                 {
-                    ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_CreateFC"]);
+                    //ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_CreateFC"]);                    
+                    ViewModelFactory.Main.ShowWorkGrid();
 
                     _container.Dispatcher.Invoke(new Action(
                         delegate
@@ -334,7 +335,7 @@ namespace MultiBranchTexter.ViewModel
         #region 方法
 
         /// <summary> 输入文件路径加载之 </summary>
-        public async Task<bool> Load(string mbtxtPath)
+        public async void Load(string mbtxtPath)
         {
             await _container.Dispatcher.BeginInvoke(new Action(
                 delegate { _container.Children.Clear(); }));
@@ -351,11 +352,8 @@ namespace MultiBranchTexter.ViewModel
                 ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_OpenFailed"]);
 #if DEBUG
                 throw new FormatException("全部木大");
-#else
-                return false;
 #endif
             }
-            return true;
         }
 
         #region 字词统计
