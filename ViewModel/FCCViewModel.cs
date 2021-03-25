@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.IO;
 using System.Threading.Tasks;
 using MultiBranchTexter.Resources;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace MultiBranchTexter.ViewModel
 {
@@ -72,7 +74,38 @@ namespace MultiBranchTexter.ViewModel
         }
         #endregion
 
-        #region 字数次数统计
+        #region 没画完的Node
+        private int _undrawedNode;
+        public int UndrawedNode
+        {
+            get { return _undrawedNode; }
+            set
+            {
+                _undrawedNode = value;
+                if (value == 0)// 节点全部生成了，再画线
+                {
+                    ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_CreateFC"]);
+
+                    _container.Dispatcher.Invoke(new Action(
+                        delegate
+                        {
+                            HashSet<NodeButton> nodeButtons = new HashSet<NodeButton>();
+                            foreach (UIElement element in Container.Children)
+                            {
+                                if (element is NodeButton)
+                                { nodeButtons.Add(element as NodeButton); }
+                            }
+                            foreach (NodeButton node in nodeButtons)
+                            { node.DrawPostLines(); }
+                            CountCharWord(true);
+                        }), DispatcherPriority.ApplicationIdle);
+                }
+                RaisePropertyChanged("UndrawedNode");
+            }
+        }
+        #endregion
+
+        #region 字数词数统计
         private int _charCount;
         public int CharCount
         {
@@ -301,39 +334,31 @@ namespace MultiBranchTexter.ViewModel
         #region 方法
 
         /// <summary> 输入文件路径加载之 </summary>
-        public bool Load(string mbtxtPath)
+        public async Task<bool> Load(string mbtxtPath)
         {
-            _container.Children.Clear();
+            await _container.Dispatcher.BeginInvoke(new Action(
+                delegate { _container.Children.Clear(); }));
             Nodes.Clear();
             SelectedNodes.Clear();// <--必须
             try
             {
                 var nodes = MetadataFile.ReadTextNodes(mbtxtPath);
-                _container.Dispatcher.BeginInvoke(new Action(
+                await _container.Dispatcher.BeginInvoke(new Action(
                     delegate { DrawFlowChart(nodes); }));
             }
             catch 
             {
-                try//1.1.4版本兼容
-                {
-                    var nodes = MetadataFile.ReadVeryNodes(mbtxtPath);
-                    _container.Dispatcher.BeginInvoke(new Action(
-                        delegate { DrawFlowChart(nodes); }));
-                }
-                catch
-                {
-                    ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_OpenFailed"]);
+                ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_OpenFailed"]);
 #if DEBUG
-                    throw new FormatException("全部木大");
+                throw new FormatException("全部木大");
 #else
-                    return false;
+                return false;
 #endif
-                }
             }
-            CountCharWord(true);
             return true;
         }
 
+        #region 字词统计
         public async void CountCharWord(bool totalReCount)
         {
             await Task.Delay(10);// <--不然有许多bug
@@ -355,6 +380,7 @@ namespace MultiBranchTexter.ViewModel
                     WordCount = w;
                 }));
         }
+        #endregion
 
         #region 流程图绘制方法
         /// <summary>
@@ -646,6 +672,7 @@ namespace MultiBranchTexter.ViewModel
             waitingNode = null;
             Debug.WriteLine("开始绘制节点图");
             int num = textNodes.Count;
+            UndrawedNode = num;
             //nodeButtons总表
             List<NodeButton> nodeButtons = new List<NodeButton>();
             await _container.Dispatcher.BeginInvoke(new Action(
@@ -658,7 +685,9 @@ namespace MultiBranchTexter.ViewModel
                         nodeButtons.Add(new NodeButton(textNodes[i].Node));
                     }
                 }));
+
             Debug.WriteLine("节点创建完成");
+
             await _container.Dispatcher.BeginInvoke(new Action(
                 delegate
                 {
@@ -681,7 +710,6 @@ namespace MultiBranchTexter.ViewModel
                                     found = true;
                                     //准备为nodeButton添加post
                                     NodeButton.Link(nodeButtons[i], nodeButtons[k], ec.Answers[j].Item1);
-                                    //mat[i, k] = true;
                                     break;
                                 }
                             }
@@ -690,7 +718,9 @@ namespace MultiBranchTexter.ViewModel
                         }
                     }
                 }));
+
             Debug.WriteLine("节点链接完成");
+
             await _container.Dispatcher.BeginInvoke(new Action(
                 delegate
                 {
@@ -701,11 +731,12 @@ namespace MultiBranchTexter.ViewModel
                         _container.Children.Add(nodeButtons[i]);
                     }
                 }));
+
             Debug.WriteLine("节点绘制完成");
+
             //添加线
-            //连线现在放到别的地方，即nodebutton的loaded里面执行
+            //连线现在放到别的地方，即nodebutton全部loaded之后执行
             Debug.WriteLine("节点图创建完成");
-            ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_CreateFC"]);
             NodeCount = num;
         }
         #endregion
@@ -910,7 +941,7 @@ namespace MultiBranchTexter.ViewModel
             newNodeButton.Move(-newNodeButton.ActualWidth / 2, -newNodeButton.ActualHeight / 2);
             //画新线
             _container.Children.Add(new ConnectingLine(preNode, newNodeButton));
-            //newNodeButton到post不用画，因为创建newNodebutton时会自动画，否则会出现两条
+            _container.Children.Add(new ConnectingLine(newNodeButton, postNode));
 
             ViewModelFactory.Main.IsModified = true;
             NodeCount = GetNodeCount();

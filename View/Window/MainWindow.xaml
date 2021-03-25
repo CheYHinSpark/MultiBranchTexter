@@ -36,6 +36,15 @@
                        HorizontalAlignment="Center" VerticalAlignment="Center"
                        Foreground="{DynamicResource Foreground.BaseBrush}" FontSize="24"/>
         </Grid>
+        <!--进度条--><!--
+        <Grid Visibility="{Binding WaitVisi}" IsHitTestVisible="False"
+              Opacity="{Binding WaitOpacity}"
+              Background="{DynamicResource BaseBrush}" Grid.RowSpan="2">
+            <Slider Margin="120" Value="{Binding WaitValue, UpdateSourceTrigger=PropertyChanged}"
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Stretch"
+                    Minimum="0" Maximum="100"/>
+        </Grid>-->
         <!--正式的两个工作控件-->
         <Grid Grid.Row="1" Background="{DynamicResource ThemeBrush}" IsEnabled="{Binding IsWorkGridVisible}">
             <Grid.ColumnDefinitions>
@@ -312,4 +321,5 @@
             </StackPanel>
         </v:ToolBarBorder>
     </Grid>
+
 </v:MetroWindow>

@@ -58,8 +58,8 @@ namespace MultiBranchTexter.View
 
             Panel.SetZIndex(this, 2);
             Debug.WriteLine("节点成功生成" + TextNode.Name);
-            await Task.Delay(20);//这是为了能让线条的位置正确
-            DrawPostLines();
+            await Task.Delay(1);//这是为了能让线条的位置正确
+            ViewModelFactory.FCC.UndrawedNode -= 1;
         }
 
         #region 移动与选中事件

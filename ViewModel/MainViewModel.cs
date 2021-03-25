@@ -11,11 +11,14 @@ using System.Windows;
 using System.Windows.Input;
 using System.Text.RegularExpressions;
 using MultiBranchTexter.Resources;
+using System.Threading;
 
 namespace MultiBranchTexter.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
+        #region 字段
+
         #region 左右显示相关
         private bool _isWorkGridVisible;
         public bool IsWorkGridVisible
@@ -161,6 +164,31 @@ namespace MultiBranchTexter.ViewModel
         /// <summary> 当前正在工作的tabitem的viewmodel </summary>
         public TabItemViewModel WorkingViewModel
         { get { return _workTabs[_selectedIndex].ViewModel; } }
+        #endregion
+
+        private Visibility _waitVisi;
+        public Visibility WaitVisi
+        {
+            get { return _waitVisi; }
+            set
+            { _waitVisi = value; RaisePropertyChanged("WaitVisi"); }
+        }
+
+        private double _waitValue;
+        public double WaitValue
+        {
+            get { return _waitValue; }
+            set
+            { _waitValue = value; RaisePropertyChanged("WaitValue"); }
+        }
+
+        private double _waitOpacity;
+        public double WaitOpacity
+        {
+            get { return _waitOpacity; }
+            set
+            { _waitOpacity = value; RaisePropertyChanged("WaitOpacity"); }
+        }
         #endregion
 
         #region 命令
@@ -401,6 +429,9 @@ namespace MultiBranchTexter.ViewModel
             IsHintAwake = false;
             InText = "";
             OutText = "";
+            WaitVisi = Visibility.Hidden;
+            WaitValue = 0;
+            WaitOpacity = 0;
             //IsFullScreen = false;//这个不能要。。。
         }
 
@@ -540,6 +571,8 @@ namespace MultiBranchTexter.ViewModel
         /// <summary> 打开文件 </summary>
         public async void OpenFile(string path)
         {
+            WaitVisi = Visibility.Visible;
+
             if (!File.Exists(path))
             { return; }
 
@@ -547,19 +580,21 @@ namespace MultiBranchTexter.ViewModel
             if (IsWorkGridVisible)
             {
                 IsWorkGridVisible = false;
-                await Task.Delay(400);//等待动画放完
+                await Task.Delay(450);//等待动画放完
             }
 
             //关闭原有标签页
             WorkTabs.Clear();
             IsModified = false;
-            if (ViewModelFactory.FCC.Load(path))
-            {
-                //新的文件名
-                FileName = path;
-                //打开新文件
-                IsWorkGridVisible = true;
-            }
+            new Thread(new ThreadStart(async () => {
+                if (await ViewModelFactory.FCC.Load(path))
+                {
+                    //新的文件名
+                    FileName = path;
+                    //打开新文件
+                    IsWorkGridVisible = true;
+                }
+            })).Start();
         }
 
         public void CreateFile(string path)

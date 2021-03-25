@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace MultiBranchTexter.View
 {
@@ -93,6 +94,8 @@ namespace MultiBranchTexter.View
         //点击scrollViewer
         private void ScrollViewer_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (e.OriginalSource is Rectangle)
+            { Debug.WriteLine((e.OriginalSource as Rectangle).Fill); }
             //更新点击点
             _clickPoint = e.GetPosition((ScrollViewer)sender);
             _oldclickPoint = _clickPoint;

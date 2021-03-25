@@ -1,8 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:MultiBranchTexter"
-                    xmlns:v="clr-namespace:MultiBranchTexter.View"
-                    xmlns:vvt="clr-namespace:MultiBranchTexter.Converters">
+                    xmlns:v="clr-namespace:MultiBranchTexter.View">
     <!--searchBox的按钮模板-->
     <ControlTemplate x:Key="searchBoxBtnTemp" TargetType="{x:Type Button}">
         <Border x:Name="MainBorder" Background="Transparent">
