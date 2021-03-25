@@ -258,6 +258,10 @@
   <data name="Msg_NotEmptyDir" xml:space="preserve">
     <value>检测到目标文件夹非空，请谨慎操作！</value>
   </data>
+  <data name="Msg_Rearrange" xml:space="preserve">
+    <value>你即将重新排列所有节点！
+这可能造成短暂的混乱，并且此操作不可撤销！</value>
+  </data>
   <data name="Msg_SaveFile" xml:space="preserve">
     <value>尚未保存，是否保存？</value>
   </data>

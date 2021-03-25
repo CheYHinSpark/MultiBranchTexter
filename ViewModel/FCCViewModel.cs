@@ -240,8 +240,8 @@ namespace MultiBranchTexter.ViewModel
             MessageBoxResult warnResult = MessageBox.Show
                             (
                             Application.Current.MainWindow,
-                            "你即将重新排列所有节点！\n这可能造成短暂的混乱，并且此操作不可撤销！",
-                            "警告",
+                            LanguageManager.Instance["Msg_Rearrange"],
+                            LanguageManager.Instance["Win_Warn"],
                             MessageBoxButton.YesNo
                             );
             if (warnResult == MessageBoxResult.No)

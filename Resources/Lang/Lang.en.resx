@@ -258,11 +258,15 @@ All connecting lines of these nodes will be deleted, and this action cannot be c
   <data name="Msg_NotEmptyDir" xml:space="preserve">
     <value>The directory is not empty, please be careful! </value>
   </data>
+  <data name="Msg_Rearrange" xml:space="preserve">
+    <value>You are going to rearrange nodes' picture! 
+This may cause chaos, and this action cannot be cancelled. </value>
+  </data>
   <data name="Msg_SaveFile" xml:space="preserve">
-    <value>File hasn't been saved. Save it now?</value>
+    <value>File has been modified. Save it now?</value>
   </data>
   <data name="Msg_SaveTxt" xml:space="preserve">
-    <value>Text hasn't been saved. Save it now?</value>
+    <value>Text has been modified. Save it now?</value>
   </data>
   <data name="Msg_UpdateQ" xml:space="preserve">
     <value>Update now?</value>
