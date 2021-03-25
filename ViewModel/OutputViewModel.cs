@@ -129,6 +129,17 @@
         }
         #endregion
 
+        #region 导出扩展名
+        private int _extNameIndex;
+
+        public int ExtNameIndex
+        {
+            get { return _extNameIndex; }
+            set
+            { _extNameIndex = value; RaisePropertyChanged("ExtNameIndex"); }
+        }
+        #endregion
+
         #endregion
 
         public OutputViewModel()
@@ -146,6 +157,7 @@
             IgnoreEmptyAnswer = true;
             QPattern = "##";
             APattern = "## @@";
+            ExtNameIndex = 0;
         }
     }
 }

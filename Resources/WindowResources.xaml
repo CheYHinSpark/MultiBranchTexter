@@ -559,6 +559,11 @@
                                 Content="{Binding [Out_Browser], Source={x:Static r:LanguageManager.Instance}}"
                                 Template="{StaticResource textButtonTemplate}"/>
                     </Border>
+                    <ComboBox Margin="8,2,0,2" SelectedIndex="{Binding ExtNameIndex}">
+                        <ComboBoxItem Content=".txt"/>
+                        <ComboBoxItem Content=".md"/>
+                        <ComboBoxItem Content=".tex"/>
+                    </ComboBox>
                 </StackPanel>
                 <Border Background="{DynamicResource ThemeBrush}" Margin="0,0,8,0"
                         HorizontalAlignment="Right">

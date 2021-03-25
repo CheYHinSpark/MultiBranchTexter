@@ -79,7 +79,13 @@ namespace MultiBranchTexter.View
 
                 result += ModStr(ViewModelFactory.Output.NodeParPost, node.Name, mainTitle);
 
-                File.WriteAllText(SavePath + "\\" + node.Name + ".txt", result);
+                string ext = ".txt";
+                if (ViewModelFactory.Output.ExtNameIndex == 1)
+                { ext = ".md"; }
+                else if (ViewModelFactory.Output.ExtNameIndex == 2)
+                { ext = ".tex"; }
+
+                File.WriteAllText(SavePath + "\\" + node.Name + ext, result);
             }
             Process.Start("explorer.exe", SavePath);
             Debug.WriteLine("导出成功");
