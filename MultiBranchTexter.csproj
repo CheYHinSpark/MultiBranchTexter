@@ -49,4 +49,17 @@
     </Resource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="View\TextSearchBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="View\TextSearchBox.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
 </Project>

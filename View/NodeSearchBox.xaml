@@ -18,14 +18,15 @@
                    Margin="4" VerticalAlignment="Center"/>
         <Button x:Name="closeBtn" Grid.Column="1" Margin="2" 
                 Template="{DynamicResource searchBoxBtnTemp}"
-                Click="CloseBtn_Click"/>
+                Content="M5,5 L15,15 M5,15 L15,5" Click="CloseBtn_Click"/>
         <TextBox x:Name="findBox" Grid.Row="1" Grid.Column="0" Margin="2"
                  VerticalAlignment="Bottom" ToolTip="{x:Null}"
                  Background="{DynamicResource BaseBrush}"
                  TextChanged="FindBox_TextChanged"/>
         <Button x:Name="nextBtn" Grid.Row="1" Grid.Column="1" Margin="2" 
                 Template="{DynamicResource searchBoxBtnTemp}"
-                Click="NextBtn_Click"/>
+                ToolTip="{Binding [Tab_SearchNext], Source={x:Static r:LanguageManager.Instance}}"
+                Content="M4,10 L16,10 M12,5 16,10 L12,15" Click="NextBtn_Click"/>
         <Rectangle Grid.Row="2" Grid.ColumnSpan="2" Fill="{DynamicResource BaseBrush}"/>
     </Grid>
 </UserControl>

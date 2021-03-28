@@ -422,6 +422,12 @@
   <data name="Tab_HideComment" xml:space="preserve">
     <value>隐藏备注</value>
   </data>
+  <data name="Tab_SearchLast" xml:space="preserve">
+    <value>搜索上一个</value>
+  </data>
+  <data name="Tab_SearchNext" xml:space="preserve">
+    <value>搜索下一个</value>
+  </data>
   <data name="Tab_ShowComment" xml:space="preserve">
     <value>显示备注</value>
   </data>

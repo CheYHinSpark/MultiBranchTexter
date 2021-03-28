@@ -56,6 +56,9 @@
     <Page Update="View\HintTextBlock.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="View\TextSearchBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="View\Window\OutputAsTxtWindow.xaml">
       <SubType>Designer</SubType>
     </Page>

@@ -424,6 +424,12 @@ $$ will be replaced by file name, \$ will be replaced by $</value>
   <data name="Tab_HideComment" xml:space="preserve">
     <value>Hide comment</value>
   </data>
+  <data name="Tab_SearchLast" xml:space="preserve">
+    <value>Search last</value>
+  </data>
+  <data name="Tab_SearchNext" xml:space="preserve">
+    <value>Search next</value>
+  </data>
   <data name="Tab_ShowComment" xml:space="preserve">
     <value>Show comment</value>
   </data>

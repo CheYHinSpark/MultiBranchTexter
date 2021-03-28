@@ -9,13 +9,19 @@
     <TabItem.DataContext>
         <vm:TabItemViewModel/>
     </TabItem.DataContext>
-   
+
     <Grid Background="{DynamicResource MainBrush}">
+        <Grid.InputBindings>
+            <KeyBinding Gesture="Ctrl+F" Command="{Binding StartSearchCommand}"/>
+        </Grid.InputBindings>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="1"/>
+            <RowDefinition Height="{Binding SearchBoxVisi}"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        
         <Rectangle IsEnabled="{Binding IsFocused}">
             <Rectangle.Style>
                 <Style TargetType="{x:Type Rectangle}">
@@ -29,8 +35,9 @@
             </Rectangle.Style>
         </Rectangle>
 
+        <v:TextSearchBox Grid.Row="1" HorizontalAlignment="Right"/>
 
-        <v:MBScViewer Grid.Row="1"
+        <v:MBScViewer Grid.Row="2"
                       VerticalScrollBarVisibility="Auto"
                       PreviewTouchDown="ScrollViewer_TouchDown"
                       TouchMove="ScrollViewer_TouchMove"
@@ -41,6 +48,7 @@
             </v:MBScViewer.RenderTransform>
             <v:MBScViewer.InputBindings>
                 <KeyBinding Gesture="Ctrl+Alt+Z" Command="{Binding UndoCommand}"/>
+                <KeyBinding Gesture="Ctrl+F" Command="{Binding StartSearchCommand}"/>
                 <KeyBinding Gesture="Ctrl+Alt+Y" Command="{Binding RedoCommand}"/>
             </v:MBScViewer.InputBindings>
             <Grid>
@@ -94,7 +102,7 @@
         </v:MBScViewer>
         
         <!--下方信息栏-->
-        <v:TabEnd x:Name="tabEnd" Grid.Row="2" HorizontalAlignment="Stretch"/>
+        <v:TabEnd x:Name="tabEnd" Grid.Row="3" HorizontalAlignment="Stretch"/>
         <!--这是为了让tabend里的信息可以绑定-->
         <TextBlock x:Name="copyWordCount" Text="{Binding CharCount}" Visibility="Collapsed"/>
         <TextBlock x:Name="copyCharCount" Text="{Binding WordCount}" Visibility="Collapsed"/>

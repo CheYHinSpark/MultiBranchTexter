@@ -17,6 +17,8 @@ namespace MultiBranchTexter.ViewModel
     public class TabItemViewModel: ViewModelBase
     {
         #region 字段
+
+        #region 文本，字数
         private string _isModified;
         public string IsModified
         {
@@ -48,6 +50,7 @@ namespace MultiBranchTexter.ViewModel
             set
             { _textFragments = value; RaisePropertyChanged("TextFragments"); }
         }
+        #endregion
 
         #region undo redo
         private int _focusIndex;
@@ -101,6 +104,24 @@ namespace MultiBranchTexter.ViewModel
         }
         #endregion
 
+        #region 文本搜索
+        private string _searchStr;
+
+        private string _searchBoxVisi;
+
+        public string SearchBoxVisi
+        {
+            get { return _searchBoxVisi; }
+            set { _searchBoxVisi = value; RaisePropertyChanged("SearchBoxVisi"); }
+        }
+
+        private List<(int, bool, int)> _searchedResult = new List<(int, bool, int)>();
+
+        private int _searchedLength = 0;
+
+        private int _searchedIndex = 0;
+        #endregion
+
         #endregion
 
         #region 构造方法
@@ -117,6 +138,7 @@ namespace MultiBranchTexter.ViewModel
             FocusInfo = null;
             SelectionStart = 0;
             SelectionLength = 0;
+            SearchBoxVisi = "0";
         }
         #endregion
 
@@ -150,11 +172,13 @@ namespace MultiBranchTexter.ViewModel
             IsModified = "*";
             ViewModelFactory.Main.IsModified = true;
             SavePrevious();
+            _searchedResult.Clear();
         }
         #endregion
 
         #region 命令
-        public ICommand UndoCommand => new RelayCommand(async (t) =>
+        /// <summary> 撤销命令 </summary>
+        public ICommand UndoCommand => new RelayCommand(async (_) =>
         {
             if (_undoRedoTask != null && !_undoRedoTask.IsCompleted)
             { return; }
@@ -163,6 +187,7 @@ namespace MultiBranchTexter.ViewModel
             await _undoRedoTask;
         });
 
+        /// <summary> 重做命令 </summary>
         public ICommand RedoCommand => new RelayCommand(async (t) =>
         {
             if (_undoRedoTask != null && !_undoRedoTask.IsCompleted)
@@ -171,6 +196,13 @@ namespace MultiBranchTexter.ViewModel
             _undoRedoTask = Task.Delay(50);
             await _undoRedoTask;
         });
+
+        /// <summary> 开始搜索命令 </summary>
+        public ICommand StartSearchCommand => new RelayCommand((t) =>
+        {
+            SearchBoxVisi = "Auto";
+        });
+
         #endregion
 
         #region 方法
@@ -312,15 +344,94 @@ namespace MultiBranchTexter.ViewModel
 
             //如果一段连续写入结束了，重写缓冲区
             _bufferData = (Clone(TextFragments), FocusIndex, FocusInfo, SelectionStart, SelectionLength);
+            Debug.WriteLine("存入结束");
         }
-
-       
 
         public void ClearUndoStack()
         {
             _previousData.Clear();
             Debug.WriteLine("清除了undo栈");
             _bufferData = (Clone(TextFragments), FocusIndex, FocusInfo, SelectionStart, SelectionLength);
+        }
+        #endregion
+
+        #region 搜索
+        public void Search(string str)
+        {
+            _searchedLength = str.Length;
+            _searchStr = str;
+            if (_searchedLength == 0)
+            { return; }
+            _searchedResult.Clear();
+            for (int i = 0; i < _textFragments.Count; i++)
+            {
+                int re = _textFragments[i].Comment.IndexOf(str);
+                while (re > 0)
+                {
+                    _searchedResult.Add((i, false, re));
+                    re = _textFragments[i].Comment.IndexOf(str, re + _searchedLength);
+                }
+                re = _textFragments[i].Content.IndexOf(str);
+                while (re > 0)
+                {
+                    _searchedResult.Add((i, true, re));
+                    re = _textFragments[i].Content.IndexOf(str, re + _searchedLength);
+                }
+            }
+
+            if (_searchedResult.Count == 0)
+            { return; }
+
+            for (int i = 0; i < _searchedResult.Count; i++)
+            {
+                if (_searchedResult[i].Item1 < FocusIndex)
+                { continue; }
+
+                _searchedIndex = i;
+                break;
+            }
+
+            Debug.WriteLine(_searchedResult[_searchedIndex]);
+            ContentPresenter cp = ViewModelFactory.Main.WorkingTab.
+                 fragmentContainer.ItemContainerGenerator
+                 .ContainerFromIndex(_searchedResult[_searchedIndex].Item1) as ContentPresenter;
+            DataTemplate MyDataTemplate = cp.ContentTemplate;
+
+            if (MyDataTemplate.FindName("TFP", cp) is TextFragmentPresenter tfp)
+            {
+                tfp.SetFocus(_searchedResult[_searchedIndex].Item3, _searchedResult[_searchedIndex].Item2, _searchedLength);
+            }
+        }
+
+        public void SearchNext(bool reverse = false)
+        {
+            if (_searchedResult.Count == 0)
+            { Search(_searchStr); }
+            if (_searchedResult.Count == 0)
+            { return; }
+
+            if (reverse)
+            {
+                _searchedIndex--;
+                if (_searchedIndex < 0)
+                { _searchedIndex = _searchedResult.Count - 1; }
+            }
+            else
+            {
+                _searchedIndex++;
+                if (_searchedIndex >= _searchedResult.Count)
+                { _searchedIndex = 0; }
+            }
+
+            ContentPresenter cp = ViewModelFactory.Main.WorkingTab.
+                    fragmentContainer.ItemContainerGenerator
+                    .ContainerFromIndex(_searchedResult[_searchedIndex].Item1) as ContentPresenter;
+            DataTemplate MyDataTemplate = cp.ContentTemplate;
+
+            if (MyDataTemplate.FindName("TFP", cp) is TextFragmentPresenter tfp)
+            {
+                tfp.SetFocus(_searchedResult[_searchedIndex].Item3, _searchedResult[_searchedIndex].Item2, _searchedLength);
+            }
         }
         #endregion
 

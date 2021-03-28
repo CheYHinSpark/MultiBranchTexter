@@ -6,7 +6,8 @@
         <Border x:Name="MainBorder" Background="Transparent">
             <Grid>
                 <Path x:Name="CP" Stroke="{DynamicResource Foreground.ThemeBrush}"
-                      StrokeThickness="2" Data="M4,10 L16,10 M12,5 16,10 L12,15"/>
+                      StrokeThickness="2" Data="{Binding Content, 
+                    RelativeSource={RelativeSource TemplatedParent}}"/>
             </Grid>
         </Border>
         <ControlTemplate.Triggers>
@@ -22,9 +23,6 @@
             </MultiTrigger>
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="Opacity" Value="0.8"/>
-            </Trigger>
-            <Trigger Property="Name" Value="closeBtn">
-                <Setter TargetName="CP" Property="Data" Value="M5,5 L15,15 M5,15 L15,5"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
