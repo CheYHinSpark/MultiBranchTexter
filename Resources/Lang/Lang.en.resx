@@ -218,6 +218,12 @@ Create navigation file by Ctrl+Shift+N</value>
   <data name="Line_To" xml:space="preserve">
     <value>To </value>
   </data>
+  <data name="Line_ToBegin" xml:space="preserve">
+    <value>To begin node</value>
+  </data>
+  <data name="Line_ToEnd" xml:space="preserve">
+    <value>To end node</value>
+  </data>
   <data name="Msg_AEmpty" xml:space="preserve">
     <value>Answer cannot be empty, and has been restored</value>
   </data>

@@ -218,6 +218,12 @@
   <data name="Line_To" xml:space="preserve">
     <value>到 </value>
   </data>
+  <data name="Line_ToBegin" xml:space="preserve">
+    <value>跳至起点</value>
+  </data>
+  <data name="Line_ToEnd" xml:space="preserve">
+    <value>跳至终点</value>
+  </data>
   <data name="Msg_AEmpty" xml:space="preserve">
     <value>回答不能为空，已还原</value>
   </data>

@@ -7,12 +7,14 @@
     <UserControl.Resources>
         <!--右键菜单部分-->
         <ContextMenu x:Key="lineContextMenu">
-            <MenuItem x:Name="addNode" 
-                      Header="{Binding [Line_AddNode], Source={x:Static r:LanguageManager.Instance}}"
+            <MenuItem Header="{Binding [Line_AddNode], Source={x:Static r:LanguageManager.Instance}}"
                       Click="AddNode_Click"/>
-            <MenuItem x:Name="deleteLine"
-                      Header="{Binding [Line_Delete], Source={x:Static r:LanguageManager.Instance}}"
+            <MenuItem Header="{Binding [Line_Delete], Source={x:Static r:LanguageManager.Instance}}"
                       Click="DeleteLine_Click"/>
+            <MenuItem Header="{Binding [Line_ToBegin], Source={x:Static r:LanguageManager.Instance}}"
+                      Click="ToBeginNode_Click"/>
+            <MenuItem Header="{Binding [Line_ToEnd], Source={x:Static r:LanguageManager.Instance}}"
+                      Click="ToEndNode_Click"/>
         </ContextMenu>
     </UserControl.Resources>
     <Path x:Name="Path" StrokeThickness="3" 

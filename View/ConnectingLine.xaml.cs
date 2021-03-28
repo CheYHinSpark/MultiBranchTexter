@@ -33,17 +33,25 @@ namespace MultiBranchTexter.View
         }
 
         #region 成员变量
-        /// <summary>
-        /// 起始节点
-        /// </summary>
+        /// <summary> 起始节点 </summary>
         public NodeBase BeginNode { get; set; }
-        /// <summary>
-        /// 终止节点
-        /// </summary>
+        /// <summary> 终止节点 </summary>
         public NodeButton EndNode { get; set; }
         //记录鼠标位置
         private Point mousePt = new Point();
         #endregion
+
+
+        public ICommand DeleteCommand => new RelayCommand((_) =>
+        {
+            //断开起始点和终止点
+            NodeButton.UnLink(BeginNode);
+            //删去本线条
+            Delete();
+        });
+
+
+
 
         #region 事件
 
@@ -85,6 +93,7 @@ namespace MultiBranchTexter.View
             //删去本线条
             Delete();
         }
+
         //添加节点
         private void AddNode_Click(object sender, RoutedEventArgs e)
         {
@@ -95,6 +104,14 @@ namespace MultiBranchTexter.View
             //删去本线条
             Delete();
         }
+
+        //跳到起始点
+        private void ToBeginNode_Click(object sender, RoutedEventArgs e)
+        { ViewModelFactory.FCC.LocateToNode(BeginNode.FatherTextNode); }
+
+        //跳到结束点
+        private void ToEndNode_Click(object sender, RoutedEventArgs e)
+        { ViewModelFactory.FCC.LocateToNode(EndNode.FatherTextNode); }
         #endregion
 
         #endregion

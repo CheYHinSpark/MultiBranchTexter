@@ -563,10 +563,10 @@ namespace MultiBranchTexter.ViewModel
             IsModified = false;
 
             await Task.Delay(20);
-
-            new Thread(new ThreadStart(() => {
-                ViewModelFactory.FCC.Load(path);
-            })).Start();
+            await Task.Run(new Action(() => {ViewModelFactory.FCC.Load(path); }));
+            //new Thread(new ThreadStart(() => {
+            //    ViewModelFactory.FCC.Load(path);
+            //})).Start();
         }
 
         public void CreateFile(string path)
