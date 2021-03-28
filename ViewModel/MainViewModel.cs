@@ -11,8 +11,6 @@ using System.Windows;
 using System.Windows.Input;
 using System.Text.RegularExpressions;
 using MultiBranchTexter.Resources;
-using System.Threading;
-using System.Windows.Threading;
 
 namespace MultiBranchTexter.ViewModel
 {
@@ -277,7 +275,8 @@ namespace MultiBranchTexter.ViewModel
                     new Microsoft.Win32.OpenFileDialog
                     {
                         RestoreDirectory = true,
-                        Filter = LanguageManager.Instance["Sys_Extname"] + "|*.mbjson"
+                        Filter = LanguageManager.Instance["Sys_Extname"] + "|*.mbjson|" +
+                        LanguageManager.Instance["Sys_AllExt"] + "|*.*"
                     };
                 if (Directory.Exists(_fileDirPath))
                 { dialog.InitialDirectory = _fileDirPath; }
@@ -515,23 +514,7 @@ namespace MultiBranchTexter.ViewModel
                 //让每个worktab保存
                 for (int i = 0; i < WorkTabs.Count; i++)
                 { WorkTabs[i].Save(); }
-                // 如果文件名不存在
-                if (!File.Exists(_fileName))
-                {
-                    Microsoft.Win32.SaveFileDialog dialog =
-                        new Microsoft.Win32.SaveFileDialog
-                        {
-                            RestoreDirectory = true,
-                            Filter = LanguageManager.Instance["Sys_Extname"] + "|*.mbjson"
-                        };
 
-                    if (Directory.Exists(_fileDirPath))
-                    { dialog.InitialDirectory = _fileDirPath; }
-                    if (dialog.ShowDialog() == true)
-                    {
-                        FileName = dialog.FileName;
-                    }
-                }
                 //保存文件
                 MetadataFile.WriteTextNodes(_fileName, ViewModelFactory.FCC.GetTextNodeWithLeftTopList());
                 IsModified = false;
@@ -540,7 +523,28 @@ namespace MultiBranchTexter.ViewModel
                     + _fileName[(_fileName.LastIndexOf('\\') + 1)..] 
                     + LanguageManager.Instance["Hint_SaveSuccess"]);
             }
-            catch { }
+            catch
+            {
+                Microsoft.Win32.SaveFileDialog dialog =
+                    new Microsoft.Win32.SaveFileDialog
+                    {
+                        RestoreDirectory = true,
+                        Filter = LanguageManager.Instance["Sys_Extname"] + "|*.mbjson"
+                    };
+
+                if (Directory.Exists(_fileDirPath))
+                { dialog.InitialDirectory = _fileDirPath; }
+                if (dialog.ShowDialog() == true)
+                {
+                    FileName = dialog.FileName;
+                }
+                MetadataFile.WriteTextNodes(_fileName, ViewModelFactory.FCC.GetTextNodeWithLeftTopList());
+                IsModified = false;
+                Debug.WriteLine("文件 " + _fileName + " 保存成功");
+                RaiseHint(LanguageManager.Instance["Hint_File"]
+                    + _fileName[(_fileName.LastIndexOf('\\') + 1)..]
+                    + LanguageManager.Instance["Hint_SaveSuccess"]);
+            }
         }
 
         /// <summary> 打开文件 </summary>
@@ -563,10 +567,7 @@ namespace MultiBranchTexter.ViewModel
             IsModified = false;
 
             await Task.Delay(20);
-            await Task.Run(new Action(() => {ViewModelFactory.FCC.Load(path); }));
-            //new Thread(new ThreadStart(() => {
-            //    ViewModelFactory.FCC.Load(path);
-            //})).Start();
+            await Task.Run(new Action(() => { ViewModelFactory.FCC.Load(path); }));
         }
 
         public void CreateFile(string path)

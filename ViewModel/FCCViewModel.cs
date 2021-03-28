@@ -13,7 +13,6 @@ using System.Windows.Media;
 using System.IO;
 using System.Threading.Tasks;
 using MultiBranchTexter.Resources;
-using System.Threading;
 using System.Windows.Threading;
 
 namespace MultiBranchTexter.ViewModel
@@ -84,7 +83,6 @@ namespace MultiBranchTexter.ViewModel
                 _undrawedNode = value;
                 if (value == 0)// 节点全部生成了，再画线
                 {
-                    //ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_CreateFC"]);                    
                     ViewModelFactory.Main.ShowWorkGrid();
 
                     _container.Dispatcher.Invoke(new Action(
@@ -347,12 +345,23 @@ namespace MultiBranchTexter.ViewModel
                 await _container.Dispatcher.BeginInvoke(new Action(
                     delegate { DrawFlowChart(nodes); }));
             }
-            catch 
+            catch
             {
-                ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_OpenFailed"]);
+                try
+                {
+                    var nodes = MetadataFile.ReadText(mbtxtPath);
+                    ViewModelFactory.Main.FileName += ".mbjson";
+                    ViewModelFactory.Main.IsModified = true;
+                    await _container.Dispatcher.BeginInvoke(new Action(
+                        delegate { DrawFlowChart(nodes); }));
+                }
+                catch
+                {
+                    ViewModelFactory.Main.RaiseHint(LanguageManager.Instance["Hint_OpenFailed"]);
 #if DEBUG
-                throw new FormatException("全部木大");
+                    throw new FormatException("全部木大");
 #endif
+                }
             }
         }
 

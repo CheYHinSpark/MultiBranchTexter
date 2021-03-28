@@ -13,53 +13,79 @@ namespace MultiBranchTexter.Model
 {
     class MetadataFile
     {
-        public Dictionary<string, (double left, double top)> coordinates = new Dictionary<string, (double left, double top)>();
-        public string nodeFilePath;
+        #region 废弃区
+        //public Dictionary<string, (double left, double top)> coordinates = new Dictionary<string, (double left, double top)>();
+        //public string nodeFilePath;
 
-        private List<TextNodeWithLeftTop> SetNodeCoordinate(List<TextNode> nodes)
-        {
-            return nodes.Select(n =>
-            {
-                string name = n.Name;
-                if (coordinates.TryGetValue(name, out (double left, double top) c))
-                {
-                    return new TextNodeWithLeftTop(n, c.left, c.top);
-                }
-                else
-                {
-                    Debug.WriteLine($"未找到节点{n.Name}坐标");
-                    ViewModelFactory.Main.IsModified = true;//这时相当于已经有修改了
-                    return new TextNodeWithLeftTop(n, 0, 0);
-                }
-            }).ToList();
-        }
+        //private List<TextNodeWithLeftTop> SetNodeCoordinate(List<TextNode> nodes)
+        //{
+        //    return nodes.Select(n =>
+        //    {
+        //        string name = n.Name;
+        //        if (coordinates.TryGetValue(name, out (double left, double top) c))
+        //        {
+        //            return new TextNodeWithLeftTop(n, c.left, c.top);
+        //        }
+        //        else
+        //        {
+        //            Debug.WriteLine($"未找到节点{n.Name}坐标");
+        //            ViewModelFactory.Main.IsModified = true;//这时相当于已经有修改了
+        //            return new TextNodeWithLeftTop(n, 0, 0);
+        //        }
+        //    }).ToList();
+        //}
 
+        //[Obsolete]
+        //public static List<TextNodeWithLeftTop> ReadVeryNodes(string metaUrl)
+        //{
+        //    var meta = JsonConvert.DeserializeObject<MetadataFile>(File.ReadAllText(metaUrl)) ?? new MetadataFile();
+        //    if (!File.Exists(meta.nodeFilePath))
+        //    {
+        //        //如果记载的没有找到，查找本地
+        //        string tryUrl = new Regex(@"\.mbjson$").Replace(metaUrl, ".json");
+        //        if (!File.Exists(tryUrl))
+        //        {
+        //            MessageBox.Show("无法找到对应的json文件！\n" +
+        //                "请用文本文档打开该mbjson文件编辑末尾的\"nodeFilePath\"项。");
+        //            ViewModelFactory.Main.IsWorkGridVisible = false;
+        //            throw new FormatException("未找到对应脚本文件");
+        //        }
+        //        meta.nodeFilePath = tryUrl;
+        //    }
+        //    var list = JsonConvert.DeserializeObject<List<OperationTextNode>>(File.ReadAllText(meta.nodeFilePath));
+        //    return meta.SetNodeCoordinate(OperationTextNode.ToTextNodeList(list));
+        //}
+        #endregion
+        
+        /// <summary>
+        /// 标准的读取
+        /// </summary>
         public static List<TextNodeWithLeftTop> ReadTextNodes(string metaUrl)
         {
             return JsonConvert.DeserializeObject<List<TextNodeWithLeftTop>>(File.ReadAllText(metaUrl));
         }
 
-        [Obsolete]
-        public static List<TextNodeWithLeftTop> ReadVeryNodes(string metaUrl)
+        /// <summary>
+        /// 读取Text
+        /// </summary>
+        public static List<TextNodeWithLeftTop> ReadText(string metaUrl)
         {
-            var meta = JsonConvert.DeserializeObject<MetadataFile>(File.ReadAllText(metaUrl)) ?? new MetadataFile();
-            if (!File.Exists(meta.nodeFilePath))
-            {
-                //如果记载的没有找到，查找本地
-                string tryUrl = new Regex(@"\.mbjson$").Replace(metaUrl, ".json");
-                if (!File.Exists(tryUrl))
+            TextNodeWithLeftTop node = new TextNodeWithLeftTop(
+                new TextNode(metaUrl) 
                 {
-                    MessageBox.Show("无法找到对应的json文件！\n" +
-                        "请用文本文档打开该mbjson文件编辑末尾的\"nodeFilePath\"项。");
-                    ViewModelFactory.Main.IsWorkGridVisible = false;
-                    throw new FormatException("未找到对应脚本文件");
-                }
-                meta.nodeFilePath = tryUrl;
-            }
-            var list = JsonConvert.DeserializeObject<List<OperationTextNode>>(File.ReadAllText(meta.nodeFilePath));
-            return meta.SetNodeCoordinate(OperationTextNode.ToTextNodeList(list));
+                    Fragments=new List<TextFragment> 
+                    {
+                        new TextFragment(File.ReadAllText(metaUrl))
+                    } 
+                },
+                100,100
+                );
+            return new List<TextNodeWithLeftTop>() { node };
         }
 
+        /// <summary>
+        /// 标准的写入
+        /// </summary>
         public static void WriteTextNodes(string metaUrl, List<TextNodeWithLeftTop> nodes)
         {
             File.WriteAllText(metaUrl, JsonConvert.SerializeObject(nodes, Formatting.Indented));

@@ -406,6 +406,9 @@ $$ will be replaced by file name, \$ will be replaced by $</value>
   <data name="Set_ViewWeb" xml:space="preserve">
     <value>View Github</value>
   </data>
+  <data name="Sys_AllExt" xml:space="preserve">
+    <value>All Files</value>
+  </data>
   <data name="Sys_Extname" xml:space="preserve">
     <value>MBT File</value>
   </data>

@@ -404,6 +404,9 @@
   <data name="Set_ViewWeb" xml:space="preserve">
     <value>访问项目主页</value>
   </data>
+  <data name="Sys_AllExt" xml:space="preserve">
+    <value>所有文件</value>
+  </data>
   <data name="Sys_Extname" xml:space="preserve">
     <value>多分支导航文件</value>
   </data>

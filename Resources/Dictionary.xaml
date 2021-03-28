@@ -632,18 +632,19 @@
                 Background="{DynamicResource MainBrush}"
                 BorderThickness="1" CornerRadius="4,4,0,0">
             <Grid>
-                <Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <ContentPresenter x:Name="CP" Grid.Column="0" 
-                                  ContentSource="Header" Margin="2"
-                                  TextElement.Foreground="{Binding ElementName=TB, Path=Foreground}"
-                                  HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                <TextBlock x:Name="TB" Grid.Column="1" Text="{Binding IsModified}" 
-                           Foreground="{DynamicResource Foreground.BaseBrush}" />
-                <Button Grid.ColumnSpan="2" Name="CloseBtn" 
-                        x:Uid="0" Margin="2"
+                    <ContentPresenter x:Name="CP" Grid.Column="0" 
+                                      ContentSource="Header" Margin="2"
+                                      TextElement.Foreground="{Binding ElementName=TB, Path=Foreground}"
+                                      HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="TB" Grid.Column="1" Text="{Binding IsModified}" 
+                               Foreground="{DynamicResource Foreground.BaseBrush}" />
+                </Grid>
+                <Button Name="CloseBtn" x:Uid="0" Margin="2"
                         Template="{StaticResource TabItemCloseBtnTemplate}"
                         HorizontalAlignment="Right" VerticalAlignment="Center"/>
             </Grid>
