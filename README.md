@@ -7,13 +7,7 @@
 [获取最新版本](https://github.com/CheYHinSpark/MultiBranchTexter/releases)
 
 ## TODO 
-- 多语言支持
-- 文本搜索、替换
-- 导出为TXT，整体导出，单独导出
-- 导出为docx
-- 导出为latex文件，添加超链接，之后可以通过latex编译为pdf，或者可以[在线编译为PDF并下载](https://online.latexstudio.net/)（需要注册）
-- 但是，导出时需要给节点排个序，不清楚怎么搞
-- 其他需求
+- 文本替换
 
 ## 使用方法
 
