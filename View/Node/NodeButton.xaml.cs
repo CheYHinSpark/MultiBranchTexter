@@ -16,6 +16,7 @@ namespace MultiBranchTexter.View
     /// </summary>
     public partial class NodeButton : NodeBase
     {
+        #region 字段
         private NodeBase endNode;//这个只是挂在屁股下面的那个容器里的东西
 
         public TextNode TextNode;
@@ -38,6 +39,7 @@ namespace MultiBranchTexter.View
         // 移动相关
         private Point oldPoint = new Point();
         private bool isMoving = false;
+        #endregion
 
         public NodeButton(TextNode newNode)
         {

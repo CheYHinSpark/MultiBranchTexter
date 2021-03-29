@@ -3,8 +3,7 @@
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             xmlns:v="clr-namespace:MultiBranchTexter.View"
             xmlns:r="clr-namespace:MultiBranchTexter.Resources"
-            MouseDoubleClick="NodeBase_MouseDoubleClick"
-            HorizontalAlignment="Left" VerticalAlignment="Top">
+            MouseDoubleClick="NodeBase_MouseDoubleClick">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -44,7 +43,7 @@
                          Focusable="False" Background="Transparent"
                          PreviewMouseDoubleClick="TitleBox_PreviewMouseDoubleClick"
                          LostFocus="TitleBox_LostFocus"/>
-                <Button x:Name="gotoBtn" Grid.Row="1" MaxWidth="80"
+                <Button Grid.Row="1" MaxWidth="80"
                         Margin="16,-2,16,-4" Tag="f"
                         Template="{StaticResource generalButtonTemplate}" 
                         Click="GotoBtn_Click"
