@@ -431,6 +431,7 @@ namespace MultiBranchTexter.ViewModel
         }
 
         #region 方法
+
         #region 标签页
         /// <summary> 打开标签页 </summary>
         public void OpenMBTabItem(TextNode node)
@@ -500,8 +501,89 @@ namespace MultiBranchTexter.ViewModel
             {
                 WorkTabs[i].ToWidth(Math.Max(0, targetWidth));
             }
-
         }
+
+        // 关闭所有标签页
+        public void CloseAll()
+        {
+            bool needWarn = false;
+            for (int i = 0; i < WorkTabs.Count; i++)
+            {
+                needWarn |= WorkTabs[i].ViewModel.IsModified == "*";
+            }
+            if (needWarn)
+            {
+                // 警告
+                MessageBoxResult warnResult = MessageBox.Show
+                 (
+                     Application.Current.MainWindow,
+                     LanguageManager.Instance["Msg_SaveNodes"],
+                     LanguageManager.Instance["Win_Warn"],
+                     MessageBoxButton.YesNoCancel
+                 );
+                if (warnResult == MessageBoxResult.Yes)
+                {
+                    for (int i = 0; i < WorkTabs.Count; i++)
+                    { WorkTabs[i].Save(); }
+                }
+                else if (warnResult == MessageBoxResult.Cancel)
+                {
+                    return;
+                }
+            }
+            WorkTabs.Clear();
+        }
+
+        public void CloseOther(object save)
+        {
+            for (int i = 0; i < WorkTabs.Count; i++)
+            {
+                if (WorkTabs[i].ViewModel == save)
+                {
+                    SelectedIndex = i;
+                    break;
+                }
+            }
+
+            bool needWarn = false;
+            for (int i = 0; i < WorkTabs.Count; i++)
+            {
+                if (i != SelectedIndex)
+                { needWarn |= WorkTabs[i].ViewModel.IsModified == "*"; }
+            }
+            if (needWarn)
+            {
+                // 警告
+                MessageBoxResult warnResult = MessageBox.Show
+                    (
+                    Application.Current.MainWindow,
+                    LanguageManager.Instance["Msg_SaveNodes"],
+                    LanguageManager.Instance["Win_Warn"],
+                    MessageBoxButton.YesNoCancel
+                );
+                if (warnResult == MessageBoxResult.Yes)
+                {
+                    for (int i = 0; i < WorkTabs.Count; i++)
+                    {
+                        if (i != SelectedIndex)
+                        { WorkTabs[i].Save(); }
+                    }
+                }
+                else if (warnResult == MessageBoxResult.Cancel)
+                {
+                    return;
+                }
+            }
+            for (int i = WorkTabs.Count - 1; i > SelectedIndex; i--)
+            {
+                WorkTabs[i].ToWidth(0, true);
+            }
+            for (int i = SelectedIndex - 1; i >= 0; i--)
+            {
+                WorkTabs[i].ToWidth(0, true);
+            }
+        }
+
 
         #endregion
 
@@ -570,6 +652,7 @@ namespace MultiBranchTexter.ViewModel
             await Task.Run(new Action(() => { ViewModelFactory.FCC.Load(path); }));
         }
 
+        /// <summary> 创建文件 </summary>
         public void CreateFile(string path)
         {
             FileName = path;
@@ -579,6 +662,7 @@ namespace MultiBranchTexter.ViewModel
             MetadataFile.WriteTextNodes(path, new List<TextNodeWithLeftTop> { n });
         }
 
+        /// <summary> 显示工作区 </summary>
         public void ShowWorkGrid()
         {
             RaiseHint(LanguageManager.Instance["Hint_CreateFC"]);
@@ -586,8 +670,7 @@ namespace MultiBranchTexter.ViewModel
         }
         #endregion
 
-
-
+        #region 提示文本
         /// <summary> 启动提示文本 </summary>
         public async void RaiseHint(string newHint)
         {
@@ -621,6 +704,8 @@ namespace MultiBranchTexter.ViewModel
             { return; }
             RaiseHint(FileName + (IsModified ? " *" : ""));
         }
+        #endregion
+
         #endregion
     }
 }

@@ -271,6 +271,9 @@
   <data name="Msg_SaveFile" xml:space="preserve">
     <value>尚未保存，是否保存？</value>
   </data>
+  <data name="Msg_SaveNodes" xml:space="preserve">
+    <value>节点尚未保存，是否保存？</value>
+  </data>
   <data name="Msg_SaveTxt" xml:space="preserve">
     <value>文本尚未保存，是否保存？</value>
   </data>
@@ -415,6 +418,12 @@
   </data>
   <data name="Tab_Char" xml:space="preserve">
     <value>字数：</value>
+  </data>
+  <data name="Tab_CloseAll" xml:space="preserve">
+    <value>关闭所有标签</value>
+  </data>
+  <data name="Tab_CloseOther" xml:space="preserve">
+    <value>关闭其他标签</value>
   </data>
   <data name="Tab_EndCond" xml:space="preserve">
     <value>后继条件</value>

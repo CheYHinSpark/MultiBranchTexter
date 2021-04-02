@@ -125,6 +125,7 @@ namespace MultiBranchTexter.View
             ToWidth(0, true);
         }
 
+        /// <summary> 保存文件 </summary>
         public void Save()
         {
             if (_viewModel.IsModified == "")

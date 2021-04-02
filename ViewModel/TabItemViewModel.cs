@@ -177,6 +177,22 @@ namespace MultiBranchTexter.ViewModel
         #endregion
 
         #region 命令
+
+        #region 标签页右键菜单命令
+        /// <summary> 关闭其他命令 </summary>
+        public ICommand CloseOtherCommand => new RelayCommand((t) =>
+        {
+            ViewModelFactory.Main.CloseOther(this);
+        });
+
+        /// <summary> 关闭所有命令 </summary>
+        public ICommand CloseAllCommand => new RelayCommand((t) =>
+        {
+            ViewModelFactory.Main.CloseAll();
+        });
+        #endregion
+
+        #region undoredo
         /// <summary> 撤销命令 </summary>
         public ICommand UndoCommand => new RelayCommand(async (_) =>
         {
@@ -196,12 +212,15 @@ namespace MultiBranchTexter.ViewModel
             _undoRedoTask = Task.Delay(50);
             await _undoRedoTask;
         });
+        #endregion
 
+        #region 文本
         /// <summary> 开始搜索命令 </summary>
         public ICommand StartSearchCommand => new RelayCommand((t) =>
         {
             SearchBoxVisi = "Auto";
         });
+        #endregion
 
         #endregion
 

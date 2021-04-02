@@ -3,12 +3,23 @@
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:vm="clr-namespace:MultiBranchTexter.ViewModel"
          xmlns:v="clr-namespace:MultiBranchTexter.View"
+         xmlns:r="clr-namespace:MultiBranchTexter.Resources"
          Loaded="TabItem_Loaded"
          MinHeight="24" Padding="0"
          Template="{StaticResource MBTabItemTemplate}">
+    
     <TabItem.DataContext>
         <vm:TabItemViewModel/>
     </TabItem.DataContext>
+
+    <TabItem.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="{Binding [Tab_CloseOther], Source={x:Static r:LanguageManager.Instance}}" 
+                      Command="{Binding CloseOtherCommand}"/>
+            <MenuItem Header="{Binding [Tab_CloseAll], Source={x:Static r:LanguageManager.Instance}}" 
+                      Command="{Binding CloseAllCommand}"/>
+        </ContextMenu>
+    </TabItem.ContextMenu>
 
     <Grid Background="{DynamicResource MainBrush}">
         <Grid.InputBindings>
