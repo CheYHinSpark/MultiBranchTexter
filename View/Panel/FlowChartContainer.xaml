@@ -27,9 +27,9 @@
                       MouseMove="ScrollViewer_MouseMove"
                       
                       AllowDrop="True"
-                      Drop="scrollViewer_Drop"
-                      DragOver="scrollViewer_DragOver"
-                      DragLeave="scrollViewer_DragLeave"
+                      Drop="ScrollViewer_Drop"
+                      DragOver="ScrollViewer_DragOver"
+                      DragLeave="ScrollViewer_DragLeave"
                       
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Auto">

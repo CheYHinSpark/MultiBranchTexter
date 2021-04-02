@@ -71,7 +71,7 @@ namespace MultiBranchTexter.Model
         public static List<TextNodeWithLeftTop> ReadText(string metaUrl)
         {
             TextNodeWithLeftTop node = new TextNodeWithLeftTop(
-                new TextNode(metaUrl) 
+                new TextNode(metaUrl[metaUrl.LastIndexOf('\\')..]) 
                 {
                     Fragments=new List<TextFragment> 
                     {
