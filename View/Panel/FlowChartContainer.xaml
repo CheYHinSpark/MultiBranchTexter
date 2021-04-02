@@ -18,12 +18,19 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
+        <!--主要控件，滚动内容呈现器-->
         <v:MBScViewer x:Name="scrollViewer" Background="{DynamicResource MainBrush}"
                       FocusVisualStyle="{x:Null}"
                       PreviewMouseDown="ScrollViewer_PreviewMouseDown"
                       PreviewMouseUp="ScrollViewer_PreviewMouseUp"
                       PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"
                       MouseMove="ScrollViewer_MouseMove"
+                      
+                      AllowDrop="True"
+                      Drop="scrollViewer_Drop"
+                      DragOver="scrollViewer_DragOver"
+                      DragLeave="scrollViewer_DragLeave"
+                      
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Auto">
             <v:AutoSizeCanvas x:Name="container"
@@ -76,6 +83,7 @@
                 </ContextMenu>
             </v:MBScViewer.ContextMenu>
         </v:MBScViewer>
+        <!--一个边框，没什么用-->
         <Border Background="Transparent" BorderThickness="1" IsHitTestVisible="False"
                 IsEnabled="{Binding IsFocused, ElementName=scrollViewer}">
             <Border.Style>
@@ -89,6 +97,9 @@
                 </Style>
             </Border.Style>
         </Border>
+        <!--拖入用效果-->
+        <v:InnerGlowGrid x:Name="baseGrid" IsHitTestVisible="False" 
+                         GlowColor="{DynamicResource  ThemeBrush}"/>
         <!--搜索框-->
         <v:NodeSearchBox Visibility="{Binding SearchBoxVisibility, Mode=TwoWay}"
                          VerticalAlignment="Top" HorizontalAlignment="Right"/>

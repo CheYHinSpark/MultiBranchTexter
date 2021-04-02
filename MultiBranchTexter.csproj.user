@@ -15,6 +15,9 @@
     <Compile Update="View\HintTextBlock.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\Panel\InnerGlowGrid.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\Window\OutputAsTxtWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -54,6 +57,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\HintTextBlock.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\Panel\InnerGlowGrid.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\TextSearchBox.xaml">

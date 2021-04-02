@@ -31,10 +31,15 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <!--没有加载文件时的提示文本-->
-        <Grid Grid.Row="1" Background="Transparent" AllowDrop="True" Drop="BgGrid_Drop">
+        <Grid Grid.Row="1" Background="Transparent" 
+              AllowDrop="True" Drop="BgGrid_Drop"
+              DragLeave="Grid_DragLeave" DragOver="Grid_DragOver">
             <TextBlock Text="{Binding [Bg_Main], Source={x:Static r:LanguageManager.Instance}}"
                        HorizontalAlignment="Center" VerticalAlignment="Center"
                        Foreground="{DynamicResource Foreground.BaseBrush}" FontSize="24"/>
+            <!--拖入用效果-->
+            <v:InnerGlowGrid x:Name="baseGrid" IsHitTestVisible="False" 
+                             GlowColor="{DynamicResource  ThemeBrush}"/>
         </Grid>
         <!--正式的两个工作控件-->
         <Grid Grid.Row="1" Background="{DynamicResource ThemeBrush}" IsEnabled="{Binding IsWorkGridVisible}">

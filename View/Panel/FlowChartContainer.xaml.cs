@@ -1,7 +1,9 @@
-﻿using MultiBranchTexter.ViewModel;
+﻿using MultiBranchTexter.Model;
+using MultiBranchTexter.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -174,6 +176,67 @@ namespace MultiBranchTexter.View
                 this.Cursor = Cursors.Arrow;
             }
         }
+
+        #region 拖动事件
+        private void ScrollViewer_Drop(object sender, DragEventArgs e)
+        {
+            string fileName = ((Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString();
+            if (File.Exists(fileName))
+            {
+                string nodeName = fileName[(fileName.LastIndexOf('\\') + 1)..];
+
+                // 获得一个无重复的名字
+                bool repeat = ViewModelFactory.FCC.CheckRepeat(nodeName);
+                int i = 0;
+                while(repeat)
+                {
+                    i++;
+                    repeat = ViewModelFactory.FCC.CheckRepeat(nodeName + "-" + i.ToString());
+                }
+                if (i > 0)
+                { nodeName += "-" + i.ToString(); }
+
+                string content = File.ReadAllText(fileName);
+
+                TextNode newNode = new TextNode(nodeName)
+                { Fragments = new List<TextFragment>() { new TextFragment(content) } };
+
+                NodeButton nodeButton = new NodeButton(newNode);
+
+                container.Children.Add(nodeButton);
+                container.UpdateLayout();
+
+                //需要得到释放点关于canvas的坐标
+                //获得了canvas相对于自身的坐标，这个point是经过放缩的
+                GeneralTransform gt = container.TransformToAncestor(this);
+                Point point = gt.Transform(new Point(0, 0));
+                point.X *= -1;//需要负号
+                point.Y *= -1;
+
+                Point pt = e.GetPosition(this);
+
+                double x = (point.X + pt.X) / container.ScaleRatio - nodeButton.ActualWidth / 2;
+                double y = (point.Y + pt.Y) / container.ScaleRatio - nodeButton.ActualHeight / 2;
+
+                Canvas.SetLeft(nodeButton, Math.Max(0, x));
+                Canvas.SetTop(nodeButton, Math.Max(0, y));
+
+                ViewModelFactory.Main.IsModified = true;
+            }
+            baseGrid.Tag = null;
+        }
+
+        private void ScrollViewer_DragOver(object sender, DragEventArgs e)
+        {
+            baseGrid.Tag = "d";
+        }
+
+        private void ScrollViewer_DragLeave(object sender, DragEventArgs e)
+        {
+            baseGrid.Tag = null;
+        }
+        #endregion
+
         #endregion
     }
 }

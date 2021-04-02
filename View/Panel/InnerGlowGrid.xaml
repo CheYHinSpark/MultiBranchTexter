@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="MultiBranchTexter.View.InnerGlowGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:v="clr-namespace:MultiBranchTexter.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Rectangle HorizontalAlignment="Left" Width="{Binding GlowLength, 
+            RelativeSource={RelativeSource AncestorType={x:Type v:InnerGlowGrid}}}"
+                   Fill="{Binding GlowColor, 
+            RelativeSource={RelativeSource AncestorType={x:Type v:InnerGlowGrid}}}">
+            <Rectangle.OpacityMask>
+                <LinearGradientBrush StartPoint="0, 0.5" EndPoint="1, 0.5">
+                    <GradientStop Color="White" Offset="0" />
+                    <GradientStop Color="Transparent" Offset="1" />
+                </LinearGradientBrush>
+            </Rectangle.OpacityMask>
+        </Rectangle>
+        <Rectangle HorizontalAlignment="Right" Width="{Binding GlowLength, 
+            RelativeSource={RelativeSource AncestorType={x:Type v:InnerGlowGrid}}}"
+                   Fill="{Binding GlowColor, 
+            RelativeSource={RelativeSource AncestorType={x:Type v:InnerGlowGrid}}}">
+            <Rectangle.OpacityMask>
+                <LinearGradientBrush StartPoint="0, 0.5" EndPoint="1, 0.5">
+                    <GradientStop Color="White" Offset="1" />
+                    <GradientStop Color="Transparent" Offset="0" />
+                </LinearGradientBrush>
+            </Rectangle.OpacityMask>
+        </Rectangle>
+        <Rectangle VerticalAlignment="Top" Height="{Binding GlowLength, 
+            RelativeSource={RelativeSource AncestorType={x:Type v:InnerGlowGrid}}}"
+                   Fill="{Binding GlowColor, 
+            RelativeSource={RelativeSource AncestorType={x:Type v:InnerGlowGrid}}}">
+            <Rectangle.OpacityMask>
+                <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5, 1">
+                    <GradientStop Color="White" Offset="0" />
+                    <GradientStop Color="Transparent" Offset="1" />
+                </LinearGradientBrush>
+            </Rectangle.OpacityMask>
+        </Rectangle>
+        <Rectangle VerticalAlignment="Bottom" Height="{Binding GlowLength, 
+            RelativeSource={RelativeSource AncestorType={x:Type v:InnerGlowGrid}}}"
+                   Fill="{Binding GlowColor, 
+            RelativeSource={RelativeSource AncestorType={x:Type v:InnerGlowGrid}}}">
+            <Rectangle.OpacityMask>
+                <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5, 1">
+                    <GradientStop Color="White" Offset="1" />
+                    <GradientStop Color="Transparent" Offset="0" />
+                </LinearGradientBrush>
+            </Rectangle.OpacityMask>
+        </Rectangle>
+    </Grid>
+</UserControl>
