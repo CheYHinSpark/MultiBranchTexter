@@ -193,7 +193,7 @@ namespace MultiBranchTexter.ViewModel
 
         #region 命令
         // 还原默认设置命令
-        public ICommand ToDefaultCommand => new RelayCommand((t) =>
+        public ICommand ToDefaultCommand => new RelayCommand((_) =>
         {
             IsDarkMode = false;
             AllowDoubleEnter = false;
@@ -208,27 +208,23 @@ namespace MultiBranchTexter.ViewModel
         });
 
         // 打开项目主页命令
-        public ICommand OpenMainWebCommand => new RelayCommand((t) =>
+        public ICommand OpenMainWebCommand => new RelayCommand((_) =>
         {
             try
-            {
-                Process.Start("explorer.exe", "https://github.com/CheYHinSpark/MultiBranchTexter");
-            }
+            { Process.Start("explorer.exe", "https://github.com/CheYHinSpark/MultiBranchTexter"); }
             catch { }
         });
 
         // 打开项目说明命令
-        public ICommand OpenIntroCommand => new RelayCommand((t) =>
+        public ICommand OpenIntroCommand => new RelayCommand((_) =>
         {
             try
-            {
-                Process.Start("explorer.exe", AppDomain.CurrentDomain.BaseDirectory + "README.md");
-            }
+            { Process.Start("explorer.exe", AppDomain.CurrentDomain.BaseDirectory + "README.md"); }
             catch { }
         });
 
         // 检查更新命令
-        public ICommand CheckUpdateCommand => new RelayCommand(async (t) =>
+        public ICommand CheckUpdateCommand => new RelayCommand(async (_) =>
         {
             if (await UpdateChecker.CheckGitHubNewerVersion())
             { DemandUpdate(); }

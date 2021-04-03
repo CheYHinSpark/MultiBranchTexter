@@ -19,6 +19,7 @@
         <TextBox x:Name="findBox" Grid.Row="0" Grid.Column="0" Margin="2"
                  VerticalAlignment="Bottom" ToolTip="{x:Null}"
                  Background="{DynamicResource BaseBrush}"
+                 KeyDown="FindBox_KeyDown"
                  TextChanged="FindBox_TextChanged"/>
         <Button x:Name="lastBtn" Grid.Row="0" Grid.Column="1" Margin="2" 
                 Template="{DynamicResource searchBoxBtnTemp}"

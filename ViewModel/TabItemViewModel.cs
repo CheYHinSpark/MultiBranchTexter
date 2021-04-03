@@ -180,16 +180,12 @@ namespace MultiBranchTexter.ViewModel
 
         #region 标签页右键菜单命令
         /// <summary> 关闭其他命令 </summary>
-        public ICommand CloseOtherCommand => new RelayCommand((t) =>
-        {
-            ViewModelFactory.Main.CloseOther(this);
-        });
+        public ICommand CloseOtherCommand => new RelayCommand((_) =>
+        { ViewModelFactory.Main.CloseOther(this); });
 
         /// <summary> 关闭所有命令 </summary>
-        public ICommand CloseAllCommand => new RelayCommand((t) =>
-        {
-            ViewModelFactory.Main.CloseAll();
-        });
+        public ICommand CloseAllCommand => new RelayCommand((_) =>
+        { ViewModelFactory.Main.CloseAll(); });
         #endregion
 
         #region undoredo
@@ -204,7 +200,7 @@ namespace MultiBranchTexter.ViewModel
         });
 
         /// <summary> 重做命令 </summary>
-        public ICommand RedoCommand => new RelayCommand(async (t) =>
+        public ICommand RedoCommand => new RelayCommand(async (_) =>
         {
             if (_undoRedoTask != null && !_undoRedoTask.IsCompleted)
             { return; }
@@ -216,10 +212,8 @@ namespace MultiBranchTexter.ViewModel
 
         #region 文本
         /// <summary> 开始搜索命令 </summary>
-        public ICommand StartSearchCommand => new RelayCommand((t) =>
-        {
-            SearchBoxVisi = "Auto";
-        });
+        public ICommand StartSearchCommand => new RelayCommand((_) =>
+        { SearchBoxVisi = "Auto"; });
         #endregion
 
         #endregion
@@ -452,6 +446,9 @@ namespace MultiBranchTexter.ViewModel
                 tfp.SetFocus(_searchedResult[_searchedIndex].Item3, _searchedResult[_searchedIndex].Item2, _searchedLength);
             }
         }
+
+        public void ClearSearch()
+        { _searchedResult.Clear(); }
         #endregion
 
         #endregion

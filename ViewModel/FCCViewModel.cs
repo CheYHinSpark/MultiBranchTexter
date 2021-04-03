@@ -146,7 +146,7 @@ namespace MultiBranchTexter.ViewModel
         #endregion
 
         #region 命令
-        public ICommand NewNodeCommand => new RelayCommand((t) =>
+        public ICommand NewNodeCommand => new RelayCommand((_) =>
         {
             Point point = Mouse.GetPosition(_container);
             NodeButton newNode = new NodeButton(new TextNode(GetNewName()));
@@ -232,7 +232,7 @@ namespace MultiBranchTexter.ViewModel
             ViewModelFactory.Main.IsModified = true;
         });
 
-        public ICommand DeleteCommand => new RelayCommand((t) =>
+        public ICommand DeleteCommand => new RelayCommand((_) =>
         {
             if (SelectedNodes.Count == 0)
             { return; }
@@ -263,11 +263,11 @@ namespace MultiBranchTexter.ViewModel
             NodeCount = GetNodeCount();
         });
 
-        public ICommand StartSearchCommand => new RelayCommand((t) =>
+        public ICommand StartSearchCommand => new RelayCommand((_) =>
         { SearchBoxVisibility = Visibility.Visible; });
 
         /// <summary> 重新绘制流程图 </summary>
-        public ICommand ReArrangeCommand => new RelayCommand((t) =>
+        public ICommand ReArrangeCommand => new RelayCommand((_) =>
         {
             MessageBoxResult warnResult = MessageBox.Show
                             (
@@ -282,7 +282,7 @@ namespace MultiBranchTexter.ViewModel
         });
 
         /// <summary> 全选 </summary>
-        public ICommand SelectAllCommand => new RelayCommand((t) =>
+        public ICommand SelectAllCommand => new RelayCommand((_) =>
         { SelectAll(); });
         #endregion
 
@@ -342,15 +342,19 @@ namespace MultiBranchTexter.ViewModel
             try
             {
                 var nodes = MetadataFile.ReadTextNodes(mbtxtPath);
-                await _container.Dispatcher.BeginInvoke(new Action(
-                    delegate { DrawFlowChart(nodes); }));
+                if (nodes.Count > 0)
+                {
+                    await _container.Dispatcher.BeginInvoke(new Action(
+                        delegate { DrawFlowChart(nodes); }));
+                }
             }
             catch
             {
                 try
                 {
                     var nodes = MetadataFile.ReadText(mbtxtPath);
-                    ViewModelFactory.Main.FileName += ".mbjson";
+                    if (!ViewModelFactory.Main.FileName.EndsWith(".mbjson"))
+                    { ViewModelFactory.Main.FileName += ".mbjson"; }
                     ViewModelFactory.Main.IsModified = true;
                     await _container.Dispatcher.BeginInvoke(new Action(
                         delegate { DrawFlowChart(nodes); }));

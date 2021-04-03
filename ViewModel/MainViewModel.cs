@@ -170,22 +170,22 @@ namespace MultiBranchTexter.ViewModel
         #region 命令
 
         #region 字体命令
-        public ICommand FontSizeUpCommand => new RelayCommand((t) =>
+        public ICommand FontSizeUpCommand => new RelayCommand((_) =>
         { TextFontSize++; });
-        public ICommand FontSizeDownCommand => new RelayCommand((t) =>
+        public ICommand FontSizeDownCommand => new RelayCommand((_) =>
         { TextFontSize--; });
         #endregion
 
         #region 界面命令，全屏、设置页
-        public ICommand ExitFullScreenCommand => new RelayCommand((t) =>
+        public ICommand ExitFullScreenCommand => new RelayCommand((_) =>
         { IsFullScreen = false; });
 
-        public ICommand SwitchOptionsPanelCommand => new RelayCommand((t) =>
+        public ICommand SwitchOptionsPanelCommand => new RelayCommand((_) =>
         { (Application.Current.MainWindow as MetroWindow).SwitchShowOptions(); });
         #endregion
 
         #region 左右框框调节
-        public ICommand RightPullCommand => new RelayCommand((t) =>
+        public ICommand RightPullCommand => new RelayCommand((_) =>
         { 
             if (FlowChartWidth == "0")
             { FlowChartWidth = "*"; }
@@ -193,7 +193,7 @@ namespace MultiBranchTexter.ViewModel
             { WorkTabWidth = "0"; }
         });
 
-        public ICommand LeftPullCommand => new RelayCommand((t) =>
+        public ICommand LeftPullCommand => new RelayCommand((_) =>
         {
             if (WorkTabWidth == "0")
             { WorkTabWidth = "*"; }
@@ -204,7 +204,7 @@ namespace MultiBranchTexter.ViewModel
 
         #region 文件新建、打开、保存
         //新建文件命令
-        public ICommand NewFileCommand => new RelayCommand((t) =>
+        public ICommand NewFileCommand => new RelayCommand((_) =>
         {
             try
             {
@@ -246,7 +246,7 @@ namespace MultiBranchTexter.ViewModel
             catch { }
         });
         //打开文件命令
-        public ICommand OpenFileCommand => new RelayCommand((t) =>
+        public ICommand OpenFileCommand => new RelayCommand((_) =>
         {
             try
             {
@@ -289,7 +289,7 @@ namespace MultiBranchTexter.ViewModel
         });
 
         //保存单个节点命令，但是在worktab没有打开时或者在已经保存好的tab上save将执行savefile，
-        public ICommand SaveNodeCommand => new RelayCommand((t) =>
+        public ICommand SaveNodeCommand => new RelayCommand((_) =>
         {
             try
             {
@@ -312,7 +312,7 @@ namespace MultiBranchTexter.ViewModel
         });
 
         //保存整个文件
-        public ICommand SaveFileCommand => new RelayCommand((t) =>
+        public ICommand SaveFileCommand => new RelayCommand((_) =>
         {
             if (!IsWorkGridVisible)
             { return; }
@@ -320,7 +320,7 @@ namespace MultiBranchTexter.ViewModel
         });
 
         //整个文件另存为
-        public ICommand SaveAsFileCommand => new RelayCommand((t) =>
+        public ICommand SaveAsFileCommand => new RelayCommand((_) =>
         {
             try
             {
@@ -349,7 +349,7 @@ namespace MultiBranchTexter.ViewModel
 
         #region 导出命令
         /// <summary> 导出为JSON，游戏开发 </summary>
-        public ICommand OutputAsJSONCommand => new RelayCommand(async (t) =>
+        public ICommand OutputAsJSONCommand => new RelayCommand(async (_) =>
         {
             if (FileName == "" || _fileDirPath == "")
             { return; }
@@ -369,7 +369,7 @@ namespace MultiBranchTexter.ViewModel
         });
 
         /// <summary> 导出为txt </summary>
-        public ICommand OutputAsTxtCommand => new RelayCommand((t) =>
+        public ICommand OutputAsTxtCommand => new RelayCommand((_) =>
         {
             if (FileName == "" || _fileDirPath == "")
             { return; }
@@ -382,7 +382,7 @@ namespace MultiBranchTexter.ViewModel
         });
 
         /// <summary> 导出节点图 </summary>
-        public ICommand OutputFCCCommand => new RelayCommand((t) =>
+        public ICommand OutputFCCCommand => new RelayCommand((_) =>
         {
             RaiseHint(LanguageManager.Instance["Hint_OutputPic"]);
             SaveFile();
@@ -657,7 +657,7 @@ namespace MultiBranchTexter.ViewModel
         {
             FileName = path;
 
-            var node = new TextNode { Name = "new-node-0" };
+            var node = new TextNode("new-node-0");
             var n = new TextNodeWithLeftTop(node, 100, 100);
             MetadataFile.WriteTextNodes(path, new List<TextNodeWithLeftTop> { n });
         }
