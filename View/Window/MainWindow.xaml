@@ -78,12 +78,12 @@
                                         BorderThickness="1"
                                         CornerRadius="5"/>
                                 <Button Background="{DynamicResource ThemeBrush}"
-                                        Command="{Binding LeftPullCommand}"
+                                        Command="{Binding LeftPullCommand}" ToolTip="(Alt+Left)"
                                         HorizontalAlignment="Left" Width="28" Tag="r"
                                         Template="{StaticResource generalButtonTemplate}"
                                         Content="M7,0 7,4 14,4 14,10 7,10 7,14 0,7Z"/>
                                 <Button Background="{DynamicResource ThemeBrush}" 
-                                        Command="{Binding RightPullCommand}"
+                                        Command="{Binding RightPullCommand}" ToolTip="(Alt+Right)"
                                         HorizontalAlignment="Right" Width="28" Tag="l"
                                         Template="{StaticResource generalButtonTemplate}"
                                         Content="M7,0 7,4 0,4 0,10 7,10 7,14 14,7Z"/>
@@ -122,6 +122,7 @@
                     </ControlTemplate>
                 </UserControl.Template>
             </UserControl>
+            <!--风格-->
             <Grid.Style>
                 <Style TargetType="{x:Type Grid}">
                     <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
@@ -176,6 +177,8 @@
                 </Style>
             </Grid.Style>
         </Grid>
+        
+        <!--菜单工具栏-->
         <v:ToolBarBorder IsFullScreen="{Binding IsFullScreen}">
             <v:ToolBarBorder.Style>
                 <Style TargetType="{x:Type v:ToolBarBorder}">

@@ -242,6 +242,31 @@ namespace MultiBranchTexter.View
         }
         #endregion
 
+        #region 工具提示
+        // 按钮用，阻断提示
+        private void Other_ToolTipOpening(object sender, ToolTipEventArgs e)
+        { e.Handled = true; }
+
+        // 主要的工具提示
+        private void BgBorder_ToolTipOpening(object sender, ToolTipEventArgs e)
+        {
+            string content = TextNode.Name;
+            for (int i = 0; i < TextNode.Fragments.Count; i++)
+            {
+                if (TextNode.Fragments[i].Content == "")
+                { continue; }
+                content += "\r\n" + TextNode.Fragments[i].Content;
+                if (content.Length > 500)
+                {
+                    content = content.Substring(0, 500);
+                    content += "……\r\n……";
+                    break;
+                }
+            }
+            borderToolTip.Text = content;
+        }
+        #endregion
+
         #endregion
 
         #region 方法

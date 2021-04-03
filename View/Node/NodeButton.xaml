@@ -17,7 +17,14 @@
                 MouseLeftButtonUp="NodeButton_MouseLeftButtonUp"
                 MouseWheel="NodeButton_MouseWheel"
                 CornerRadius="4"
+                ToolTipOpening="BgBorder_ToolTipOpening"
                 Style="{StaticResource nodebuttonBorderStyle}">
+            <Border.ToolTip>
+                <StackPanel MaxWidth="400">
+                    <TextBlock x:Name="borderToolTip" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border.ToolTip>
+
             <Border.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="{Binding [N_Delete], Source={x:Static r:LanguageManager.Instance}}" 
@@ -43,14 +50,16 @@
                          Focusable="False" Background="Transparent"
                          PreviewMouseDoubleClick="TitleBox_PreviewMouseDoubleClick"
                          LostFocus="TitleBox_LostFocus"/>
-                <Button Grid.Row="1" MaxWidth="80"
+                <Button Grid.Row="1" MaxWidth="80" 
                         Margin="16,-2,16,-4" Tag="f"
+                        ToolTip="" ToolTipOpening="Other_ToolTipOpening"
                         Template="{StaticResource generalButtonTemplate}" 
                         Click="GotoBtn_Click"
                         Content="M0,0 0,10 8,5Z"/>
                 <!--等待点击-->
                 <Border x:Name="UpperBd" Background="#FFB2E4E4" Grid.RowSpan="2" 
                         Opacity="0.9" MouseDown="UpperBd_MouseDown" CornerRadius="4"
+                        ToolTip="" ToolTipOpening="Other_ToolTipOpening"
                         Margin="-8,-2,-8,-2" Visibility="Hidden">
                     <TextBlock Text="{Binding [N_NewEndHint], Source={x:Static r:LanguageManager.Instance}}" 
                                IsHitTestVisible="False"
