@@ -657,7 +657,7 @@ namespace MultiBranchTexter.ViewModel
         {
             FileName = path;
 
-            var node = new TextNode("new-node-0");
+            var node = new TextNode(LanguageManager.Instance["N_NewNode"] + "0");
             var n = new TextNodeWithLeftTop(node, 100, 100);
             MetadataFile.WriteTextNodes(path, new List<TextNodeWithLeftTop> { n });
         }

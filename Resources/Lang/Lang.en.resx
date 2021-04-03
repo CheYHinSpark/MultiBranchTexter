@@ -292,9 +292,15 @@ This may cause chaos, and this action cannot be cancelled. </value>
   <data name="N_Multi" xml:space="preserve">
     <value>Multiple</value>
   </data>
+  <data name="N_NewAnswer" xml:space="preserve">
+    <value>new answer </value>
+  </data>
   <data name="N_NewEndHint" xml:space="preserve">
     <value>Click to set as 
 new post node</value>
+  </data>
+  <data name="N_NewNode" xml:space="preserve">
+    <value>new-node-</value>
   </data>
   <data name="N_Question" xml:space="preserve">
     <value>Question</value>

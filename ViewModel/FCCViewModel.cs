@@ -897,7 +897,7 @@ namespace MultiBranchTexter.ViewModel
         public string GetNewName()
         {
             //创造一个不重名的
-            string newName = "new-node-";
+            string newName = LanguageManager.Instance["N_NewNode"];
             int i = 1;
             bool repeated = true;
             while (repeated)

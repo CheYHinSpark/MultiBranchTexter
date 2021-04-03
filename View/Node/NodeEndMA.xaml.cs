@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MultiBranchTexter.Model;
+using MultiBranchTexter.Resources;
 using MultiBranchTexter.ViewModel;
 
 namespace MultiBranchTexter.View
@@ -60,7 +61,7 @@ namespace MultiBranchTexter.View
         {
             List<(string,string, string)> atns = FatherTextNode.EndCondition.Answers;
             //创造一个不重名的回答
-            string newAnswer = "新回答";
+            string newAnswer = LanguageManager.Instance["N_NewAnswer"];
             int i = 0;
             bool repeated = true;
             while (repeated)

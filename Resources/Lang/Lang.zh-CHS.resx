@@ -292,9 +292,15 @@
   <data name="N_Multi" xml:space="preserve">
     <value>多选后继</value>
   </data>
+  <data name="N_NewAnswer" xml:space="preserve">
+    <value>新回答</value>
+  </data>
   <data name="N_NewEndHint" xml:space="preserve">
     <value>点击以设置为
 新的后继节点</value>
+  </data>
+  <data name="N_NewNode" xml:space="preserve">
+    <value>新节点</value>
   </data>
   <data name="N_Question" xml:space="preserve">
     <value>询问</value>
