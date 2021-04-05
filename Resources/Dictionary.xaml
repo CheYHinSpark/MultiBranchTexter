@@ -976,4 +976,32 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <!--ToolTip风格-->
+    <Style x:Key="{x:Type ToolTip}" TargetType="{x:Type ToolTip}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="HasDropShadow" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToolTip">
+                    <Border Name="Border" BorderThickness="1"
+                            Width="{TemplateBinding Width}"
+                            Height="{TemplateBinding Height}"
+                            Background="{DynamicResource BaseBrush}"
+                            BorderBrush="{DynamicResource Text.Foreground.BaseBrush}">
+                        <ContentPresenter Margin="4" 
+                                          TextElement.Foreground="{DynamicResource Text.Foreground.BaseBrush}"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Top" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasDropShadow" Value="True">
+                            <Setter TargetName="Border" Property="CornerRadius" Value="4" />
+                            <Setter TargetName="Border" Property="SnapsToDevicePixels" Value="True" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

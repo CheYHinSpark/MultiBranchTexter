@@ -21,7 +21,8 @@
                 Style="{StaticResource nodebuttonBorderStyle}">
             <Border.ToolTip>
                 <StackPanel MaxWidth="400">
-                    <TextBlock x:Name="borderToolTip" TextWrapping="Wrap"/>
+                    <TextBlock x:Name="borderToolTip" TextWrapping="Wrap"
+                               Foreground="{DynamicResource Text.Foreground.BaseBrush}" />
                 </StackPanel>
             </Border.ToolTip>
 
