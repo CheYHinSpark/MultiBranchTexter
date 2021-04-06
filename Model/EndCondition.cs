@@ -31,5 +31,14 @@ namespace MultiBranchTexter.Model
                 Answers.Add(("no", "", ""));
             }
         }
+
+        public void ChangeNodeName(string oldN, string newN)
+        {
+            for (int i = 0; i < Answers.Count; i++)
+            {
+                if (Answers[i].Item2 == oldN)
+                { Answers[i] = (Answers[i].Item1, newN, Answers[i].Item3); }
+            }
+        }
     }
 }

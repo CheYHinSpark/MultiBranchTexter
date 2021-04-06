@@ -139,7 +139,7 @@ namespace MultiBranchTexter.View
                 }
                 else
                 {
-                    //没有重复，检查是否符合文件夹命名规则
+                    //没有重复，检查是否符合文件命名规则
                     if (titleBox.Text.Contains('*')
                         || titleBox.Text.Contains('\\')
                         || titleBox.Text.Contains('/')
@@ -155,6 +155,9 @@ namespace MultiBranchTexter.View
                     }
                     else
                     {
+                        //通知前置节点们自己被改了
+                        for (int i = 0; i < PreLines.Count; i++)
+                        { PreLines[i].BeginNode.FatherTextNode.EndCondition.ChangeNodeName(TextNode.Name, titleBox.Text); }
                         TextNode.Name = titleBox.Text;
                         //通知窗体改变相应的标签页
                         ViewModelFactory.Main.ReLoadTab(TextNode);
@@ -164,7 +167,8 @@ namespace MultiBranchTexter.View
             UpdateLines();
         }
 
-        //上层bd被点击，这是在重新选择后继节点时可以被选中
+        #region 上层border点击
+        // 上层bd被点击，这是在重新选择后继节点时可以被选中
         private void UpperBd_MouseDown(object sender, MouseButtonEventArgs e)
         {
             //通知流程图容器自己被选中
@@ -186,6 +190,7 @@ namespace MultiBranchTexter.View
                 }
             }
         }
+        #endregion
 
         #region 右键菜单功能
         private void DeleteNode_Click(object sender, RoutedEventArgs e)
@@ -540,7 +545,7 @@ namespace MultiBranchTexter.View
         {
             AnswerToNodes.Add(newKey, AnswerToNodes[oldKey]);
             AnswerToNodes.Remove(oldKey);
-            for (int i =0; i < TextNode.EndCondition.Answers.Count; i++)
+            for (int i = 0; i < TextNode.EndCondition.Answers.Count; i++)
             {
                 if (TextNode.EndCondition.Answers[i].Item1 == oldKey)
                 {
