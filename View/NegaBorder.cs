@@ -16,8 +16,8 @@ namespace MultiBranchTexter.View
         public void SetEndPt(double ex, double ey)
         {
             Margin = new Thickness(
-                Math.Min(ex,StartPt.X),Math.Min(ey,StartPt.Y),
-                0,0
+                Math.Min(ex, StartPt.X), Math.Min(ey, StartPt.Y),
+                0, 0
                 );
             Width = Math.Abs(StartPt.X - ex);
             Height = Math.Abs(StartPt.Y - ey);

@@ -12,9 +12,9 @@ namespace MultiBranchTexter.View
     /// </summary>
     public partial class NodeEndMAAnswer : NodeBase
     {
-        private Button maCloseBtn;
-        private TextBox hintTxt;
-        private TextBox answerTxt;
+        //private Button maCloseBtn;
+        //private TextBox hintTxt;
+        //private TextBox answerTxt;
         private string answer = "";
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace MultiBranchTexter.View
         { 
             get 
             {
-                if (answerTxt == null)
+                if (answerTxt.Text == null || answerTxt.Text == "")
                 { return answer; }
                 return answerTxt.Text; 
             }
@@ -45,9 +45,9 @@ namespace MultiBranchTexter.View
         //加载完成
         private void NodeBase_Loaded(object sender, RoutedEventArgs e)
         {
-            maCloseBtn = GetTemplateChild("maCloseBtn") as Button;
-            hintTxt = GetTemplateChild("hintTxt") as TextBox;
-            answerTxt = GetTemplateChild("answerTxt") as TextBox;
+            //maCloseBtn = GetTemplateChild("maCloseBtn") as Button;
+            //hintTxt = GetTemplateChild("hintTxt") as TextBox;
+            //answerTxt = GetTemplateChild("answerTxt") as TextBox;
 
             maCloseBtn.Click += MaCloseBtn_Click;
             hintTxt.LostFocus += HintTxt_LostFocus;
@@ -144,7 +144,7 @@ namespace MultiBranchTexter.View
             //通知标签页改变
             ViewModelFactory.Main.ReLoadTab(FatherTextNode);
             //移除自身
-            ControlTreeHelper.FindParentOfType<StackPanel>(this).Children.Remove(this);
+            ControlTreeHelper.FindParentOfType<NodeEndMA>(this).RemoveAnswer(this);
         }
         #endregion
 

@@ -93,9 +93,7 @@ namespace MultiBranchTexter.View
         #endregion
 
         #region 方法
-        /// <summary>
-        /// 设置真正的father
-        /// </summary>
+        /// <summary> 设置真正的father </summary>
         public void SetFather(NodeButton father)
         {
             this.FatherNode = father;
@@ -104,6 +102,12 @@ namespace MultiBranchTexter.View
                 (control as NodeEndMAAnswer).FatherNode = father;
                 father.AnswerToNodes.Add((control as NodeEndMAAnswer).Answer, null);
             }
+        }
+
+        /// <summary> 去除答案 </summary>
+        public void RemoveAnswer(NodeEndMAAnswer answer)
+        {
+            answerContainer.Children.Remove(answer);
         }
         #endregion
     }

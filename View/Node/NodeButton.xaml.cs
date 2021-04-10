@@ -53,15 +53,12 @@ namespace MultiBranchTexter.View
 
         #region 事件
         //加载完成
-        private async void NodeBase_Loaded(object sender, RoutedEventArgs e)
+        private void NodeBase_Loaded(object sender, RoutedEventArgs e)
         {
             endContainer.Child = endNode;
             //显示标题
             titleBox.Text = TextNode.Name;
-
             Panel.SetZIndex(this, 2);
-            // Debug.WriteLine("节点成功生成" + TextNode.Name);
-            await Task.Delay(1);//这是为了能让线条的位置正确
             ViewModelFactory.FCC.UndrawedNode -= 1;
         }
 

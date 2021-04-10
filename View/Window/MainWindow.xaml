@@ -319,6 +319,24 @@
                 </CheckBox>
             </StackPanel>
         </v:ToolBarBorder>
+
+        <Rectangle Fill="Red" Width="100" Height="100" Grid.RowSpan="2">
+            <Rectangle.RenderTransform>
+                <RotateTransform x:Name="rtf" CenterX="50" CenterY="50"/>
+            </Rectangle.RenderTransform>
+            <Rectangle.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard RepeatBehavior="Forever">
+                            <DoubleAnimation Duration="0:0:1" From="0" To="90"
+                                             Storyboard.TargetName="rtf"
+                                             Storyboard.TargetProperty="(RotateTransform.Angle)"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Rectangle.Triggers>
+        </Rectangle>
+
     </Grid>
 
 </v:MetroWindow>

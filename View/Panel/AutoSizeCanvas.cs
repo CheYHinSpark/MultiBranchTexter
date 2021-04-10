@@ -23,10 +23,8 @@ namespace MultiBranchTexter.View
             set { SetValue(ScaleRatioProperty, value); }
         }
 
-
         public bool IsResizing = false;
         private Size oldSize;
-
 
         protected override Size MeasureOverride(Size constraint)
         {

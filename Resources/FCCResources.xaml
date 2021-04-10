@@ -61,65 +61,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    <!--多选后继的单个答案框-->
-    <ControlTemplate x:Key="multiAnswerTemplate" TargetType="{x:Type v:NodeBase}">
-        <Grid Height="24">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="16"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button x:Name="maCloseBtn" Grid.Column="0" Width="0" Height="18"
-                    HorizontalAlignment="Right">
-                <Button.Template>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="maBd" CornerRadius="6,0,0,6" Background="{DynamicResource ThemeBrush}">
-                            <Path x:Name="CP" Stroke="{DynamicResource Foreground.ThemeBrush}" 
-                                  StrokeThickness="1" Data="M5,5 L13,13 M5,13 L13,5"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{StaticResource RedBrush}" TargetName="maBd"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-            <Border x:Name="maBd"  Grid.Column="1"
-                    Background="{DynamicResource NodeBgBrush}" BorderBrush="{DynamicResource ThemeBrush}" 
-                    BorderThickness="1" CornerRadius="4">
-                <StackPanel Orientation="Horizontal">
-                    <TextBox x:Name="hintTxt" Margin="2,2,0,2" ToolTip="{x:Null}" MinWidth="6"
-                             Template="{StaticResource operationTextBoxTemplate}"/>
-                    <TextBox x:Name="answerTxt" Margin="0,2,8,2" Background="Transparent"/>
-                </StackPanel>
-            </Border>
-        </Grid>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource NodeBgHBrush}" TargetName="maBd"/>
-                <Trigger.EnterActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                                Storyboard.TargetName="maCloseBtn"
-                                Storyboard.TargetProperty="(Button.Width)"
-                                To="16" Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.EnterActions>
-                <Trigger.ExitActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                                Storyboard.TargetName="maCloseBtn"
-                                Storyboard.TargetProperty="(Button.Width)"
-                                To="0" Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.ExitActions>
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
+   
     <!--多选后继下面的添加按钮-->
     <ControlTemplate x:Key="addAnswerButtonTemplate" TargetType="{x:Type Button}">
         <Border x:Name="BD" CornerRadius="0,0,4,4" BorderThickness="1,0,1,1" 

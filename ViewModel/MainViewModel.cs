@@ -649,7 +649,8 @@ namespace MultiBranchTexter.ViewModel
             IsModified = false;
 
             await Task.Delay(20);
-            await Task.Run(new Action(() => { ViewModelFactory.FCC.Load(path); }));
+            ViewModelFactory.FCC.Load(path);
+            Debug.WriteLine("OpenFile结束");
         }
 
         /// <summary> 创建文件 </summary>
