@@ -499,7 +499,7 @@
     <value>最小化</value>
   </data>
   <data name="Win_Option" xml:space="preserve">
-    <value> 选项 </value>
+    <value>选项(Ctrl+Alt+O)</value>
   </data>
   <data name="Win_Restore" xml:space="preserve">
     <value>还原</value>

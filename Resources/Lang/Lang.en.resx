@@ -501,7 +501,7 @@ $$ will be replaced by file name, \$ will be replaced by $</value>
     <value>Minimize</value>
   </data>
   <data name="Win_Option" xml:space="preserve">
-    <value> Option </value>
+    <value>Option(Ctrl+Alt+O)</value>
   </data>
   <data name="Win_Restore" xml:space="preserve">
     <value>Restore</value>

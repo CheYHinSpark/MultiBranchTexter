@@ -299,9 +299,29 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
-                <Button x:Name="SettingButton" Width="Auto" 
-                        Content="{Binding [Win_Option], Source={x:Static r:LanguageManager.Instance}}"
-                        Template="{StaticResource textButtonTemplate}"/>
+                <Button x:Name="SettingButton"
+                        ToolTip="{Binding [Win_Option], Source={x:Static r:LanguageManager.Instance}}"
+                        Style="{DynamicResource ThemeBtnStyle}">
+                    <Path Stroke="{DynamicResource Foreground.ThemeBrush}" 
+                          StrokeThickness="2">
+                        <Path.Data>
+                            <GeometryGroup>
+                                <PathGeometry Figures="M 12,4.8 A 7.8,7.8 0 0 1 18,4.8" />
+                                <PathGeometry Figures="M 12,19.2 A 7.8,7.8 0 0 0 18,19.2" />
+                                <PathGeometry Figures="M 7.8,9 A 7.8,7.8 0 0 0 7.8,15" />
+                                <PathGeometry Figures="M 22.2,9 A 7.8,7.8 0 0 1 22.2,15" />
+
+                                <PathGeometry Figures="M 12,4.8 A 7.8,7.8 0 0 1 7.8,9" />
+                                <PathGeometry Figures="M 18,4.8 A 7.8,7.8 0 0 0 22.2,9" />
+                                <PathGeometry Figures="M 22.2,15 A 7.8,7.8 0 0 0 18,19.2" />
+                                <PathGeometry Figures="M 12,19.2 A 7.8,7.8 0 0 0 7.8,15" />
+
+                                <PathGeometry Figures="M 15,9 A 3,3 0 0 1 15,15" />
+                                <PathGeometry Figures="M 15,9 A 3,3 0 0 0 15,15" />
+                            </GeometryGroup>
+                        </Path.Data>
+                    </Path>
+                </Button>
                 <Button x:Name="MinWinButton"
                         ToolTip="{Binding [Win_Min], Source={x:Static r:LanguageManager.Instance}}"
                         Style="{DynamicResource ThemeBtnStyle}">
