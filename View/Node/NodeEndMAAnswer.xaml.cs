@@ -12,9 +12,6 @@ namespace MultiBranchTexter.View
     /// </summary>
     public partial class NodeEndMAAnswer : NodeBase
     {
-        //private Button maCloseBtn;
-        //private TextBox hintTxt;
-        //private TextBox answerTxt;
         private string answer = "";
 
         /// <summary>
@@ -30,31 +27,22 @@ namespace MultiBranchTexter.View
             }
         }
 
-        public NodeEndMAAnswer()
-        {
-            InitializeComponent();
-        }
-
-        public NodeEndMAAnswer(string newAnswer)
+        public NodeEndMAAnswer(string newAnswer, string newHint)
         {
             InitializeComponent();
             answer = newAnswer;
+            answerTxt.Text = newAnswer;
+            hintTxt.Text = newHint;
         }
 
         #region 事件
         //加载完成
         private void NodeBase_Loaded(object sender, RoutedEventArgs e)
         {
-            //maCloseBtn = GetTemplateChild("maCloseBtn") as Button;
-            //hintTxt = GetTemplateChild("hintTxt") as TextBox;
-            //answerTxt = GetTemplateChild("answerTxt") as TextBox;
-
             maCloseBtn.Click += MaCloseBtn_Click;
             hintTxt.LostFocus += HintTxt_LostFocus;
             answerTxt.LostFocus += AnswerTxt_LostFocus;
             MouseDoubleClick += NodeEndMAAnswer_MouseDoubleClick;
-
-            answerTxt.Text = answer;
         }
 
         //双击，准备调整后继节点
@@ -93,8 +81,8 @@ namespace MultiBranchTexter.View
                 } 
             }
 
-            FatherNode.ChangeAnswer(answer, answerTxt.Text);
             //没有重复，完成修改
+            FatherNode.ChangeAnswer(answer, answerTxt.Text);
             answer = answerTxt.Text;
             //通知标签页改变
             ViewModelFactory.Main.ReLoadTab(FatherTextNode);

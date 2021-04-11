@@ -13,19 +13,14 @@ namespace MultiBranchTexter.View
     /// </summary>
     public partial class NodeEndMA : NodeBase
     {
-        public NodeEndMA()
-        {
-            InitializeComponent();
-        }
-
         public NodeEndMA(EndCondition maEnd)
         {
             InitializeComponent();
             titleBox.Text = maEnd.Question;
             isQuestionBtn.IsChecked = maEnd.IsQuestion;
-            for (int i =0;i < maEnd.Answers.Count;i++)
+            for (int i = 0; i < maEnd.Answers.Count; i++)
             {
-                NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(maEnd.Answers[i].Item1);
+                NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(maEnd.Answers[i].Item1, maEnd.Answers[i].Item3);
                 answerContainer.Children.Add(nodeEnd);
             }
         }
@@ -49,7 +44,11 @@ namespace MultiBranchTexter.View
         {
             titleBox.Focusable = false;
             // 完成问题修改
-            FatherTextNode.EndCondition.Question = titleBox.Text;
+            if (FatherTextNode.EndCondition.Question != titleBox.Text)
+            {
+                ViewModelFactory.Main.IsModified = true;
+                FatherTextNode.EndCondition.Question = titleBox.Text;
+            }
             titleBox.SelectionStart = 0;
             // 还要通知窗口改变相应的标签页
             ViewModelFactory.Main.ReLoadTab(FatherTextNode);
@@ -77,7 +76,7 @@ namespace MultiBranchTexter.View
             //添加键
             atns.Add((newAnswer, "", ""));
             FatherNode.AnswerToNodes.Add(newAnswer, null);
-            NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(newAnswer)
+            NodeEndMAAnswer nodeEnd = new NodeEndMAAnswer(newAnswer, "")
             { FatherNode = this.FatherNode };
             answerContainer.Children.Add(nodeEnd);
             // 还要通知窗口改变相应的标签页

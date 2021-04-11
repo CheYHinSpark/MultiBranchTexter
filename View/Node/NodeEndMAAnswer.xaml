@@ -58,7 +58,7 @@
                 BorderThickness="1" CornerRadius="4">
             <StackPanel Orientation="Horizontal">
                 <TextBox x:Name="hintTxt" Margin="2,2,0,2" ToolTip="{x:Null}" MinWidth="6"
-                             Template="{StaticResource operationTextBoxTemplate}"/>
+                         Template="{StaticResource operationTextBoxTemplate}"/>
                 <TextBox x:Name="answerTxt" Margin="0,2,8,2" Background="Transparent"/>
             </StackPanel>
             <Border.Style>

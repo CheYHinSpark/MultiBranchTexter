@@ -563,8 +563,11 @@ namespace MultiBranchTexter.View
             {
                 if (TextNode.EndCondition.Answers[i].Item1 == key)
                 {
-                    TextNode.EndCondition.Answers[i] = (key, TextNode.EndCondition.Answers[i].Item2, newHint);
-                    ViewModelFactory.Main.IsModified = true;
+                    if (TextNode.EndCondition.Answers[i].Item3 != newHint)
+                    {
+                        TextNode.EndCondition.Answers[i] = (key, TextNode.EndCondition.Answers[i].Item2, newHint);
+                        ViewModelFactory.Main.IsModified = true;
+                    }
                     return;
                 }
             }
