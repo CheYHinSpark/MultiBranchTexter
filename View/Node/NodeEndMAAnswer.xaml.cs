@@ -32,7 +32,10 @@ namespace MultiBranchTexter.View
             InitializeComponent();
             answer = newAnswer;
             answerTxt.Text = newAnswer;
-            hintTxt.Text = newHint;
+            if (newHint == null)
+            { hintTxt.Text = ""; }
+            else
+            { hintTxt.Text = newHint; }
         }
 
         #region 事件

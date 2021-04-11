@@ -38,11 +38,13 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+
+        <Border Background="{DynamicResource ThemeBrush}">
+            <TextBlock Text="{Binding [Out_Title], Source={x:Static r:LanguageManager.Instance}}"
+                       Foreground="{DynamicResource Foreground.ThemeBrush}"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Border>
         
-        <TextBlock Grid.Row="0"
-                   Text="{Binding [Out_Title], Source={x:Static r:LanguageManager.Instance}}"
-                   Foreground="{DynamicResource Foreground.BaseBrush}"
-                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
         <Grid Grid.Row="1" Margin="10,5,10,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="tt"/>

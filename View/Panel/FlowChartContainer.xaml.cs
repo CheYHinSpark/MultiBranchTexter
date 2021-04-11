@@ -96,8 +96,6 @@ namespace MultiBranchTexter.View
         //点击scrollViewer
         private void ScrollViewer_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.OriginalSource is Rectangle)
-            { Debug.WriteLine((e.OriginalSource as Rectangle).Fill); }
             //更新点击点
             _clickPoint = e.GetPosition((ScrollViewer)sender);
             _oldclickPoint = _clickPoint;
@@ -109,9 +107,7 @@ namespace MultiBranchTexter.View
                 if (e.RightButton == MouseButtonState.Pressed)
                 {
                     if (_viewModel.IsWaiting)
-                    {
-                        _viewModel.PostNodeChoosed(null);
-                    }
+                    { _viewModel.PostNodeChoosed(null); }
                     return;
                 }
                 //非右键点击
