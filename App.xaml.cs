@@ -31,7 +31,10 @@ namespace MultiBranchTexter
             this.MainWindow = window;
             if (e.Args.Length > 0)
             {
-                ViewModelFactory.Main.OpenFile(e.Args[0]);
+                string eArgs = e.Args[0];
+                for (int i = 1; i < e.Args.Length; i++)
+                { eArgs += " " + e.Args[i]; }
+                ViewModelFactory.Main.OpenFile(eArgs);
             }
             window.Show();
 
