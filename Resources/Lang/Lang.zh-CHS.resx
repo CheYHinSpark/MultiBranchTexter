@@ -378,6 +378,9 @@
   <data name="Out_Win" xml:space="preserve">
     <value>导出各个节点</value>
   </data>
+  <data name="Set_BlurOn" xml:space="preserve">
+    <value>开启模糊</value>
+  </data>
   <data name="Set_CheckUpdate" xml:space="preserve">
     <value>检查更新</value>
   </data>
@@ -413,6 +416,9 @@
   </data>
   <data name="Set_ViewWeb" xml:space="preserve">
     <value>访问项目主页</value>
+  </data>
+  <data name="Set_WindowOpacity" xml:space="preserve">
+    <value>窗口不透明度</value>
   </data>
   <data name="Sys_AllExt" xml:space="preserve">
     <value>所有文件</value>

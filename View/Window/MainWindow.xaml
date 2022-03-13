@@ -6,11 +6,23 @@
                xmlns:r="clr-namespace:MultiBranchTexter.Resources"
                Style="{StaticResource MainWindowStyle}"
                WindowStartupLocation="CenterScreen"
+               WindowStyle="None"
+               Opacity="{Binding WindowOpacity}"
                Title="MultiBranchTexter" Height="450" Width="800">
     <v:MetroWindow.DataContext>
         <vm:MainViewModel/>
     </v:MetroWindow.DataContext>
-    
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome x:Name="windowChrome"
+                      CaptionHeight="0"
+                      UseAeroCaptionButtons="False"
+                      ResizeBorderThickness="4"
+                      CornerRadius="0"
+                      GlassFrameThickness="1"/>
+    </WindowChrome.WindowChrome>
+
+
     <v:MetroWindow.InputBindings>
         <KeyBinding Gesture="Ctrl+Shift+N" Command="{Binding NewFileCommand}"/>
         <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenFileCommand}"/>

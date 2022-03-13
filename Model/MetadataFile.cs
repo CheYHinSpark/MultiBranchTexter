@@ -11,7 +11,7 @@ using System.Windows;
 
 namespace MultiBranchTexter.Model
 {
-    class MetadataFile
+    internal class MetadataFile
     {
         #region 废弃区
         //public Dictionary<string, (double left, double top)> coordinates = new Dictionary<string, (double left, double top)>();

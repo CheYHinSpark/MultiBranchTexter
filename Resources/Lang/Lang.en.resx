@@ -380,6 +380,9 @@ $$ will be replaced by file name, \$ will be replaced by $</value>
   <data name="Out_Win" xml:space="preserve">
     <value>Output individually</value>
   </data>
+  <data name="Set_BlurOn" xml:space="preserve">
+    <value>Blur on</value>
+  </data>
   <data name="Set_CheckUpdate" xml:space="preserve">
     <value>Check update</value>
   </data>
@@ -415,6 +418,9 @@ $$ will be replaced by file name, \$ will be replaced by $</value>
   </data>
   <data name="Set_ViewWeb" xml:space="preserve">
     <value>View Github</value>
+  </data>
+  <data name="Set_WindowOpacity" xml:space="preserve">
+    <value>Window opacity</value>
   </data>
   <data name="Sys_AllExt" xml:space="preserve">
     <value>All Files</value>

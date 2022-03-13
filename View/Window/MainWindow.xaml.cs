@@ -36,7 +36,6 @@ namespace MultiBranchTexter.View
                 LanguageManager.Instance.ChangeLanguage(new CultureInfo("en"));
             }
 
-
             InitializeComponent();
             ViewModelFactory.SetViewModel(typeof(MainViewModel), DataContext as MainViewModel);
         }
@@ -65,5 +64,12 @@ namespace MultiBranchTexter.View
             baseGrid.Tag = "d";
         }
         #endregion
+
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            UpdateEffect();
+        }
     }
 }

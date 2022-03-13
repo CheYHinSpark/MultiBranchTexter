@@ -33,7 +33,7 @@ namespace MultiBranchTexter.Model
         /// <summary>  
         /// 使文件类型与对应的图标及应用程序关联起来
         /// </summary>          
-        [PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
+        // .NET6中，这个已经过时 [PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
         public static void RegisterFileType(FileTypeRegInfo regInfo)
         {
             //HKEY_CLASSES_ROOT/.mbjson

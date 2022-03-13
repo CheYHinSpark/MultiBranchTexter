@@ -144,6 +144,39 @@ namespace MultiBranchTexter.ViewModel
         }
         #endregion
 
+
+        #region 显示特效
+
+        private double _windowOpacity = 75;
+        public double WindowOpacity
+        {
+            get { return _windowOpacity; }
+            set
+            {
+                _windowOpacity = Math.Min(Math.Max(value, 50), 100);
+                ViewModelFactory.Main.WindowOpacity = _windowOpacity / 100.0;
+                RaisePropertyChanged("WindowOpacity");
+            }
+        }
+
+        private bool _blurOn = true;
+        public bool BlurOn
+        {
+            get { return _blurOn; }
+            set
+            {
+                _blurOn = value;
+                try
+                { (Application.Current.MainWindow as MainWindow).UpdateEffect(); }
+                catch 
+                { }
+                RaisePropertyChanged("BlurOn");
+            }
+        }
+
+        #endregion
+
+
         // 语言
         private int _langIndex;
         public int LangIndex
@@ -204,6 +237,8 @@ namespace MultiBranchTexter.ViewModel
             _colorG = 170;
             ColorB = 22;
             SideWidth = 10;
+            WindowOpacity = 75;
+            BlurOn = true;
             WriteIni();
         });
 
@@ -282,6 +317,10 @@ namespace MultiBranchTexter.ViewModel
             _colorG = iniFile.GetInt("Color", "Green", 170);
             ColorB = iniFile.GetInt("Color", "Blue", 22);
 
+            WindowOpacity = iniFile.GetInt("Color", "WindowOpacity", 75);
+            _blurOn = iniFile.GetBool("Color", "BlurOn", true); // 注意只能设置_blurOn不能BlurOn
+
+
             culInfo = iniFile.GetString("Language", "Language", culInfo);
             if (culInfo == "zh-CHS")
             { 
@@ -310,6 +349,10 @@ namespace MultiBranchTexter.ViewModel
             iniFile.WriteInt("Color", "Red", (int)_colorR);
             iniFile.WriteInt("Color", "Green", (int)_colorG);
             iniFile.WriteInt("Color", "Blue", (int)_colorB);
+
+            iniFile.WriteInt("Color", "WindowOpacity", (int)_windowOpacity);
+            iniFile.WriteBool("Color", "BlurOn", _blurOn);
+
 
             if (LangIndex == 0)
             { iniFile.WriteString("Language", "Language", "zh-CHS"); }

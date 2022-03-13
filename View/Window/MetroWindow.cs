@@ -7,6 +7,7 @@ using System.Windows.Input;
 using MultiBranchTexter.ViewModel;
 using MultiBranchTexter.Resources;
 using System.Windows.Interop;
+using System.Windows.Shell;
 
 namespace MultiBranchTexter.View
 {
@@ -22,6 +23,7 @@ namespace MultiBranchTexter.View
             get { return (bool)GetValue(ShowSettingsProperty); }
             set { SetValue(ShowSettingsProperty, value); }
         }
+
         #endregion
 
         #region 我也不懂这一坨东西是什么，但是它可以起到不遮盖任务栏的作用
@@ -136,6 +138,22 @@ namespace MultiBranchTexter.View
             this.SourceInitialized += Win_SourceInitialized;
         }
 
+        private void TitleBar_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed
+                && WindowState == WindowState.Maximized)
+            {
+                Point mousePt = Mouse.GetPosition(this);
+                Point oldSize = new Point(this.ActualWidth, this.ActualHeight);
+                WindowState = WindowState.Normal;
+                Point newSize = new Point(this.ActualWidth, this.ActualHeight);
+                this.Left = mousePt.X * (1 - newSize.X / oldSize.X);
+                this.Top = mousePt.Y * (1 - newSize.Y / oldSize.Y);
+                DragMove();
+
+            }
+        }
+
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // 查找窗体模板
@@ -148,7 +166,10 @@ namespace MultiBranchTexter.View
                 (mWTemplate.FindName("UpperBd", this) as Border).MouseDown += UpperBd_MouseDown;
 
                 (mWTemplate.FindName("WindowTitleTbl", this) as TextBlock).Text = Title;
+                (mWTemplate.FindName("titleBar", this) as Border).MouseMove += TitleBar_MouseMove;
             }
+            WindowStyle = WindowStyle.SingleBorderWindow;
+            ResizeMode = ResizeMode.CanResize;
         }
 
         private void UpperBd_MouseDown(object sender, MouseButtonEventArgs e)
@@ -200,5 +221,22 @@ namespace MultiBranchTexter.View
 
         public void SwitchShowOptions()
         { ShowSettings = !ShowSettings; }
+
+        public void UpdateEffect()
+        {
+            if (ViewModelFactory.Settings.BlurOn)
+            {
+                // 实现透明模糊窗口需要 WindowChrome.GlassFrameThickness 至少一个分量为正
+                (this.FindName("windowChrome") as WindowChrome).GlassFrameThickness = new Thickness(1);
+                GlassHelper.EnableBlur(this, true);
+            }
+            else
+            {
+                GlassHelper.EnableBlur(this, false);
+                // 实现透明窗口 需要 WindowChrome.GlassFrameThickness = 0
+                (this.FindName("windowChrome") as WindowChrome).GlassFrameThickness = new Thickness(0);
+                GlassHelper.ExtendGlassFrame(this, new Thickness(-1));
+            }
+        }
     }
 }

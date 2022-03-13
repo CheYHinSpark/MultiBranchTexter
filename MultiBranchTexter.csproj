@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\Images\icon.ico</ApplicationIcon>
     <PackageIcon>icon.png</PackageIcon>
     <Company>Glumick Studio</Company>
     <Authors>Glumick Studio</Authors>
     <Description>为了满足多分支的游戏剧情等的写作需要而开发的多分支文本编辑器。</Description>
-    <AssemblyVersion>1.3.7.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <SignAssembly>false</SignAssembly>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
@@ -19,14 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="KTDU\**" />
-    <EmbeddedResource Remove="KTDU\**" />
-    <None Remove="KTDU\**" />
-    <Page Remove="KTDU\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Octokit" Version="0.50.0" />
     <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
   </ItemGroup>

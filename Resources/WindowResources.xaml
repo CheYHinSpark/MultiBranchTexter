@@ -291,13 +291,16 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <!--标题栏-->
+            <!--背景-->
+            <Border x:Name="titleBar" Grid.Row="0" Background="#01808080"/>
+            <!--标题-->
             <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
                 <ContentControl Width="24" Content="{DynamicResource iconImg}"/>
-                <TextBlock x:Name="WindowTitleTbl" Grid.Row="0" Text="" 
+                <TextBlock x:Name="WindowTitleTbl" Text="" 
                            VerticalAlignment="Center"
                            Foreground="{DynamicResource Foreground.ThemeBrush}"/>
             </StackPanel>
-
+            <!--按键区-->
             <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
                 <Button x:Name="SettingButton"
                         ToolTip="{Binding [Win_Option], Source={x:Static r:LanguageManager.Instance}}"
@@ -339,6 +342,7 @@
                           StrokeThickness="2" Data="M9,6 L21,18 M9,18 L21,6"/>
                 </Button>
             </StackPanel>
+            
             <!--内容部分-->
             <AdornerDecorator Grid.Row="2">
                 <AdornerDecorator.RenderTransform>
@@ -400,6 +404,23 @@
                                    Foreground="{DynamicResource Foreground.BaseBrush}"/>
                         <Slider Maximum="200" Style="{StaticResource colorSliderStyle}"
                                 Foreground="{DynamicResource ThemeBrush}" Value="{Binding SideWidth}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="2"
+                                Background="{DynamicResource BaseBrush}">
+                        <Grid>
+                            <TextBlock Text="{Binding [Set_WindowOpacity], Source={x:Static r:LanguageManager.Instance}}" 
+                                       Margin="4,4,0,0"
+                                       Foreground="{DynamicResource Foreground.BaseBrush}"/>
+                            <Border HorizontalAlignment="Right" Background="{DynamicResource ThemeBrush}">
+                                <CheckBox Content="{Binding [Set_BlurOn], Source={x:Static r:LanguageManager.Instance}}"
+                                          VerticalAlignment="Center" Margin="0 0 4 0"
+                                          IsChecked="{Binding BlurOn}"
+                                          Template="{StaticResource settingCheckBox}"/>
+                            </Border>
+                        </Grid>
+                        <Slider Maximum="100" Minimum="50"
+                                Style="{StaticResource colorSliderStyle}"
+                                Foreground="{DynamicResource ThemeBrush}" Value="{Binding WindowOpacity}"/>
                     </StackPanel>
                     <ComboBox SelectedIndex="{Binding LangIndex}">
                         <ComboBoxItem Content="中文"/>
@@ -497,31 +518,6 @@
         <Setter Property="MinHeight" Value="300"/>
         <Setter Property="MinWidth" Value="400"/>
         <Setter Property="Template" Value="{StaticResource MainWindowTemplate}"/>
-        <Setter Property="WindowChrome.WindowChrome">
-            <Setter.Value>
-                <!--允许调整窗口大小-->
-                <WindowChrome GlassFrameThickness="0"
-                              CornerRadius="0" 
-                              CaptionHeight="0"
-                              UseAeroCaptionButtons="False"
-                              ResizeBorderThickness="2" />
-            </Setter.Value>
-        </Setter>
-        <Style.Triggers>
-            <!--这是为了防止某些恶心的东西出现-->
-            <Trigger Property="WindowState" Value="Maximized">
-                <Setter Property="WindowChrome.WindowChrome">
-                    <Setter.Value>
-                        <!--允许调整窗口大小-->
-                        <WindowChrome GlassFrameThickness="-1"
-                                      CornerRadius="0" 
-                                      CaptionHeight="0"
-                                      UseAeroCaptionButtons="False"
-                                      ResizeBorderThickness="0" />
-                    </Setter.Value>
-                </Setter>
-            </Trigger>
-        </Style.Triggers>
     </Style>
 
     

@@ -165,6 +165,20 @@ namespace MultiBranchTexter.ViewModel
         { get { return _workTabs[_selectedIndex].ViewModel; } }
         #endregion
 
+        #region 显示特效
+
+        private double _windowOpacity = 0.75;
+        public double WindowOpacity
+        {
+            get { return _windowOpacity; }
+            set
+            {
+                _windowOpacity = value;
+                RaisePropertyChanged("WindowOpacity");
+            }
+        }
+        #endregion
+
         #endregion
 
         #region 命令
